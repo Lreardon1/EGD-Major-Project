@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CustomizedCardTestScene.unity
     guid: 9a49f00256c501c4e8f0d1c094bf354c
+  - enabled: 1
+    path: Assets/Scenes/BattleScene.unity
+    guid: 73b8960ce6800e841ae05c7d81d2edd2
   m_configObjects: {}
