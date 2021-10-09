@@ -7,6 +7,10 @@ public class DeckCustomizer : MonoBehaviour
 {
     [SerializeField]
     public GameObject cardRenderer;
+    [SerializeField]
+    public GameObject elementDraggable;
+    [SerializeField]
+    public GameObject elementStorage;
 
     void Start()
     {
@@ -15,6 +19,14 @@ public class DeckCustomizer : MonoBehaviour
 
     public void SetUp()
     {
+        GridLayoutGroup cardGrid = gameObject.GetComponent<GridLayoutGroup>();
+        Vector2 cardSize = cardRenderer.GetComponent<RectTransform>().sizeDelta;
+        cardGrid.cellSize = new Vector2(cardSize.x, cardSize.y);
+
+        GridLayoutGroup elementGrid = elementStorage.GetComponent<GridLayoutGroup>();
+        Vector2 elementSize = elementDraggable.GetComponent<RectTransform>().sizeDelta;
+        elementGrid.cellSize = new Vector2(elementSize.x, elementSize.y);
+
         List<GameObject> deck = Deck.instance.viewOrder;
         foreach (GameObject c in deck)
         {

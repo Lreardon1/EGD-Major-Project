@@ -72,4 +72,20 @@ public class Deck : MonoBehaviour
             card.GetComponent<Button>().enabled = !card.GetComponent<Button>().enabled;
         }
     }
+
+    public void HideCards()
+    {
+        foreach (GameObject card in viewOrder)
+        {
+            card.GetComponent<RectTransform>().SetParent(offscreenPos.transform);
+        }
+    }
+
+    public void HideCard(GameObject card)
+    {
+        if (viewOrder.Contains(card))
+        {
+            card.GetComponent<RectTransform>().SetParent(offscreenPos.transform);
+        }
+    }
 }
