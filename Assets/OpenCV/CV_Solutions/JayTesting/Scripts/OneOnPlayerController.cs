@@ -30,10 +30,18 @@ public class OneOnPlayerController : MonoBehaviour
 
     IEnumerator ApplyCard(OneOnTurnActor.Element element)
     {
-        whatSeenText.text = "Applying " + (element) + " to current actor.";
-        manager.PlayCard(new OneOnApplyElementCard(element));
-        yield return new WaitForSeconds(3.0f);
-        manager.RequestCardTurnOver(this);
+        if (element != OneOnTurnActor.Element.None)
+        {
+            whatSeenText.text = "Applying " + (element) + " to current actor.";
+            manager.PlayCard(new OneOnApplyElementCard(element));
+            yield return new WaitForSeconds(3.0f);
+            manager.RequestCardTurnOver(this);
+        } else
+        {
+            manager.PlayCard(null);
+            manager.RequestCardTurnOver(this);
+            yield return null;
+        }
     }
 
     // Update is called once per frame
@@ -60,7 +68,7 @@ public class OneOnPlayerController : MonoBehaviour
                 // TODO : more logic for more types here
                 cardTurn = false;
                 OneOnTurnActor.Element element = OneOnTurnActor.Element.None;
-                if (acceptedCardID != -1)
+                if (acceptedCardID >= 0 && acceptedCardID < (int)OneOnTurnActor.Element.None)
                     element = (OneOnTurnActor.Element)acceptedCardID;
                 StartCoroutine(ApplyCard(element));
             }

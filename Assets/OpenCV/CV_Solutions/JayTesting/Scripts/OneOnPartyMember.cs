@@ -26,14 +26,16 @@ public class OneOnPartyMember : OneOnTurnActor
 
         nextAction = new OneOnAttackAction(attackElement);
         nextAction.SetTargets(manager.GetRandomEnemy());
-        print(name + " picks new target of " + nextAction.targets[0].name);
+        if (nextAction.targets.Length > 0)
+            print(name + " picks new target of " + nextAction.targets[0].name);
     }
 
     public override void UpdateScene(OneOnCombatManager manager)
     {
         base.UpdateScene(manager);
 
-        if (nextAction.GetType() == typeof(OneOnAttackAction) && nextAction.targets[0].GetIsDefeated())
+        if (nextAction.GetType() == typeof(OneOnAttackAction) 
+            && nextAction.targets.Length > 0 && nextAction.targets[0].GetIsDefeated())
         {
             nextAction.SetTargets(manager.GetRandomEnemy());
         }

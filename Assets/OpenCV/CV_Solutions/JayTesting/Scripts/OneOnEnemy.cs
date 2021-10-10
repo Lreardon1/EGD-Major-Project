@@ -31,7 +31,7 @@ public class OneOnEnemy : OneOnTurnActor
     {
         base.UpdateScene(manager);
 
-        if (nextAction.GetType() == typeof(OneOnAttackAction) && nextAction.targets[0].GetIsDefeated())
+        if (nextAction.GetType() == typeof(OneOnAttackAction) && nextAction.targets.Length > 0 && nextAction.targets[0].GetIsDefeated())
         {
             nextAction.SetTargets(manager.GetRandomPartyMember());
         }

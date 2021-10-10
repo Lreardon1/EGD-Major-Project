@@ -26,8 +26,9 @@ public class OneOnAttackAction : OneOnAction
                 damage /= 2;
             }
 
-            Debug.Log(actor.name + " attacks " + targets[0] + " for " + damage 
-                + (element == OneOnTurnActor.Element.None ? "." : (" and applied " + element + ".")));
+            if (targets.Length > 0)
+                Debug.Log(actor.name + " attacks " + targets[0] + " for " + damage 
+                    + (element == OneOnTurnActor.Element.None ? "." : (" and applied " + element + ".")));
 
             if (element != OneOnTurnActor.Element.None)
                 t.appliedElement = element;

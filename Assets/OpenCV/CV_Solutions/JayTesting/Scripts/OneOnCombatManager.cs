@@ -118,6 +118,11 @@ public class OneOnCombatManager : MonoBehaviour
 
     public void PlayCard(OneOnPlayCard card)
     {
+        if (card == null)
+        {
+            print("NO CARD PLAYED, YOU MAY DRAW 2 CARDS IF DESIRED");
+            return;
+        }
         card.ModifyAction(turnOrderActors[0].nextAction);
         turnOrderActors[0].nextAction.modificationCard = card;
         turnOrderActors[0].UpdateActionDisplay();
@@ -167,6 +172,13 @@ public class OneOnCombatManager : MonoBehaviour
 
     public bool RequestActorTurnOver(OneOnTurnActor returningActor)
     {
+
+        if (CheckForLoss() || CheckForWin())
+        {
+            currentPlayMode = PlayMode.End;
+            return false;
+        }
+
         // these should never be false when this is called
         if (turnOrderActors[0] != returningActor || currentPlayMode != PlayMode.ActorAction)
             throw new System.Exception("INVALID STATE TO CALL THIS FUNCTION");
@@ -174,10 +186,7 @@ public class OneOnCombatManager : MonoBehaviour
         turnOrderActors.RemoveAt(0);
         InsertIntoTurnOrder(returningActor);
 
-        if (CheckForLoss() || CheckForWin())
-            currentPlayMode = PlayMode.End;
-        else
-            currentPlayMode = PlayMode.TimeProgress;
+        currentPlayMode = PlayMode.TimeProgress;
 
         // inform all actors that the scene has changed, in particular characters may have died.
         foreach (OneOnTurnActor actor in turnOrderActors)
@@ -188,7 +197,7 @@ public class OneOnCombatManager : MonoBehaviour
 
     private void HandleEnd()
     {
-        print("THIS IS THE END, THERE IS NOTHING ELSE");
+        print("THIS IS THE END, THERE IS NOTHING ELSE." + (CheckForLoss() ? "  THE PARTY LOST" : "  THE PARTY WON"));
     }
 
     private void HandleCardAction()
