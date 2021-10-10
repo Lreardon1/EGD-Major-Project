@@ -29,7 +29,7 @@ public class Deck : MonoBehaviour
         viewOrder.CopyTo(cards);
         deck.AddRange(cards);
 
-        SceneManager.LoadScene("BattleScene");
+        SceneManager.LoadScene("CustomizedCardTestScene");
     }
 
     public GameObject Draw()

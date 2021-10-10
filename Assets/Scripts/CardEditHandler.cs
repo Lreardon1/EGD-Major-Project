@@ -7,22 +7,17 @@ public class CardEditHandler : MonoBehaviour
 {
 
     public Card cardScript;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private DeckCustomizer deckCustomizer;
 
     public void DisplayCard()
     {
+        if (deckCustomizer == null)
+        {
+            deckCustomizer = FindObjectOfType<DeckCustomizer>();
+        }
+
         gameObject.GetComponent<Button>().interactable = false;
+        deckCustomizer.gameObject.SetActive(true);
         //instantiate editable card UI, allowing for changes with more buttons 
     }
 
@@ -30,5 +25,6 @@ public class CardEditHandler : MonoBehaviour
     {
         //save changes on editable card UI, and return
         gameObject.GetComponent<Button>().interactable = true;
+        deckCustomizer.gameObject.SetActive(false);
     }
 }
