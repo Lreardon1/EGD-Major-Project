@@ -33,6 +33,7 @@ public class DeckCustomizer : MonoBehaviour
         List<GameObject> deck = Deck.instance.viewOrder;
         foreach (GameObject c in deck)
         {
+            c.GetComponent<DragDrop>().isDraggable = false;
             c.GetComponent<RectTransform>().SetParent(transform);
         }
 

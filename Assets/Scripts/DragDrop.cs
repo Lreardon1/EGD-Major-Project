@@ -45,23 +45,26 @@ public class DragDrop : MonoBehaviour
 
     public void EndDrag()
     {
-        dragger.GetComponent<Dragger>().isDragging = false;
-        if (isOverDropZone && dropZone != previousParent)
+        if (isDraggable)
         {
-            ScrollRect scrollRectZone = dropZone.GetComponent<ScrollRect>();
-            if (scrollRectZone != null && scrollRectZone.content != previousParent)
+            dragger.GetComponent<Dragger>().isDragging = false;
+            if (isOverDropZone && dropZone != previousParent)
             {
-                trans.SetParent(scrollRectZone.content.transform, false);
+                ScrollRect scrollRectZone = dropZone.GetComponent<ScrollRect>();
+                if (scrollRectZone != null && scrollRectZone.content != previousParent)
+                {
+                    trans.SetParent(scrollRectZone.content.transform, false);
+                }
+                else
+                {
+                    trans.SetParent(dropZone.transform, false);
+                }
             }
             else
             {
-                trans.SetParent(dropZone.transform, false);
+                trans.SetParent(previousParent.transform, false);
+                trans.localPosition = startPosition;
             }
-        }
-        else
-        {
-            trans.SetParent(previousParent.transform, false);
-            trans.localPosition = startPosition;
         }
     }
 }
