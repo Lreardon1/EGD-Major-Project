@@ -5,19 +5,18 @@ using UnityEngine.UI;
 
 public class DragDrop : MonoBehaviour
 {
-
-    private bool isDragging = false;
+    public bool isDraggable = true;
+    public GameObject dragger;
     private bool isOverDropZone = false;
+    private GameObject previousParent;
     private GameObject dropZone;
     private Vector2 startPosition;
+    private RectTransform trans;
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        if (isDragging)
-        {
-            transform.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        }
+        dragger = FindObjectOfType<Dragger>().gameObject;
+        trans = GetComponent<RectTransform>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -34,28 +33,35 @@ public class DragDrop : MonoBehaviour
 
     public void StartDrag()
     {
-        startPosition = transform.position;
-        isDragging = true;
+        if (isDraggable)
+        {
+            startPosition = trans.localPosition;
+            previousParent = trans.parent.gameObject;
+            dragger.GetComponent<Dragger>().isDragging = true;
+            trans.localPosition = new Vector3(0, 0, 0);
+            trans.SetParent(dragger.transform, false);
+        }
     }
 
     public void EndDrag()
     {
-        isDragging = false;
-        if (isOverDropZone)
+        dragger.GetComponent<Dragger>().isDragging = false;
+        if (isOverDropZone && dropZone != previousParent)
         {
             ScrollRect scrollRectZone = dropZone.GetComponent<ScrollRect>();
-            if (scrollRectZone != null)
+            if (scrollRectZone != null && scrollRectZone.content != previousParent)
             {
-                transform.SetParent(scrollRectZone.content.transform, false);
+                trans.SetParent(scrollRectZone.content.transform, false);
             }
             else
             {
-                transform.SetParent(dropZone.transform, false);
+                trans.SetParent(dropZone.transform, false);
             }
         }
         else
         {
-            transform.position = startPosition;
+            trans.SetParent(previousParent.transform, false);
+            trans.localPosition = startPosition;
         }
     }
 }
