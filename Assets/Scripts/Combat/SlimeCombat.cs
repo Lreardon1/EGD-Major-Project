@@ -2,23 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MageCombat : PartyMember
+public class SlimeCombat : EnemyBasis
 {
     public override void Attack()
     {
         // Apply damage to target's enemy script
-        Debug.Log("Mage Attack");
+        Debug.Log("Slime Attack");
     }
 
     public override void Block()
     {
         // Increase defense multipler to 2X
-        Debug.Log("Mage Block");
+        Debug.Log("Slime Block");
     }
 
     public override void Special()
     {
         // Do special random effect
-        Debug.Log("Mage Special");
+        Debug.Log("Slime Special");
     }
 }

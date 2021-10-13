@@ -15,6 +15,8 @@ public class Deck : MonoBehaviour
     public List<GameObject> viewOrder;
     List<GameObject> discard = new List<GameObject>();
 
+    public string sceneToLoad = "CustomizedCardTestScene";
+
     //enforcing singleton of deck on game start
     void Awake()
     {
@@ -35,7 +37,7 @@ public class Deck : MonoBehaviour
             card.GetComponent<Card>().InitializeCard();
         }
 
-        SceneManager.LoadScene("CustomizedCardTestScene");
+        SceneManager.LoadScene(sceneToLoad);
     }
 
     public GameObject Draw()

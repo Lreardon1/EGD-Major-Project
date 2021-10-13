@@ -493,6 +493,7 @@ MonoBehaviour:
   - {fileID: 926444037}
   - {fileID: 1161119769}
   - {fileID: 1051123638}
+  sceneToLoad: BattleScene
 --- !u!114 &816220764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -550,7 +551,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
