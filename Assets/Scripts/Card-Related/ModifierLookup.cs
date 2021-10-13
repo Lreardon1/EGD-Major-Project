@@ -7,8 +7,6 @@ public static class ModifierLookup
     private static string path = "Testing/";
     public static Dictionary<Modifier.ModifierEnum, Modifier> modifierLookupTable;
 
-    
-
     public static void LoadModifierTable() {
         //DEFINE ALL SEARCHABLE MODIFIERS HERE
         //formatting is string to search by, then matching sprite for CardRenderer followed by editable type int (0 for number, 1 for draggable) in a KeyValuePair
