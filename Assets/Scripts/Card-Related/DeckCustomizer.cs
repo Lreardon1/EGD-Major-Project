@@ -11,9 +11,12 @@ public class DeckCustomizer : MonoBehaviour
     public GameObject elementDraggable;
     [SerializeField]
     public GameObject elementStorage;
+    [SerializeField]
+    public GameObject cardEditor;
 
     void Start()
     {
+        cardEditor.SetActive(false);
         SetUp();
     }
 

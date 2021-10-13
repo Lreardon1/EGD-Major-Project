@@ -29,6 +29,12 @@ public class Deck : MonoBehaviour
         viewOrder.CopyTo(cards);
         deck.AddRange(cards);
 
+        ModifierLookup.LoadModifierTable();
+        foreach (GameObject card in viewOrder)
+        {
+            card.GetComponent<Card>().InitializeCard();
+        }
+
         SceneManager.LoadScene("CustomizedCardTestScene");
     }
 
