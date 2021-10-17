@@ -8,6 +8,7 @@ public class CardEditHandler : MonoBehaviour
 
     public Card cardScript;
     private DeckCustomizer deckCustomizer;
+    public Dictionary<GameObject, Modifier> activeModifiers = new Dictionary<GameObject, Modifier>();
 
     public void DisplayCard()
     {
@@ -17,14 +18,15 @@ public class CardEditHandler : MonoBehaviour
         }
 
         gameObject.GetComponent<Button>().interactable = false;
-        deckCustomizer.gameObject.SetActive(true);
+        deckCustomizer.cardEditor.SetActive(true);
         //instantiate editable card UI, allowing for changes with more buttons 
+        deckCustomizer.cardEditor.GetComponent<CardEditor>().LoadCard(cardScript);
     }
 
     public void ShrinkCard()
     {
         //save changes on editable card UI, and return
         gameObject.GetComponent<Button>().interactable = true;
-        deckCustomizer.gameObject.SetActive(false);
+        deckCustomizer.cardEditor.SetActive(false);
     }
 }

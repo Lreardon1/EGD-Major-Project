@@ -15,6 +15,8 @@ public class Deck : MonoBehaviour
     public List<GameObject> viewOrder;
     List<GameObject> discard = new List<GameObject>();
 
+    public string sceneToLoad = "CustomizedCardTestScene";
+
     //enforcing singleton of deck on game start
     void Awake()
     {
@@ -29,7 +31,13 @@ public class Deck : MonoBehaviour
         viewOrder.CopyTo(cards);
         deck.AddRange(cards);
 
-        SceneManager.LoadScene("CustomizedCardTestScene");
+        ModifierLookup.LoadModifierTable();
+        foreach (GameObject card in viewOrder)
+        {
+            card.GetComponent<Card>().InitializeCard();
+        }
+
+        SceneManager.LoadScene(sceneToLoad);
     }
 
     public GameObject Draw()

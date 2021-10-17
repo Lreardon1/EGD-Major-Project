@@ -8,7 +8,8 @@ public class PartyMember : MonoBehaviour
 
     public PartyMemberAction nextAction;
     public string characterName;
-    public int hitPoints;
+    public int totalHitPoints;
+    public int currentHitPoints;
     public int attack;
     public int speed;
 
@@ -23,13 +24,23 @@ public class PartyMember : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        text.text = "";
+
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void ExecuteAction()
+    {
+        if (nextAction == PartyMemberAction.Attack)
+            Attack();
+        else if (nextAction == PartyMemberAction.Block)
+            Block();
+        else if (nextAction == PartyMemberAction.Special)
+            Special();
     }
 
     public virtual void Attack()
