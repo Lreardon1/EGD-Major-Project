@@ -1142,7 +1142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756489ae1d2415e4fae49781513e8e25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deltaTimeMultipler: 0.05
+  deltaTimeMultipler: 2
   currentPlayMode: 2
   party:
   - {fileID: 5631541174566506438}
