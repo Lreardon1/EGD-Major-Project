@@ -201,7 +201,6 @@ public class BaseImageParser
         return (float)goodCount / m_kp1.Length > homoPercentThresh && goodCount >= 4;
     }
 
-
     public Mat ReplaneUsingKeypoints(Mat planedImage, Mat im, ref Mat debugMat, bool shouldDebug = false)
     {
         KeyPoint[] kp1; Mat des1;
@@ -310,7 +309,6 @@ public class BaseImageParser
     /**
      * Make HSV histogram using H and S values, 
      * this is much more lighting independent!!!
-     * TODO : we can use CompareHist to compare histograms and decide what the most likely type/card is
      */ 
     public Mat MakeHSHistrogram(Mat im)
     {
