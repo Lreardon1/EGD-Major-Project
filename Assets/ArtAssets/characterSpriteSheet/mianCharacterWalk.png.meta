@@ -4,22 +4,22 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: -2471468092568484093
-    second: mianCharacterWalk_0
+    second: MC_Walk0
   - first:
       213: -5360289590720410684
-    second: mianCharacterWalk_1
+    second: MC_Walk2
   - first:
       213: -6715651490922199456
-    second: mianCharacterWalk_2
+    second: MC_Walk5&7
   - first:
       213: -6443241925534221642
-    second: mianCharacterWalk_3
+    second: MC_Walk4
   - first:
       213: 4941017386394668184
-    second: mianCharacterWalk_4
+    second: MC_Walk6
   - first:
       213: 106418015206031639
-    second: mianCharacterWalk_5
+    second: MC_Walk1&3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -145,7 +145,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: mianCharacterWalk_0
+      name: MC_Walk0
       rect:
         serializedVersion: 2
         x: 0
@@ -153,7 +153,7 @@ TextureImporter:
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -166,7 +166,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mianCharacterWalk_1
+      name: MC_Walk2
       rect:
         serializedVersion: 2
         x: 40
@@ -174,7 +174,7 @@ TextureImporter:
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -187,7 +187,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mianCharacterWalk_2
+      name: MC_Walk5&7
       rect:
         serializedVersion: 2
         x: 80
@@ -195,7 +195,7 @@ TextureImporter:
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -208,7 +208,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mianCharacterWalk_3
+      name: MC_Walk4
       rect:
         serializedVersion: 2
         x: 120
@@ -216,7 +216,7 @@ TextureImporter:
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -229,7 +229,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mianCharacterWalk_4
+      name: MC_Walk6
       rect:
         serializedVersion: 2
         x: 160
@@ -237,7 +237,7 @@ TextureImporter:
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -250,7 +250,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mianCharacterWalk_5
+      name: MC_Walk1&3
       rect:
         serializedVersion: 2
         x: 200
@@ -258,7 +258,7 @@ TextureImporter:
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

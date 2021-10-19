@@ -1,0 +1,137 @@
+fileFormatVersion: 2
+guid: 3ea68a72a4e64924b80b5e2eb53ef84e
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: cobble stones_parts_00
+    100002: cobble stones_parts_01
+    100004: cobble stones_parts_02
+    100006: cobble stones_parts_03
+    100008: cobble stones_parts_04
+    100010: cobble stones_parts_05
+    100012: cobble stones_parts_06
+    100014: cobble stones_parts_07
+    100016: //RootNode
+    400000: cobble stones_parts_00
+    400002: cobble stones_parts_01
+    400004: cobble stones_parts_02
+    400006: cobble stones_parts_03
+    400008: cobble stones_parts_04
+    400010: cobble stones_parts_05
+    400012: cobble stones_parts_06
+    400014: cobble stones_parts_07
+    400016: //RootNode
+    2100000: MAT_Base_3
+    2300000: cobble stones_parts_00
+    2300002: cobble stones_parts_01
+    2300004: cobble stones_parts_02
+    2300006: cobble stones_parts_03
+    2300008: cobble stones_parts_04
+    2300010: cobble stones_parts_05
+    2300012: cobble stones_parts_06
+    2300014: cobble stones_parts_07
+    2300016: //RootNode
+    3300000: cobble stones_parts_00
+    3300002: cobble stones_parts_01
+    3300004: cobble stones_parts_02
+    3300006: cobble stones_parts_03
+    3300008: cobble stones_parts_04
+    3300010: cobble stones_parts_05
+    3300012: cobble stones_parts_06
+    3300014: cobble stones_parts_07
+    3300016: //RootNode
+    4300000: Model_cobble_stones_2
+    4300002: cobble stones_parts_00
+    4300004: cobble stones_parts_01
+    4300006: cobble stones_parts_02
+    4300008: cobble stones_parts_03
+    4300010: cobble stones_parts_04
+    4300012: cobble stones_parts_05
+    4300014: cobble stones_parts_06
+    4300016: cobble stones_parts_07
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MAT_Base_3
+    second: {fileID: 2100000, guid: a0d6968d46da5ef43b0a73f55cbc0e72, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

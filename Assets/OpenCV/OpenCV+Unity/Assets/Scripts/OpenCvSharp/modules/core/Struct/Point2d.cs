@@ -244,6 +244,11 @@ namespace OpenCvSharp
             return new Point2d((float) (pt.X*scale), (float) (pt.Y*scale));
         }
 
+        public static implicit operator Point2d(Point2f v)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #endregion
