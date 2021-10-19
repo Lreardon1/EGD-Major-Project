@@ -14,6 +14,7 @@ public class Deck : MonoBehaviour
     List<GameObject> deck = new List<GameObject>();
     public List<GameObject> viewOrder;
     List<GameObject> discard = new List<GameObject>();
+    public Dictionary<string, List<GameObject>> freeDraggables;
 
     public string sceneToLoad = "CustomizedCardTestScene";
 
@@ -36,6 +37,8 @@ public class Deck : MonoBehaviour
         {
             card.GetComponent<Card>().InitializeCard();
         }
+
+        freeDraggables = new Dictionary<string, List<GameObject>>();
 
         SceneManager.LoadScene(sceneToLoad);
     }

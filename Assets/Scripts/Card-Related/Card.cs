@@ -5,11 +5,14 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
+    public enum CardType { None, Attack, Block, Influence };
     public enum Element { None, Fire, Water, Lightning, Air };
 
     [Header("Initial Settings")]
     [SerializeField]
     public int manaCost = 0;
+    [SerializeField]
+    public CardType type;
     [SerializeField]
     public Element element;
     [SerializeField]
@@ -26,11 +29,16 @@ public class Card : MonoBehaviour
     public TMPro.TextMeshProUGUI manaText;
     [SerializeField]
     public GameObject elementIcon;
+    [SerializeField]
+    public GameObject typeIcon;
 
     [Header("OnPlay Script")]
     public CardActionTemplate onPlayScript;
 
-    [Header("References")]
+    [Header("Quick Data References")]
+    public Image cardText;
+
+    [Header("Prefab References")]
     [SerializeField]
     public List<GameObject> draggableElements;
     [SerializeField]
@@ -54,7 +62,7 @@ public class Card : MonoBehaviour
                 GameObject textMod = Instantiate(textComp, modifiers[i].transform.GetChild(0).transform);
                 textMod.GetComponent<TMPro.TextMeshProUGUI>().text = intModifierVals[intModC].ToString();
                 Modifier newMod = new Modifier(template.name, template.icon, template.type, intModifierVals[intModC], null);
-                GetComponent<CardEditHandler>().activeModifiers[modifiers[i]] = newMod;
+                GetComponent<CardEditHandler>().activeModifiers.Add(modifiers[i], newMod);
                 intModC++;
             }
             //sprite detected, using next sprite modifier
@@ -63,8 +71,8 @@ public class Card : MonoBehaviour
                 modifiers[i].GetComponent<Image>().sprite = template.icon;
                 GameObject spriteMod = Instantiate(spriteComp, modifiers[i].transform.GetChild(0).transform);
                 spriteMod.GetComponent<Image>().sprite = spriteModifierVals[spriteModC];
-                Modifier newMod = new Modifier(template.name, template.icon, template.type, intModifierVals[spriteModC], null);
-                GetComponent<CardEditHandler>().activeModifiers[modifiers[i]] = newMod;
+                Modifier newMod = new Modifier(template.name, template.icon, template.type, -1, spriteModifierVals[spriteModC]);
+                GetComponent<CardEditHandler>().activeModifiers.Add(modifiers[i], newMod);
                 spriteModC++;
             }
         }
@@ -96,7 +104,6 @@ public class Card : MonoBehaviour
         if (elemIcon != null)
         {
             elemIcon.GetComponent<DragDrop>().isDraggable = false;
-            elemIcon.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         }
 
         //setting mana text to the right cost
@@ -108,8 +115,45 @@ public class Card : MonoBehaviour
         onPlayScript.OnPlay();
     }
 
-    public void Refresh()
+    public void UpdateManaCost(int newCost)
     {
+        manaCost = newCost;
+        manaText.text = manaCost.ToString();
+    }
 
+    public void CopyCardSprites(Card c)
+    {
+        //updating all default set sprites
+        GetComponent<Image>().sprite = c.gameObject.GetComponent<Image>().sprite;
+        GetComponent<Image>().color = c.gameObject.GetComponent<Image>().color;
+        typeIcon.GetComponent<Image>().sprite = c.typeIcon.GetComponent<Image>().sprite;
+        cardText.sprite = c.cardText.sprite;
+
+        element = c.element;
+        //updating element icon to match
+        GameObject elemIcon = null;
+        switch (element)
+        {
+            case Element.Fire:
+                elemIcon = Instantiate(draggableElements[0], elementIcon.transform);
+                break;
+
+            case Element.Water:
+                elemIcon = Instantiate(draggableElements[1], elementIcon.transform);
+                break;
+
+            case Element.Lightning:
+                elemIcon = Instantiate(draggableElements[2], elementIcon.transform);
+                break;
+
+            case Element.Air:
+                elemIcon = Instantiate(draggableElements[3], elementIcon.transform);
+                break;
+        }
+        if (elemIcon != null)
+        {
+            elemIcon.GetComponent<DragDrop>().isDraggable = false;
+            c.GetComponent<CardEditHandler>().deckCustomizer.cardEditor.GetComponent<CardEditor>().primElementIcon = elemIcon;
+        }
     }
 }
