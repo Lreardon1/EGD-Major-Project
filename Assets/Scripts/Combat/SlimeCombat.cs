@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlimeCombat : EnemyBasis
+public class SlimeCombat : CombatantBasis
 {
     public override void Attack()
     {

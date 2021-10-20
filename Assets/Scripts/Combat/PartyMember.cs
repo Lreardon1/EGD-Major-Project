@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PartyMember : MonoBehaviour
 {
-    public enum PartyMemberAction {Attack, Block, Special};
+    public enum PartyMemberAction { Attack, Block, Special };
 
     public PartyMemberAction nextAction;
     public string characterName;
@@ -12,6 +12,8 @@ public class PartyMember : MonoBehaviour
     public int currentHitPoints;
     public int attack;
     public int speed;
+    public float defenseMultiplier = 1f;
+    public int temporaryHitPoints = 0;
 
     public TMPro.TextMeshPro text;
 
@@ -19,6 +21,8 @@ public class PartyMember : MonoBehaviour
     public GameObject appliedCard = null;
 
     public GameObject target = null;
+
+    private PartyMemberAction previousAction;
 
 
     // Start is called before the first frame update
@@ -30,7 +34,7 @@ public class PartyMember : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void ExecuteAction()
@@ -41,6 +45,16 @@ public class PartyMember : MonoBehaviour
             Block();
         else if (nextAction == PartyMemberAction.Special)
             Special();
+    }
+
+    public virtual void TakeDamage(int damageAmount, string damageType)
+    {
+        Debug.Log("Took " + damageAmount + " of " + damageType + " type");
+    }
+
+    public virtual void SelectTarget(List<GameObject> enemies)
+    {
+        Debug.Log("Enemy Selected");
     }
 
     public virtual void Attack()

@@ -12,12 +12,17 @@ public class EnemyBasis : MonoBehaviour
     public int currentHitPoints;
     public int attack;
     public int speed;
+    public float defenseMultiplier = 1f;
+    public int temporaryHitPoints = 0;
+    public int negativeHitPointShield = 0;
 
     public TMPro.TextMeshPro text;
     
     public GameObject appliedCard = null;
 
     public GameObject target = null;
+
+    private EnemyAction previousAction;
 
     public void ExecuteAction()
     {
@@ -27,6 +32,16 @@ public class EnemyBasis : MonoBehaviour
             Block();
         else if (nextAction == EnemyAction.Special)
             Special();
+    }
+
+    public virtual void TakeDamage(int damageAmount, string damageType)
+    {
+        Debug.Log("Took " + damageAmount + " of " + damageType + " type");
+    }
+
+    public virtual void SelectTarget(List<GameObject> partyMembers)
+    {
+        Debug.Log("Party Member Selected");
     }
 
     public virtual void Attack()

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PriestessCombat : PartyMember
+public class PriestCombat : CombatantBasis
 {
     public override void Attack()
     {

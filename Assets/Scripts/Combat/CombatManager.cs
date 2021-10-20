@@ -12,6 +12,11 @@ public class CombatManager : MonoBehaviour
     public List<GameObject> enemies = new List<GameObject>();
 
     public List<GameObject> actionOrder = new List<GameObject>();
+
+    public bool canDraw = false;
+    public bool canPlay = true;
+    private bool enoughMana = true;    
+
     
     // Start is called before the first frame update
     void Start()
@@ -30,84 +35,123 @@ public class CombatManager : MonoBehaviour
     {
         foreach(GameObject member in partyMembers)
         {
-            int rand = Random.Range(0, 3);
-            if (rand == 0)
+            CombatantBasis memberScript = member.GetComponent<CombatantBasis>();
+            memberScript.SelectAction();
+            memberScript.SelectTarget(enemies);
+
+            if (memberScript.nextAction == CombatantBasis.Action.Attack)
             {
-                PartyMember memberScript = member.GetComponent<PartyMember>();
-                memberScript.nextAction = PartyMember.PartyMemberAction.Attack;
-                memberScript.target = enemies[Random.Range(0, enemies.Count)];
                 memberScript.text.text = "Attack " + memberScript.target.name;
             }
-            else if (rand == 1)
+            else if (memberScript.nextAction == CombatantBasis.Action.Block)
             {
-                PartyMember memberScript = member.GetComponent<PartyMember>();
-                memberScript.nextAction = PartyMember.PartyMemberAction.Block;
                 memberScript.text.text = "Block";
             }
-            else if (rand == 2)
+            else if (memberScript.nextAction == CombatantBasis.Action.Special)
             {
-                PartyMember memberScript = member.GetComponent<PartyMember>();
-                memberScript.nextAction = PartyMember.PartyMemberAction.Special;
-                memberScript.target = enemies[Random.Range(0, enemies.Count)];
                 memberScript.text.text = "Special " + memberScript.target.name;
             }
         }
 
         foreach (GameObject enemy in enemies)
         {
-            int rand = Random.Range(0, 3);
-            if (rand == 0)
+            CombatantBasis enemyScript = enemy.GetComponent<CombatantBasis>();
+            enemyScript.SelectAction(); 
+            enemyScript.SelectTarget(partyMembers);
+            if (enemyScript.nextAction ==  CombatantBasis.Action.Attack)
             {
-                EnemyBasis enemyScript = enemy.GetComponent<EnemyBasis>();
-                enemyScript.nextAction = EnemyBasis.EnemyAction.Attack;
-                enemyScript.target = partyMembers[Random.Range(0, partyMembers.Count)];
                 enemyScript.text.text = "Attack " + enemyScript.target.name;
             }
-            else if (rand == 1)
+            else if (enemyScript.nextAction == CombatantBasis.Action.Block)
             {
-                EnemyBasis enemyScript = enemy.GetComponent<EnemyBasis>();
-                enemyScript.nextAction = EnemyBasis.EnemyAction.Block;
                 enemyScript.text.text = "Block";
             }
-            else if (rand == 2)
+            else if (enemyScript.nextAction == CombatantBasis.Action.Special)
             {
-                EnemyBasis enemyScript = enemy.GetComponent<EnemyBasis>();
-                enemyScript.nextAction = EnemyBasis.EnemyAction.Special;
-                enemyScript.target = partyMembers[Random.Range(0, partyMembers.Count)];
                 enemyScript.text.text = "Special " + enemyScript.target.name;
             }
 
         }
 
-        CreatActionQueue();
+        CreateActionQueue();
         foreach(GameObject combatant in actionOrder)
         {
             Debug.Log(combatant.name);
         }
-        
 
+        ActivatePlayPhase();
         // Allies and enemies select actions to perform, Player selects number of cards to draw, transition to Play Phase
     }
 
     public void ActivatePlayPhase()
     {
+        currentPhase = CombatPhase.PlayPhase;
         // Allow player to move cards to play on allies/enemies, update action order accordingly, ends when player clicks done or something, transition to Discard Phase
+        ActivateDiscardPhase();
     }
 
     public void ActivateDiscardPhase()
     {
+        currentPhase = CombatPhase.DiscardPhase;
         // Player can drag cards to discard pile to discard them, ends when player clicks done or something, transition to Action Phase
+        ActivateActionPhase();
     }
 
     public void ActivateActionPhase()
     {
+        currentPhase = CombatPhase.ActionPhase;
         // Party members and enemies take turns attacking in action order, death prevents attacking, transition to Draw Phase
-
-
-        CheckWinCondition();
+        StartCoroutine("StartActions");
+        
     }
 
-    public void CreatActionQueue()
+    public IEnumerator StartActions()
+    {
+        for(int i = 0; i < actionOrder.Count; i++)
+        {
+            CombatantBasis cb = actionOrder[i].GetComponent<CombatantBasis>();
+            bool cardAlreadyPlayed = false;
+
+            if (cb.appliedCard != null)
+                cardAlreadyPlayed = true;
+
+            if (enoughMana && !cardAlreadyPlayed)
+            {
+                Debug.Log("Play card on " + actionOrder[i].name);
+
+                bool done = false;
+                while(!done)
+                {
+                    // skips when space is hit
+                    if(Input.GetKeyDown(KeyCode.Space))
+                    {
+                        done = true;
+                    }
+
+                    // Need code to detect if card has been applied
+
+                    if (cb.appliedCard != null)
+                        done = true;
+                    yield return null;
+                }
+            }
+
+            cb.ExecuteAction();
+            // Check if any combatant was killed and update the action queue
+        }
+
+        currentPhase = CombatPhase.DrawPhase;
+        ActivateDrawPhase();
+        yield return null;
+    }
+   
+
+    public void CheckEnoughMana()
+    {
+        // Check if player has enough mana to play any cards in their hand, if not the action order can procede without input
+    }
+
+    public void CreateActionQueue()
     {
         actionOrder.Clear();
         List<GameObject> allCombatants = new List<GameObject>();
@@ -126,23 +170,15 @@ public class CombatManager : MonoBehaviour
             foreach(GameObject combatant in allCombatants)
             {
                 int maxSpeed = -1;
-                PartyMember pm = combatant.GetComponent<PartyMember>();
-                EnemyBasis eb = combatant.GetComponent<EnemyBasis>();
-                if(pm != null)
+                CombatantBasis cb = combatant.GetComponent<CombatantBasis>();
+                if(cb != null)
                 {
-                    if(pm.speed > maxSpeed)
+                    if(cb.speed > maxSpeed)
                     {
-                        maxSpeed = pm.speed;
+                        maxSpeed = cb.speed;
                         fastestCombatant = combatant;
                     }
-                } else if(eb != null)
-                {
-                    if (eb.speed > maxSpeed)
-                    {
-                        maxSpeed = eb.speed;
-                        fastestCombatant = combatant;
-                    }
-                }
+                } 
             }
 
             actionOrder.Add(fastestCombatant);

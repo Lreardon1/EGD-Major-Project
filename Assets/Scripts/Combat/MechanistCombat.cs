@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MechanistCombat : PartyMember
+public class MechanistCombat : CombatantBasis
 {
     public override void Attack()
     {
