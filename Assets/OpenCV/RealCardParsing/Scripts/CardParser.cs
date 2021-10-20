@@ -591,15 +591,12 @@ public class CardParser : MonoBehaviour
         {
             intersect.Y = line2[2] / line2[0];
             intersect.X = line1[2] / line1[1];
-
-            print("Got in here");
             return intersect;
         }
         else if (Mathf.Abs(line1[1]) < 0.001f && Mathf.Abs(line2[0]) < 0.001f)
         {
             intersect.Y = line1[2] / line1[0];
             intersect.X = line2[2] / line2[1];
-            print("got in here");
             return intersect;
         }
         else if (Mathf.Abs((a - b)) < 0.01f)
@@ -680,12 +677,12 @@ public class CardParser : MonoBehaviour
             //Cv2.GaussianBlur(grey, grey, new Size(3, 3), 0);
             Cv2.MinMaxLoc(grey, out double minVal, out double maxVal);
 
-            Cv2.Threshold(grey, grey, minVal + 20, 255, ThresholdTypes.BinaryInv);
+            Cv2.Threshold(grey, grey, minVal + 30, 255, ThresholdTypes.BinaryInv);
             //Cv2.Erode(grey, grey, new Mat());
             Point[][] contours;
             HierarchyIndex[] hierarchy;
             Cv2.FindContours(grey, out contours, out hierarchy, RetrievalModes.CComp, ContourApproximationModes.ApproxSimple);
-            Point2f[][] simpCnts = SimplifyContours(contours, -1, 0.2f);
+            Point2f[][] simpCnts = SimplifyContours(contours, -1, 0.1f);
             Mat colorMat = new Mat();
             im.CopyTo(colorMat);
             Cv2.DrawContours(colorMat, ConvertPoint2fToPoint(simpCnts), -1, Scalar.Blue, 2);
@@ -1045,7 +1042,12 @@ public class CardParser : MonoBehaviour
                 print("I don't think this was a card");
                 return;
             }
-        } else { print("Failed fundemental matrix test"); }
+        } else {
+            print("Failed fundemental matrix test");
+            numberText.text = "Found a possible card but filtered it out by fundamental test";
+            return;
+        }
+
         // the default used for keypoint matching has a border so that we can get better keypoints at the border of cards (since it doesn't use image edge in its feature finding)
         // if we replaned the image perfectly, we will have a matchBorder sized border
         Mat croppedReplaned = replaned[matchBorder, replaned.Height - matchBorder, matchBorder, replaned.Width - matchBorder];
