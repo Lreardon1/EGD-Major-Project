@@ -8,12 +8,15 @@ public class Deck : MonoBehaviour
 {
     [SerializeField]
     public GameObject offscreenPos;
+    [SerializeField]
+    public GameObject draggablePos;
 
     public static Deck instance;
 
     List<GameObject> deck = new List<GameObject>();
     public List<GameObject> viewOrder;
     List<GameObject> discard = new List<GameObject>();
+    public Dictionary<string, List<GameObject>> freeDraggables;
 
     public string sceneToLoad = "CustomizedCardTestScene";
 
@@ -36,6 +39,8 @@ public class Deck : MonoBehaviour
         {
             card.GetComponent<Card>().InitializeCard();
         }
+
+        freeDraggables = new Dictionary<string, List<GameObject>>();
 
         SceneManager.LoadScene(sceneToLoad);
     }
@@ -85,7 +90,12 @@ public class Deck : MonoBehaviour
     {
         foreach (GameObject card in viewOrder)
         {
-            card.GetComponent<RectTransform>().SetParent(offscreenPos.transform);
+            RectTransform trans = card.GetComponent<RectTransform>();
+            trans.SetParent(offscreenPos.transform);
+            trans.anchorMax = new Vector2(0.5f, 0.5f);
+            trans.anchorMin = new Vector2(0.5f, 0.5f);
+            trans.anchoredPosition = new Vector2(0.5f, 0.5f);
+            trans.localPosition = new Vector3(0, 0, 0);
         }
     }
 

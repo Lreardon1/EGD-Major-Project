@@ -7,6 +7,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: availableModifiers.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: spriteModifierVals.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: availableModifiers.Array.data[0]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: availableModifiers.Array.data[1]
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4604274906329554768, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: m_Name
       value: Card2
