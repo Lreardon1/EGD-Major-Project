@@ -8,6 +8,8 @@ public class Deck : MonoBehaviour
 {
     [SerializeField]
     public GameObject offscreenPos;
+    [SerializeField]
+    public GameObject draggablePos;
 
     public static Deck instance;
 
@@ -88,7 +90,12 @@ public class Deck : MonoBehaviour
     {
         foreach (GameObject card in viewOrder)
         {
-            card.GetComponent<RectTransform>().SetParent(offscreenPos.transform);
+            RectTransform trans = card.GetComponent<RectTransform>();
+            trans.SetParent(offscreenPos.transform);
+            trans.anchorMax = new Vector2(0.5f, 0.5f);
+            trans.anchorMin = new Vector2(0.5f, 0.5f);
+            trans.anchoredPosition = new Vector2(0.5f, 0.5f);
+            trans.localPosition = new Vector3(0, 0, 0);
         }
     }
 

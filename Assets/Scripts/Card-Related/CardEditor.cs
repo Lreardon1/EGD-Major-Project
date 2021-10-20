@@ -15,7 +15,9 @@ public class CardEditor : MonoBehaviour
     public List<int> previousChildrenNum = new List<int>();
 
     [SerializeField]
-    public Sprite transparentSprite;
+    public TMPro.TextMeshProUGUI manaBankTMP;
+    [SerializeField]
+    public TMPro.TextMeshProUGUI attackBlockTMP;
 
     public GameObject manaEditor;
     public GameObject primElementIcon;
@@ -49,7 +51,7 @@ public class CardEditor : MonoBehaviour
                     previousChildrenNum[i] = modifierTransforms[i].transform.childCount;
                     if (previousChildrenNum[i] == 0)
                     {
-                        currentCard.modifiers[i].transform.GetChild(0).GetChild(0).gameObject.GetComponent<Image>().sprite = transparentSprite;
+                        currentCard.modifiers[i].transform.GetChild(0).GetChild(0).gameObject.GetComponent<Image>().sprite = currentCard.transparentSprite;
                         currentCard.gameObject.GetComponent<CardEditHandler>().activeModifiers[currentCard.modifiers[i]].setSpriteMod(null);
                     }
                     else if (previousChildrenNum[i] == 1)

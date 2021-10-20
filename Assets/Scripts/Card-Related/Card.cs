@@ -36,7 +36,11 @@ public class Card : MonoBehaviour
     public CardActionTemplate onPlayScript;
 
     [Header("Quick Data References")]
+    [SerializeField]
     public Image cardText;
+
+    [SerializeField]
+    public Sprite transparentSprite;
 
     [Header("Prefab References")]
     [SerializeField]
@@ -70,7 +74,14 @@ public class Card : MonoBehaviour
             {
                 modifiers[i].GetComponent<Image>().sprite = template.icon;
                 GameObject spriteMod = Instantiate(spriteComp, modifiers[i].transform.GetChild(0).transform);
-                spriteMod.GetComponent<Image>().sprite = spriteModifierVals[spriteModC];
+                if (spriteModifierVals[spriteModC] != null)
+                {
+                    spriteMod.GetComponent<Image>().sprite = spriteModifierVals[spriteModC];
+                }
+                else
+                {
+                    spriteMod.GetComponent<Image>().sprite = transparentSprite;
+                }
                 Modifier newMod = new Modifier(template.name, template.icon, template.type, -1, spriteModifierVals[spriteModC]);
                 GetComponent<CardEditHandler>().activeModifiers.Add(modifiers[i], newMod);
                 spriteModC++;

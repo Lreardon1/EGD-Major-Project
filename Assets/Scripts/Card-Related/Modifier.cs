@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Modifier
 {
-    public enum ModifierEnum { Attack, Defense, SecondaryElement, Priority };
+    public enum ModifierEnum { None, Attack, Defense, SecondaryElement, Priority };
 
     public ModifierEnum name;
     public Sprite icon;

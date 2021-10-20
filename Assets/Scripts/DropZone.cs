@@ -5,13 +5,24 @@ using UnityEngine;
 public class DropZone : MonoBehaviour
 {
     public int allowedChildren;
+    public Modifier.ModifierEnum slotType = Modifier.ModifierEnum.None;
 
-    public bool CheckAllowDrop()
+    public bool CheckAllowDrop(GameObject dropped)
     {
-        if (transform.childCount < allowedChildren)
+        bool isValid = true;
+        if (transform.childCount >= allowedChildren)
         {
-            return true;
+            isValid = false;
         }
-        return false;
+
+        if (slotType != Modifier.ModifierEnum.None)
+        {
+            if (slotType != dropped.GetComponent<DragDrop>().dropType)
+            {
+                isValid = false;
+            }
+        }
+
+        return isValid;
     }
 }

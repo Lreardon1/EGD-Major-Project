@@ -14,6 +14,7 @@ public class DragDrop : MonoBehaviour
     private GameObject dropZone;
     private Vector2 startPosition;
     private RectTransform trans;
+    public Modifier.ModifierEnum dropType = Modifier.ModifierEnum.None;
 
     void Start()
     {
@@ -25,6 +26,7 @@ public class DragDrop : MonoBehaviour
     {
         isOverDropZone = true;
         dropZone = collision.gameObject;
+        print(dropZone);
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -63,7 +65,8 @@ public class DragDrop : MonoBehaviour
             {
                 dz = dropZone.GetComponent<DropZone>();
             }
-            if (isOverDropZone && dropZone != previousParent && (dz == null || dz.CheckAllowDrop())) //prevents dropping onto same parent and check is the DropZone script is present, asking it if drop is valid
+            print(dropZone);
+            if (isOverDropZone && dropZone != previousParent && (dz == null || dz.CheckAllowDrop(gameObject))) //prevents dropping onto same parent and check is the DropZone script is present, asking it if drop is valid
             {
                 print(dropZone);
                 if (allowedDropZones.Count == 0 || allowedDropZones.Contains(dropZone)) //if no specific drop zones are specified, goes to any, otherwise only to specified

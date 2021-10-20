@@ -473,6 +473,7 @@ MonoBehaviour:
   typeIcon: {fileID: 1998341849088010748}
   onPlayScript: {fileID: 0}
   cardText: {fileID: 2669859812542877783}
+  transparentSprite: {fileID: 21300000, guid: cb910b0286b881b42a4e0e552c60435f, type: 3}
   draggableElements:
   - {fileID: 6858126061847552652, guid: 8919bcf47a75272418f9af1ffee4ba7b, type: 3}
   - {fileID: 8161400679952285361, guid: 476fdcaa57f51f64d8a1525e66628c8d, type: 3}

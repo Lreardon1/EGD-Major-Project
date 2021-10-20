@@ -92,6 +92,10 @@ PrefabInstance:
       value: -62.5
       objectReference: {fileID: 0}
     - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: element
       value: 1
       objectReference: {fileID: 0}
@@ -109,7 +113,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: availableModifiers.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: intModifierVals.Array.data[0]
@@ -117,16 +121,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: spriteModifierVals.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: availableModifiers.Array.data[0]
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: availableModifiers.Array.data[1]
-      value: 2
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: availableModifiers.Array.data[2]
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: spriteModifierVals.Array.data[0]
       value: 
       objectReference: {fileID: 2611541048023404966, guid: fd3fda5b6300188459213d3db6861d9c, type: 3}
+    - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: spriteModifierVals.Array.data[1]
+      value: 
+      objectReference: {fileID: -5900866640680920091, guid: 869344411ca1f014f899a63f67fef33e, type: 3}
     - target: {fileID: 4464987126968525579, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.7

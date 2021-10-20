@@ -49,24 +49,38 @@ public class CardEditHandler : MonoBehaviour
         {
             displayCard.modifiers[i].SetActive(true);
             cardEditor.modifierTransforms[i].SetActive(true);
+            cardEditor.modifierTransforms[i].GetComponent<DropZone>().slotType = mod.Value.name;
             displayCard.modifiers[i].GetComponent<Image>().sprite = mod.Key.GetComponent<Image>().sprite;
             cardEditor.previousChildrenNum[i] = 1;
             if (mod.Value.type == 0) //text editor needed, so spawn a button that will create a text editor and match curr value
             {
                 GameObject textEdit = Instantiate(textEditor, cardEditor.modifierTransforms[i].transform);
-                textEdit.GetComponent<NumEditor>().SetUp(mod, mod.Value.intVal, numEditorMin, numEditorMax);
+                cardEditor.modifierTransforms[i].GetComponent<BoxCollider2D>().enabled = false;
+                textEdit.GetComponent<NumEditor>().SetUp(mod, mod.Value.intVal, numEditorMin, numEditorMax, cardEditor.attackBlockTMP);
             }
             else if (mod.Value.type == 1) //draggable sprite needed, so spawn a draggable sprite matching the curr value
             {
+                cardEditor.modifierTransforms[i].GetComponent<BoxCollider2D>().enabled = true;
                 if (mod.Value.spriteVal != null)
                 {
                     GameObject spriteEdit = Instantiate(spriteEditor, cardEditor.modifierTransforms[i].transform);
                     spriteEdit.GetComponent<Image>().sprite = mod.Value.spriteVal;
-                    cardEditor.modifierTransforms[i].GetComponent<BoxCollider2D>().enabled = true;
+                    spriteEdit.GetComponent<DragDrop>().dropType = mod.Value.name;
                     if (mod.Value.name == Modifier.ModifierEnum.SecondaryElement)
                     {
                         spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(deckCustomizer.elementStorage.transform.parent.parent.gameObject);
-                        spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(cardEditor.modifierTransforms[i]);
+                        for (int j = 0; j < cardEditor.modifierTransforms.Count; j++)
+                        {
+                            spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(cardEditor.modifierTransforms[j]);
+                        }
+                    }
+                    else if (mod.Value.name == Modifier.ModifierEnum.Priority)
+                    {
+                        spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(deckCustomizer.otherStorage.transform.parent.parent.gameObject);
+                        for (int j = 0; j < cardEditor.modifierTransforms.Count; j++)
+                        {
+                            spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(cardEditor.modifierTransforms[j]);
+                        }
                     }
                 }
             }
@@ -81,7 +95,7 @@ public class CardEditHandler : MonoBehaviour
 
         //spawning a mana editor
         cardEditor.manaEditor = Instantiate(textEditor, cardEditor.manaModifierTransform.transform);
-        cardEditor.manaEditor.GetComponent<NumEditor>().SetUp(new KeyValuePair<GameObject, Modifier>(cardEditor.currentCard.gameObject, null), cardEditor.currentCard.manaCost, manaCostMin, manaCostMax);
+        cardEditor.manaEditor.GetComponent<NumEditor>().SetUp(new KeyValuePair<GameObject, Modifier>(cardEditor.currentCard.gameObject, null), cardEditor.currentCard.manaCost, manaCostMin, manaCostMax, cardEditor.manaBankTMP);
     }
 
     public void ShrinkCard()

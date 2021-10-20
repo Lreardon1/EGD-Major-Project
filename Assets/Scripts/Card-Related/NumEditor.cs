@@ -5,6 +5,8 @@ using UnityEngine.UI;
 public class NumEditor : MonoBehaviour
 {
     [SerializeField]
+    public TMPro.TextMeshProUGUI bankTMP;
+    [SerializeField]
     public TMPro.TextMeshProUGUI displayNum;
     public int numValue;
     [SerializeField]
@@ -24,12 +26,13 @@ public class NumEditor : MonoBehaviour
         rightButton.SetActive(!rightButton.activeSelf);
     }
 
-    public void SetUp(KeyValuePair<GameObject, Modifier> mod, int val, int minVal, int maxVal)
+    public void SetUp(KeyValuePair<GameObject, Modifier> mod, int val, int minVal, int maxVal, TMPro.TextMeshProUGUI tmp)
     {
         numValue = val;
         modPairing = mod;
         minValue = minVal;
         maxValue = maxVal;
+        bankTMP = tmp;
         displayNum.text = val.ToString();
 
         if (numValue == minValue)
@@ -48,6 +51,15 @@ public class NumEditor : MonoBehaviour
         leftButton.GetComponent<Button>().interactable = true;
         numValue++;
         displayNum.text = numValue.ToString();
+        int newBank = int.Parse(bankTMP.text) - 1;
+        if (newBank >= 0)
+        {
+            bankTMP.text = "+" + newBank.ToString();
+        }
+        else
+        {
+            bankTMP.text = newBank.ToString();
+        }
         UpdateModifier();
 
         if (numValue == maxValue)
@@ -61,6 +73,15 @@ public class NumEditor : MonoBehaviour
         rightButton.GetComponent<Button>().interactable = true;
         numValue--;
         displayNum.text = numValue.ToString();
+        int newBank = int.Parse(bankTMP.text) + 1;
+        if (newBank >= 0)
+        {
+            bankTMP.text = "+" + newBank.ToString();
+        }
+        else
+        {
+            bankTMP.text = newBank.ToString();
+        }
         UpdateModifier();
 
         if (numValue == minValue)
