@@ -5,8 +5,10 @@ using UnityEngine;
 public class CombatantBasis : MonoBehaviour
 {
     public enum Action { Attack, Block, Special };
+    public enum Status { None, Burn, Chill, Shock, Gust};
 
     public Action nextAction;
+    public Status statusCondition;
     public string combatantName;
     public int totalHitPoints;
     public int currentHitPoints;
@@ -27,17 +29,31 @@ public class CombatantBasis : MonoBehaviour
 
     public void ExecuteAction()
     {
+        defenseMultiplier = 1f;
+
         if (nextAction == Action.Attack)
             Attack();
         else if (nextAction == Action.Block)
             Block();
         else if (nextAction == Action.Special)
             Special();
+
+        previousAction = nextAction;
     }
 
     public virtual void TakeDamage(int damageAmount, string damageType)
     {
+        // Check for elemental combo
+        float elementalComboMultiplier = 1f;
+
+        currentHitPoints -= (int)((damageAmount * elementalComboMultiplier) / defenseMultiplier);
         Debug.Log(combatantName + " took " + damageAmount + " of " + damageType + " type");
+
+        if(currentHitPoints <= negativeHitPointShield)
+        {
+            Debug.Log(combatantName + " Slain");
+            GetComponent<SpriteRenderer>().enabled = false;
+        }
     }
 
     public virtual void SelectAction()
@@ -45,12 +61,39 @@ public class CombatantBasis : MonoBehaviour
         int rand = Random.Range(0, 3);
         if(rand == 0)
         {
+            if(previousAction == Action.Attack)
+            {
+                rand = Random.Range(0, 2);
+                if(rand == 0)
+                    nextAction = Action.Block;
+                else
+                    nextAction = Action.Special;
+                return;
+            }
             nextAction = Action.Attack;
         } else if(rand == 1)
         {
+            if (previousAction == Action.Block)
+            {
+                rand = Random.Range(0, 2);
+                if (rand == 0)
+                    nextAction = Action.Attack;
+                else
+                    nextAction = Action.Special;
+                return;
+            }
             nextAction = Action.Block;
-        } else if(rand == 3)
+        } else if(rand == 2)
         {
+            if (previousAction == Action.Special)
+            {
+                rand = Random.Range(0, 2);
+                if (rand == 0)
+                    nextAction = Action.Attack;
+                else
+                    nextAction = Action.Block;
+                return;
+            }
             nextAction = Action.Special;
         }
     }
@@ -69,11 +112,23 @@ public class CombatantBasis : MonoBehaviour
 
     public virtual void Attack()
     {
+        CombatantBasis cb = target.GetComponent<CombatantBasis>();
+
+        int damageTotal = attack + 0; // Get modifier from card here
+
+        string damageType = "none"; // Get damage type from card here
+
+        cb.TakeDamage(damageTotal, damageType);
         Debug.Log("Attack");
     }
 
     public virtual void Block()
     {
+        temporaryHitPoints += 0; // Get temporary hit points from card here
+
+        // Increase defense multipler to 2X
+        defenseMultiplier = 2f;
+
         Debug.Log("Block");
     }
 

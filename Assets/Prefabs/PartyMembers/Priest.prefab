@@ -13,13 +13,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextAction: 0
-  characterName: 
-  hitPoints: 100
+  combatantName: Priest
+  totalHitPoints: 60
+  currentHitPoints: 60
   attack: 30
   speed: 16
+  defenseMultiplier: 1
+  temporaryHitPoints: 0
+  negativeHitPointShield: 0
   text: {fileID: 6673966145099131155}
-  heldItem: {fileID: 0}
   appliedCard: {fileID: 0}
+  heldItem: {fileID: 0}
   target: {fileID: 0}
 --- !u!1001 &8070679975717550152
 PrefabInstance:
@@ -114,7 +118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409306, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Name
-      value: Mage
+      value: Priest
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}

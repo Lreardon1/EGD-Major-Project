@@ -13,13 +13,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextAction: 0
-  characterName: 
-  hitPoints: 110
+  combatantName: Hunter
+  totalHitPoints: 80
+  currentHitPoints: 80
   attack: 25
   speed: 20
+  defenseMultiplier: 1
+  temporaryHitPoints: 0
+  negativeHitPointShield: 0
   text: {fileID: 6296247438686769151}
-  heldItem: {fileID: 0}
   appliedCard: {fileID: 0}
+  heldItem: {fileID: 0}
   target: {fileID: 0}
 --- !u!1001 &8934758875802771108
 PrefabInstance:
@@ -114,7 +118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409306, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Name
-      value: Ranger
+      value: Hunter
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}

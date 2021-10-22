@@ -7,11 +7,13 @@ public class CombatManager : MonoBehaviour
     public enum CombatPhase {DrawPhase, PlayPhase, DiscardPhase, ActionPhase};
 
     public CombatPhase currentPhase = CombatPhase.PlayPhase;
+    public CombatHandController chb;
 
     public List<GameObject> partyMembers = new List<GameObject>();
     public List<GameObject> enemies = new List<GameObject>();
 
     public List<GameObject> actionOrder = new List<GameObject>();
+    
 
     public bool canDraw = false;
     public bool canPlay = true;
@@ -23,7 +25,20 @@ public class CombatManager : MonoBehaviour
     {
         // Populate Partymembers and enemies
         ActivateDrawPhase();
+
+
+        foreach (GameObject card in Deck.instance.viewOrder)
+        {
+            DragDrop dd = card.GetComponent<DragDrop>();
+            List<GameObject> allZones = new List<GameObject>();
+            allZones.AddRange(partyMembers);
+            allZones.AddRange(enemies);
+            allZones.Add(chb.discardPile);
+            dd.allowedDropZones = allZones;
+        }
     }
+
+   
 
     // Update is called once per frame
     void Update()
@@ -41,7 +56,7 @@ public class CombatManager : MonoBehaviour
 
             if (memberScript.nextAction == CombatantBasis.Action.Attack)
             {
-                memberScript.text.text = "Attack " + memberScript.target.name;
+                memberScript.text.text = "Attack " + memberScript.target.GetComponent<CombatantBasis>().combatantName;
             }
             else if (memberScript.nextAction == CombatantBasis.Action.Block)
             {
@@ -49,7 +64,7 @@ public class CombatManager : MonoBehaviour
             }
             else if (memberScript.nextAction == CombatantBasis.Action.Special)
             {
-                memberScript.text.text = "Special " + memberScript.target.name;
+                memberScript.text.text = "Special " + memberScript.target.GetComponent<CombatantBasis>().combatantName;
             }
         }
 
@@ -60,7 +75,7 @@ public class CombatManager : MonoBehaviour
             enemyScript.SelectTarget(partyMembers);
             if (enemyScript.nextAction ==  CombatantBasis.Action.Attack)
             {
-                enemyScript.text.text = "Attack " + enemyScript.target.name;
+                enemyScript.text.text = "Attack " + enemyScript.target.GetComponent<CombatantBasis>().combatantName;
             }
             else if (enemyScript.nextAction == CombatantBasis.Action.Block)
             {
@@ -68,7 +83,7 @@ public class CombatManager : MonoBehaviour
             }
             else if (enemyScript.nextAction == CombatantBasis.Action.Special)
             {
-                enemyScript.text.text = "Special " + enemyScript.target.name;
+                enemyScript.text.text = "Special " + enemyScript.target.GetComponent<CombatantBasis>().combatantName;
             }
 
         }

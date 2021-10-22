@@ -1,5 +1,30 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1675813738337571217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7685112655293785792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826eca48ee718114ebdcc2e4c43368ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextAction: 0
+  combatantName: Cobra
+  totalHitPoints: 25
+  currentHitPoints: 25
+  attack: 15
+  speed: 15
+  defenseMultiplier: 1
+  temporaryHitPoints: 0
+  negativeHitPointShield: 0
+  text: {fileID: 7447595518004980471}
+  appliedCard: {fileID: 0}
+  heldItem: {fileID: 0}
+  target: {fileID: 0}
 --- !u!1001 &6518643535064828342
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -73,3 +98,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+--- !u!1 &7685112655293785792 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3517837958156300150, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+  m_PrefabInstance: {fileID: 6518643535064828342}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7447595518004980471 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4408447238898312001, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+  m_PrefabInstance: {fileID: 6518643535064828342}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

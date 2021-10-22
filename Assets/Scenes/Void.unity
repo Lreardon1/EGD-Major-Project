@@ -130,6 +130,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1628610027}
     m_Modifications:
+    - target: {fileID: 3806483315315229153, guid: b67dd46ecc96175498ac9072737f4e65, type: 3}
+      propertyPath: allowedDropZones.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6515756284331085172, guid: b67dd46ecc96175498ac9072737f4e65, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -227,6 +231,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1628610027}
     m_Modifications:
+    - target: {fileID: 495138362667999062, guid: 545f4def0023ae94da6eaeec950c074b, type: 3}
+      propertyPath: allowedDropZones.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7521240137921762242, guid: 545f4def0023ae94da6eaeec950c074b, type: 3}
       propertyPath: m_Name
       value: Card2
@@ -439,6 +447,10 @@ PrefabInstance:
     - target: {fileID: 2272473572386799253, guid: c459a3a7e17bade46b34389ebcb4e4c6, type: 3}
       propertyPath: m_Name
       value: Card7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8157909077021815297, guid: c459a3a7e17bade46b34389ebcb4e4c6, type: 3}
+      propertyPath: allowedDropZones.Array.size
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c459a3a7e17bade46b34389ebcb4e4c6, type: 3}
@@ -715,6 +727,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1628610027}
     m_Modifications:
+    - target: {fileID: 4473592138535217487, guid: c6edd7eb41584d545aedefd77cfbbbc6, type: 3}
+      propertyPath: allowedDropZones.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5812636255759705562, guid: c6edd7eb41584d545aedefd77cfbbbc6, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -900,6 +916,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8075917126097482290, guid: d439c65aa818e5a4fad16226e02eb526, type: 3}
+      propertyPath: allowedDropZones.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d439c65aa818e5a4fad16226e02eb526, type: 3}
 --- !u!1001 &1360421715
@@ -909,6 +929,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1628610027}
     m_Modifications:
+    - target: {fileID: 3345293581966878348, guid: 2ad171b09345ffa46ba68cc17e696763, type: 3}
+      propertyPath: allowedDropZones.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4671107407047666200, guid: 2ad171b09345ffa46ba68cc17e696763, type: 3}
       propertyPath: m_Name
       value: Card1
@@ -1145,6 +1169,10 @@ PrefabInstance:
     - target: {fileID: 1911125048865500345, guid: caa06130e7fbfe84d83d63bc413ce81c, type: 3}
       propertyPath: m_Name
       value: Card6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8375124804683472941, guid: caa06130e7fbfe84d83d63bc413ce81c, type: 3}
+      propertyPath: allowedDropZones.Array.size
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: caa06130e7fbfe84d83d63bc413ce81c, type: 3}

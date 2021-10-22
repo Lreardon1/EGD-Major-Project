@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextAction: 0
-  combatantName: 
-  totalHitPoints: 0
-  currentHitPoints: 0
-  attack: 20
+  combatantName: Slime
+  totalHitPoints: 20
+  currentHitPoints: 20
+  attack: 10
   speed: 12
   defenseMultiplier: 1
   temporaryHitPoints: 0
