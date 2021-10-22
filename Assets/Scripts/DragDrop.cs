@@ -11,7 +11,7 @@ public class DragDrop : MonoBehaviour
     private GameObject previousParent;
     [SerializeField]
     public List<GameObject> allowedDropZones = new List<GameObject>();
-    private GameObject dropZone;
+    private List<GameObject> dropZones = new List<GameObject>();
     private Vector2 startPosition;
     private RectTransform trans;
     public Modifier.ModifierEnum dropType = Modifier.ModifierEnum.None;
@@ -25,14 +25,17 @@ public class DragDrop : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         isOverDropZone = true;
-        dropZone = collision.gameObject;
-        print(dropZone);
+        dropZones.Add(collision.gameObject);
+        print(collision.gameObject);
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        isOverDropZone = false;
-        dropZone = null;
+        dropZones.Remove(collision.gameObject);
+        if (dropZones.Count == 0)
+        {
+            isOverDropZone = false;
+        }
     }
 
     public void StartDrag()
@@ -55,36 +58,66 @@ public class DragDrop : MonoBehaviour
         trans.anchoredPosition = new Vector2(0.5f, 0.5f);
     }
 
+    private GameObject GetClosestValidDropZone()
+    {
+        List<GameObject> valid = new List<GameObject>();
+        GameObject retVal = null;
+        //first performing validation checks
+        foreach (GameObject dropZone in dropZones)
+        {
+            DropZone dz = dropZone.GetComponent<DropZone>();
+            if (dropZone != previousParent && (dz == null || dz.CheckAllowDrop(gameObject))) //prevents dropping onto same parent and check is the DropZone script is present, asking it if drop is valid)
+            {
+                if (allowedDropZones.Count == 0 || allowedDropZones.Contains(dropZone)) //if no specific drop zones are specified, goes to any, otherwise only to specified
+                {
+                    valid.Add(dropZone);
+                }
+            }
+        }
+
+        if (valid.Count == 0)
+        {
+            return retVal;
+        }
+
+        //then picking minimum distance from valid collision
+        retVal = valid[0];
+        float minDist = Vector3.Distance(gameObject.transform.position, retVal.transform.position);
+        foreach (GameObject dropZone in valid)
+        {
+            float dist = Vector3.Distance(gameObject.transform.position, dropZone.transform.position);
+            if (dist < minDist)
+            {
+                retVal = dropZone;
+                minDist = dist;
+            }
+        }
+
+        return retVal;
+    }
+
     public void EndDrag()
     {
         if (isDraggable)
         {
             dragger.GetComponent<Dragger>().isDragging = false;
-            DropZone dz = null;
+            GameObject dropZone = null;
             if (isOverDropZone)
             {
-                dz = dropZone.GetComponent<DropZone>();
+                dropZone = GetClosestValidDropZone();
             }
             print(dropZone);
-            if (isOverDropZone && dropZone != previousParent && (dz == null || dz.CheckAllowDrop(gameObject))) //prevents dropping onto same parent and check is the DropZone script is present, asking it if drop is valid
+            if (isOverDropZone && dropZone != null) //prevents dropping onto same parent and check is the DropZone script is present, asking it if drop is valid
             {
                 print(dropZone);
-                if (allowedDropZones.Count == 0 || allowedDropZones.Contains(dropZone)) //if no specific drop zones are specified, goes to any, otherwise only to specified
+                ScrollRect scrollRectZone = dropZone.GetComponent<ScrollRect>();
+                if (scrollRectZone != null && scrollRectZone.content != previousParent)
                 {
-                    ScrollRect scrollRectZone = dropZone.GetComponent<ScrollRect>();
-                    if (scrollRectZone != null && scrollRectZone.content != previousParent)
-                    {
-                        trans.SetParent(scrollRectZone.content.transform, false);
-                    }
-                    else
-                    {
-                        trans.SetParent(dropZone.transform, false);
-                    }
+                    trans.SetParent(scrollRectZone.content.transform, false);
                 }
                 else
                 {
-                    trans.SetParent(previousParent.transform, false);
-                    trans.localPosition = startPosition;
+                    trans.SetParent(dropZone.transform, false);
                 }
             }
             else
