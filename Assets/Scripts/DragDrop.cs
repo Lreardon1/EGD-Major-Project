@@ -26,7 +26,7 @@ public class DragDrop : MonoBehaviour
     {
         isOverDropZone = true;
         dropZones.Add(collision.gameObject);
-        print(collision.gameObject);
+        //print(collision.gameObject);
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -65,12 +65,31 @@ public class DragDrop : MonoBehaviour
         //first performing validation checks
         foreach (GameObject dropZone in dropZones)
         {
-            DropZone dz = dropZone.GetComponent<DropZone>();
-            if (dropZone != previousParent && (dz == null || dz.CheckAllowDrop(gameObject))) //prevents dropping onto same parent and check is the DropZone script is present, asking it if drop is valid)
+            CustomizationDropZone cdz = dropZone.GetComponent<CustomizationDropZone>();
+            if (cdz != null)
             {
-                if (allowedDropZones.Count == 0 || allowedDropZones.Contains(dropZone)) //if no specific drop zones are specified, goes to any, otherwise only to specified
+                GameObject subDropZone = cdz.DroppedOnto(gameObject);
+                if (subDropZone != null)
                 {
-                    valid.Add(dropZone);
+                    DropZone dz = subDropZone.GetComponent<DropZone>();
+                    if (subDropZone != previousParent && (dz == null || dz.CheckAllowDrop(gameObject))) //prevents dropping onto same parent and check is the DropZone script is present, asking it if drop is valid)
+                    {
+                        if (allowedDropZones.Count == 0 || allowedDropZones.Contains(subDropZone)) //if no specific drop zones are specified, goes to any, otherwise only to specified
+                        {
+                            valid.Add(subDropZone);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                DropZone dz = dropZone.GetComponent<DropZone>();
+                if (dropZone != previousParent && (dz == null || dz.CheckAllowDrop(gameObject))) //prevents dropping onto same parent and check is the DropZone script is present, asking it if drop is valid)
+                {
+                    if (allowedDropZones.Count == 0 || allowedDropZones.Contains(dropZone)) //if no specific drop zones are specified, goes to any, otherwise only to specified
+                    {
+                        valid.Add(dropZone);
+                    }
                 }
             }
         }
@@ -106,10 +125,10 @@ public class DragDrop : MonoBehaviour
             {
                 dropZone = GetClosestValidDropZone();
             }
-            print(dropZone);
+            //print(dropZone);
             if (isOverDropZone && dropZone != null) //prevents dropping onto same parent and check is the DropZone script is present, asking it if drop is valid
             {
-                print(dropZone);
+                //print(dropZone);
                 ScrollRect scrollRectZone = dropZone.GetComponent<ScrollRect>();
                 if (scrollRectZone != null && scrollRectZone.content != previousParent)
                 {
