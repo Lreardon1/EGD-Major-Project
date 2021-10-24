@@ -16,7 +16,7 @@ public class Deck : MonoBehaviour
     List<GameObject> deck = new List<GameObject>();
     public List<GameObject> viewOrder;
     List<GameObject> discard = new List<GameObject>();
-    public Dictionary<string, List<GameObject>> freeDraggables;
+    public Dictionary<string, List<GameObject>> freeDraggables = new Dictionary<string, List<GameObject>>();
 
     public string sceneToLoad = "CustomizedCardTestScene";
 

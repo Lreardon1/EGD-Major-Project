@@ -4,21 +4,18 @@ using UnityEngine;
 
 public class Modifier
 {
-    public enum ModifierEnum { None, Attack, Defense, SecondaryElement, Priority };
+    public enum ModifierEnum { None, NumModifier, SecondaryElement, Utility };
 
     public ModifierEnum name;
     public Sprite icon;
-    public int type;
     public int intVal;
     public Sprite spriteVal;
     public string spriteParsing;
 
-    public Modifier(ModifierEnum n, Sprite i, int t, int iVal, Sprite sVal)
+    public Modifier(ModifierEnum n, Sprite i, Sprite sVal)
     {
         name = n;
         icon = i;
-        type = t;
-        intVal = iVal;
         spriteVal = sVal;
 
         parseSpriteVal();
@@ -45,5 +42,15 @@ public class Modifier
         {
             spriteParsing = "UNIDENTIFIED";
         }
+    }
+
+    public void ActivateModifier(Card c)
+    {
+
+    }
+
+    public void DeactivateModifier(Card c)
+    {
+
     }
 }

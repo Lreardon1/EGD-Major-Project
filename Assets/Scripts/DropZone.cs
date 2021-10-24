@@ -9,8 +9,12 @@ public class DropZone : MonoBehaviour
 
     public bool CheckAllowDrop(GameObject dropped)
     {
+        if (dropped == null || !gameObject.activeSelf)
+        {
+            return false;
+        }
         bool isValid = true;
-        if (transform.childCount >= allowedChildren)
+        if (transform.childCount >= allowedChildren && allowedChildren != -1)
         {
             isValid = false;
         }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Card : MonoBehaviour
 {
     public enum CardType { None, Attack, Block, Influence };
-    public enum Element { None, Fire, Water, Lightning, Air };
+    public enum Element { None, Fire, Water, Air, Earth, Light, Dark };
 
     [Header("Initial Settings")]
     [SerializeField]
@@ -17,8 +17,6 @@ public class Card : MonoBehaviour
     public Element element;
     [SerializeField]
     public List<Modifier.ModifierEnum> availableModifiers;
-    [SerializeField]
-    public List<int> intModifierVals;
     [SerializeField]
     public List<Sprite> spriteModifierVals;
 
@@ -54,38 +52,24 @@ public class Card : MonoBehaviour
     public void InitializeCard()
     {
         //dynamically determining valid slots based on starting values
-        int intModC = 0, spriteModC = 0;
+        int spriteModC = 0;
         int i;
         for (i = 0; i < availableModifiers.Count; i++)
         {
             Modifier template = ModifierLookup.modifierLookupTable[availableModifiers[i]];
-            //int detected, using next int modifier
-            if (template.type == 0)
+            modifiers[i].GetComponent<Image>().sprite = template.icon;
+            GameObject spriteMod = Instantiate(spriteComp, modifiers[i].transform.GetChild(0).transform);
+            if (spriteModifierVals[spriteModC] != null)
             {
-                modifiers[i].GetComponent<Image>().sprite = template.icon;
-                GameObject textMod = Instantiate(textComp, modifiers[i].transform.GetChild(0).transform);
-                textMod.GetComponent<TMPro.TextMeshProUGUI>().text = intModifierVals[intModC].ToString();
-                Modifier newMod = new Modifier(template.name, template.icon, template.type, intModifierVals[intModC], null);
-                GetComponent<CardEditHandler>().activeModifiers.Add(modifiers[i], newMod);
-                intModC++;
+                spriteMod.GetComponent<Image>().sprite = spriteModifierVals[spriteModC];
             }
-            //sprite detected, using next sprite modifier
-            else if (template.type == 1)
+            else
             {
-                modifiers[i].GetComponent<Image>().sprite = template.icon;
-                GameObject spriteMod = Instantiate(spriteComp, modifiers[i].transform.GetChild(0).transform);
-                if (spriteModifierVals[spriteModC] != null)
-                {
-                    spriteMod.GetComponent<Image>().sprite = spriteModifierVals[spriteModC];
-                }
-                else
-                {
-                    spriteMod.GetComponent<Image>().sprite = transparentSprite;
-                }
-                Modifier newMod = new Modifier(template.name, template.icon, template.type, -1, spriteModifierVals[spriteModC]);
-                GetComponent<CardEditHandler>().activeModifiers.Add(modifiers[i], newMod);
-                spriteModC++;
+                spriteMod.GetComponent<Image>().sprite = transparentSprite;
             }
+            Modifier newMod = new Modifier(template.name, template.icon, spriteModifierVals[spriteModC]);
+            GetComponent<CardEditHandler>().activeModifiers.Add(modifiers[i], newMod);
+            spriteModC++;
         }
         for (; i < modifiers.Count; i++)
         {
@@ -104,7 +88,7 @@ public class Card : MonoBehaviour
                 elemIcon = Instantiate(draggableElements[1], elementIcon.transform);
                 break;
 
-            case Element.Lightning:
+            case Element.Earth:
                 elemIcon = Instantiate(draggableElements[2], elementIcon.transform);
                 break;
 
@@ -153,7 +137,7 @@ public class Card : MonoBehaviour
                 elemIcon = Instantiate(draggableElements[1], elementIcon.transform);
                 break;
 
-            case Element.Lightning:
+            case Element.Earth:
                 elemIcon = Instantiate(draggableElements[2], elementIcon.transform);
                 break;
 

@@ -10,16 +10,9 @@ public class CardEditor : MonoBehaviour
 
     public Card currentCard;
     public bool checkForChanges = false;
-    public GameObject manaModifierTransform;
     public List<GameObject> modifierTransforms;
     public List<int> previousChildrenNum = new List<int>();
 
-    [SerializeField]
-    public TMPro.TextMeshProUGUI manaBankTMP;
-    [SerializeField]
-    public TMPro.TextMeshProUGUI attackBlockTMP;
-
-    public GameObject manaEditor;
     public GameObject primElementIcon;
 
     void ResetChildrenNum()
@@ -52,13 +45,17 @@ public class CardEditor : MonoBehaviour
                     if (previousChildrenNum[i] == 0)
                     {
                         currentCard.modifiers[i].transform.GetChild(0).GetChild(0).gameObject.GetComponent<Image>().sprite = currentCard.transparentSprite;
+                        currentCard.gameObject.GetComponent<CardEditHandler>().activeModifiers[currentCard.modifiers[i]].DeactivateModifier(currentCard);
                         currentCard.gameObject.GetComponent<CardEditHandler>().activeModifiers[currentCard.modifiers[i]].setSpriteMod(null);
                     }
                     else if (previousChildrenNum[i] == 1)
                     {
                         GameObject newChild = modifierTransforms[i].transform.GetChild(0).gameObject;
+                        print(newChild);
+                        print(currentCard.modifiers[i]);
                         currentCard.modifiers[i].transform.GetChild(0).GetChild(0).gameObject.GetComponent<Image>().sprite = newChild.GetComponent<Image>().sprite;
                         currentCard.gameObject.GetComponent<CardEditHandler>().activeModifiers[currentCard.modifiers[i]].setSpriteMod(newChild.GetComponent<Image>().sprite);
+                        currentCard.gameObject.GetComponent<CardEditHandler>().activeModifiers[currentCard.modifiers[i]].ActivateModifier(currentCard);
                     }
                 }
             }
@@ -79,11 +76,6 @@ public class CardEditor : MonoBehaviour
         {
             Destroy(primElementIcon);
             primElementIcon = null;
-        }
-        if (manaEditor != null)
-        {
-            Destroy(manaEditor);
-            manaEditor = null;
         }
         ResetChildrenNum();
         currentCard.gameObject.GetComponent<CardEditHandler>().ShrinkCard();
