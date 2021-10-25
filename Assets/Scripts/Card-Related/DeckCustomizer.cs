@@ -23,20 +23,35 @@ public class DeckCustomizer : MonoBehaviour
     public GameObject cantAcceptWindow;
     [SerializeField]
     public GameObject customizationWindow;
+    [SerializeField]
+    public GameObject cardSelectionWindow;
+    [SerializeField]
+    public GameObject customizeStorage;
+    [SerializeField]
+    public GameObject fullDeckStorage;
+    [SerializeField]
+    public GameObject currentDeckStorage;
 
     public GameObject cardEditor;
 
     void Start()
     {
         cardEditor.SetActive(false);
+        customizationWindow.SetActive(false);
+        cardSelectionWindow.SetActive(true);
         SetUp();
     }
 
     public void SetUp()
     {
-        GridLayoutGroup cardGrid = gameObject.GetComponent<GridLayoutGroup>();
+        print("setting up");
+        GridLayoutGroup cardGrid = customizeStorage.GetComponent<GridLayoutGroup>();
+        GridLayoutGroup allCardGrid = fullDeckStorage.GetComponent<GridLayoutGroup>();
+        GridLayoutGroup currDeckGrid = currentDeckStorage.GetComponent<GridLayoutGroup>();
         Vector2 cardSize = cardRenderer.GetComponent<RectTransform>().sizeDelta;
         cardGrid.cellSize = new Vector2(cardSize.x, cardSize.y);
+        allCardGrid.cellSize = new Vector2(cardSize.x, cardSize.y);
+        currDeckGrid.cellSize = new Vector2(cardSize.x, cardSize.y);
 
         GridLayoutGroup numGrid = numStorage.GetComponent<GridLayoutGroup>();
         GridLayoutGroup elementGrid = elementStorage.GetComponent<GridLayoutGroup>();
@@ -46,13 +61,7 @@ public class DeckCustomizer : MonoBehaviour
         elementGrid.cellSize = new Vector2(elementSize.x, elementSize.y);
         utilGrid.cellSize = new Vector2(elementSize.x, elementSize.y);
 
-        List<GameObject> deck = Deck.instance.viewOrder;
-        foreach (GameObject c in deck)
-        {
-            c.GetComponent<DragDrop>().isDraggable = false;
-            c.GetComponent<RectTransform>().SetParent(transform);
-            c.GetComponent<BoxCollider2D>().enabled = false;
-        }
+        SwapCardsToSelect();
 
         Dictionary<string, List<GameObject>> freeDraggables = Deck.instance.freeDraggables;
         if (freeDraggables.ContainsKey("num"))
@@ -81,6 +90,53 @@ public class DeckCustomizer : MonoBehaviour
                 mod.GetComponent<RectTransform>().SetParent(utilityStorage.transform);
             }
         }
+    }
+
+    private void SwapCardsToSelect()
+    {
+        List<GameObject> allCards = Deck.instance.allCards;
+        List<GameObject> deck = Deck.instance.deck;
+        foreach (GameObject c in allCards)
+        {
+            if (deck.Contains(c))
+            {
+                c.GetComponent<RectTransform>().SetParent(currentDeckStorage.transform);
+            }
+            else
+            {
+                c.GetComponent<RectTransform>().SetParent(fullDeckStorage.transform);
+            }
+        }
+    }
+
+    private void SwapCardsToCustomize()
+    {
+        Deck.instance.HideCards();
+        List<GameObject> allCards = Deck.instance.allCards;
+        List<GameObject> deck = Deck.instance.deck;
+        foreach (GameObject c in allCards)
+        {
+            if (deck.Contains(c))
+            {
+                c.GetComponent<DragDrop>().isDraggable = false;
+                c.GetComponent<RectTransform>().SetParent(customizeStorage.transform);
+                c.GetComponent<BoxCollider2D>().enabled = false;
+            }
+        }
+    }
+
+    public void SwapToCustomize()
+    {
+        cardSelectionWindow.SetActive(false);
+        customizationWindow.SetActive(true);
+        SwapCardsToCustomize();
+    }
+
+    public void SwapToSelect()
+    {
+        customizationWindow.SetActive(false);
+        cardSelectionWindow.SetActive(true);
+        SwapCardsToSelect();
     }
 
     public void AttemptAccept()

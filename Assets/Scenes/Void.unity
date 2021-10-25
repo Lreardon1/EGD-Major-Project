@@ -498,6 +498,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offscreenPos: {fileID: 1628610026}
   draggablePos: {fileID: 1078596381}
+  allCards:
+  - {fileID: 1360421716}
+  - {fileID: 214182174}
+  - {fileID: 810515045}
+  - {fileID: 643203981}
+  - {fileID: 926444037}
+  - {fileID: 1161119769}
+  - {fileID: 1051123638}
   viewOrder:
   - {fileID: 1360421716}
   - {fileID: 214182174}

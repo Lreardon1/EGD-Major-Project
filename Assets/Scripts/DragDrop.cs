@@ -18,8 +18,16 @@ public class DragDrop : MonoBehaviour
 
     void Start()
     {
-        dragger = FindObjectOfType<Dragger>().gameObject;
         trans = GetComponent<RectTransform>();
+        Dragger d = FindObjectOfType<Dragger>();
+        if (d != null)
+        {
+            dragger = d.gameObject;
+        }
+        else
+        {
+            print("ERROR: CANNOT FIND DRAGGERPOS PREFAB");
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

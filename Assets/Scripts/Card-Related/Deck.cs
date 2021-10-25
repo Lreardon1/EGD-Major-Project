@@ -13,7 +13,8 @@ public class Deck : MonoBehaviour
 
     public static Deck instance;
 
-    List<GameObject> deck = new List<GameObject>();
+    public List<GameObject> deck = new List<GameObject>();
+    public List<GameObject> allCards;
     public List<GameObject> viewOrder;
     List<GameObject> discard = new List<GameObject>();
     public Dictionary<string, List<GameObject>> freeDraggables = new Dictionary<string, List<GameObject>>();
@@ -35,7 +36,7 @@ public class Deck : MonoBehaviour
         deck.AddRange(cards);
 
         ModifierLookup.LoadModifierTable();
-        foreach (GameObject card in viewOrder)
+        foreach (GameObject card in allCards)
         {
             card.GetComponent<Card>().InitializeCard();
         }
@@ -78,17 +79,17 @@ public class Deck : MonoBehaviour
         discard.Clear();
     }
 
-    public void ToggleButtons()
+    public void ToggleButtons(bool isActive)
     {
-        foreach (GameObject card in viewOrder)
+        foreach (GameObject card in allCards)
         {
-            card.GetComponent<Button>().enabled = !card.GetComponent<Button>().enabled;
+            card.GetComponent<Button>().enabled = isActive;
         }
     }
 
     public void HideCards()
     {
-        foreach (GameObject card in viewOrder)
+        foreach (GameObject card in allCards)
         {
             RectTransform trans = card.GetComponent<RectTransform>();
             trans.SetParent(offscreenPos.transform);
@@ -101,9 +102,14 @@ public class Deck : MonoBehaviour
 
     public void HideCard(GameObject card)
     {
-        if (viewOrder.Contains(card))
+        if (allCards.Contains(card))
         {
-            card.GetComponent<RectTransform>().SetParent(offscreenPos.transform);
+            RectTransform trans = card.GetComponent<RectTransform>();
+            trans.SetParent(offscreenPos.transform);
+            trans.anchorMax = new Vector2(0.5f, 0.5f);
+            trans.anchorMin = new Vector2(0.5f, 0.5f);
+            trans.anchoredPosition = new Vector2(0.5f, 0.5f);
+            trans.localPosition = new Vector3(0, 0, 0);
         }
     }
 }
