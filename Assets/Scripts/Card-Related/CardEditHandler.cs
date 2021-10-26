@@ -12,9 +12,10 @@ public class CardEditHandler : MonoBehaviour
     public Dictionary<GameObject, Modifier> activeModifiers = new Dictionary<GameObject, Modifier>();
 
     public bool isCustomizable;
-    private bool displayOnClick;
+    public bool displayOnClick = true;
     private float startHeldTime;
     private bool isHeld;
+    private GameObject currentParent;
 
     public bool inCombat;
 
@@ -23,9 +24,13 @@ public class CardEditHandler : MonoBehaviour
 
     public void DontDisplay()
     {
-        print("dontdisplay");
-        startHeldTime = Time.time;
-        isHeld = true;
+        if (!isCustomizable)
+        {
+            print("dontdisplay");
+            startHeldTime = Time.time;
+            isHeld = true;
+            currentParent = transform.parent.gameObject;
+        }
     }
 
     void Update()
@@ -33,8 +38,9 @@ public class CardEditHandler : MonoBehaviour
         if (isHeld)
         {
             //determine if clicking on card is a drag or a button click, don't display if not a button click
-            if (Time.time - startHeldTime > 0.5)
+            if (Time.time - startHeldTime > 0.65 || currentParent != transform.parent.gameObject)
             {
+                print("not displaying");
                 displayOnClick = false;
             }
         }
@@ -49,18 +55,11 @@ public class CardEditHandler : MonoBehaviour
             deckCustomizer = FindObjectOfType<DeckCustomizer>();
             cardEditor = deckCustomizer.cardEditor.GetComponent<CardEditor>();
         }
-
+        print(Time.time - startHeldTime);
         if (displayOnClick)
         {
-            print("attempt display");
             if (isCustomizable)
             {
-                if (deckCustomizer == null)
-                {
-                    deckCustomizer = FindObjectOfType<DeckCustomizer>();
-                    cardEditor = deckCustomizer.cardEditor.GetComponent<CardEditor>();
-                }
-
                 gameObject.GetComponent<Button>().interactable = false;
                 deckCustomizer.cardEditor.SetActive(true);
                 //instantiate editable card UI, allowing for changes with more buttons 
@@ -71,7 +70,10 @@ public class CardEditHandler : MonoBehaviour
             }
             else
             {
-
+                gameObject.GetComponent<Button>().interactable = false;
+                deckCustomizer.cardDisplay.SetActive(true);
+                Card displayCard = deckCustomizer.cardDisplay.transform.GetChild(0).gameObject.GetComponent<Card>();
+                displayCard.VisualCopy(cardScript);
             }
         }
         displayOnClick = true;
