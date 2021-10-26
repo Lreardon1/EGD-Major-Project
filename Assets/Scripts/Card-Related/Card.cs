@@ -36,6 +36,7 @@ public class Card : MonoBehaviour
     [Header("Quick Data References")]
     [SerializeField]
     public Image cardText;
+    private Card copiedCard;
 
     [SerializeField]
     public Sprite transparentSprite;
@@ -123,6 +124,7 @@ public class Card : MonoBehaviour
         GetComponent<Image>().color = c.gameObject.GetComponent<Image>().color;
         typeIcon.GetComponent<Image>().sprite = c.typeIcon.GetComponent<Image>().sprite;
         cardText.sprite = c.cardText.sprite;
+        UpdateManaCost(c.manaCost);
 
         element = c.element;
         //updating element icon to match
@@ -150,6 +152,49 @@ public class Card : MonoBehaviour
             elemIcon.GetComponent<DragDrop>().isDraggable = false;
             c.GetComponent<CardEditHandler>().deckCustomizer.cardEditor.GetComponent<CardEditor>().primElementIcon = elemIcon;
         }
+    }
+
+    //Creates a visual only copy of a given Card script (MUST BE CALLED ON FULLY EQUIPPED CARD OR NULL REF OCCURS)
+    public void VisualCopy(Card c)
+    {
+        //updating all default set sprites
+        GetComponent<Image>().sprite = c.gameObject.GetComponent<Image>().sprite;
+        GetComponent<Image>().color = c.gameObject.GetComponent<Image>().color;
+        typeIcon.GetComponent<Image>().sprite = c.typeIcon.GetComponent<Image>().sprite;
+        cardText.sprite = c.cardText.sprite;
+        UpdateManaCost(c.manaCost);
+
+        GameObject elemIcon = elementIcon.transform.GetChild(0).gameObject;
+        if (c.element != Element.None) {
+            
+            elemIcon.GetComponent<Image>().sprite = c.elementIcon.transform.GetChild(0).gameObject.GetComponent<Image>().sprite;
+        }
+        else
+        {
+            elemIcon.GetComponent<Image>().sprite = transparentSprite;
+        }
+
+        for (int i = 0; i < modifiers.Count; i++)
+        {
+            if (c.modifiers[i].activeSelf)
+            {
+                modifiers[i].SetActive(true);
+                modifiers[i].GetComponent<Image>().sprite = c.modifiers[i].GetComponent<Image>().sprite;
+                modifiers[i].transform.GetChild(0).GetChild(0).gameObject.GetComponent<Image>().sprite = c.modifiers[i].transform.GetChild(0).GetChild(0).gameObject.GetComponent<Image>().sprite;
+            }
+            else
+            {
+                modifiers[i].SetActive(false);
+            }
+        }
+
+        copiedCard = c;
+    }
+
+    public void HideDisplay()
+    {
+        transform.parent.gameObject.SetActive(false);
+        copiedCard.gameObject.GetComponent<Button>().interactable = true;
     }
 
     public void Unequip()
