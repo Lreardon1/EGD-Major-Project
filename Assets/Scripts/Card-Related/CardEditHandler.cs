@@ -16,6 +16,8 @@ public class CardEditHandler : MonoBehaviour
     private float startHeldTime;
     private bool isHeld;
 
+    public bool inCombat;
+
     [SerializeField]
     public GameObject spriteEditor;
 
@@ -40,6 +42,8 @@ public class CardEditHandler : MonoBehaviour
 
     public void DisplayCard()
     {
+        if (inCombat)
+            return;
         if (deckCustomizer == null)
         {
             deckCustomizer = FindObjectOfType<DeckCustomizer>();

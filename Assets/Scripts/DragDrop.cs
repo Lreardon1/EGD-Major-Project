@@ -7,11 +7,11 @@ public class DragDrop : MonoBehaviour
 {
     public bool isDraggable = true;
     public GameObject dragger;
-    private bool isOverDropZone = false;
+    public bool isOverDropZone = false;
     private GameObject previousParent;
     [SerializeField]
     public List<GameObject> allowedDropZones = new List<GameObject>();
-    private List<GameObject> dropZones = new List<GameObject>();
+    public List<GameObject> dropZones = new List<GameObject>();
     private Vector2 startPosition;
     private RectTransform trans;
     public Modifier.ModifierEnum dropType = Modifier.ModifierEnum.None;

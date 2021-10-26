@@ -498,6 +498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offscreenPos: {fileID: 1628610026}
   draggablePos: {fileID: 1078596381}
+  deck: []
   allCards:
   - {fileID: 1360421716}
   - {fileID: 214182174}
@@ -514,7 +515,7 @@ MonoBehaviour:
   - {fileID: 926444037}
   - {fileID: 1161119769}
   - {fileID: 1051123638}
-  sceneToLoad: CustomizedCardTestScene
+  sceneToLoad: BattleScene
 --- !u!114 &816220764
 MonoBehaviour:
   m_ObjectHideFlags: 0
