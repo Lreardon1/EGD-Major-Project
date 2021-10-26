@@ -151,4 +151,18 @@ public class Card : MonoBehaviour
             c.GetComponent<CardEditHandler>().deckCustomizer.cardEditor.GetComponent<CardEditor>().primElementIcon = elemIcon;
         }
     }
+
+    public void Unequip()
+    {
+        //clearing modifier values and instancing modifiers to respective pools
+        GetComponent<CardEditHandler>().Unequip();
+        //clearing sprites
+        for (int i = 0; i < modifiers.Count; i++)
+        {
+            if (modifiers[i].transform.GetChild(0).childCount != 0)
+            {
+                modifiers[i].transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = transparentSprite;
+            }
+        }
+    }
 }

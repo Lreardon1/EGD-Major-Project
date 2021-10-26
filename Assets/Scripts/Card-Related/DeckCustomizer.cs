@@ -62,6 +62,8 @@ public class DeckCustomizer : MonoBehaviour
         utilGrid.cellSize = new Vector2(elementSize.x, elementSize.y);
 
         SwapCardsToSelect();
+        fullDeckStorage.GetComponent<AllCardViewer>().checkForUpdates = true;
+        currentDeckStorage.GetComponent<DeckViewer>().checkForUpdates = true;
 
         Dictionary<string, List<GameObject>> freeDraggables = Deck.instance.freeDraggables;
         if (freeDraggables.ContainsKey("num"))
@@ -98,15 +100,24 @@ public class DeckCustomizer : MonoBehaviour
         List<GameObject> deck = Deck.instance.deck;
         foreach (GameObject c in allCards)
         {
+            c.GetComponent<DragDrop>().allowedDropZones.Add(fullDeckStorage.transform.parent.parent.gameObject);
+            c.GetComponent<DragDrop>().allowedDropZones.Add(currentDeckStorage.transform.parent.parent.gameObject);
+            c.GetComponent<CardEditHandler>().isCustomizable = false;
             if (deck.Contains(c))
             {
+                c.GetComponent<DragDrop>().isDraggable = true;
                 c.GetComponent<RectTransform>().SetParent(currentDeckStorage.transform);
+                //c.GetComponent<BoxCollider2D>().enabled = false;
             }
             else
             {
+                c.GetComponent<DragDrop>().isDraggable = true;
                 c.GetComponent<RectTransform>().SetParent(fullDeckStorage.transform);
+                //c.GetComponent<BoxCollider2D>().enabled = false;
             }
         }
+
+        currentDeckStorage.GetComponent<DeckViewer>().UpdateDeckSize();
     }
 
     private void SwapCardsToCustomize()
@@ -116,19 +127,31 @@ public class DeckCustomizer : MonoBehaviour
         List<GameObject> deck = Deck.instance.deck;
         foreach (GameObject c in allCards)
         {
+            c.GetComponent<DragDrop>().allowedDropZones.Clear();
+            c.GetComponent<CardEditHandler>().isCustomizable = true;
             if (deck.Contains(c))
             {
                 c.GetComponent<DragDrop>().isDraggable = false;
                 c.GetComponent<RectTransform>().SetParent(customizeStorage.transform);
-                c.GetComponent<BoxCollider2D>().enabled = false;
+                //c.GetComponent<BoxCollider2D>().enabled = false;
             }
         }
     }
 
     public void SwapToCustomize()
     {
+        //saving newly equipped cards
+        Deck.instance.deck.Clear();
+        int equippedCardCount = currentDeckStorage.transform.childCount;
+        for (int i = 0; i < equippedCardCount; i++)
+        {
+            Deck.instance.deck.Add(currentDeckStorage.transform.GetChild(i).gameObject);
+        }
+        fullDeckStorage.GetComponent<AllCardViewer>().checkForUpdates = false;
+        currentDeckStorage.GetComponent<DeckViewer>().checkForUpdates = false;
         cardSelectionWindow.SetActive(false);
         customizationWindow.SetActive(true);
+        
         SwapCardsToCustomize();
     }
 
@@ -137,7 +160,23 @@ public class DeckCustomizer : MonoBehaviour
         customizationWindow.SetActive(false);
         cardSelectionWindow.SetActive(true);
         SwapCardsToSelect();
+        fullDeckStorage.GetComponent<AllCardViewer>().checkForUpdates = true;
+        currentDeckStorage.GetComponent<DeckViewer>().checkForUpdates = true;
     }
+
+    //public void UpdateDeckSize()
+    //{
+    //    int size = currentDeckStorage.transform.childCount;
+    //    deckSize.text = size.ToString() + " / 30";
+    //    if (size == 30)
+    //    {
+    //        currentDeckStorage.transform.parent.parent.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+    //    }
+    //    else
+    //    {
+    //        currentDeckStorage.transform.parent.parent.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+    //    }
+    //}
 
     public void AttemptAccept()
     {   

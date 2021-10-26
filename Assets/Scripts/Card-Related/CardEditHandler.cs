@@ -11,8 +11,32 @@ public class CardEditHandler : MonoBehaviour
     private CardEditor cardEditor;
     public Dictionary<GameObject, Modifier> activeModifiers = new Dictionary<GameObject, Modifier>();
 
+    public bool isCustomizable;
+    private bool displayOnClick;
+    private float startHeldTime;
+    private bool isHeld;
+
     [SerializeField]
     public GameObject spriteEditor;
+
+    public void DontDisplay()
+    {
+        print("dontdisplay");
+        startHeldTime = Time.time;
+        isHeld = true;
+    }
+
+    void Update()
+    {
+        if (isHeld)
+        {
+            //determine if clicking on card is a drag or a button click, don't display if not a button click
+            if (Time.time - startHeldTime > 0.5)
+            {
+                displayOnClick = false;
+            }
+        }
+    }
 
     public void DisplayCard()
     {
@@ -22,13 +46,32 @@ public class CardEditHandler : MonoBehaviour
             cardEditor = deckCustomizer.cardEditor.GetComponent<CardEditor>();
         }
 
-        gameObject.GetComponent<Button>().interactable = false;
-        deckCustomizer.cardEditor.SetActive(true);
-        //instantiate editable card UI, allowing for changes with more buttons 
-        Card displayCard = cardEditor.editedCardRender.GetComponent<Card>();
-        cardEditor.LoadCard(cardScript);
-        formatModifierEditors(displayCard);
-        cardEditor.checkForChanges = true;
+        if (displayOnClick)
+        {
+            print("attempt display");
+            if (isCustomizable)
+            {
+                if (deckCustomizer == null)
+                {
+                    deckCustomizer = FindObjectOfType<DeckCustomizer>();
+                    cardEditor = deckCustomizer.cardEditor.GetComponent<CardEditor>();
+                }
+
+                gameObject.GetComponent<Button>().interactable = false;
+                deckCustomizer.cardEditor.SetActive(true);
+                //instantiate editable card UI, allowing for changes with more buttons 
+                Card displayCard = cardEditor.editedCardRender.GetComponent<Card>();
+                cardEditor.LoadCard(cardScript);
+                formatModifierEditors(displayCard);
+                cardEditor.checkForChanges = true;
+            }
+            else
+            {
+
+            }
+        }
+        displayOnClick = true;
+        isHeld = false;
     }
 
     private void formatModifierEditors(Card displayCard)
@@ -84,5 +127,54 @@ public class CardEditHandler : MonoBehaviour
         //save changes on editable card UI, and return
         gameObject.GetComponent<Button>().interactable = true;
         deckCustomizer.cardEditor.SetActive(false);
+    }
+
+    public void Unequip()
+    {
+        if (deckCustomizer == null)
+        {
+            deckCustomizer = FindObjectOfType<DeckCustomizer>();
+            cardEditor = deckCustomizer.cardEditor.GetComponent<CardEditor>();
+        }
+
+        foreach (KeyValuePair<GameObject, Modifier> mod in activeModifiers)
+        {
+            if (mod.Value.spriteVal != null)
+            {
+                GameObject spriteEdit = null;
+
+                if (mod.Value.name == Modifier.ModifierEnum.NumModifier)
+                {
+                    spriteEdit = Instantiate(spriteEditor, deckCustomizer.numStorage.transform);
+                    spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(deckCustomizer.numStorage);
+                }
+                else if (mod.Value.name == Modifier.ModifierEnum.SecondaryElement)
+                {
+                    spriteEdit = Instantiate(spriteEditor, deckCustomizer.elementStorage.transform);
+                    spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(deckCustomizer.elementStorage);
+                }
+                else if (mod.Value.name == Modifier.ModifierEnum.Utility)
+                {
+                    spriteEdit = Instantiate(spriteEditor, deckCustomizer.utilityStorage.transform);
+                    spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(deckCustomizer.utilityStorage);
+                }
+
+                if (spriteEdit != null)
+                {
+                    spriteEdit.GetComponent<Image>().sprite = mod.Value.spriteVal;
+                    spriteEdit.GetComponent<DragDrop>().dropType = mod.Value.name;
+
+                    //all constantly available drop zones
+                    spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(deckCustomizer.modsDropZone);
+                    spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(deckCustomizer.editorDropZone);
+                    for (int j = 0; j < cardEditor.modifierTransforms.Count; j++)
+                    {
+                        spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(cardEditor.modifierTransforms[j]);
+                    }
+                }
+                mod.Value.DeactivateModifier(cardScript);
+                mod.Value.setSpriteMod(null);
+            }
+        }
     }
 }
