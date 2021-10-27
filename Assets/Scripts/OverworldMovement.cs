@@ -10,6 +10,9 @@ public class OverworldMovement : MonoBehaviour
     SpriteRenderer characterRenderer;
     public Animator animator;
     public CharacterController cc;
+
+    public bool canMove = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,11 +28,16 @@ public class OverworldMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float rightTurn = Input.GetAxisRaw("Rotate");
-        transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
+        Vector3 right = new Vector3(0, 0, 0);
+        Vector3 up = new Vector3(0,0,0);
+        if (canMove)
+        {
+            float rightTurn = Input.GetAxisRaw("Rotate");
+            transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
 
-        Vector3 right = Input.GetAxisRaw("Horizontal") * transform.right;
-        Vector3 up = Input.GetAxisRaw("Vertical") * transform.forward;
+            right = Input.GetAxisRaw("Horizontal") * transform.right;
+            up = Input.GetAxisRaw("Vertical") * transform.forward;
+        }
 
         // could just use gravity, character controller will handle not going thru the floor but this gives me more control
         bool isGround = Physics.Raycast(transform.position,
@@ -41,43 +49,46 @@ public class OverworldMovement : MonoBehaviour
 
 
         cc.Move((((right + up).normalized * movementspeed) + velocity) * Time.deltaTime);
+        
+        if (canMove)
+        {
+            if (Input.GetKey(KeyCode.D))
+            {
+                animator.SetBool("Walking", true);
+                //transform.Translate(Vector3.right * movementspeed * Time.deltaTime);
+                if (direction != "right" || direction != "forward")
+                {
+                    characterRenderer.flipX = true;
+                    direction = "right";
+                }
+            }
+            else if (Input.GetKey(KeyCode.A))
+            {
+                animator.SetBool("Walking", true);
+                //transform.Translate(Vector3.left * movementspeed * Time.deltaTime);
+                if (direction != "left" || direction != "back")
+                {
+                    characterRenderer.flipX = false;
+                    direction = "left";
+                }
+            }
+            else if (Input.GetKey(KeyCode.W))
+            {
+                animator.SetBool("Walking", true);
+                //transform.Translate(Vector3.forward * movementspeed * Time.deltaTime);
 
-        if (Input.GetKey(KeyCode.D))
-        {
-            animator.SetBool("Walking", true);
-            //transform.Translate(Vector3.right * movementspeed * Time.deltaTime);
-            if (direction != "right" || direction != "forward")
-            {
-                characterRenderer.flipX = true;
-                direction = "right";
             }
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            animator.SetBool("Walking", true);
-            //transform.Translate(Vector3.left * movementspeed * Time.deltaTime);
-            if (direction != "left" || direction != "back")
+            else if (Input.GetKey(KeyCode.S))
             {
-                characterRenderer.flipX = false;
-                direction = "left";
+                animator.SetBool("Walking", true);
+                //transform.Translate(Vector3.back * movementspeed * Time.deltaTime);
+
             }
+            else
+            {
+                animator.SetBool("Walking", false);
+            }
+            //Debug.Log(direction);
         }
-        else if (Input.GetKey(KeyCode.W))
-        {
-            animator.SetBool("Walking", true);
-            //transform.Translate(Vector3.forward * movementspeed * Time.deltaTime);
-          
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            animator.SetBool("Walking", true);
-            //transform.Translate(Vector3.back * movementspeed * Time.deltaTime);
-            
-        }
-        else
-        {
-            animator.SetBool("Walking", false);
-        }
-        //Debug.Log(direction);
     }
 }
