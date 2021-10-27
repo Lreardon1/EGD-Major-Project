@@ -272,9 +272,10 @@ public class CardParser : MonoBehaviour
         // TODO
         using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(image))
         {
-            int f = 3;
-            Cv2.Resize(cardScene, cardScene, new Size(cardScene.Width / f, cardScene.Height / f));
+            //int f = 3;
+            //Cv2.Resize(cardScene, cardScene, new Size(cardScene.Width / f, cardScene.Height / f));
             print(cardScene.Size());
+
             //Mat cardScene = OpenCvSharp.Unity.TextureToMat(image);
             ParseCard(cardScene);
         }
@@ -415,7 +416,7 @@ public class CardParser : MonoBehaviour
 
             float diffOp = 1.0f - ((float)sum / (template.Size().Height * template.Size().Width * 255));
             if (diffOp > 0.9) {
-                diffImages[0].texture = OpenCvSharp.Unity.MatToTexture(diff);
+                //diffImages[0].texture = OpenCvSharp.Unity.MatToTexture(diff);
                 print(diffOp);
             }
             float histOp = GetHistogramMatch(im1, template);
@@ -757,8 +758,8 @@ public class CardParser : MonoBehaviour
             Mat colorMat = new Mat();
             im.CopyTo(colorMat);
             Cv2.DrawContours(colorMat, ConvertPoint2fToPoint(simpCnts), -1, Scalar.Blue, 2);
-            diffImages[1].texture = OpenCvSharp.Unity.MatToTexture(grey);
-            diffImages[2].texture = OpenCvSharp.Unity.MatToTexture(colorMat);
+            ///diffImages[1].texture = OpenCvSharp.Unity.MatToTexture(grey);
+            ///diffImages[2].texture = OpenCvSharp.Unity.MatToTexture(colorMat);
 
             int val = 0;
             foreach (Point2f[] cnt in simpCnts)
@@ -801,7 +802,7 @@ public class CardParser : MonoBehaviour
             contours = contours.Concat(corners).ToArray();
 
             CvAruco.DrawDetectedMarkers(testMat, contours, null);
-            matcherImage.texture = OpenCvSharp.Unity.MatToTexture(testMat);
+            ///matcherImage.texture = OpenCvSharp.Unity.MatToTexture(testMat);
         }
     }
     
@@ -1014,8 +1015,8 @@ public class CardParser : MonoBehaviour
                     using (Mat n = new Mat())
                     {
                         Cv2.DrawMatches(matchDefault, kp1, cardScene, kp2, goodMatches, n);
-                        matcherImage.texture = OpenCvSharp.Unity.MatToTexture(n);
-                        replaneImage.texture = OpenCvSharp.Unity.MatToTexture(testIM);
+                        ///matcherImage.texture = OpenCvSharp.Unity.MatToTexture(n);
+                        ///replaneImage.texture = OpenCvSharp.Unity.MatToTexture(testIM);
                     }
                 }
             }
@@ -1048,7 +1049,10 @@ public class CardParser : MonoBehaviour
         bestLowerRight.neededRot = 0;
         print("Selected corner got out with match val: " + bestLowerRight.matchVal);
         CvAruco.DrawDetectedMarkers(cardScene, new Point2f[][] { bestLowerRight.corners  }, null);
+        if (arucoImage.texture != null)
+            Destroy(arucoImage.texture);
         arucoImage.texture = OpenCvSharp.Unity.MatToTexture(cardScene);
+        return;
         CardCorner bestUpperLeft = FindBestUpperLeftCardCorner(cardScene, bestLowerRight.corners, ref contours);
         if (bestUpperLeft == null) {
             print("Failed on upper left, which might be needed");
@@ -1080,9 +1084,9 @@ public class CardParser : MonoBehaviour
 
         // DEBUG DRAWS
         Cv2.DrawKeypoints(matchDefault, kp1, blackOut);
-        contourImage.texture = OpenCvSharp.Unity.MatToTexture(blackOut);
+        //contourImage.texture = OpenCvSharp.Unity.MatToTexture(blackOut);
         CvAruco.DrawDetectedMarkers(cardScene, new Point2f[][] { bestLowerRight.corners, bestUpperLeft.corners, possibleCard }, null);
-        arucoImage.texture = OpenCvSharp.Unity.MatToTexture(cardScene);
+        //arucoImage.texture = OpenCvSharp.Unity.MatToTexture(cardScene);
 
         // WARP THE PERSPECTIVE
         GetMatchedKeypoints(kp1, kp2, goodMatches, out Point2f[] m_kp1, out Point2f[] m_kp2);
@@ -1105,7 +1109,7 @@ public class CardParser : MonoBehaviour
                 {
                     Cv2.DrawMatches(matchDefault, kp1, replaned, kp2, goodMatches, n);
                     //matcherImage.texture = OpenCvSharp.Unity.MatToTexture(n);
-                    replaneImage.texture = OpenCvSharp.Unity.MatToTexture(replaned);
+                    //replaneImage.texture = OpenCvSharp.Unity.MatToTexture(replaned);
                 }
             }
             else
@@ -1128,6 +1132,11 @@ public class CardParser : MonoBehaviour
             Mat help = new Mat();
             Cv2.GaussianBlur(croppedReplaned, help, new Size(0, 0), 3);
             Cv2.AddWeighted(croppedReplaned, 1.5, help, -0.5, 0, croppedReplaned);
+        }
+        // TODO
+        if (replaneImage.texture != null)
+        {
+            Destroy(replaneImage.texture);
         }
         replaneImage.texture = OpenCvSharp.Unity.MatToTexture(croppedReplaned);
 
