@@ -1060,7 +1060,7 @@ public class CardParser : MonoBehaviour
             bestUpperLeft.neededRot = 0;
             print("Best upper left got out");
 
-            // Make first try at remapping
+            // REMAP BY CORNERS
             Point2f[] possibleCard = TryToBoundCardFromCorners(cardScene, bestLowerRight.corners, bestUpperLeft.corners);
             if (possibleCard == null)
                 return;
@@ -1068,16 +1068,13 @@ public class CardParser : MonoBehaviour
 
             // predict most likely element from single replane, might not work but may improve performance.
             bestLowerRight.mostLikelyElement = GetMostLikelyElement(replaned, cornerReplaneOffset);
-
-            // get TODO TODO TODO
-            //Mat hMat = KeypointMatchToTemplate(replaned, bestLowerRight, out CardType cardType, out CardElement cardElement);
-
+            // get the homography matrix from the replaned image to the template image space
+            Mat hMat = KeypointMatchToTemplate(replaned, bestLowerRight, out CardType cardType, out CardElement cardElement);
+            Cv2.WarpPerspective(cardScene, replaned, firstTMat * hMat, new Size(defaultCardWidth, defaultCardHeight)); // TODO : may be backwards matrix
 
             // the default used for keypoint matching has a border so that we can get better keypoints at the border of cards (since it doesn't use image edge in its feature finding)
             // if we replaned the image perfectly, we will have a matchBorder sized border
-            // TODO : sharpness testing
             Mat croppedReplaned = replaned[borderAmount, replaned.Height - borderAmount, borderAmount, replaned.Width - borderAmount];
-            // TODO
             if (replaneImage.texture != null)
             {
                 Destroy(replaneImage.texture);
@@ -1095,58 +1092,52 @@ public class CardParser : MonoBehaviour
     }
 
     /**
-     *  TODO TODO
-     *  Given expected card type and element, run thru the most likely cards and try to get the best keypoint matches
-     *  
-     */ 
-     /*
-    private Mat KeypointMatchToTemplate(Mat replaned, CardCorner bestLowerRight, out CardType cardType, out CardElement cardElement)
-    {
+    *  Given expected card type and element, run thru the most likely cards and try to get the best keypoint matches
+    *  
+    */
+   private Mat KeypointMatchToTemplate(Mat replaned, CardCorner bestLowerRight, out CardType cardType, out CardElement cardElement)
+   {
 
-        // GET KEYPOINTS FOR THE REPLANED IMAGE
-        GetKeypoints(replaned, out KeyPoint[] kp2, out Mat des2);
-        MatchKeypointsBoring(kp1, kp2, des1, des2, out DMatch[] goodMatches);
+       // GET KEYPOINTS FOR THE REPLANED IMAGE
+       GetKeypoints(replaned, out KeyPoint[] kp2, out Mat des2);
 
-        // WARP THE PERSPECTIVE
-        GetMatchedKeypoints(kp1, kp2, goodMatches, out Point2f[] m_kp1, out Point2f[] m_kp2);
-        int initMatches = goodMatches.Length;
-        if (FilterByFundy(ref m_kp1, ref m_kp2, ref goodMatches, 1.5f))
+        // ITERATE THRU THE MOST LIKELY CARDS
+        bool hasList = templateCardDict.TryGetValue(
+            (int)bestLowerRight.mostLikelyType | (int)bestLowerRight.mostLikelyElement, 
+            out List<TemplateCardData> cardDataList);
+        int bestGoodMatches = 0;
+        Mat bestHomographyMat = null;
+        foreach (TemplateCardData cardData in cardDataList)
         {
-            if (CheckIfEnoughMatch(goodMatches, initMatches))
-            {
-                Mat hMat = GetHomographyMatrix(m_kp2, m_kp1);
-                Mat mainMat = hMat * firstTMat;
-                if (hMat == null || (hMat.Type() != MatType.CV_32F && hMat.Type() != MatType.CV_64F) || hMat.Width != 3 || hMat.Height != 3)
-                {
-                    Debug.LogError("Error: Failed to create homography matrix for " + goodMatches.Length + " keypoints.");
-                }
-                else
-                {
-                    Cv2.WarpPerspective(cardScene, replaned, mainMat, matchDefault.Size());
-                }
+            KeyPoint[] kp1 = cardData.keypoints;
+            Mat des1 = cardData.des;
+            MatchKeypointsBoring(kp1, kp2, des1, des2, out DMatch[] goodMatches);
 
-                // DEBUG DRAWS
-                using (Mat n = new Mat())
+            GetMatchedKeypoints(kp1, kp2, goodMatches, out Point2f[] m_kp1, out Point2f[] m_kp2);
+            int initMatches = goodMatches.Length;
+            if (FilterByFundy(ref m_kp1, ref m_kp2, ref goodMatches, 1.5f))
+            {
+                if (CheckIfEnoughMatch(goodMatches, initMatches) && bestGoodMatches < goodMatches.Length)
                 {
-                    Cv2.DrawMatches(matchDefault, kp1, replaned, kp2, goodMatches, n);
-                    //matcherImage.texture = OpenCvSharp.Unity.MatToTexture(n);
-                    //replaneImage.texture = OpenCvSharp.Unity.MatToTexture(replaned);
+                    bestGoodMatches = goodMatches.Length;
+                    bestHomographyMat = GetHomographyMatrix(m_kp2, m_kp1);
+                    if (bestHomographyMat == null 
+                        || (bestHomographyMat.Type() != MatType.CV_32F && bestHomographyMat.Type() != MatType.CV_64F)
+                        || bestHomographyMat.Width != 3 || bestHomographyMat.Height != 3)
+                    {
+                        Debug.LogError("Error: Failed to create homography matrix for " + goodMatches.Length + " keypoints.");
+                    }
                 }
             }
-            else
-            {
-                print("I don't think this was a card");
-                return;
-            }
         }
-        else
-        {
-            print("Failed fundemental matrix test");
-            numberText.text = "Found a possible card but filtered it out by fundamental test";
-            return;
-        }
-    }*/
-    
+
+        // TODO : we can also do the others if we got nothing good, but that would be expensive.
+
+        cardType = bestLowerRight.mostLikelyType;
+        cardElement = bestLowerRight.mostLikelyElement;
+        return bestHomographyMat;
+   }
+
 
     /**
      * From the estimated mean values, get the closest average element and say that that is probably the element.
