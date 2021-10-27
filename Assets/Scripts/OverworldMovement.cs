@@ -86,15 +86,18 @@ public class OverworldMovement : MonoBehaviour
         bool isGround = Physics.Raycast(transform.position,
             (ground.transform.position - transform.position).normalized,
             (ground.transform.position - transform.position).magnitude, LayerMask.GetMask("Ground"));
+<<<<<<< HEAD
         print(isGround);
 
+=======
+>>>>>>> a683a4349ae70a7a73b45fe3fdfd06a7a2425a63
         velocity += Vector3.down * 9.8f * Time.deltaTime;
         velocity = isGround ? Vector3.zero : velocity;
 
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
         {
             walkTime += Time.fixedDeltaTime;
-            print(Time.fixedDeltaTime);
+            //print(Time.fixedDeltaTime);
             Vector3 pos = transform.position;
             walkLine.AddFirst(new TimePairTransform(walkTime, pos));
         }
@@ -159,7 +162,7 @@ public class OverworldMovement : MonoBehaviour
                 if (walkoff >= tpt.time)
                 {
                     party_members[i].transform.position = tpt.pos;
-                    print("Took " + l);
+                    //print("Took " + l);
                     break;
                 }
             }

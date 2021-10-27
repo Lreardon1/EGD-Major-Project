@@ -42,8 +42,57 @@ public class CombatManager : MonoBehaviour
             activeEnemies.Add(enemy);
         }
         // Populate Partymembers and enemies
-        ActivateDrawPhase();
 
+        ToggleDrawButtons(false);
+        foreach (GameObject member in partyMembers)
+        {
+            CombatantBasis cb = member.GetComponent<CombatantBasis>();
+            if (cb.appliedCard != null)
+            {
+                Deck.instance.Discard(cb.appliedCard);
+                cb.appliedCard = null;
+            }
+        }
+        foreach (GameObject enemy in enemies)
+        {
+            CombatantBasis cb = enemy.GetComponent<CombatantBasis>();
+            if (cb.appliedCard != null)
+            {
+                Deck.instance.Discard(cb.appliedCard);
+                cb.appliedCard = null;
+            }
+        }
+
+        foreach (GameObject member in partyMembers)
+        {
+            CombatantBasis memberScript = member.GetComponent<CombatantBasis>();
+            memberScript.SelectAction();
+            memberScript.SelectTarget(activeEnemies);
+            if (memberScript.nextAction == CombatantBasis.Action.Block)
+            {
+                memberScript.text.text = "Block";
+            }
+        }
+
+        foreach (GameObject enemy in enemies)
+        {
+            CombatantBasis enemyScript = enemy.GetComponent<CombatantBasis>();
+            enemyScript.SelectAction();
+            enemyScript.SelectTarget(activePartyMembers);
+            if (enemyScript.nextAction == CombatantBasis.Action.Block)
+            {
+                enemyScript.text.text = "Block";
+            }
+
+        }
+
+        CreateActionQueue();
+        foreach (GameObject combatant in actionOrder)
+        {
+            Debug.Log(combatant.name);
+        }
+
+        ActivatePlayPhase();
     }
 
     public void ActivateDrawPhase()
@@ -406,9 +455,8 @@ public class CombatManager : MonoBehaviour
         if(currentMana - cardScript.manaCost < 0)
         {
             Debug.Log("Not Enough Mana To Play This Card");
-
-            cb.appliedCard.transform.SetParent(chc.gameObject.transform);
-            cb.appliedCard.transform.localScale = new Vector3(1, 1, 1);
+            card.transform.SetParent(chc.gameObject.transform);
+            card.transform.localScale = new Vector3(1, 1, 1);
             cb.appliedCard = null;
             return;
         }
