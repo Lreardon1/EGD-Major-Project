@@ -531,6 +531,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3029b409b095b274c8738876c675414a, type: 3}
+--- !u!1 &1728571430 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 674488719510518914, guid: 3029b409b095b274c8738876c675414a, type: 3}
+  m_PrefabInstance: {fileID: 1728571429}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1756750045
 GameObject:
   m_ObjectHideFlags: 0
@@ -688,7 +693,7 @@ PrefabInstance:
     - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: party_members.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1728571430}
     - target: {fileID: 1426100620896122064, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: m_Name
       value: Player
