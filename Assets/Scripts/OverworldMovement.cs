@@ -14,8 +14,22 @@ public class OverworldMovement : MonoBehaviour
     string rotation_way;
     public bool canMove = true;
     public List<UnityEngine.Vector3> movements = new List<UnityEngine.Vector3>();
+    private LinkedList<TimePairTransform> walkLine = new LinkedList<TimePairTransform>();
+    private float walkTime = 0;
+
     float elapsed = 0f;
-    GameObject[] party_members;
+    public GameObject[] party_members;
+
+    public class TimePairTransform
+    {
+        public float time;
+        public Vector3 pos;
+        public TimePairTransform(float time, Vector3 t)
+        {
+            this.time = time;
+            pos = t;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +47,7 @@ public class OverworldMovement : MonoBehaviour
     public Vector3 velocity = Vector3.zero;
     public float turnSpeed = 30.0f;
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Vector3 right = new Vector3(0, 0, 0);
         Vector3 up = new Vector3(0,0,0);
@@ -72,32 +86,30 @@ public class OverworldMovement : MonoBehaviour
         bool isGround = Physics.Raycast(transform.position,
             (ground.transform.position - transform.position).normalized,
             (ground.transform.position - transform.position).magnitude, LayerMask.GetMask("Ground"));
-
+        isGround = true;
         velocity += Vector3.down * 9.8f * Time.deltaTime;
         velocity = isGround ? Vector3.zero : velocity;
 
-        elapsed += Time.deltaTime;
-        if (elapsed >= 0.0166f)
+        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
         {
-            party_members = GameObject.FindGameObjectsWithTag("Party");
-            if (party_members.Length > 0)
-            {
-                Follow();
-                //need to do this because position vector has some wierd y values
-                // Vector3 tmp = (((right + up).normalized * movementspeed) + velocity) * Time.deltaTime;
-                //movements.Add(tmp);
-                movements.Add((((right + up).normalized * movementspeed) + velocity));
-            }
-            elapsed = elapsed % 0.0166f;
+            walkTime += Time.fixedDeltaTime;
+            print(Time.fixedDeltaTime);
+            Vector3 pos = transform.position;
+            walkLine.AddFirst(new TimePairTransform(walkTime, pos));
         }
-        cc.Move((((right + up).normalized * movementspeed) + velocity) * Time.deltaTime);
+        if (party_members.Length > 0)
+        {
+            MovePartyMembers();
+        }
+        cc.Move((((right + up).normalized * movementspeed) + velocity) * Time.fixedDeltaTime);
+
 
         if (canMove)
         {
             if (Input.GetKey(KeyCode.D))
             {
                 animator.SetBool("Walking", true);
-                //transform.Translate(Vector3.right * movementspeed * Time.deltaTime);
+                //transform.Translate(Vector3.right * movementspeed * Time.fixedDeltaTime);
                 if (direction != "right" || direction != "forward")
                 {
                     characterRenderer.flipX = true;
@@ -107,7 +119,7 @@ public class OverworldMovement : MonoBehaviour
             else if (Input.GetKey(KeyCode.A))
             {
                 animator.SetBool("Walking", true);
-                //transform.Translate(Vector3.left * movementspeed * Time.deltaTime);
+                //transform.Translate(Vector3.left * movementspeed * Time.fixedDeltaTime);
                 if (direction != "left" || direction != "back")
                 {
                     characterRenderer.flipX = false;
@@ -117,13 +129,13 @@ public class OverworldMovement : MonoBehaviour
             else if (Input.GetKey(KeyCode.W))
             {
                 animator.SetBool("Walking", true);
-                //transform.Translate(Vector3.forward * movementspeed * Time.deltaTime);
+                //transform.Translate(Vector3.forward * movementspeed * Time.fixedDeltaTime);
 
             }
             else if (Input.GetKey(KeyCode.S))
             {
                 animator.SetBool("Walking", true);
-                //transform.Translate(Vector3.back * movementspeed * Time.deltaTime);
+                //transform.Translate(Vector3.back * movementspeed * Time.fixedDeltaTime);
 
             }
             else
@@ -133,14 +145,31 @@ public class OverworldMovement : MonoBehaviour
         }
     }
 
-    //for each object with the tag player, this function updates its position to be the same as the player after 1 second
-    //unless the player has stopped
-    void Follow()
+    public float backoff = 0.1f;
+    private void MovePartyMembers()
     {
-        //Debug.Log("here");
-        party_members[0].transform.Translate(movements[0]);
-        //somethin wonky with y coordinate, so this is trying to fix it
-        party_members[0].transform.position = new Vector3(party_members[0].transform.position.x, 0.200105f, party_members[0].transform.position.z); ;
-        movements.RemoveAt(0);
+        for (int i = 0; i < party_members.Length; ++i)
+        {
+            float walkoff = walkTime - (backoff * (1 + i));
+            int l = 0;
+            foreach (TimePairTransform tpt in walkLine)
+            {
+                l++;
+                if (walkoff >= tpt.time)
+                {
+                    party_members[i].transform.position = tpt.pos;
+                    print("Took " + l);
+                    break;
+                }
+            }
+        }
+        
+        /*
+        while (walkLine.Count != 0 && walkLine.Last.Value.time < walkTime + 5.0f)
+        {
+            walkLine.RemoveLast();
+        }
+        */
     }
 }
+

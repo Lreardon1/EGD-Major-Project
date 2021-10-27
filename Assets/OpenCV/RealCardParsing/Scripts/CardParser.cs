@@ -177,7 +177,6 @@ public class CardParser : MonoBehaviour
             // process texture with whatever method sub-class might have in mind
             ProcessTexture(webCamTexture);
         }
-        //Debug.Log("Time to complete: " + (Time.realtimeSinceStartupAsDouble - t) + ". Delta Time: " + Time.deltaTime);
     }
 
 
