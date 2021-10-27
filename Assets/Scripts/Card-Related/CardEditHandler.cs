@@ -26,7 +26,6 @@ public class CardEditHandler : MonoBehaviour
     {
         if (!isCustomizable)
         {
-            print("dontdisplay");
             startHeldTime = Time.time;
             isHeld = true;
             currentParent = transform.parent.gameObject;
@@ -40,7 +39,6 @@ public class CardEditHandler : MonoBehaviour
             //determine if clicking on card is a drag or a button click, don't display if not a button click
             if (Time.time - startHeldTime > 0.65 || currentParent != transform.parent.gameObject)
             {
-                print("not displaying");
                 displayOnClick = false;
             }
         }

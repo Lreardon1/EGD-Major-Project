@@ -38,7 +38,7 @@ public class DeckCustomizer : MonoBehaviour
 
     void Start()
     {
-        SetUp();
+        //SetUp();
     }
 
     public void SetUp()
@@ -146,6 +146,11 @@ public class DeckCustomizer : MonoBehaviour
 
     public void SwapToCustomize()
     {
+        //resetting and unequipping selected card if open
+        if (cardDisplay.activeSelf)
+        {
+            cardDisplay.transform.GetChild(0).gameObject.GetComponent<Card>().HideDisplay();
+        }
         //saving newly equipped cards
         Deck.instance.deck.Clear();
         int equippedCardCount = currentDeckStorage.transform.childCount;
@@ -163,6 +168,11 @@ public class DeckCustomizer : MonoBehaviour
 
     public void SwapToSelect()
     {
+        //saving and unequipping editted card if open
+        if (cardEditor.activeSelf)
+        {
+            cardEditor.GetComponent<CardEditor>().SaveCard();
+        }
         customizationWindow.SetActive(false);
         cardSelectionWindow.SetActive(true);
         SwapCardsToSelect();
@@ -272,6 +282,8 @@ public class DeckCustomizer : MonoBehaviour
         }
         Deck.instance.HideCards();
 
+        print(transform.parent.gameObject);
+        transform.parent.gameObject.GetComponent<CanvasManager>().UnlockPlayer();
         customizationWindow.SetActive(false);
     }
 }
