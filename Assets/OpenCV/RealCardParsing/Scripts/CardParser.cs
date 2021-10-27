@@ -10,51 +10,56 @@ using System;
 
 public class CardParser : MonoBehaviour
 {
+    [Header("UI and Debugging")]
     public RawImage matcherImage;
     public RawImage contourImage;
     public RawImage arucoImage;
     public RawImage replaneImage;
     public RawImage[] diffImages;
+
     public Text numberText;
-    public Texture2D image;
-    public Texture2D defaultCardTexture;
-    public float defaultCardResizeAmount = 0.5f;
-    public Mat defaultCardMat;
+    
+    [Space(10)]
+    public Texture2D staticTestImage;
     
     // BOUNDING BOXES
     [Space(10)]
+    [Header("Boudning Boxes")]
     public Point2f bottomRightBoundingBox_UL;
     public Point2f bottomRightBoundingBox_LR;
     public BoundingBox bottomRightBoundingBox;
-    [Space(10)]
-
+    [Space(1)]
     public Point2f upperLeftBoundingBox_UL;
     public Point2f upperLeftBoundingBox_LR;
     public BoundingBox upperLeftBoundingBox;
-    [Space(10)]
-
+    [Space(1)]
     public Point2f bannerNumberBox_UL;
     public Point2f bannerNumberBox_LR;
     public BoundingBox bannerNumberBox;
+    [Space]
+    public Point2f elementColorBox_UL;
+    public Point2f elementColorBox_LR;
+    public BoundingBox elementColorBox;
 
     [Space(10)]
+    [Header("Match and Planing Scalars")]
+    public int cornerReplaneOffset = 25;
     public float matchThresh = 0.8f;
     public float tagLineIntersectThresh = 4.0f;
+    private int defaultCardWidth = 0;
+    private int defaultCardHeight = 0;
 
     [Space(10)]
+    [Header("Template Cards")]
+    public int borderAmount = 10;
+    public float defaultCardResizeAmount = 0.5f;
     public ScriptableCardImage[] cardTemplates;
-    private Dictionary<int, List<CardKeypoint>> cardKeypoints = new Dictionary<int, List<CardKeypoint>>();
-    private Dictionary<CardElement, CardElementTemplateData> cardElementsImages = new Dictionary<CardElement, CardElementTemplateData>();
-    private Dictionary<CardType, CardTypeTemplateData> cardTypeImages = new Dictionary<CardType, CardTypeTemplateData>();
-
-    private Mat brMatch;
-
+    private Dictionary<int, List<TemplateCardData>> templateCardDict = new Dictionary<int, List<TemplateCardData>>();
+    private Dictionary<CardType, CardTypeTemplateData> cardTypeDict = new Dictionary<CardType, CardTypeTemplateData>();
+    private Dictionary<CardElement, CardElementTemplateData> cardElementDict = new Dictionary<CardElement, CardElementTemplateData>();
     private WebCamDevice? webCamDevice = null;
     private WebCamTexture webCamTexture = null;
-
-    [Space(10)]
-    [Header("Card Params")]
-    public Texture2D baseCardImage;
+    
 
     /// <summary>
     /// A kind of workaround for macOS issue: MacBook doesn't state it's webcam as frontal
@@ -73,15 +78,10 @@ public class CardParser : MonoBehaviour
         bottomRightBoundingBox = new BoundingBox(bottomRightBoundingBox_UL, bottomRightBoundingBox_LR);
         upperLeftBoundingBox = new BoundingBox(upperLeftBoundingBox_UL, upperLeftBoundingBox_LR);
         bannerNumberBox = new BoundingBox(bannerNumberBox_UL, bannerNumberBox_LR);
-
-        defaultCardMat = OpenCvSharp.Unity.TextureToMat(defaultCardTexture);
-        Cv2.Resize(defaultCardMat, defaultCardMat,
-            new Size(defaultCardMat.Size().Width * defaultCardResizeAmount, defaultCardMat.Size().Height * defaultCardResizeAmount));
-
-        brMatch = bottomRightBoundingBox.CropByBox(defaultCardMat);
-
+        
         BakeCardTemplateData();
     }
+
 
     private int ConvertToIntMask(CardElement element)
     {
@@ -93,23 +93,29 @@ public class CardParser : MonoBehaviour
         return (int)type;
     }
 
+    // TODO
+    private Mat ExtractCardType(Mat cardMat)
+    {
+        throw new NotImplementedException();
+    }
+    private Color ExtractCardElement(Mat cardMat)
+    {
+        return Color.red;
+    }
+
+    /**
+     * Bake the template card data for quicker use in detection and parsing.
+     * Uses a pretty large amount of memory for great gains in performance.
+     * Called on START using provided scriptable objects of cards.
+     */
     private void BakeCardTemplateData()
     {
-        cardKeypoints.Add(0, new List<CardKeypoint>());
-
+        templateCardDict.Add(0, new List<TemplateCardData>());
+        
         foreach (ScriptableCardImage card in cardTemplates)
         {
-            // extract card type and elements if new
-            if (!cardTypeImages.ContainsKey(card.cardType))
-            {
-                CardTypeTemplateData typeData = new CardTypeTemplateData(ExtractCardType(card.cardTexture));
-                cardTypeImages.Add(card.cardType, typeData);
-            }
-            if (!cardElementsImages.ContainsKey(card.cardElement))
-            {
-                CardElementTemplateData elementData = new CardElementTemplateData(ExtractCardElement(card.cardTexture));
-                cardElementsImages.Add(card.cardElement, elementData);
-            }
+            defaultCardWidth = card.cardTexture.width;
+            defaultCardHeight = card.cardTexture.height;
 
             // extract keypoints
             int cardType = ConvertToIntMask(card.cardElement);
@@ -117,38 +123,48 @@ public class CardParser : MonoBehaviour
 
             using (Mat cardMat = OpenCvSharp.Unity.TextureToMat(card.cardTexture))
             {
+                // extract card type and elements if new, BEFORE WE MAKE A BORDER FOR THE IMAGE!!!
+                if (!cardTypeDict.ContainsKey(card.cardType))
+                {
+                    CardTypeTemplateData typeData = new CardTypeTemplateData(ExtractCardType(cardMat));
+                    cardTypeDict.Add(card.cardType, typeData);
+                }
+                if (!cardElementDict.ContainsKey(card.cardElement))
+                {
+                    CardElementTemplateData elementData = new CardElementTemplateData(ExtractCardElement(cardMat));
+                    cardElementDict.Add(card.cardElement, elementData);
+                }
+                
+                // create the image we'll bake for self and keypoints
+                Cv2.CopyMakeBorder(cardMat, cardMat, borderAmount, borderAmount, borderAmount, borderAmount, BorderTypes.Constant, Scalar.White);
+
+                // get and store keypoints
                 GetKeypoints(cardMat, out KeyPoint[] kp, out Mat des);
 
-                CardKeypoint cardKeypointData = new CardKeypoint(kp, des);
+                // make keypoint data to store : TODO : this can be offloaded to editor for massive increase in exe size
+                TemplateCardData cardKeypointData = new TemplateCardData(kp, des);
 
-                if (!cardKeypoints.ContainsKey(cardType | cardElement))
-                    cardKeypoints.Add(cardType | cardType, new List<CardKeypoint>());
+                // if the current card element and/or card type doesn't have a list, make one
+                if (!templateCardDict.ContainsKey(cardType | cardElement))
+                    templateCardDict.Add(cardType | cardElement, new List<TemplateCardData>());
+                if (!templateCardDict.ContainsKey(cardElement))
+                    templateCardDict.Add(cardElement, new List<TemplateCardData>());
+                if (!templateCardDict.ContainsKey(cardType))
+                    templateCardDict.Add(cardType, new List<TemplateCardData>());
 
-                cardKeypoints.TryGetValue(cardType | cardElement, out List<CardKeypoint> cards);
+                // Add the !REFERENCE! of this data to 4 lists: one for both known, 2 for either type or element known, 1 for totally clueless.
+                templateCardDict.TryGetValue(cardType | cardElement, out List<TemplateCardData> cards);
                 cards.Add(cardKeypointData);
-                cardKeypoints.TryGetValue(0, out cards);
-                cards.Add(cardKeypointData); // this is the unknown category.
+                templateCardDict.TryGetValue(cardType, out cards);
+                cards.Add(cardKeypointData);
+                templateCardDict.TryGetValue(cardElement, out cards);
+                cards.Add(cardKeypointData);
+                templateCardDict.TryGetValue(0, out cards);
+                cards.Add(cardKeypointData); // this is the unknown category: 0.
             }
         }
     }
-
-    // TODO
-    private Mat ExtractCardType(Texture2D cardTexture)
-    {
-        throw new NotImplementedException();
-    }
-
-    private Mat ExtractCardElement(Texture2D cardTexture)
-    {
-        throw new NotImplementedException();
-    }
-
-
-
-
-
-
-
+          
     // Update is called once per frame
     void Update()
     {
@@ -161,7 +177,6 @@ public class CardParser : MonoBehaviour
             // process texture with whatever method sub-class might have in mind
             ProcessTexture(webCamTexture);
         }
-        //Debug.Log("Time to complete: " + (Time.realtimeSinceStartupAsDouble - t) + ". Delta Time: " + Time.deltaTime);
     }
 
 
@@ -270,7 +285,7 @@ public class CardParser : MonoBehaviour
     protected bool ProcessTexture(WebCamTexture input)
     {
         // TODO
-        using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(image))
+        using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(staticTestImage))
         {
             //int f = 3;
             //Cv2.Resize(cardScene, cardScene, new Size(cardScene.Width / f, cardScene.Height / f));
@@ -425,17 +440,18 @@ public class CardParser : MonoBehaviour
         }
     }
 
-    int count = 0;
-    int vel = 0;
     private float GetShapeScore(Mat im, out int type)
     {
+        Debug.LogError("ERROR: Shape score outdated from changes, multiple shapes in type possible.");
+        type = -1;
+        return 0.0f;
         using (Mat greyBR = new Mat())
         using (Mat greyIM = new Mat()) 
         {
             // TODO : perform this on all of the shapes, and store them s.t. you don't recall everytime 
             // TODO : jerry rigging is fine but should not be getting done at runtime.
             // (might also be more stable if you guarenteed success in editor rather than runtime)
-            Cv2.CvtColor(brMatch, greyBR, ColorConversionCodes.BGR2GRAY);
+            //Cv2.CvtColor(brMatch, greyBR, ColorConversionCodes.BGR2GRAY);
             Cv2.GaussianBlur(greyBR, greyBR, new Size(5, 5), 2);
             Cv2.AdaptiveThreshold(greyBR, greyBR, 125, AdaptiveThresholdTypes.MeanC, ThresholdTypes.Binary, 5, 12);
             Point[][] templateShape;
@@ -457,13 +473,6 @@ public class CardParser : MonoBehaviour
                 float match = (float)Cv2.MatchShapes(templateShape[1], shape, ShapeMatchModes.I1);
                 bestMatch = Mathf.Min(bestMatch, match);
             }
-
-            if (Input.GetKeyDown(KeyCode.Q)) vel++;
-            if (count == vel) // TODO : seriously debug code
-            {
-                Cv2.DrawContours(greyIM, imShapes, -1, Scalar.White);
-            }
-            count++;
             type = -1;
             return bestMatch;
         }
@@ -491,7 +500,7 @@ public class CardParser : MonoBehaviour
             new Point2f(rect[2].X, rect[2].Y), new Point2f(rect[3].X, rect[3].Y) };
         // remapping to have a better time replaning
         int top = Mathf.FloorToInt(Mathf.Min(newRect[0].Y, newRect[1].Y, newRect[2].Y, newRect[3].Y));
-        int bottom = Mathf.CeilToInt(Mathf.Max(newRect[0].Y, newRect[1].Y, newRect[2].Y, newRect[3].Y)); // TODO?
+        int bottom = Mathf.CeilToInt(Mathf.Max(newRect[0].Y, newRect[1].Y, newRect[2].Y, newRect[3].Y));
         int left = Mathf.FloorToInt(Mathf.Min(newRect[0].X, newRect[1].X, newRect[2].X, newRect[3].X));
         int right = Mathf.CeilToInt(Mathf.Max(newRect[0].X, newRect[1].X, newRect[2].X, newRect[3].X));
 
@@ -561,14 +570,7 @@ public class CardParser : MonoBehaviour
         rotCount = bestRot;
         return bestMatch;
     }
-
-    public class CardCorner
-    {
-        public float matchVal;
-        public Point2f[] corners; // CW
-        public int neededRot;
-    }
-
+    
     // this is trying to find the tag, it was not to be.... even tho it would have nailed the image
     private Point2f[] GetBestParallelMatchToCorner(Point2f[] corner, Point2f[][] shapes)
     {
@@ -604,6 +606,11 @@ public class CardParser : MonoBehaviour
         return null;
     }
 
+    /***********************************************************************************************************************
+     * *********************************************************************************************************************
+     * *********************************************************************************************************************/
+     // Line functions
+
     private float GetIntersectDot(Point2f[] line1, Point2f[] line2)
     {
         Point2f vec1 = line1[0] - line1[1];
@@ -619,20 +626,6 @@ public class CardParser : MonoBehaviour
         return ((float)vec1.DotProduct(vec2));
     }
 
-    private int FindMinSum(Point2f[] shape)
-    {
-        float minSum = float.PositiveInfinity;
-        int best = -1;
-        for (int i = 0; i < shape.Length; ++i)
-        {
-            if (shape[i].X + shape[i].Y < minSum)
-            {
-                best = i;
-                minSum = shape[i].X + shape[i].Y;
-            }
-        }
-        return best;
-    }
 
 
     private float[] GetLineFromPoints(Point2f first, Point2f second)
@@ -689,6 +682,14 @@ public class CardParser : MonoBehaviour
             / Mathf.Sqrt((line[0] * line[0]) + (line[1] * line[1]));
     }
 
+
+
+
+    /*************************************************************************************************************
+     * ***********************************************************************************************************
+     * ***********************************************************************************************************/
+     // CONTOUR AND POINT FUNCTIONS:
+
     private Point2f[][] SimplifyContours(Point[][] contours, int sizeReq = -1, float ratio = 0.04f)
     {
         List<Point2f[]> contourList = new List<Point2f[]>();
@@ -726,51 +727,7 @@ public class CardParser : MonoBehaviour
         }
         return contourList.ToArray();
     }
-
-    private Point[][] ConvertPoint2fToPoint(Point2f[][] cvt)
-    {
-        Point[][] newCvt = new Point[cvt.Length][];
-        for (int i = 0; i < cvt.Length; ++i)
-        {
-            newCvt[i] = new Point[cvt[i].Length];
-            for (int k = 0; k < cvt[i].Length; ++k)
-            {
-                newCvt[i][k] = cvt[i][k];
-            }
-        }
-        return newCvt;
-    }
-
-    private int GetCardIDFromShapes(Mat im)
-    {
-        using (Mat grey = new Mat())
-        {
-            Cv2.CvtColor(im, grey, ColorConversionCodes.BGR2GRAY);
-            //Cv2.GaussianBlur(grey, grey, new Size(3, 3), 0);
-            Cv2.MinMaxLoc(grey, out double minVal, out double maxVal);
-
-            Cv2.Threshold(grey, grey, minVal + 30, 255, ThresholdTypes.BinaryInv);
-            //Cv2.Erode(grey, grey, new Mat());
-            Point[][] contours;
-            HierarchyIndex[] hierarchy;
-            Cv2.FindContours(grey, out contours, out hierarchy, RetrievalModes.CComp, ContourApproximationModes.ApproxSimple);
-            Point2f[][] simpCnts = SimplifyContours(contours, -1, 0.1f);
-            Mat colorMat = new Mat();
-            im.CopyTo(colorMat);
-            Cv2.DrawContours(colorMat, ConvertPoint2fToPoint(simpCnts), -1, Scalar.Blue, 2);
-            ///diffImages[1].texture = OpenCvSharp.Unity.MatToTexture(grey);
-            ///diffImages[2].texture = OpenCvSharp.Unity.MatToTexture(colorMat);
-
-            int val = 0;
-            foreach (Point2f[] cnt in simpCnts)
-            {
-                val += cnt.Length;
-            }
-            return val;
-        }
-    }
-
-
+    
     private void DetectContours(Mat scene, out Point2f[][] contours, out HierarchyIndex[] hierarchy)
     {
         // BIG TO-DO : more accurate this, always, not matter how accurate you get it.
@@ -805,35 +762,109 @@ public class CardParser : MonoBehaviour
             ///matcherImage.texture = OpenCvSharp.Unity.MatToTexture(testMat);
         }
     }
-    
-    private CardCorner FindBestLowerRightCardCorner(Mat scene, ref Point2f[][] contours)
+
+    private Point[][] ConvertPoint2fToPoint(Point2f[][] cvt)
     {
-        // Two schemes:
-        // 3 corner
-        // 2 corner, we start with this
+        Point[][] newCvt = new Point[cvt.Length][];
+        for (int i = 0; i < cvt.Length; ++i)
+        {
+            newCvt[i] = new Point[cvt[i].Length];
+            for (int k = 0; k < cvt[i].Length; ++k)
+            {
+                newCvt[i][k] = cvt[i][k];
+            }
+        }
+        return newCvt;
+    }
+
+    /*************************************************************************************************************
+     * ***********************************************************************************************************
+     * ***********************************************************************************************************/
+
+
+    private int GetCardIDFromShapes(Mat im)
+    {
+        using (Mat grey = new Mat())
+        {
+            Cv2.CvtColor(im, grey, ColorConversionCodes.BGR2GRAY);
+            //Cv2.GaussianBlur(grey, grey, new Size(3, 3), 0);
+            Cv2.MinMaxLoc(grey, out double minVal, out double maxVal);
+
+            Cv2.Threshold(grey, grey, minVal + 30, 255, ThresholdTypes.BinaryInv);
+            //Cv2.Erode(grey, grey, new Mat());
+            Point[][] contours;
+            HierarchyIndex[] hierarchy;
+            Cv2.FindContours(grey, out contours, out hierarchy, RetrievalModes.CComp, ContourApproximationModes.ApproxSimple);
+            Point2f[][] simpCnts = SimplifyContours(contours, -1, 0.1f);
+            Mat colorMat = new Mat();
+            im.CopyTo(colorMat);
+            Cv2.DrawContours(colorMat, ConvertPoint2fToPoint(simpCnts), -1, Scalar.Blue, 2);
+            ///diffImages[1].texture = OpenCvSharp.Unity.MatToTexture(grey);
+            ///diffImages[2].texture = OpenCvSharp.Unity.MatToTexture(colorMat);
+
+            int val = 0;
+            foreach (Point2f[] cnt in simpCnts)
+            {
+                val += cnt.Length;
+            }
+            return val;
+        }
+    }
+
+
+    private CardCorner[] FindBestLowerRightCardCorner(Mat scene, ref Point2f[][] contours)
+    {
+        // TODO : THIS FUNCTION NO LONGER REMOVES ANYTHING FROM CONTOURS!!!
         List<CardCorner> rectList = new List<CardCorner>();
         foreach (Point2f[] rect in contours)
         {
-            int rotCount = 0; // todo : more robust checking here, currently we use shape to filter and diff to select rotation
-            float matchByShape = AttemptToMatchByShape(scene, brMatch, rect);
-            float matchToDiff = AttemptToMatchCardByTemplate(scene, brMatch, rect, out rotCount);
-            if ((matchByShape * 0.1f) + (matchToDiff * 0.9f) > matchThresh)
+            CardCorner bestCorner = new CardCorner();
+            bestCorner.matchVal = 0;
+
+            foreach (CardType typeKey in cardTypeDict.Keys) {
+
+                cardTypeDict.TryGetValue(typeKey, out CardTypeTemplateData data);
+                int rotCount = 0;
+                float matchByShape = AttemptToMatchByShape(scene, data.typeImage, rect);
+                float matchToDiff = AttemptToMatchCardByTemplate(scene, data.typeImage, rect, out rotCount);
+
+                if ((matchByShape * 0.1f) + (matchToDiff * 0.9f) > bestCorner.matchVal) {
+                    bestCorner = new CardCorner()
+                    {
+                        corners = rect,
+                        matchVal = (matchByShape * 0.1f) + (matchToDiff * 0.9f),
+                        neededRot = rotCount,
+                        mostLikelyType = typeKey
+                    };
+                }
+            }
+
+            if (bestCorner.matchVal > matchThresh)
             {
-                rectList.Add(new CardCorner { corners = rect, matchVal = (matchByShape * 0.1f) + (matchToDiff * 0.9f), neededRot = rotCount });
+                rectList.Add(bestCorner);
             }
         }
 
 
         rectList.Sort((k1, k2) => k2.matchVal.CompareTo(k1.matchVal));
-        if (rectList.Count == 0)
-            return null;
-
-        List<Point2f[]> temp = new List<Point2f[]>(contours);
-        temp.Remove(rectList[0].corners);
-        contours = temp.ToArray();
-        return rectList[0];
+        return rectList.ToArray();
     }
 
+    // helper function for replaned square box, allows you to get the upper left corner
+    private int FindMinSum(Point2f[] shape)
+    {
+        float minSum = float.PositiveInfinity;
+        int best = -1;
+        for (int i = 0; i < shape.Length; ++i)
+        {
+            if (shape[i].X + shape[i].Y < minSum)
+            {
+                best = i;
+                minSum = shape[i].X + shape[i].Y;
+            }
+        }
+        return best;
+    }
 
     // RETURNS A WINDING ORDER OR -1 for the canidate.
     private int TryToReorientUpperLeft(Point2f[] canid, Point2f[] warpedOG, Mat persp)
@@ -845,14 +876,12 @@ public class CardParser : MonoBehaviour
         Point2f[] line1 = new Point2f[] { warpedCanid[0], warpedCanid[1] };
         Point2f[] line2 = new Point2f[] { warpedCanid[2], warpedCanid[3] };
         float intersectDot = GetIntersectDot(line1, line2);
-        //print("For ratio " + ratio + " got " + intersectDot + " for first");
         if (intersectDot > -0.97f && intersectDot < 0.97f)
             return -1;
 
         line1 = new Point2f[] { warpedCanid[1], warpedCanid[2] };
         line2 = new Point2f[] { warpedCanid[3], warpedCanid[0] };
         intersectDot = GetIntersectDot(line1, line2);
-        //print("For ratio " + ratio + " got " + intersectDot + " for second");
         if (intersectDot > -0.97f && intersectDot < 0.97f)
             return -1;
 
@@ -947,6 +976,7 @@ public class CardParser : MonoBehaviour
         }
     }
 
+    // return CW wound card corners using the upper left and lower right corner squares
     private Point2f[] TryToBoundCardFromCorners(Mat scene, Point2f[] lowerRight, Point2f[] upperLeft)
     {
         if (lowerRight == null || upperLeft == null)
@@ -976,117 +1006,106 @@ public class CardParser : MonoBehaviour
         Point2f[] mainCorners = new Point2f[]
         {
                 new Point2f(off, off),
-                new Point2f(defaultCardMat.Width - off, off),
-                new Point2f(defaultCardMat.Width - off, defaultCardMat.Height - off),
-                new Point2f(off, defaultCardMat.Height - off)
+                new Point2f(defaultCardWidth - off, off),
+                new Point2f(defaultCardWidth - off, defaultCardHeight - off),
+                new Point2f(off, defaultCardHeight - off)
         };
 
         persp = Cv2.GetPerspectiveTransform(possibleCard, mainCorners); 
         Mat replaned = new Mat();
-        Size warpSize = new Size(defaultCardMat.Width, defaultCardMat.Height);
+        Size warpSize = new Size(defaultCardWidth, defaultCardHeight);
         Cv2.WarpPerspective(scene, replaned, persp, warpSize);
         return replaned;
     }
 
-    private void ShowJustKeypointMatches(Mat cardScene)
-    {
-        GetKeypoints(cardScene, out KeyPoint[] kp2, out Mat des2);
 
-        int matchBorder = 10;
-        Mat matchDefault = new Mat();
-        Cv2.CopyMakeBorder(defaultCardMat, matchDefault, matchBorder, matchBorder, matchBorder, matchBorder, BorderTypes.Constant, Scalar.White);
 
-        GetKeypoints(matchDefault, out KeyPoint[] kp1, out Mat des1);
-
-        MatchKeypointsBoring(kp1, kp2, des1, des2, out DMatch[] goodMatches);
-        int initMatches = goodMatches.Length;
-        GetMatchedKeypoints(kp1, kp2, goodMatches, out Point2f[] m_kp1, out Point2f[] m_kp2);
-        // WARP THE PERSPECTIVE
-        using (Mat mask = new Mat())
-        {
-            if (FilterByFundy(ref m_kp1, ref m_kp2, ref goodMatches))
-            {
-                if (CheckIfEnoughMatch(goodMatches, initMatches))
-                {
-                    Mat testIM = new Mat();
-                    Cv2.WarpPerspective(cardScene, testIM, GetHomographyMatrix(m_kp2, m_kp1), matchDefault.Size());
-
-                    // DEBUG DRAWS
-                    using (Mat n = new Mat())
-                    {
-                        Cv2.DrawMatches(matchDefault, kp1, cardScene, kp2, goodMatches, n);
-                        ///matcherImage.texture = OpenCvSharp.Unity.MatToTexture(n);
-                        ///replaneImage.texture = OpenCvSharp.Unity.MatToTexture(testIM);
-                    }
-                }
-            }
-        }
-            // TODO : look at the homography matches, if we fail, boot it...
-        matchDefault.Release();
-    }
-
-    public AdaptiveThresholdTypes adaptTestType = AdaptiveThresholdTypes.GaussianC;
-    public int frameSize = 3;
-    public double subConst = 7.0;
-
-    bool otsu = false;
-    public bool useSharp = false;
+    /***
+     *  THE BIG FUNCTION, MANAGES STATE AND PARSING!!!!
+     *  
+     */ 
     public void ParseCard(Mat cardScene)
     {
-        count = 0;
-        Mat blackOut = new Mat();
         Point2f[][] contours;
         HierarchyIndex[] h;
         // DETECT CONTOURS AND SIMPLIFY THEM IF NEEDED
         DetectContours(cardScene, out contours, out h);
-        cardScene.CopyTo(blackOut);
 
-        // LOWER RIGHT
-        CardCorner bestLowerRight = FindBestLowerRightCardCorner(cardScene, ref contours);
-        if (bestLowerRight == null) return; // TODO : handle failure
-        print("Desired rot = " + bestLowerRight.neededRot);
-        bestLowerRight.corners = RotateWinding(bestLowerRight.corners, bestLowerRight.neededRot);
-        bestLowerRight.neededRot = 0;
-        print("Selected corner got out with match val: " + bestLowerRight.matchVal);
-        CvAruco.DrawDetectedMarkers(cardScene, new Point2f[][] { bestLowerRight.corners  }, null);
-        if (arucoImage.texture != null)
-            Destroy(arucoImage.texture);
-        arucoImage.texture = OpenCvSharp.Unity.MatToTexture(cardScene);
-        return;
-        CardCorner bestUpperLeft = FindBestUpperLeftCardCorner(cardScene, bestLowerRight.corners, ref contours);
-        if (bestUpperLeft == null) {
-            print("Failed on upper left, which might be needed");
-            return;
-        } // TODO : handle failure
-        bestUpperLeft.corners = RotateWinding(bestUpperLeft.corners, bestUpperLeft.neededRot);
-        bestUpperLeft.neededRot = 0;
-        print("Best upper left got out");
+        // POSSIBLE LOWER RIGHTS
+        CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
 
-        Point2f[] possibleCard = TryToBoundCardFromCorners(cardScene, bestLowerRight.corners, bestUpperLeft.corners);
-        Mat replaned = null;
-        if (possibleCard == null)
+        foreach (CardCorner bestLowerRight in bestLowerRights)
         {
-            print("Not imp for bad correction"); // TODO : attempt to keypoint match from just the corner
-            return;
+            // CLEAN UP THE CURRENT LOWER RIGHT
+            if (bestLowerRight == null) break; // TODO : handle failure
+            print("Desired rot = " + bestLowerRight.neededRot);
+            bestLowerRight.corners = RotateWinding(bestLowerRight.corners, bestLowerRight.neededRot);
+            bestLowerRight.neededRot = 0;
+
+            // LOWER RIGHT DEBUGGING
+            print("Selected corner got out with match val: " + bestLowerRight.matchVal);
+            CvAruco.DrawDetectedMarkers(cardScene, new Point2f[][] { bestLowerRight.corners }, null);
+            if (arucoImage.texture != null)
+                Destroy(arucoImage.texture);
+            arucoImage.texture = OpenCvSharp.Unity.MatToTexture(cardScene);
+
+            // UPPER LEFT
+            CardCorner bestUpperLeft = FindBestUpperLeftCardCorner(cardScene, bestLowerRight.corners, ref contours);
+            if (bestUpperLeft == null)
+            {
+                print("Failed on upper left, which might be needed");
+                return;
+            }
+            bestUpperLeft.corners = RotateWinding(bestUpperLeft.corners, bestUpperLeft.neededRot);
+            bestUpperLeft.neededRot = 0;
+            print("Best upper left got out");
+
+            // Make first try at remapping
+            Point2f[] possibleCard = TryToBoundCardFromCorners(cardScene, bestLowerRight.corners, bestUpperLeft.corners);
+            if (possibleCard == null)
+                return;
+            Mat replaned = PerformFirstReplaneFull(cardScene, possibleCard, cornerReplaneOffset, out Mat firstTMat);
+
+            // predict most likely element from single replane, might not work but may improve performance.
+            bestLowerRight.mostLikelyElement = GetMostLikelyElement(replaned, cornerReplaneOffset);
+
+            // get TODO TODO TODO
+            //Mat hMat = KeypointMatchToTemplate(replaned, bestLowerRight, out CardType cardType, out CardElement cardElement);
+
+
+            // the default used for keypoint matching has a border so that we can get better keypoints at the border of cards (since it doesn't use image edge in its feature finding)
+            // if we replaned the image perfectly, we will have a matchBorder sized border
+            // TODO : sharpness testing
+            Mat croppedReplaned = replaned[borderAmount, replaned.Height - borderAmount, borderAmount, replaned.Width - borderAmount];
+            // TODO
+            if (replaneImage.texture != null)
+            {
+                Destroy(replaneImage.texture);
+            }
+            replaneImage.texture = OpenCvSharp.Unity.MatToTexture(croppedReplaned);
+
+            // Read in number data
+            Mat readIn = bannerNumberBox.CropByBox(croppedReplaned);
+            numberText.text = "Card ID: " + GetCardIDFromShapes(readIn);
+
+            replaned.Release();
+
+            break; // TODO : only 1 right now. The best.
         }
-        replaned = PerformFirstReplaneFull(cardScene, possibleCard, 25, out Mat firstTransformMat);
-        print("I have decided to make a card");
+    }
 
-        int matchBorder = 10;
-        Mat matchDefault = new Mat();
-        Cv2.CopyMakeBorder(defaultCardMat, matchDefault, matchBorder, matchBorder, matchBorder, matchBorder, BorderTypes.Constant, Scalar.White);
+    /**
+     *  TODO TODO
+     *  Given expected card type and element, run thru the most likely cards and try to get the best keypoint matches
+     *  
+     */ 
+     /*
+    private Mat KeypointMatchToTemplate(Mat replaned, CardCorner bestLowerRight, out CardType cardType, out CardElement cardElement)
+    {
 
-        // GET KEYPOINTS FOR THE REPLANED IMAGE AND THE OTHER IMAGE
-        Cv2.GaussianBlur(matchDefault, matchDefault, new Size(5, 5), 1.0f);
-        GetKeypoints(matchDefault, out KeyPoint[] kp1, out Mat des1);
+        // GET KEYPOINTS FOR THE REPLANED IMAGE
         GetKeypoints(replaned, out KeyPoint[] kp2, out Mat des2);
         MatchKeypointsBoring(kp1, kp2, des1, des2, out DMatch[] goodMatches);
-
-        // DEBUG DRAWS
-        Cv2.DrawKeypoints(matchDefault, kp1, blackOut);
-        //contourImage.texture = OpenCvSharp.Unity.MatToTexture(blackOut);
-        CvAruco.DrawDetectedMarkers(cardScene, new Point2f[][] { bestLowerRight.corners, bestUpperLeft.corners, possibleCard }, null);
-        //arucoImage.texture = OpenCvSharp.Unity.MatToTexture(cardScene);
 
         // WARP THE PERSPECTIVE
         GetMatchedKeypoints(kp1, kp2, goodMatches, out Point2f[] m_kp1, out Point2f[] m_kp2);
@@ -1096,11 +1115,13 @@ public class CardParser : MonoBehaviour
             if (CheckIfEnoughMatch(goodMatches, initMatches))
             {
                 Mat hMat = GetHomographyMatrix(m_kp2, m_kp1);
-                Mat mainMat = hMat * firstTransformMat;
+                Mat mainMat = hMat * firstTMat;
                 if (hMat == null || (hMat.Type() != MatType.CV_32F && hMat.Type() != MatType.CV_64F) || hMat.Width != 3 || hMat.Height != 3)
                 {
                     Debug.LogError("Error: Failed to create homography matrix for " + goodMatches.Length + " keypoints.");
-                } else {
+                }
+                else
+                {
                     Cv2.WarpPerspective(cardScene, replaned, mainMat, matchDefault.Size());
                 }
 
@@ -1117,36 +1138,59 @@ public class CardParser : MonoBehaviour
                 print("I don't think this was a card");
                 return;
             }
-        } else {
+        }
+        else
+        {
             print("Failed fundemental matrix test");
             numberText.text = "Found a possible card but filtered it out by fundamental test";
             return;
         }
+    }*/
+    
 
-        // the default used for keypoint matching has a border so that we can get better keypoints at the border of cards (since it doesn't use image edge in its feature finding)
-        // if we replaned the image perfectly, we will have a matchBorder sized border
-        // TODO : sharpness testing
-        Mat croppedReplaned = replaned[matchBorder, replaned.Height - matchBorder, matchBorder, replaned.Width - matchBorder];
-        if (useSharp)
+    /**
+     * From the estimated mean values, get the closest average element and say that that is probably the element.
+     * TODO : may not work on bad cameras that output too much red. 
+     * Being color agnostic is an ideal we probably cannot meet...
+     */
+    private CardElement GetMostLikelyElement(Mat replaned, int cornerReplaneOffset)
+    {
+        Mat area = replaned[cornerReplaneOffset, replaned.Width - cornerReplaneOffset, cornerReplaneOffset, replaned.Height - cornerReplaneOffset];
+
+        using (Mat crop = elementColorBox.CropByBox(area))
         {
-            Mat help = new Mat();
-            Cv2.GaussianBlur(croppedReplaned, help, new Size(0, 0), 3);
-            Cv2.AddWeighted(croppedReplaned, 1.5, help, -0.5, 0, croppedReplaned);
-        }
-        // TODO
-        if (replaneImage.texture != null)
-        {
-            Destroy(replaneImage.texture);
-        }
-        replaneImage.texture = OpenCvSharp.Unity.MatToTexture(croppedReplaned);
+            Scalar tMean = crop.Mean();
+            print("Template: " + (float)tMean.Val0 + ", " + (float)tMean.Val1 + ", " + (float)tMean.Val2);
 
-        // Read in number data
-        Mat readIn = bannerNumberBox.CropByBox(croppedReplaned);
-        numberText.text = "Card ID: " + GetCardIDFromShapes(readIn);
+            float bestDist = Mathf.Infinity;
+            CardElement bestElement = CardElement.Dark;
 
-        replaned.Release();
-        blackOut.Release();
+            foreach (CardElement element in cardElementDict.Keys)
+            {
+                Scalar rMean = cardElementDict[element].typeScalar;
+                print("Response: " + (float)rMean.Val0 + ", " + (float)rMean.Val1 + ", " + (float)rMean.Val2);
+
+                float dist = Mathf.Sqrt((float)
+                    ((rMean.Val0 - tMean.Val0) * (rMean.Val0 - tMean.Val0) +
+                    (rMean.Val0 - tMean.Val1) * (rMean.Val0 - tMean.Val1) +
+                    (rMean.Val0 - tMean.Val2) * (rMean.Val0 - tMean.Val2)));
+                if (dist < bestDist)
+                {
+                    dist = bestDist;
+                    bestElement = element;
+                }
+            }
+            return bestElement;
+        }
     }
+
+
+
+
+    /************************************************************************************************************************************
+     * **********************************************************************************************************************************
+     * **********************************************************************************************************************************/
+    // KEYPOINT LOGICS
 
     public void GetKeypoints(Mat im, out KeyPoint[] keypoints, out Mat des)
     {
@@ -1158,6 +1202,7 @@ public class CardParser : MonoBehaviour
         }
     }
 
+    [Space(1)]
     public float loweRatio = 0.7f;
     public float kpDist = 7;
 
@@ -1325,37 +1370,67 @@ public class CardParser : MonoBehaviour
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /*******************************************************************************************************
      *******************************************************************************************************
      *******************************************************************************************************/
 
     public enum CardElement
     {
+        None = 1,
         Fire = 2, 
         Water = 4, 
-        None = 8
+        Wind = 8,
+        Earth = 16,
+        Light = 32,
+        Dark = 64
     }
 
     public enum CardType
     {
-        Attack = 128,
-        Defense = 256,
-        Influence = 512
+        None = 128,
+        Attack = 256,
+        Defense = 512,
+        Influence = 1024
     }
 
-    public class CardKeypoint
+    public class CardCorner
     {
-        public CardKeypoint(KeyPoint[] k, Mat d)
+        public float matchVal;
+        public Point2f[] corners; // CW
+        public int neededRot;
+        public CardType mostLikelyType;
+        public CardElement mostLikelyElement;
+    }
+
+    public class TemplateCardData
+    {
+        public TemplateCardData(KeyPoint[] k, Mat d)
         {
             keypoints = k;
             des = d;
         }
 
-        ~CardKeypoint()
+        ~TemplateCardData()
         {
             des.Dispose(); // TODO?
             des.Release();
         }
+
         public KeyPoint[] keypoints;
         public Mat des;
     }
@@ -1377,17 +1452,13 @@ public class CardParser : MonoBehaviour
 
     public class CardElementTemplateData
     {
-        public CardElementTemplateData(Mat ti)
+        public CardElementTemplateData(Color ti)
         {
-            typeImage = ti;
+            typeColor = ti; // TODO : may be bgr? or rgb
+            typeScalar = new Scalar(ti.b, ti.g, ti.r, ti.a);
         }
-
-        ~CardElementTemplateData()
-        {
-            typeImage.Release();
-            typeImage.Dispose();
-        }
-        public Mat typeImage;
+        public Color typeColor;
+        public Scalar typeScalar;
     }
 
     /**
