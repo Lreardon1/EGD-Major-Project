@@ -7,10 +7,13 @@ public class PartyFollow : MonoBehaviour
     public List<UnityEngine.Vector3> movements = new List<UnityEngine.Vector3>();
     GameObject[] party_members;
     float elapsed = 0f;
+    public GameObject player;
+    private OverworldMovement overworld_script;
 
     // Start is called before the first frame update
     void Start()
     {
+        overworld_script = player.GetComponent<OverworldMovement>();
         movements.Add(GameObject.FindGameObjectWithTag("Player").transform.position);
     }
 

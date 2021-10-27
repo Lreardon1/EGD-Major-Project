@@ -251,7 +251,7 @@ GameObject:
   - component: {fileID: 364864584}
   m_Layer: 0
   m_Name: warrior
-  m_TagString: Untagged
+  m_TagString: Party
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -264,11 +264,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 364864582}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.345, y: 0.0041999966, z: 0}
+  m_LocalPosition: {x: -0.345, y: 0.233, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1468310514}
-  m_RootOrder: 2
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &364864584
 SpriteRenderer:
@@ -553,6 +553,7 @@ MonoBehaviour:
   animator: {fileID: 1468310517}
   cc: {fileID: 0}
   canMove: 1
+  movements: []
   velocity: {x: 0, y: 0, z: 0}
   turnSpeed: 60
 --- !u!212 &1468310513
@@ -619,9 +620,8 @@ Transform:
   m_Children:
   - {fileID: 207284628}
   - {fileID: 1756750046}
-  - {fileID: 364864583}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1468310515
 Rigidbody:
@@ -861,7 +861,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1756750045
 GameObject:
@@ -906,7 +906,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 536600873052465341, guid: d0c437a2741a2ea49ba366913f570de3, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 536600873052465341, guid: d0c437a2741a2ea49ba366913f570de3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -967,7 +967,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 3d5096576f6ba40c6ac884ebb6aa61db, type: 2}
     - target: {fileID: 4914949034566310788, guid: 355e384ebe13d6042903c8ad3e8bd3bf, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4914949034566310788, guid: 355e384ebe13d6042903c8ad3e8bd3bf, type: 3}
       propertyPath: m_LocalPosition.x
