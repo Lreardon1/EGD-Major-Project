@@ -10,7 +10,8 @@ public class OverworldMovement : MonoBehaviour
     SpriteRenderer characterRenderer;
     public Animator animator;
     public CharacterController cc;
-
+    bool rotated;
+    string rotation_way;
     public bool canMove = true;
 
     // Start is called before the first frame update
@@ -21,6 +22,8 @@ public class OverworldMovement : MonoBehaviour
         characterRenderer = GetComponent<SpriteRenderer>();
         characterRenderer.flipX = false;
         cc = GetComponent<CharacterController>();
+        rotated = false;
+        rotation_way = "";
     }
 
     public Vector3 velocity = Vector3.zero;
@@ -32,8 +35,30 @@ public class OverworldMovement : MonoBehaviour
         Vector3 up = new Vector3(0,0,0);
         if (canMove)
         {
-            float rightTurn = Input.GetAxisRaw("Rotate");
-            transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
+            //float rightTurn = Input.GetAxisRaw("Rotate");
+            //transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
+
+            //player camera rotation
+            if (Input.GetKeyDown(KeyCode.E) && rotated != true)
+            {
+                transform.Rotate(0, 90, 0);
+                rotated = true;
+                rotation_way = "E";
+            }
+            else if (Input.GetKeyDown(KeyCode.Q) && rotated != true)
+            {
+                transform.Rotate(0, -90, 0);
+                rotated = true;
+                rotation_way = "Q";
+            }
+            else if (Input.GetKeyUp(KeyCode.E) && rotation_way == "E")
+            {
+                rotated = false;
+            }
+            else if (Input.GetKeyUp(KeyCode.Q) && rotation_way == "Q")
+            {
+                rotated = false;
+            }
 
             right = Input.GetAxisRaw("Horizontal") * transform.right;
             up = Input.GetAxisRaw("Vertical") * transform.forward;
@@ -88,7 +113,6 @@ public class OverworldMovement : MonoBehaviour
             {
                 animator.SetBool("Walking", false);
             }
-            //Debug.Log(direction);
         }
     }
 }
