@@ -53,9 +53,9 @@ public class OverworldMovement : MonoBehaviour
         Vector3 up = new Vector3(0,0,0);
         if (canMove)
         {
-            //float rightTurn = Input.GetAxisRaw("Rotate");
-            //transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
-
+            float rightTurn = Input.GetAxisRaw("Rotate");
+            transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
+            /*
             //player camera rotation
             if (Input.GetKeyDown(KeyCode.E) && rotated != true)
             {
@@ -76,7 +76,7 @@ public class OverworldMovement : MonoBehaviour
             else if (Input.GetKeyUp(KeyCode.Q) && rotation_way == "Q")
             {
                 rotated = false;
-            }
+            }*/
 
             right = Input.GetAxisRaw("Horizontal") * transform.right;
             up = Input.GetAxisRaw("Vertical") * transform.forward;
@@ -86,7 +86,8 @@ public class OverworldMovement : MonoBehaviour
         bool isGround = Physics.Raycast(transform.position,
             (ground.transform.position - transform.position).normalized,
             (ground.transform.position - transform.position).magnitude, LayerMask.GetMask("Ground"));
-        isGround = true;
+        print(isGround);
+
         velocity += Vector3.down * 9.8f * Time.deltaTime;
         velocity = isGround ? Vector3.zero : velocity;
 
