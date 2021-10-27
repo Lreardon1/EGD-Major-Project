@@ -13,6 +13,7 @@ public class OverworldMovement : MonoBehaviour
     bool rotated;
     string rotation_way;
     public bool canMove = true;
+    public List<UnityEngine.Vector3> movements = new List<UnityEngine.Vector3>();
 
     // Start is called before the first frame update
     void Start()
@@ -72,9 +73,10 @@ public class OverworldMovement : MonoBehaviour
         velocity += Vector3.down * 9.8f * Time.deltaTime;
         velocity = isGround ? Vector3.zero : velocity;
 
-
+        //movements.Add((((right + up).normalized * movementspeed) + velocity));
+        //Debug.Log((((right + up).normalized * movementspeed) + velocity));
         cc.Move((((right + up).normalized * movementspeed) + velocity) * Time.deltaTime);
-        
+
         if (canMove)
         {
             if (Input.GetKey(KeyCode.D))
