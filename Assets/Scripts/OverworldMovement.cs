@@ -80,12 +80,15 @@ public class OverworldMovement : MonoBehaviour
         if (elapsed >= 0.0166f)
         {
             party_members = GameObject.FindGameObjectsWithTag("Party");
-            Follow();
+            if (party_members.Length > 0)
+            {
+                Follow();
+                //need to do this because position vector has some wierd y values
+                // Vector3 tmp = (((right + up).normalized * movementspeed) + velocity) * Time.deltaTime;
+                //movements.Add(tmp);
+                movements.Add((((right + up).normalized * movementspeed) + velocity));
+            }
             elapsed = elapsed % 0.0166f;
-            //need to do this because position vector has some wierd y values
-            // Vector3 tmp = (((right + up).normalized * movementspeed) + velocity) * Time.deltaTime;
-            //movements.Add(tmp);
-            movements.Add((((right + up).normalized * movementspeed) + velocity));
         }
         cc.Move((((right + up).normalized * movementspeed) + velocity) * Time.deltaTime);
 
@@ -134,7 +137,7 @@ public class OverworldMovement : MonoBehaviour
     //unless the player has stopped
     void Follow()
     {
-        Debug.Log("here");
+        //Debug.Log("here");
         party_members[0].transform.Translate(movements[0]);
         //somethin wonky with y coordinate, so this is trying to fix it
         party_members[0].transform.position = new Vector3(party_members[0].transform.position.x, 0.200105f, party_members[0].transform.position.z); ;
