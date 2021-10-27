@@ -86,11 +86,6 @@ public class OverworldMovement : MonoBehaviour
         bool isGround = Physics.Raycast(transform.position,
             (ground.transform.position - transform.position).normalized,
             (ground.transform.position - transform.position).magnitude, LayerMask.GetMask("Ground"));
-<<<<<<< HEAD
-        print(isGround);
-
-=======
->>>>>>> a683a4349ae70a7a73b45fe3fdfd06a7a2425a63
         velocity += Vector3.down * 9.8f * Time.deltaTime;
         velocity = isGround ? Vector3.zero : velocity;
 
