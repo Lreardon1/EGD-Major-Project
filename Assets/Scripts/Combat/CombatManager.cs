@@ -51,23 +51,33 @@ public class CombatManager : MonoBehaviour
         currentPhase = CombatPhase.DrawPhase;
         UpdateDropZones();
         ToggleDrawButtons(true);
-        foreach(GameObject member in partyMembers)
+        foreach (GameObject member in partyMembers)
+        {
+            CombatantBasis cb = member.GetComponent<CombatantBasis>();
+            if (cb.appliedCard != null)
+            {
+                Deck.instance.Discard(cb.appliedCard);
+                cb.appliedCard = null;
+            }
+        }
+        foreach (GameObject enemy in enemies)
+        {
+            CombatantBasis cb = enemy.GetComponent<CombatantBasis>();
+            if (cb.appliedCard != null)
+            {
+                Deck.instance.Discard(cb.appliedCard);
+                cb.appliedCard = null;
+            }
+        }
+
+        foreach (GameObject member in partyMembers)
         {
             CombatantBasis memberScript = member.GetComponent<CombatantBasis>();
             memberScript.SelectAction();
             memberScript.SelectTarget(activeEnemies);
-
-            if (memberScript.nextAction == CombatantBasis.Action.Attack)
-            {
-                memberScript.text.text = "Attack " + memberScript.target.GetComponent<CombatantBasis>().combatantName;
-            }
-            else if (memberScript.nextAction == CombatantBasis.Action.Block)
+            if (memberScript.nextAction == CombatantBasis.Action.Block)
             {
                 memberScript.text.text = "Block";
-            }
-            else if (memberScript.nextAction == CombatantBasis.Action.Special)
-            {
-                memberScript.text.text = "Special " + memberScript.target.GetComponent<CombatantBasis>().combatantName;
             }
         }
 
@@ -76,17 +86,9 @@ public class CombatManager : MonoBehaviour
             CombatantBasis enemyScript = enemy.GetComponent<CombatantBasis>();
             enemyScript.SelectAction(); 
             enemyScript.SelectTarget(activePartyMembers);
-            if (enemyScript.nextAction ==  CombatantBasis.Action.Attack)
-            {
-                enemyScript.text.text = "Attack " + enemyScript.target.GetComponent<CombatantBasis>().combatantName;
-            }
-            else if (enemyScript.nextAction == CombatantBasis.Action.Block)
+            if (enemyScript.nextAction == CombatantBasis.Action.Block)
             {
                 enemyScript.text.text = "Block";
-            }
-            else if (enemyScript.nextAction == CombatantBasis.Action.Special)
-            {
-                enemyScript.text.text = "Special " + enemyScript.target.GetComponent<CombatantBasis>().combatantName;
             }
 
         }
@@ -97,8 +99,26 @@ public class CombatManager : MonoBehaviour
             Debug.Log(combatant.name);
         }
 
-        ActivatePlayPhase();
+        StartCoroutine("DrawPhaseCoroutine");
         // Allies and enemies select actions to perform, Player selects number of cards to draw, transition to Play Phase
+    }
+
+    public IEnumerator DrawPhaseCoroutine()
+    {
+        bool done = false;
+        while (!done)
+        {
+            // skips when space is hit
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                done = true;
+            }
+
+            // Need code to detect if card has been applied
+            yield return null;
+        }
+        NextPhase();
+        yield return null;
     }
 
     public void ActivatePlayPhase()
@@ -108,7 +128,25 @@ public class CombatManager : MonoBehaviour
 
         ToggleDrawButtons(false);
         // Allow player to move cards to play on allies/enemies, update action order accordingly, ends when player clicks done or something, transition to Discard Phase
-        ActivateDiscardPhase();
+        StartCoroutine("PlayPhaseCoroutine");
+    }
+
+    public IEnumerator PlayPhaseCoroutine()
+    {
+        bool done = false;
+        while (!done)
+        {
+            // skips when space is hit
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                done = true;
+            }
+
+            // Need code to detect if card has been applied
+            yield return null;
+        }
+        NextPhase();
+        yield return null;
     }
 
     public void ActivateDiscardPhase()
@@ -116,7 +154,32 @@ public class CombatManager : MonoBehaviour
         currentPhase = CombatPhase.DiscardPhase;
         UpdateDropZones();
         // Player can drag cards to discard pile to discard them, ends when player clicks done or something, transition to Action Phase
-        ActivateActionPhase();
+        StartCoroutine("DiscardPhaseCoroutine");
+    }
+
+    public IEnumerator DiscardPhaseCoroutine()
+    {
+        bool done = false;
+        int currentCardsInDiscard = chc.discardPile.transform.childCount;
+        while (!done)
+        {
+            // skips when space is hit
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                done = true;
+            }
+            if(currentCardsInDiscard != chc.discardPile.transform.childCount)
+            {
+                currentMana -= Mathf.Abs(chc.discardPile.transform.childCount - currentCardsInDiscard);
+                currentCardsInDiscard = chc.discardPile.transform.childCount;
+                manaText.text = "Mana: " + currentMana + "/" + maxMana;
+            }
+
+            // Need code to detect if card has been applied
+            yield return null;
+        }
+        NextPhase();
+        yield return null;
     }
 
     public void ActivateActionPhase()
@@ -140,7 +203,7 @@ public class CombatManager : MonoBehaviour
             if (cb.appliedCard != null)
                 cardAlreadyPlayed = true;
 
-            if (enoughMana && !cardAlreadyPlayed)
+            if (enoughMana && !cardAlreadyPlayed && chc.transform.childCount != 0)
             {
                 Debug.Log("Play card on " + actionOrder[i].name);
                 foreach (GameObject card in Deck.instance.viewOrder)
@@ -165,19 +228,6 @@ public class CombatManager : MonoBehaviour
 
                     if (cb.appliedCard != null)
                     {
-                        Card cardScript = cb.appliedCard.GetComponent<Card>();
-                        if(currentMana - cardScript.manaCost < 0)
-                        {
-                            Debug.Log("Not Enough Mana To Play This Card");
-
-                            cb.appliedCard.transform.SetParent(chc.gameObject.transform);
-                            cb.appliedCard.transform.localScale = new Vector3(1,1,1);
-                            cb.appliedCard = null;
-                            continue;
-                        }
-
-                        currentMana -= cardScript.manaCost;
-                        manaText.text = "Mana: " + currentMana + "/" + maxMana;
                         // Activate Card Effect
                         done = true;
 
@@ -191,6 +241,7 @@ public class CombatManager : MonoBehaviour
             CheckWinCondition();
             UpdateTargets();
             CheckEnoughMana();
+            yield return new WaitForSeconds(1f);
             // Check if any combatant was killed and update the action queue
         }
 
@@ -233,6 +284,7 @@ public class CombatManager : MonoBehaviour
                 foreach (GameObject card in Deck.instance.viewOrder)
                 {
                     DragDrop dd = card.GetComponent<DragDrop>();
+                    dd.isDraggable = false;
                     dd.allowedDropZones.Clear();
                 }
                 break;
@@ -243,6 +295,7 @@ public class CombatManager : MonoBehaviour
                     List<GameObject> allZones = new List<GameObject>();
                     allZones.AddRange(partyMembers);
                     allZones.AddRange(enemies);
+                    dd.isDraggable = true;
                     dd.allowedDropZones.Clear();
                     dd.allowedDropZones = allZones;
                 }
@@ -253,6 +306,7 @@ public class CombatManager : MonoBehaviour
                     DragDrop dd = card.GetComponent<DragDrop>();
                     List<GameObject> allZones = new List<GameObject>();
                     allZones.Add(chc.discardPile);
+                    dd.isDraggable = true;
                     dd.allowedDropZones.Clear();
                     dd.allowedDropZones = allZones;
                 }
@@ -261,13 +315,7 @@ public class CombatManager : MonoBehaviour
                 foreach (GameObject card in Deck.instance.viewOrder)
                 {
                     DragDrop dd = card.GetComponent<DragDrop>();
-                    dd.allowedDropZones.Clear();
-                }
-                break;
-            default:
-                foreach (GameObject card in Deck.instance.viewOrder)
-                {
-                    DragDrop dd = card.GetComponent<DragDrop>();
+                    dd.isDraggable = true;
                     dd.allowedDropZones.Clear();
                 }
                 break;
@@ -284,29 +332,25 @@ public class CombatManager : MonoBehaviour
 
     public void NextPhase()
     {
+        if (currentPhase == CombatPhase.ActionPhase)
+            return;
         StopAllCoroutines();
-        currentPhaseText.text = "";
         switch (currentPhase)
         {
             case CombatPhase.DrawPhase:
                 currentPhase = CombatPhase.PlayPhase;
-
                 currentPhaseText.text = "Play Phase";
+                ActivatePlayPhase();
                 break;
             case CombatPhase.PlayPhase:
                 currentPhase = CombatPhase.DiscardPhase;
-
                 currentPhaseText.text = "Discard Phase";
+                ActivateDiscardPhase();
                 break;
             case CombatPhase.DiscardPhase:
                 currentPhase = CombatPhase.ActionPhase;
-
                 currentPhaseText.text = "Action Phase";
-                break;
-            case CombatPhase.ActionPhase:
-                currentPhase = CombatPhase.DrawPhase;
-
-                currentPhaseText.text = "Draw Phase";
+                ActivateActionPhase();
                 break;
         }
     }
@@ -346,6 +390,31 @@ public class CombatManager : MonoBehaviour
             }
         }
         enoughMana = tempEnoughMana;
+    }
+
+    public void ApplyCard(GameObject card, GameObject combatant)
+    {
+        CombatantBasis cb = combatant.GetComponent<CombatantBasis>();
+        Card cardScript = card.GetComponent<Card>();
+        if(cb.appliedCard != null)
+        {
+            card.transform.SetParent(chc.gameObject.transform);
+            card.transform.localScale = new Vector3(1, 1, 1);
+            Debug.Log("Card Already Played On This Combatant");
+            return;
+        } 
+        if(currentMana - cardScript.manaCost < 0)
+        {
+            Debug.Log("Not Enough Mana To Play This Card");
+
+            cb.appliedCard.transform.SetParent(chc.gameObject.transform);
+            cb.appliedCard.transform.localScale = new Vector3(1, 1, 1);
+            cb.appliedCard = null;
+            return;
+        }
+        cb.appliedCard = card;
+        currentMana -= cardScript.manaCost;
+        manaText.text = "Mana: " + currentMana + "/" + maxMana;
     }
 
     public void AddMana(int manaAmount)

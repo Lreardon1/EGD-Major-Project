@@ -147,7 +147,7 @@ public class DragDrop : MonoBehaviour
                     trans.SetParent(dropZone.transform, false);
                     if(dropZone.GetComponent<CombatantBasis>() != null)
                     {
-                        dropZone.GetComponent<CombatantBasis>().appliedCard = gameObject;
+                        FindObjectOfType<CombatManager>().ApplyCard(this.gameObject, dropZone);
                     }
                 }
             }

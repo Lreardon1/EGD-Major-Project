@@ -9,6 +9,7 @@ public class CombatHandController : MonoBehaviour
     public GameObject discardPile;
     public int startingHandSize = 4;
     public int maxHandSize = 7;
+    public int cardsInDiscard = 0;
 
     public GameObject cardWorldColliderPrefab;
     public Transform cardWorldColliderParent;
@@ -67,11 +68,17 @@ public class CombatHandController : MonoBehaviour
 
     public void DrawCards(int cardAmount)
     {
-        if (cardsInHand.Count + cardAmount > maxHandSize)
+        if (transform.childCount + cardAmount > maxHandSize)
         {
             Debug.Log("You Can't Draw That Many Cards!");
             return;
         }
+        if(Deck.instance.deck.Count < cardAmount)
+        {
+            Debug.Log("Not Enough Cards In Deck To Draw!");
+            return;
+        }
+
         for(int i = 0; i < cardAmount; i++)
         {
             GameObject card = Deck.instance.Draw();
@@ -104,10 +111,12 @@ public class CombatHandController : MonoBehaviour
                 cm.AddMana(14);
                 break;
         }
+        cm.NextPhase();
     }
 
     public void DiscardCard(GameObject card)
     {
+        cardsInDiscard++;
         Deck.instance.Discard(card);
     }
 
