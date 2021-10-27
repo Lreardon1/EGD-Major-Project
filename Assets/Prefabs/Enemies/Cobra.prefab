@@ -13,18 +13,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextAction: 0
+  statusCondition: 0
   combatantName: Cobra
-  totalHitPoints: 25
-  currentHitPoints: 25
-  attack: 15
+  totalHitPoints: 15
+  currentHitPoints: 15
+  attack: 6
   speed: 15
   defenseMultiplier: 1
+  resistance: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
   text: {fileID: 7447595518004980471}
   appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
+  isSlain: 0
 --- !u!1001 &6518643535064828342
 PrefabInstance:
   m_ObjectHideFlags: 0

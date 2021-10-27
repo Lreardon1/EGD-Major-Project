@@ -5,7 +5,8 @@ using UnityEngine;
 public class CombatantBasis : MonoBehaviour
 {
     public enum Action { Attack, Block, Special };
-    public enum Status { None, Burn, Chill, Shock, Gust};
+    public enum DamageType { None, Fire, Water, Earth, Air, Light, Dark};
+    public enum Status { None, Burn, Wet, Earthbound, Gust, Holy, Fallen, Molten, Vaporise, Lightning, Hellfire, Ice, HolyWater, Blight, Corruption};
 
     public Action nextAction;
     public Status statusCondition;
@@ -15,6 +16,7 @@ public class CombatantBasis : MonoBehaviour
     public int attack;
     public int speed;
     public float defenseMultiplier = 1f;
+    public DamageType resistance = DamageType.None;
     public int temporaryHitPoints = 0;
     public int negativeHitPointShield = 0;
 
@@ -24,6 +26,7 @@ public class CombatantBasis : MonoBehaviour
     public GameObject heldItem = null;
 
     public GameObject target = null;
+    public bool isSlain = false;
 
     private Action previousAction;
 
@@ -52,7 +55,9 @@ public class CombatantBasis : MonoBehaviour
         if(currentHitPoints <= negativeHitPointShield)
         {
             Debug.Log(combatantName + " Slain");
-            GetComponent<SpriteRenderer>().enabled = false;
+            isSlain = true;
+            this.GetComponent<SpriteRenderer>().enabled = false;
+            text.enabled = false;
         }
     }
 
@@ -107,6 +112,13 @@ public class CombatantBasis : MonoBehaviour
         }
         int randint = Random.Range(0, targets.Count);
         target = targets[randint];
+        if(nextAction == Action.Attack)
+        {
+            text.text = "Attack " + target.GetComponent<CombatantBasis>().combatantName;
+        } else if(nextAction == Action.Special)
+        {
+            text.text = "Special " + target.GetComponent<CombatantBasis>().combatantName;
+        }
         Debug.Log("Target Selected");
     }
 

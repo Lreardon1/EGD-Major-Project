@@ -13,18 +13,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextAction: 0
+  statusCondition: 0
   combatantName: Warrior
-  totalHitPoints: 100
-  currentHitPoints: 100
-  attack: 50
+  totalHitPoints: 30
+  currentHitPoints: 30
+  attack: 6
   speed: 10
   defenseMultiplier: 1
+  resistance: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
   text: {fileID: 3003093641233324152}
   appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
+  isSlain: 0
 --- !u!1001 &374715440752953635
 PrefabInstance:
   m_ObjectHideFlags: 0

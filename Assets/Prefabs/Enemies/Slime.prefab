@@ -13,18 +13,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextAction: 0
+  statusCondition: 0
   combatantName: Slime
-  totalHitPoints: 20
-  currentHitPoints: 20
-  attack: 10
+  totalHitPoints: 10
+  currentHitPoints: 10
+  attack: 5
   speed: 12
   defenseMultiplier: 1
+  resistance: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
   text: {fileID: 2147232144169677366}
   appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
+  isSlain: 0
 --- !u!1001 &2369301503570432375
 PrefabInstance:
   m_ObjectHideFlags: 0
