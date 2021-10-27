@@ -14,6 +14,8 @@ public class OverworldMovement : MonoBehaviour
     string rotation_way;
     public bool canMove = true;
     public List<UnityEngine.Vector3> movements = new List<UnityEngine.Vector3>();
+    float elapsed = 0f;
+    GameObject[] party_members;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +27,7 @@ public class OverworldMovement : MonoBehaviour
         cc = GetComponent<CharacterController>();
         rotated = false;
         rotation_way = "";
+        movements.Add(Vector3.zero);
     }
 
     public Vector3 velocity = Vector3.zero;
@@ -73,8 +76,20 @@ public class OverworldMovement : MonoBehaviour
         velocity += Vector3.down * 9.8f * Time.deltaTime;
         velocity = isGround ? Vector3.zero : velocity;
 
-        //movements.Add((((right + up).normalized * movementspeed) + velocity));
-        //Debug.Log((((right + up).normalized * movementspeed) + velocity));
+        elapsed += Time.deltaTime;
+        if (elapsed >= 0.0166f)
+        {
+            party_members = GameObject.FindGameObjectsWithTag("Party");
+            if (party_members.Length > 0)
+            {
+                Follow();
+                //need to do this because position vector has some wierd y values
+                // Vector3 tmp = (((right + up).normalized * movementspeed) + velocity) * Time.deltaTime;
+                //movements.Add(tmp);
+                movements.Add((((right + up).normalized * movementspeed) + velocity));
+            }
+            elapsed = elapsed % 0.0166f;
+        }
         cc.Move((((right + up).normalized * movementspeed) + velocity) * Time.deltaTime);
 
         if (canMove)
@@ -116,5 +131,16 @@ public class OverworldMovement : MonoBehaviour
                 animator.SetBool("Walking", false);
             }
         }
+    }
+
+    //for each object with the tag player, this function updates its position to be the same as the player after 1 second
+    //unless the player has stopped
+    void Follow()
+    {
+        //Debug.Log("here");
+        party_members[0].transform.Translate(movements[0]);
+        //somethin wonky with y coordinate, so this is trying to fix it
+        party_members[0].transform.position = new Vector3(party_members[0].transform.position.x, 0.200105f, party_members[0].transform.position.z); ;
+        movements.RemoveAt(0);
     }
 }

@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ForestAndVillage.unity
     guid: 199b587232124f6409c0d654ac4e15ce
+  - enabled: 1
+    path: Assets/Scenes/OverworldTest.unity
+    guid: 8c45b66b70b42a243a4648dd6ef7498c
   m_configObjects: {}

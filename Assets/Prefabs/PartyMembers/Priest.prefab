@@ -13,18 +13,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextAction: 0
+  statusCondition: 0
   combatantName: Priest
-  totalHitPoints: 60
-  currentHitPoints: 60
+  totalHitPoints: 15
+  currentHitPoints: 15
   attack: 30
   speed: 16
   defenseMultiplier: 1
+  resistance: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
   text: {fileID: 6673966145099131155}
   appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
+  isSlain: 0
 --- !u!1001 &8070679975717550152
 PrefabInstance:
   m_ObjectHideFlags: 0

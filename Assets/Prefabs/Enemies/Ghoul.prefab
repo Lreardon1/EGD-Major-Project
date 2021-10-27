@@ -13,18 +13,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextAction: 0
+  statusCondition: 0
   combatantName: Ghoul
-  totalHitPoints: 30
-  currentHitPoints: 30
-  attack: 8
+  totalHitPoints: 20
+  currentHitPoints: 20
+  attack: 4
   speed: 10
   defenseMultiplier: 1
+  resistance: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
   text: {fileID: 143262092470255084}
   appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
+  isSlain: 0
 --- !u!1001 &4382296509931200173
 PrefabInstance:
   m_ObjectHideFlags: 0

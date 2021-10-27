@@ -8,9 +8,11 @@ public class CombatHandController : MonoBehaviour
     public GameObject drawPile;
     public GameObject discardPile;
     public int startingHandSize = 4;
+    public int maxHandSize = 7;
 
     public GameObject cardWorldColliderPrefab;
     public Transform cardWorldColliderParent;
+    public CombatManager cm;
 
     Camera mainCam;
 
@@ -28,6 +30,7 @@ public class CombatHandController : MonoBehaviour
             card.transform.localScale = transform.localScale;
             card.GetComponent<RectTransform>().SetParent(transform);
             card.GetComponent<CardEditHandler>().inCombat = true;
+
             UIToWorldCollider utwc = card.GetComponent<UIToWorldCollider>();
             utwc.mainCam = mainCam;
             utwc.inHand = true;
@@ -46,15 +49,61 @@ public class CombatHandController : MonoBehaviour
         
     }
 
-    public void DrawCard()
+    public void DisableDrag()
     {
-        GameObject card = Deck.instance.Draw();
-        card.transform.localScale = transform.localScale;
-        card.GetComponent<RectTransform>().SetParent(transform);
-        card.GetComponent<CardEditHandler>().inCombat = true;
-        card.GetComponent<UIToWorldCollider>().mainCam = mainCam;
-        card.GetComponent<UIToWorldCollider>().inHand = true;
-        cardsInHand.Add(card);
+        foreach(GameObject card in cardsInHand)
+        {
+            card.GetComponent<DragDrop>().isDraggable = false;
+        }
+    }
+
+    public void EnableDrag()
+    {
+        foreach (GameObject card in cardsInHand)
+        {
+            card.GetComponent<DragDrop>().isDraggable = true;
+        }
+    }
+
+    public void DrawCards(int cardAmount)
+    {
+        if (cardsInHand.Count + cardAmount > maxHandSize)
+        {
+            Debug.Log("You Can't Draw That Many Cards!");
+            return;
+        }
+        for(int i = 0; i < cardAmount; i++)
+        {
+            GameObject card = Deck.instance.Draw();
+            card.transform.localScale = transform.localScale;
+            card.GetComponent<RectTransform>().SetParent(transform);
+            card.GetComponent<CardEditHandler>().inCombat = true;
+
+            UIToWorldCollider utwc = card.GetComponent<UIToWorldCollider>();
+            utwc.mainCam = mainCam;
+            utwc.inHand = true;
+            GameObject cardWorldCollider = Instantiate(cardWorldColliderPrefab, Vector3.zero, Quaternion.identity, cardWorldColliderParent);
+            cardWorldCollider.GetComponent<CardWorldColliderDetection>().dragDrop = card.GetComponent<DragDrop>();
+            utwc.colliderGO = cardWorldCollider;
+            utwc.bc = cardWorldCollider.GetComponent<BoxCollider2D>();
+            utwc.rb = cardWorldCollider.GetComponent<Rigidbody2D>();
+            cardsInHand.Add(card);
+        }
+        switch (cardAmount)
+        {
+            case 1:
+                cm.AddMana(20);
+                break;
+            case 2:
+                cm.AddMana(18);
+                break;
+            case 3:
+                cm.AddMana(16);
+                break;
+            case 4:
+                cm.AddMana(14);
+                break;
+        }
     }
 
     public void DiscardCard(GameObject card)

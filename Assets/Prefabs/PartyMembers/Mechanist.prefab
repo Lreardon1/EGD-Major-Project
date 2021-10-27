@@ -13,18 +13,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextAction: 0
+  statusCondition: 0
   combatantName: Mechanist
-  totalHitPoints: 70
-  currentHitPoints: 70
-  attack: 40
+  totalHitPoints: 20
+  currentHitPoints: 20
+  attack: 6
   speed: 13
   defenseMultiplier: 1
+  resistance: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
   text: {fileID: 5022943810321618168}
   appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
+  isSlain: 0
 --- !u!1001 &7578279150225114531
 PrefabInstance:
   m_ObjectHideFlags: 0
