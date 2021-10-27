@@ -164,12 +164,11 @@ public class OverworldMovement : MonoBehaviour
             }
         }
         
-        /*
-        while (walkLine.Count != 0 && walkLine.Last.Value.time < walkTime + 5.0f)
+        
+        while (walkLine.Count != 0 && walkLine.Last.Value.time < walkTime - 2.0f)
         {
             walkLine.RemoveLast();
         }
-        */
     }
 }
 
