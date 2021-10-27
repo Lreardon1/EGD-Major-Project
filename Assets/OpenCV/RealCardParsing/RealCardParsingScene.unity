@@ -917,10 +917,12 @@ MonoBehaviour:
     Y: 0.477941
   matchThresh: 0.7
   tagLineIntersectThresh: 4
+  cardTemplates: []
   baseCardImage: {fileID: 0}
   adaptTestType: 1
   frameSize: 3
   subConst: 7
+  interpolateFlag: 1
   loweRatio: 0.7
   kpDist: 30
 --- !u!1 &1847200080

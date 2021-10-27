@@ -31,19 +31,23 @@ public class DeckCustomizer : MonoBehaviour
     public GameObject fullDeckStorage;
     [SerializeField]
     public GameObject currentDeckStorage;
-
+    [SerializeField]
     public GameObject cardEditor;
+    [SerializeField]
+    public GameObject cardDisplay;
 
     void Start()
     {
-        cardEditor.SetActive(false);
-        customizationWindow.SetActive(false);
-        cardSelectionWindow.SetActive(true);
-        SetUp();
+        //SetUp();
     }
 
     public void SetUp()
     {
+        cardEditor.SetActive(false);
+        cardDisplay.SetActive(false);
+        customizationWindow.SetActive(false);
+        cardSelectionWindow.SetActive(true);
+
         print("setting up");
         GridLayoutGroup cardGrid = customizeStorage.GetComponent<GridLayoutGroup>();
         GridLayoutGroup allCardGrid = fullDeckStorage.GetComponent<GridLayoutGroup>();
@@ -103,6 +107,7 @@ public class DeckCustomizer : MonoBehaviour
             c.GetComponent<DragDrop>().allowedDropZones.Add(fullDeckStorage.transform.parent.parent.gameObject);
             c.GetComponent<DragDrop>().allowedDropZones.Add(currentDeckStorage.transform.parent.parent.gameObject);
             c.GetComponent<CardEditHandler>().isCustomizable = false;
+            c.GetComponent<CardEditHandler>().inCombat = false;
             if (deck.Contains(c))
             {
                 c.GetComponent<DragDrop>().isDraggable = true;
@@ -129,6 +134,7 @@ public class DeckCustomizer : MonoBehaviour
         {
             c.GetComponent<DragDrop>().allowedDropZones.Clear();
             c.GetComponent<CardEditHandler>().isCustomizable = true;
+            c.GetComponent<CardEditHandler>().displayOnClick = true;
             if (deck.Contains(c))
             {
                 c.GetComponent<DragDrop>().isDraggable = false;
@@ -140,6 +146,11 @@ public class DeckCustomizer : MonoBehaviour
 
     public void SwapToCustomize()
     {
+        //resetting and unequipping selected card if open
+        if (cardDisplay.activeSelf)
+        {
+            cardDisplay.transform.GetChild(0).gameObject.GetComponent<Card>().HideDisplay();
+        }
         //saving newly equipped cards
         Deck.instance.deck.Clear();
         int equippedCardCount = currentDeckStorage.transform.childCount;
@@ -157,6 +168,11 @@ public class DeckCustomizer : MonoBehaviour
 
     public void SwapToSelect()
     {
+        //saving and unequipping editted card if open
+        if (cardEditor.activeSelf)
+        {
+            cardEditor.GetComponent<CardEditor>().SaveCard();
+        }
         customizationWindow.SetActive(false);
         cardSelectionWindow.SetActive(true);
         SwapCardsToSelect();
@@ -164,24 +180,10 @@ public class DeckCustomizer : MonoBehaviour
         currentDeckStorage.GetComponent<DeckViewer>().checkForUpdates = true;
     }
 
-    //public void UpdateDeckSize()
-    //{
-    //    int size = currentDeckStorage.transform.childCount;
-    //    deckSize.text = size.ToString() + " / 30";
-    //    if (size == 30)
-    //    {
-    //        currentDeckStorage.transform.parent.parent.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-    //    }
-    //    else
-    //    {
-    //        currentDeckStorage.transform.parent.parent.gameObject.GetComponent<BoxCollider2D>().enabled = true;
-    //    }
-    //}
-
     public void AttemptAccept()
     {   
         //checking for balanced banks
-        if (true)
+        if (true)//Deck.instance.deck.Count == 30)
         {
             AcceptAndStore();
         }
@@ -273,9 +275,15 @@ public class DeckCustomizer : MonoBehaviour
             trans.anchoredPosition = new Vector2(0.5f, 0.5f);
             trans.localPosition = new Vector3(0, 0, 0);
         }
-
+        List<GameObject> allCards = Deck.instance.allCards;
+        foreach (GameObject c in allCards)
+        {
+            c.GetComponent<CardEditHandler>().inCombat = true;
+        }
         Deck.instance.HideCards();
 
+        print(transform.parent.gameObject);
+        transform.parent.gameObject.GetComponent<CanvasManager>().UnlockPlayer();
         customizationWindow.SetActive(false);
     }
 }
