@@ -46,11 +46,80 @@ public class Modifier
 
     public void ActivateModifier(Card c)
     {
-
+        if (spriteParsing == "fire")
+        {
+            c.secondaryElem = Card.Element.Fire;
+        }
+        else if (spriteParsing == "water")
+        {
+            c.secondaryElem = Card.Element.Water;
+        }
+        else if (spriteParsing == "earth")
+        {
+            c.secondaryElem = Card.Element.Earth;
+        }
+        else if (spriteParsing == "air")
+        {
+            c.secondaryElem = Card.Element.Air;
+        }
+        else if (spriteParsing == "light")
+        {
+            c.secondaryElem = Card.Element.Light;
+        }
+        else if (spriteParsing == "dark")
+        {
+            c.secondaryElem = Card.Element.Dark;
+        }
+        else if (spriteParsing == "plus2")
+        {
+            c.numMod = 2;
+        }
+        else if (spriteParsing == "mana2")
+        {
+            c.UpdateManaCost(c.manaCost - 2);
+        }
+        else if (spriteParsing == "prio")
+        {
+            c.givePrio = true;
+        }
+        else if (spriteParsing == "adj")
+        {
+            c.targetting = Card.AoE.Adjascent;
+        }
+        else if (spriteParsing == "all")
+        {
+            c.targetting = Card.AoE.All;
+        }
     }
 
     public void DeactivateModifier(Card c)
     {
-
+        if (name == ModifierEnum.SecondaryElement)
+        {
+            c.secondaryElem = Card.Element.None;
+        }
+        else if (name == ModifierEnum.NumModifier)
+        {
+            c.numMod = 0;
+        }
+        else //utility modifiers
+        {
+            if (spriteParsing == "mana2")
+            {
+                c.UpdateManaCost(c.manaCost + 2);
+            }
+            else if (spriteParsing == "prio")
+            {
+                c.givePrio = false;
+            }
+            else if (spriteParsing == "adj")
+            {
+                c.targetting = Card.AoE.Single;
+            }
+            else if (spriteParsing == "all")
+            {
+                c.targetting = Card.AoE.Single;
+            }
+        }
     }
 }

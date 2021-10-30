@@ -4,27 +4,25 @@ using UnityEngine;
 
 public class SlimeCombat : CombatantBasis
 {
-    public override void Attack()
-    {
-        // Apply damage to target's enemy script
-        CombatantBasis cb = target.GetComponent<CombatantBasis>();
+    //public override void Attack()
+    //{
+    //    // Apply damage to target's enemy script
+    //    CombatantBasis cb = target.GetComponent<CombatantBasis>();
 
-        int damageTotal = attack - 0; // Get modifier from card here (apply negative)
+    //    int damageTotal = attack - 0; // Get modifier from card here (apply negative)
 
-        string damageType = "none"; // Get damage type from card here
+    //    cb.TakeDamage(damageTotal, damageType);
+    //    Debug.Log(combatantName + " Attack");
+    //}
 
-        cb.TakeDamage(damageTotal, damageType);
-        Debug.Log(combatantName + " Attack");
-    }
+    //public override void Block()
+    //{
+    //    negativeHitPointShield += 0; // Get temporary hit points from card here
 
-    public override void Block()
-    {
-        negativeHitPointShield += 0; // Get temporary hit points from card here
-
-        // Increase defense multipler to 2X
-        defenseMultiplier = 2f;
-        Debug.Log(combatantName + " Block");
-    }
+    //    // Increase defense multipler to 2X
+    //    defenseMultiplier = 2f;
+    //    Debug.Log(combatantName + " Block");
+    //}
 
     public override void Special()
     {

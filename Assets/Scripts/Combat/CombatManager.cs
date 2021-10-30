@@ -510,6 +510,10 @@ public class CombatManager : MonoBehaviour
             actionOrder.Add(fastestCombatant);
             allCombatants.Remove(fastestCombatant);
         }
+    }
+
+    public void GivePriority(GameObject combatant)
+    {
 
     }
 
