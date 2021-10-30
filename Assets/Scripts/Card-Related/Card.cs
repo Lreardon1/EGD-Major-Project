@@ -7,6 +7,7 @@ public class Card : MonoBehaviour
 {
     public enum CardType { None, Attack, Block, Influence };
     public enum Element { None, Fire, Water, Air, Earth, Light, Dark };
+    public enum AoE { Single, Adjascent, All };
 
     [Header("Initial Settings")]
     [SerializeField]
@@ -108,7 +109,7 @@ public class Card : MonoBehaviour
 
     public void Play()
     {
-        onPlayScript.OnPlay();
+        onPlayScript.OnPlay(this);
     }
 
     public void UpdateManaCost(int newCost)

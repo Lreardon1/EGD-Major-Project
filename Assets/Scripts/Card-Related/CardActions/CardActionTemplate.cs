@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CardActionTemplate : MonoBehaviour, ICardAction
 {
-    public virtual void OnPlay()
+    public virtual void OnPlay(Card c)
     {
         print("Template ON PLAY");
     }

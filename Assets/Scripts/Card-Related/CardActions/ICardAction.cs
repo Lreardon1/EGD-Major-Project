@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ICardAction
 {
-    void OnPlay();
+    void OnPlay(Card c);
 }
