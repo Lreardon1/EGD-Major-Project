@@ -23,6 +23,7 @@ public class CombatManager : MonoBehaviour
 
     public int maxMana = 30;
     public int currentMana = 20;
+    public int discardCost = 1;
     
 
     public bool canDraw = false;
@@ -163,6 +164,8 @@ public class CombatManager : MonoBehaviour
                 done = true;
             }
 
+            // This code waits until either a card amount to draw has been selected or for cv, a number of cards is shown to the camera
+
             // Need code to detect if card has been applied
             yield return null;
         }
@@ -209,19 +212,12 @@ public class CombatManager : MonoBehaviour
     public IEnumerator DiscardPhaseCoroutine()
     {
         bool done = false;
-        int currentCardsInDiscard = chc.discardPile.transform.childCount;
         while (!done)
         {
             // skips when space is hit
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 done = true;
-            }
-            if(currentCardsInDiscard != chc.discardPile.transform.childCount)
-            {
-                currentMana -= Mathf.Abs(chc.discardPile.transform.childCount - currentCardsInDiscard);
-                currentCardsInDiscard = chc.discardPile.transform.childCount;
-                manaText.text = "Mana: " + currentMana + "/" + maxMana;
             }
 
             // Need code to detect if card has been applied
@@ -466,11 +462,23 @@ public class CombatManager : MonoBehaviour
 
         if(!cb.isEnemy)
         {
-            cardScript.Play(combatant, partyMembers);
+            //cardScript.Play(combatant, partyMembers);
         } else
         {
-            cardScript.Play(combatant, enemies);
+            //cardScript.Play(combatant, enemies);
         }
+    }
+
+    public void DrawCards(int cardsToDraw)
+    {
+        chc.DrawCards(cardsToDraw);
+    }
+
+    public void DiscardCard(GameObject card)
+    {
+        currentMana -= discardCost;
+        manaText.text = "Mana: " + currentMana + "/" + maxMana;
+        chc.DiscardCard(card);
     }
 
     public void AddMana(int manaAmount)
