@@ -107,9 +107,9 @@ public class Card : MonoBehaviour
         manaText.text = manaCost.ToString();
     }
 
-    public void Play()
+    public void Play(GameObject combatant, List<GameObject> otherCombatants)
     {
-        onPlayScript.OnPlay(this);
+        onPlayScript.OnPlay(this, combatant, otherCombatants);
     }
 
     public void UpdateManaCost(int newCost)

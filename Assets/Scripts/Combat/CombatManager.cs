@@ -463,6 +463,14 @@ public class CombatManager : MonoBehaviour
         cb.appliedCard = card;
         currentMana -= cardScript.manaCost;
         manaText.text = "Mana: " + currentMana + "/" + maxMana;
+
+        if(!cb.isEnemy)
+        {
+            cardScript.Play(combatant, partyMembers);
+        } else
+        {
+            cardScript.Play(combatant, enemies);
+        }
     }
 
     public void AddMana(int manaAmount)

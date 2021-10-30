@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class AttackCardAction : CardActionTemplate
 {
-    public override void OnPlay(Card c)
+    public override void OnPlay(Card c, GameObject combatant, List<GameObject> otherCombatants)
     {
-        base.OnPlay(c);
+        base.OnPlay(c, combatant, otherCombatants);
 
         Card.Element type;
         int numModifier;

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ICardAction
 {
-    void OnPlay(Card c);
+    void OnPlay(Card c, GameObject combatant, List<GameObject> otherCombatants);
 }
