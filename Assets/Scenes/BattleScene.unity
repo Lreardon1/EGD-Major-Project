@@ -185,9 +185,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2096779966}
-  - {fileID: 2106434608}
   - {fileID: 244591422}
   - {fileID: 1582332345}
+  - {fileID: 2106434608}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -518,7 +518,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5033110867934627441, guid: 260ba61df3638904997d8253487d3066, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5033110867934627441, guid: 260ba61df3638904997d8253487d3066, type: 3}
       propertyPath: m_LocalScale.x
@@ -1513,12 +1513,12 @@ MonoBehaviour:
   manaText: {fileID: 1534407708}
   partyMembers:
   - {fileID: 2096779967}
-  - {fileID: 2106434609}
   - {fileID: 244591423}
   - {fileID: 1582332344}
+  - {fileID: 2106434609}
   enemies:
-  - {fileID: 686693983}
   - {fileID: 1785654590}
+  - {fileID: 686693983}
   - {fileID: 1754622247}
   - {fileID: 1811753866}
   actionOrder: []
@@ -1991,6 +1991,7 @@ MonoBehaviour:
   discardPile: {fileID: 89712373}
   startingHandSize: 4
   maxHandSize: 7
+  cardsInDiscard: 0
   cardWorldColliderPrefab: {fileID: 3219779073509697202, guid: d851cb974d4e42e45b879ee0942f3717, type: 3}
   cardWorldColliderParent: {fileID: 693321388}
   cm: {fileID: 940410049}
@@ -2528,7 +2529,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4257258188698014198, guid: d08908fcee48617479c737820e8ea31c, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4257258188698014198, guid: d08908fcee48617479c737820e8ea31c, type: 3}
       propertyPath: m_LocalScale.x
@@ -3378,7 +3379,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6272639951522897270, guid: a02df2b30c237634da61a932e01618f4, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6272639951522897270, guid: a02df2b30c237634da61a932e01618f4, type: 3}
       propertyPath: m_LocalScale.x

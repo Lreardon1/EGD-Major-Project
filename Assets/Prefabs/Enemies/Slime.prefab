@@ -28,6 +28,7 @@ MonoBehaviour:
   heldItem: {fileID: 0}
   target: {fileID: 0}
   isSlain: 0
+  isEnemy: 1
 --- !u!1001 &2369301503570432375
 PrefabInstance:
   m_ObjectHideFlags: 0

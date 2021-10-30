@@ -27,6 +27,7 @@ public class CombatantBasis : MonoBehaviour
 
     public GameObject target = null;
     public bool isSlain = false;
+    public bool isEnemy = false;
 
     private Action previousAction;
 
