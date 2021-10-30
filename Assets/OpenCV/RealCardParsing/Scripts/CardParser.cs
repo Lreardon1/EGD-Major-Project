@@ -7,6 +7,7 @@ using OpenCvSharp.Aruco;
 using OpenCvSharp.XFeatures2D;
 using System.Linq;
 using System;
+using UnityEngine.Events;
 
 public class CardParser : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class CardParser : MonoBehaviour
     public Point2f bottomRightBoundingBox_UL;
     public Point2f bottomRightBoundingBox_LR;
     public BoundingBox bottomRightBoundingBox;
+    
     [Space(1)]
     public Point2f upperLeftBoundingBox_UL;
     public Point2f upperLeftBoundingBox_LR;
@@ -28,6 +30,7 @@ public class CardParser : MonoBehaviour
     [Space(1)]
     public Point2f stickerBoundingBox1_UL;
     public Point2f stickerBoundingBox1_LR;
+    
     public BoundingBox stickerBoundingBox1;
     [Space(1)]
     public Point2f stickerBoundingBox2_UL;
@@ -168,21 +171,40 @@ public class CardParser : MonoBehaviour
             }
         }
     }
+
+    [HideInInspector] // decides if the card parser should attempt CV on the screen
+    public bool LookForInput = false;
           
     // Update is called once per frame
     void Update()
     {
-        double t = Time.realtimeSinceStartupAsDouble;
+        if (!LookForInput)
+            return;
+
         if (webCamTexture != null && webCamTexture.didUpdateThisFrame)
         {
             // this must be called continuously
             ReadTextureConversionParameters();
-
             // process texture with whatever method sub-class might have in mind
             ProcessTexture(webCamTexture);
         }
     }
 
+
+    public void SetLookForInput(bool b, int deviceIndex = -1)
+    {
+        if (deviceIndex == -1)
+            deviceIndex = WebCamTexture.devices.Length - 1;
+
+        if (b)
+        {
+            if (WebCamTexture.devices.Length > 0)
+                DeviceName = WebCamTexture.devices[deviceIndex % WebCamTexture.devices.Length].name;
+        } else
+        {
+            DeviceName = null;
+        }
+    }
 
     /* HANDLE CAMERA THINGS */
     /// <summary>
@@ -202,6 +224,9 @@ public class CardParser : MonoBehaviour
 
             if (null != webCamTexture && webCamTexture.isPlaying)
                 webCamTexture.Stop();
+            webCamTexture = null;
+
+            if (DeviceName == null) return;
 
             // get device index
             int cameraIndex = -1;
@@ -215,7 +240,7 @@ public class CardParser : MonoBehaviour
             if (-1 != cameraIndex)
             {
                 webCamDevice = WebCamTexture.devices[cameraIndex];
-                webCamTexture = new WebCamTexture(webCamDevice.Value.name, 1920, 1080, 10);
+                webCamTexture = new WebCamTexture(webCamDevice.Value.name, 1920, 1080, 15);
 
                 // read device params and make conversion map
                 ReadTextureConversionParameters();
@@ -259,16 +284,7 @@ public class CardParser : MonoBehaviour
 
         //UnityEngine.Debug.Log (string.Format("front = {0}, vertMirrored = {1}, angle = {2}", webCamDevice.isFrontFacing, webCamTexture.videoVerticallyMirrored, webCamTexture.videoRotationAngle));
     }
-
-    /// <summary>
-    /// Default initializer for MonoBehavior sub-classes
-    /// </summary>
-    protected virtual void Awake()
-    {
-        if (WebCamTexture.devices.Length > 0)
-            DeviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 2].name;
-    }
-
+    
     void OnDestroy()
     {
         if (webCamTexture != null)
@@ -295,21 +311,80 @@ public class CardParser : MonoBehaviour
             print(cardScene.Size());
 
             CustomCard card = ParseCard(cardScene, previousCard);
-            previousCard = card;
+            UpdateCardDetected(card);
         }
         return true;
+    }
+
+    [Header("Controller")]
+    public UnityEvent<CustomCard> StableUpdateEvent = new UnityEvent<CustomCard>();
+    public UnityEvent<CustomCard> ToNullUpdateEvent = new UnityEvent<CustomCard>();
+    public UnityEvent<CustomCard> ToNewUpdateEvent = new UnityEvent<CustomCard>();
+
+    private float timeSinceLastUpdate = -1.0f;
+    public float timeRequiredForNull = 0.4f;
+    public float timeRequiredForNew = 0.2f;
+
+    private void UpdateCardDetected(CustomCard card)
+    {
+        // if card is the same as last, don't update
+        if (CustomCard.Equiv(card, previousCard))
+        {
+            timeSinceLastUpdate = Time.time;
+            StableUpdateEvent.Invoke(card);
+        }
+
+        // update to null
+        if (card == null && timeSinceLastUpdate + timeRequiredForNull <= Time.time)
+        {
+            previousCard = card;
+            ToNullUpdateEvent.Invoke(card);
+        }
+
+        // update to different card
+        if (card != null && timeSinceLastUpdate + timeRequiredForNew <= Time.time)
+        {
+            previousCard = card;
+            ToNewUpdateEvent.Invoke(card);
+        }
     }
 
     public class CustomCard
     {
         public float certainty;
+        public int cardID;
         public BoundingBox bb;
         public CardType cardType;
         public CardElement cardElement;
+        public CardMod[] cardMods;
 
         public CustomCard(float certainty, BoundingBox inSceneBB, CardType type, CardElement element, int cardID, CardMod[] cardMods)
         {
+            this.certainty = certainty;
+            this.cardID = cardID;
+            this.bb = inSceneBB;
+            this.cardType = type;
+            this.cardElement = element;
+            this.cardMods = new CardMod[cardMods.Length];
 
+            for (int i = 0; i < cardMods.Length; ++i)
+                this.cardMods[i] = cardMods[i];
+
+        }
+
+        public static bool Equiv(CustomCard card1, CustomCard card2)
+        {
+            if (card1 == card2)
+                return true;
+
+            int compCount = 0;
+            for (int i = 0; i < card1.cardMods.Length && i < card2.cardMods.Length; ++i)
+            {
+                compCount += card1.cardMods[i] == card2.cardMods[i] ? 1 : 0;
+            }
+
+            // TODO?
+            return card1.cardID == card2.cardID  && compCount >= 3;
         }
 
         public enum CardMod
@@ -496,16 +571,7 @@ public class CardParser : MonoBehaviour
             return bestMatch;
         }
     }
-
-    private void RotateWindingOnRect(Point2f[] newRect)
-    {
-        Point2f nowFirst = newRect[3];
-        newRect[3] = newRect[2];
-        newRect[2] = newRect[1];
-        newRect[1] = newRect[0];
-        newRect[0] = nowFirst;
-    }
-
+    
     private float AttemptToMatchByShape(Mat scene, Mat template, Point2f[] rect)
     {
         Size s = template.Size();
@@ -581,7 +647,7 @@ public class CardParser : MonoBehaviour
                     bestRot = currentRot;
                 }
                 // ROTATE
-                RotateWindingOnRect(newRect);
+                newRect = RotateWinding(newRect, 1);
                 currentRot++;
             }
         }
@@ -663,12 +729,7 @@ public class CardParser : MonoBehaviour
         float b = line2[0] / -line2[1];
         float c = line1[2] / -line1[1];
         float d = line2[2] / -line2[1];
-
-        /*
-        float x_numer = (line1[1] * line2[2]) - (line2[1] * line1[2]);
-        float y_numer = (line1[2] * line2[0]) - (line2[2] * line1[1]);
-        float denom = (line1[0] * line2[1]) - (line2[1] * line1[0]);
-        */
+        
         // if denom == 0, they are either parallel or axis aligned
         // this happens because vertical lines are not actually functions?
         if (Mathf.Abs(line1[0]) < 0.001f && Mathf.Abs(line2[1]) < 0.001f)
@@ -683,9 +744,9 @@ public class CardParser : MonoBehaviour
             intersect.X = line2[2] / line2[1];
             return intersect;
         }
-        else if (Mathf.Abs((a - b)) < 0.01f)
+        else if (Mathf.Abs((a - b)) < 0.001f)
         {
-            throw new System.Exception("WHAT YOU DOING? A PARALLEL LINES HAVE GOT NOTHING");
+            Debug.LogError("WHAT YOU DOING? A PARALLEL LINES HAVE GOT NOTHING");
             return new Point2f(Mathf.Infinity, Mathf.Infinity);
         }
 
@@ -749,17 +810,11 @@ public class CardParser : MonoBehaviour
     
     private void DetectContours(Mat scene, out Point2f[][] contours, out HierarchyIndex[] hierarchy)
     {
-        // BIG TO-DO : more accurate this, always, not matter how accurate you get it.
         using (Mat greyCard = new Mat())
         using (Mat edgeCard = new Mat())
         {
             hierarchy = null;
-            /*
-            Cv2.CvtColor(scene, greyCard, ColorConversionCodes.BGR2GRAY);
-            Cv2.GaussianBlur(greyCard, greyCard, new Size(5, 5), 1.0f); // crazy expensive
-            Cv2.Canny(greyCard, edgeCard, 120, 255);
-            Cv2.FindContours(edgeCard, out contours, out hierarchy, RetrievalModes.List, ContourApproximationModes.ApproxSimple);
-            */
+
             Dictionary arucoDict = CvAruco.GetPredefinedDictionary(PredefinedDictionaryName.Dict4X4_50);
             DetectorParameters arucoParams = DetectorParameters.Create();
             arucoParams.CornerRefinementMinAccuracy = 0.000001;
@@ -771,14 +826,12 @@ public class CardParser : MonoBehaviour
 
             Point2f[][] corners;
             int[] ids;
-            //Mat testMat = 255 - scene;
             Mat testMat = new Mat();
             Cv2.BitwiseNot(scene, testMat);
             CvAruco.DetectMarkers(testMat, arucoDict, out corners, out ids, arucoParams, out contours);
             contours = contours.Concat(corners).ToArray();
 
             CvAruco.DrawDetectedMarkers(testMat, contours, null);
-            ///matcherImage.texture = OpenCvSharp.Unity.MatToTexture(testMat);
         }
     }
 
@@ -818,8 +871,6 @@ public class CardParser : MonoBehaviour
             Mat colorMat = new Mat();
             im.CopyTo(colorMat);
             Cv2.DrawContours(colorMat, ConvertPoint2fToPoint(simpCnts), -1, Scalar.Blue, 2);
-            ///diffImages[1].texture = OpenCvSharp.Unity.MatToTexture(grey);
-            ///diffImages[2].texture = OpenCvSharp.Unity.MatToTexture(colorMat);
 
             int val = 0;
             foreach (Point2f[] cnt in simpCnts)
@@ -833,7 +884,6 @@ public class CardParser : MonoBehaviour
 
     private CardCorner[] FindBestLowerRightCardCorner(Mat scene, ref Point2f[][] contours)
     {
-        // TODO : THIS FUNCTION NO LONGER REMOVES ANYTHING FROM CONTOURS!!!
         List<CardCorner> rectList = new List<CardCorner>();
         foreach (Point2f[] rect in contours)
         {
@@ -1042,11 +1092,16 @@ public class CardParser : MonoBehaviour
     }
 
 
+    private Mat lastGoodReplane;
+    public Mat GetLastGoodReplane()
+    {
+        return lastGoodReplane;
+    }
+
 
     /***
      *  THE BIG FUNCTION, MANAGES STATE AND PARSING!!!!
-     *  
-     */ 
+     */
     public CustomCard ParseCard(Mat cardScene, CustomCard previousCard)
     {
 
@@ -1061,7 +1116,7 @@ public class CardParser : MonoBehaviour
         foreach (CardCorner bestLowerRight in bestLowerRights)
         {
             // CLEAN UP THE CURRENT LOWER RIGHT
-            if (bestLowerRight == null) break; // TODO : handle failure
+            if (bestLowerRight == null) break;
             bestLowerRight.corners = RotateWinding(bestLowerRight.corners, bestLowerRight.neededRot);
             bestLowerRight.neededRot = 0;
             
@@ -1096,8 +1151,11 @@ public class CardParser : MonoBehaviour
             }
             replaneImage.texture = OpenCvSharp.Unity.MatToTexture(croppedReplaned);
 
+            // TODO 
+            croppedReplaned.CopyTo(lastGoodReplane);
 
             replaned.Release();
+            replaned.Dispose();
 
             // TODO : bound the bounding box less strictly and perhaps axis aligned?
             // TODO : ID function, by array or similar? : add to card template data
