@@ -10,21 +10,14 @@ using System;
 
 public class CardParser : MonoBehaviour
 {
-    [Header("UI and Debugging")]
-    public RawImage matcherImage;
-    public RawImage contourImage;
-    public RawImage arucoImage;
     public RawImage replaneImage;
-    public RawImage[] diffImages;
-
-    public Text numberText;
     
     [Space(10)]
     public Texture2D staticTestImage;
     
     // BOUNDING BOXES
     [Space(10)]
-    [Header("Boudning Boxes")]
+    [Header("Bounding Boxes")]
     public Point2f bottomRightBoundingBox_UL;
     public Point2f bottomRightBoundingBox_LR;
     public BoundingBox bottomRightBoundingBox;
@@ -33,13 +26,21 @@ public class CardParser : MonoBehaviour
     public Point2f upperLeftBoundingBox_LR;
     public BoundingBox upperLeftBoundingBox;
     [Space(1)]
-    public Point2f bannerNumberBox_UL;
-    public Point2f bannerNumberBox_LR;
-    public BoundingBox bannerNumberBox;
-    [Space]
-    public Point2f elementColorBox_UL;
-    public Point2f elementColorBox_LR;
-    public BoundingBox elementColorBox;
+    public Point2f stickerBoundingBox1_UL;
+    public Point2f stickerBoundingBox1_LR;
+    public BoundingBox stickerBoundingBox1;
+    [Space(1)]
+    public Point2f stickerBoundingBox2_UL;
+    public Point2f stickerBoundingBox2_LR;
+    public BoundingBox stickerBoundingBox2;
+    [Space(1)]
+    public Point2f stickerBoundingBox3_UL;
+    public Point2f stickerBoundingBox3_LR;
+    public BoundingBox stickerBoundingBox3;
+    [Space(1)]
+    public Point2f elementColorBoundingBox_UL;
+    public Point2f elementColorBoundingBox_LR;
+    public BoundingBox elementColorBoundingBox;
 
     [Space(10)]
     [Header("Match and Planing Scalars")]
@@ -77,8 +78,11 @@ public class CardParser : MonoBehaviour
     {
         bottomRightBoundingBox = new BoundingBox(bottomRightBoundingBox_UL, bottomRightBoundingBox_LR);
         upperLeftBoundingBox = new BoundingBox(upperLeftBoundingBox_UL, upperLeftBoundingBox_LR);
-        bannerNumberBox = new BoundingBox(bannerNumberBox_UL, bannerNumberBox_LR);
-        
+        stickerBoundingBox1 = new BoundingBox(stickerBoundingBox1_UL, stickerBoundingBox1_LR);
+        stickerBoundingBox2 = new BoundingBox(stickerBoundingBox2_UL, stickerBoundingBox2_LR);
+        stickerBoundingBox3 = new BoundingBox(stickerBoundingBox3_UL, stickerBoundingBox3_LR);
+        elementColorBoundingBox = new BoundingBox(elementColorBoundingBox_UL, elementColorBoundingBox_LR);
+
         BakeCardTemplateData();
     }
 
@@ -93,14 +97,14 @@ public class CardParser : MonoBehaviour
         return (int)type;
     }
 
-    // TODO
     private Mat ExtractCardType(Mat cardMat)
     {
-        throw new NotImplementedException();
+        return bottomRightBoundingBox.CropByBox(cardMat);
     }
-    private Color ExtractCardElement(Mat cardMat)
+    private Scalar ExtractCardElement(Mat cardMat)
     {
-        return Color.red;
+        Mat elementBox = elementColorBoundingBox.CropByBox(cardMat);
+        return elementBox.Mean();
     }
 
     /**
@@ -141,7 +145,7 @@ public class CardParser : MonoBehaviour
                 // get and store keypoints
                 GetKeypoints(cardMat, out KeyPoint[] kp, out Mat des);
 
-                // make keypoint data to store : TODO : this can be offloaded to editor for massive increase in exe size
+                // make keypoint data to store
                 TemplateCardData cardKeypointData = new TemplateCardData(kp, des);
 
                 // if the current card element and/or card type doesn't have a list, make one
@@ -282,22 +286,37 @@ public class CardParser : MonoBehaviour
         }
     }
 
+    private CustomCard previousCard;
+
     protected bool ProcessTexture(WebCamTexture input)
     {
-        // TODO
         using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(staticTestImage))
         {
-            //int f = 3;
-            //Cv2.Resize(cardScene, cardScene, new Size(cardScene.Width / f, cardScene.Height / f));
             print(cardScene.Size());
 
-            //Mat cardScene = OpenCvSharp.Unity.TextureToMat(image);
-            ParseCard(cardScene);
+            CustomCard card = ParseCard(cardScene, previousCard);
+            previousCard = card;
         }
         return true;
     }
 
+    public class CustomCard
+    {
+        public float certainty;
+        public BoundingBox bb;
+        public CardType cardType;
+        public CardElement cardElement;
 
+        public CustomCard(float certainty, BoundingBox inSceneBB, CardType type, CardElement element, int cardID, CardMod[] cardMods)
+        {
+
+        }
+
+        public enum CardMod
+        {
+
+        }
+    }
 
 
 
@@ -829,6 +848,11 @@ public class CardParser : MonoBehaviour
                 float matchToDiff = AttemptToMatchCardByTemplate(scene, data.typeImage, rect, out rotCount);
 
                 if ((matchByShape * 0.1f) + (matchToDiff * 0.9f) > bestCorner.matchVal) {
+                    // if we have no upper left partner, we aren't a lower right.
+                    Point2f[] rotRect = RotateWinding(rect, rotCount);
+                    if (FindBestUpperLeftCardCorner(scene, rotRect, ref contours) == null)
+                        continue;
+
                     bestCorner = new CardCorner()
                     {
                         corners = rect,
@@ -914,7 +938,7 @@ public class CardParser : MonoBehaviour
         return ratio;
     }
 
-    // Expects lowerRight to be wound properly!!!
+    // Get the most likely upper left corner from lower right corner
     private CardCorner FindBestUpperLeftCardCorner(Mat scene, Point2f[] lowerRight, ref Point2f[][] contours)
     {
         Point2f[] dest = bottomRightBoundingBox.GetCWWindingOrder();
@@ -967,11 +991,10 @@ public class CardParser : MonoBehaviour
             if (bestTopLeft == null)
                 return null;
 
-            // filter out the best from the contour list
-            List<Point2f[]> temp = new List<Point2f[]>(contours);
-            temp.Remove(bestTopLeft);
-            contours = temp.ToArray();
-            print("Best area ratio was: " + bestAreaRatio + ", compared to " + bestLocalAreaRatio + " was best locally");
+            // filter out the best from the contour list, TODO : commented out
+            //List<Point2f[]> temp = new List<Point2f[]>(contours);
+            //temp.Remove(bestTopLeft);
+            //contours = temp.ToArray();
             return new CardCorner { corners = bestTopLeft, matchVal = bestRatio, neededRot = bestRotCount };
         }
     }
@@ -1024,8 +1047,9 @@ public class CardParser : MonoBehaviour
      *  THE BIG FUNCTION, MANAGES STATE AND PARSING!!!!
      *  
      */ 
-    public void ParseCard(Mat cardScene)
+    public CustomCard ParseCard(Mat cardScene, CustomCard previousCard)
     {
+
         Point2f[][] contours;
         HierarchyIndex[] h;
         // DETECT CONTOURS AND SIMPLIFY THEM IF NEEDED
@@ -1038,32 +1062,23 @@ public class CardParser : MonoBehaviour
         {
             // CLEAN UP THE CURRENT LOWER RIGHT
             if (bestLowerRight == null) break; // TODO : handle failure
-            print("Desired rot = " + bestLowerRight.neededRot);
             bestLowerRight.corners = RotateWinding(bestLowerRight.corners, bestLowerRight.neededRot);
             bestLowerRight.neededRot = 0;
-
-            // LOWER RIGHT DEBUGGING
-            print("Selected corner got out with match val: " + bestLowerRight.matchVal);
-            CvAruco.DrawDetectedMarkers(cardScene, new Point2f[][] { bestLowerRight.corners }, null);
-            if (arucoImage.texture != null)
-                Destroy(arucoImage.texture);
-            arucoImage.texture = OpenCvSharp.Unity.MatToTexture(cardScene);
-
+            
             // UPPER LEFT
             CardCorner bestUpperLeft = FindBestUpperLeftCardCorner(cardScene, bestLowerRight.corners, ref contours);
             if (bestUpperLeft == null)
             {
                 print("Failed on upper left, which might be needed");
-                return;
+                return null;
             }
             bestUpperLeft.corners = RotateWinding(bestUpperLeft.corners, bestUpperLeft.neededRot);
             bestUpperLeft.neededRot = 0;
-            print("Best upper left got out");
 
             // REMAP BY CORNERS
             Point2f[] possibleCard = TryToBoundCardFromCorners(cardScene, bestLowerRight.corners, bestUpperLeft.corners);
             if (possibleCard == null)
-                return;
+                return null;
             Mat replaned = PerformFirstReplaneFull(cardScene, possibleCard, cornerReplaneOffset, out Mat firstTMat);
 
             // predict most likely element from single replane, might not work but may improve performance.
@@ -1081,14 +1096,16 @@ public class CardParser : MonoBehaviour
             }
             replaneImage.texture = OpenCvSharp.Unity.MatToTexture(croppedReplaned);
 
-            // Read in number data
-            Mat readIn = bannerNumberBox.CropByBox(croppedReplaned);
-            numberText.text = "Card ID: " + GetCardIDFromShapes(readIn);
 
             replaned.Release();
 
-            break; // TODO : only 1 right now. The best.
+            // TODO : bound the bounding box less strictly and perhaps axis aligned?
+            // TODO : ID function, by array or similar? : add to card template data
+            return new CustomCard(1.0f, new BoundingBox(possibleCard[0], possibleCard[1], possibleCard[2], possibleCard[3]),
+                cardType, cardElement, 0, new CustomCard.CardMod[0]);
+            // TODO : function to reaquire from old BB, 
         }
+        return null;
     }
 
     /**
@@ -1148,7 +1165,7 @@ public class CardParser : MonoBehaviour
     {
         Mat area = replaned[cornerReplaneOffset, replaned.Width - cornerReplaneOffset, cornerReplaneOffset, replaned.Height - cornerReplaneOffset];
 
-        using (Mat crop = elementColorBox.CropByBox(area))
+        using (Mat crop = elementColorBoundingBox.CropByBox(area))
         {
             Scalar tMean = crop.Mean();
             print("Template: " + (float)tMean.Val0 + ", " + (float)tMean.Val1 + ", " + (float)tMean.Val2);
@@ -1443,10 +1460,10 @@ public class CardParser : MonoBehaviour
 
     public class CardElementTemplateData
     {
-        public CardElementTemplateData(Color ti)
+        public CardElementTemplateData(Scalar ti)
         {
-            typeColor = ti; // TODO : may be bgr? or rgb
-            typeScalar = new Scalar(ti.b, ti.g, ti.r, ti.a);
+            typeColor = new Color((float)ti.Val0, (float)ti.Val1, (float)ti.Val2, (float)ti.Val3);
+            typeScalar = ti;
         }
         public Color typeColor;
         public Scalar typeScalar;
