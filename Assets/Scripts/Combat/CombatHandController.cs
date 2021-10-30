@@ -122,6 +122,7 @@ public class CombatHandController : MonoBehaviour
 
     public void ReShuffle()
     {
+        cardsInDiscard = 0;
         Deck.instance.Shuffle();
     }
 }

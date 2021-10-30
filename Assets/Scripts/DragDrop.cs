@@ -148,6 +148,9 @@ public class DragDrop : MonoBehaviour
                     if(dropZone.GetComponent<CombatantBasis>() != null)
                     {
                         FindObjectOfType<CombatManager>().ApplyCard(this.gameObject, dropZone);
+                    } if(dropZone.CompareTag("DiscardPile"))
+                    {
+                        FindObjectOfType<CombatManager>().DiscardCard(this.gameObject);
                     }
                 }
             }

@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 89712378}
   m_Layer: 5
   m_Name: DiscardPileBlank
-  m_TagString: Untagged
+  m_TagString: DiscardPile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1096,8 +1096,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1325936472}
-        m_TargetAssemblyTypeName: CombatHandController, Assembly-CSharp
+      - m_Target: {fileID: 940410049}
+        m_TargetAssemblyTypeName: CombatManager, Assembly-CSharp
         m_MethodName: DrawCards
         m_Mode: 3
         m_Arguments:
@@ -1229,8 +1229,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1325936472}
-        m_TargetAssemblyTypeName: CombatHandController, Assembly-CSharp
+      - m_Target: {fileID: 940410049}
+        m_TargetAssemblyTypeName: CombatManager, Assembly-CSharp
         m_MethodName: DrawCards
         m_Mode: 3
         m_Arguments:
@@ -1861,8 +1861,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1325936472}
-        m_TargetAssemblyTypeName: CombatHandController, Assembly-CSharp
+      - m_Target: {fileID: 940410049}
+        m_TargetAssemblyTypeName: CombatManager, Assembly-CSharp
         m_MethodName: DrawCards
         m_Mode: 3
         m_Arguments:
@@ -3236,8 +3236,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1325936472}
-        m_TargetAssemblyTypeName: CombatHandController, Assembly-CSharp
+      - m_Target: {fileID: 940410049}
+        m_TargetAssemblyTypeName: CombatManager, Assembly-CSharp
         m_MethodName: DrawCards
         m_Mode: 3
         m_Arguments:
