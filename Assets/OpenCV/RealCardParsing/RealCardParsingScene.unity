@@ -885,46 +885,124 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20207fcf6ab55b54faa1a662df242386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matcherImage: {fileID: 1975671178}
-  contourImage: {fileID: 2076763954}
-  arucoImage: {fileID: 1289399208}
+  mainSeeImage: {fileID: 1975671178}
   replaneImage: {fileID: 314472635}
-  diffImages:
+  debugCardImage: {fileID: 2076763954}
+  debugSceneImage: {fileID: 1289399208}
+  stickerImages:
   - {fileID: 1351414702}
   - {fileID: 881097418}
   - {fileID: 1847200082}
-  numberText: {fileID: 1204691797}
-  image: {fileID: 2800000, guid: cbb95e0b65ea8344e9cb52acd5e22dcd, type: 3}
-  defaultCardTexture: {fileID: 2800000, guid: b0a2bdbf4eae5db48901d095c7cfc6ed, type: 3}
-  defaultCardResizeAmount: 0.5
-  bottomRightBoundingBox_UL:
-    X: 0.731557
-    Y: 0.809384
-  bottomRightBoundingBox_LR:
-    X: 0.967213
-    Y: 0.978006
-  upperLeftBoundingBox_UL:
-    X: 0.030738
-    Y: 0.021994
-  upperLeftBoundingBox_LR:
-    X: 0.266393
-    Y: 0.190616
-  bannerNumberBox_UL:
-    X: 0.763699
-    Y: 0.348039
-  bannerNumberBox_LR:
-    X: 0.94863
-    Y: 0.477941
+  staticTestImage: {fileID: 0}
+  bottomRightBoundingBox:
+    ul:
+      X: 0.776639
+      Y: 0.846041
+    ur:
+      X: 0.776639
+      Y: 0.979472
+    lr:
+      X: 0.963115
+      Y: 0.979472
+    ll:
+      X: 0.963115
+      Y: 0.846041
+  upperLeftBoundingBox:
+    ul:
+      X: 0.02459
+      Y: 0.020528
+    ur:
+      X: 0.02459
+      Y: 0.153959
+    lr:
+      X: 0.211066
+      Y: 0.153959
+    ll:
+      X: 0.211066
+      Y: 0.020528
+  stickerBoundingBox1:
+    ul:
+      X: 0.768443
+      Y: 0.041056
+    ur:
+      X: 0.768443
+      Y: 0.140762
+    lr:
+      X: 0.907787
+      Y: 0.140762
+    ll:
+      X: 0.907787
+      Y: 0.041056
+  stickerBoundingBox2:
+    ul:
+      X: 0.770492
+      Y: 0.177419
+    ur:
+      X: 0.770492
+      Y: 0.274194
+    lr:
+      X: 0.905738
+      Y: 0.274194
+    ll:
+      X: 0.905738
+      Y: 0.177419
+  stickerBoundingBox3:
+    ul:
+      X: 0.770492
+      Y: 0.306452
+    ur:
+      X: 0.770492
+      Y: 0.404692
+    lr:
+      X: 0.905738
+      Y: 0.404692
+    ll:
+      X: 0.905738
+      Y: 0.306452
+  elementColorBoundingBox:
+    ul:
+      X: 0.655738
+      Y: 0.912023
+    ur:
+      X: 0.655738
+      Y: 0.958944
+    lr:
+      X: 0.715164
+      Y: 0.958944
+    ll:
+      X: 0.715164
+      Y: 0.912023
+  cornerReplaneOffset: 25
   matchThresh: 0.7
   tagLineIntersectThresh: 4
-  cardTemplates: []
-  baseCardImage: {fileID: 0}
-  adaptTestType: 1
-  frameSize: 3
-  subConst: 7
-  interpolateFlag: 1
+  borderAmount: 10
+  defaultCardResizeAmount: 0.5
+  cardTemplates:
+  - {fileID: 11400000, guid: 3809b0d816758f848817db642f568347, type: 2}
+  StableUpdateEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  ToNullUpdateEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  ToNewUpdateEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  timeRequiredForNull: 0.4
+  timeRequiredForNew: 0.2
   loweRatio: 0.7
   kpDist: 30
+  boundBoxText: '0.024590,0.020528,0.211066,0.153959
+
+    0.776639,0.846041,0.963115,0.979472
+
+    0.655738,0.912023,0.715164,0.958944
+
+    0.768443,0.041056,0.907787,0.140762
+
+    0.770492,0.177419,0.905738,0.274194
+
+    0.770492,0.306452,0.905738,0.404692'
 --- !u!1 &1847200080
 GameObject:
   m_ObjectHideFlags: 0
