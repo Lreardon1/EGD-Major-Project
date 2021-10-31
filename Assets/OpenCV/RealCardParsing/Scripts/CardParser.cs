@@ -12,12 +12,13 @@ using UnityEditor;
 
 public class CardParser : MonoBehaviour
 {
+    /*
     public RawImage mainSeeImage;
     public RawImage replaneImage;
     public RawImage debugCardImage;
     public RawImage debugSceneImage;
     public RawImage[] stickerImages; 
-
+    */
     [Space(10)]
     public Texture2D staticTestImage;
     
@@ -145,7 +146,7 @@ public class CardParser : MonoBehaviour
                 GetKeypoints(cardMat, out KeyPoint[] kp, out Mat des);
 
                 // make keypoint data to store
-                TemplateCardData cardKeypointData = new TemplateCardData(kp, des);
+                TemplateCardData cardKeypointData = new TemplateCardData(kp, des, card.cardID);
 
                 // if the current card element and/or card type doesn't have a list, make one
                 if (!templateCardDict.ContainsKey(cardType | cardElement))
@@ -331,6 +332,7 @@ public class CardParser : MonoBehaviour
         if (card == null && timeSinceLastUpdate + timeRequiredForNull <= Time.time)
         {
             previousCard = card;
+            timeSinceLastUpdate = Time.time;
             ToNullUpdateEvent.Invoke(card);
         }
 
@@ -338,6 +340,7 @@ public class CardParser : MonoBehaviour
         if (card != null && timeSinceLastUpdate + timeRequiredForNew <= Time.time)
         {
             previousCard = card;
+            timeSinceLastUpdate = Time.time;
             ToNewUpdateEvent.Invoke(card);
         }
     }
@@ -1095,10 +1098,11 @@ public class CardParser : MonoBehaviour
      */
     public CustomCard ParseCard(Mat cardScene, CustomCard previousCard)
     {
+        /* DEBUG
         if (mainSeeImage.texture != null)
             Destroy(mainSeeImage.texture);
         mainSeeImage.texture = OpenCvSharp.Unity.MatToTexture(cardScene);
-
+        */
 
         Point2f[][] contours;
         HierarchyIndex[] h;
@@ -1140,29 +1144,30 @@ public class CardParser : MonoBehaviour
 
             // get the homography matrix from the replaned image to the template image space
             print("Made it to keypoints");
-            Mat hMat = KeypointMatchToTemplate(replaned, bestLowerRight, out CardType cardType, out CardElement cardElement);
+            Mat hMat = KeypointMatchToTemplate(replaned, bestLowerRight, out CardType cardType, out CardElement cardElement, out int ID);
             if (hMat == null) return null;
             print("Made it out of keypoints");
             // REMINDER! THE HOMOGRAPHY MATRIX RETURNED HAS A BORDER ATTACHED TO IT!
             Cv2.WarpPerspective(cardScene, replaned, hMat * firstTMat, new Size(defaultCardPlusBorderWidth, defaultCardPlusBorderHeight));
 
+            
+            // the default used for keypoint matching has a border so that we can get better keypoints at the border of cards (since it doesn't use image edge in its feature finding)
+            // if we replaned the image perfectly, we will have a matchBorder sized border
+            Mat croppedReplaned = replaned[borderAmount, replaned.Height - borderAmount, borderAmount, replaned.Width - borderAmount];
+
+
+            croppedReplaned.CopyTo(lastGoodReplane);
+
+            /* DEBUG
             if (debugCardImage.texture)
                 Destroy(debugCardImage.texture);
             debugCardImage.texture = OpenCvSharp.Unity.MatToTexture(replaned);
 
-            // the default used for keypoint matching has a border so that we can get better keypoints at the border of cards (since it doesn't use image edge in its feature finding)
-            // if we replaned the image perfectly, we will have a matchBorder sized border
-            Mat croppedReplaned = replaned[borderAmount, replaned.Height - borderAmount, borderAmount, replaned.Width - borderAmount];
-            
             if (replaneImage.texture != null)
             {
                 Destroy(replaneImage.texture);
             }
             replaneImage.texture = OpenCvSharp.Unity.MatToTexture(croppedReplaned);
-
-
-            replaned.Release();
-            replaned.Dispose();
 
             if (stickerImages[0].texture)
                 Destroy(stickerImages[0].texture);
@@ -1175,11 +1180,15 @@ public class CardParser : MonoBehaviour
             if (stickerImages[2].texture)
                 Destroy(stickerImages[2].texture);
             stickerImages[2].texture = OpenCvSharp.Unity.MatToTexture(stickerBoundingBox3.CropByBox(croppedReplaned));
+            */
+
+            replaned.Release();
+            replaned.Dispose();
 
             // TODO : bound the bounding box less strictly and perhaps axis aligned?
             // TODO : ID function, by array or similar? : add to card template data
             return new CustomCard(1.0f, new BoundingBox(possibleCard[0], possibleCard[1], possibleCard[2], possibleCard[3]),
-                cardType, cardElement, 0, new CustomCard.CardMod[0]);
+                cardType, cardElement, ID, new CustomCard.CardMod[0]);
             // TODO : function to reaquire from old BB, 
         }
         return null;
@@ -1189,7 +1198,7 @@ public class CardParser : MonoBehaviour
     *  Given expected card type and element, run thru the most likely cards and try to get the best keypoint matches
     *  
     */
-   private Mat KeypointMatchToTemplate(Mat replaned, CardCorner bestLowerRight, out CardType cardType, out CardElement cardElement)
+   private Mat KeypointMatchToTemplate(Mat replaned, CardCorner bestLowerRight, out CardType cardType, out CardElement cardElement, out int ID)
    {
         float t = Time.realtimeSinceStartup;
        // GET KEYPOINTS FOR THE REPLANED IMAGE
@@ -1225,6 +1234,7 @@ public class CardParser : MonoBehaviour
                         bestGoodMatches = goodMatches.Length;
                     }
                     
+                    /* DEBUG
                     if (debugSceneImage.texture)
                         Destroy(debugSceneImage.texture);
                     Mat output = new Mat();
@@ -1234,14 +1244,16 @@ public class CardParser : MonoBehaviour
                     if (replaneImage.texture)
                         Destroy(replaneImage.texture);
                     replaneImage.texture = OpenCvSharp.Unity.MatToTexture(replaned);
+                    */
                 }
             }
         }
 
-        // TODO : we can also do the others if we got nothing good, but that would be expensive.
+        // TODO : do others and match cardType, element, and ID to keypoint matching!!!
         print("The entire templating took " + (Time.realtimeSinceStartup - t) + " seconds");
         cardType = bestLowerRight.mostLikelyType;
         cardElement = bestLowerRight.mostLikelyElement;
+        ID = 0;
         return bestHomographyMat;
    }
 
@@ -1502,10 +1514,11 @@ public class CardParser : MonoBehaviour
 
     public class TemplateCardData
     {
-        public TemplateCardData(KeyPoint[] k, Mat d)
+        public TemplateCardData(KeyPoint[] k, Mat d, int id)
         {
             keypoints = k;
             des = d;
+            ID = id;
         }
 
         ~TemplateCardData()
@@ -1516,6 +1529,7 @@ public class CardParser : MonoBehaviour
 
         public KeyPoint[] keypoints;
         public Mat des;
+        public int ID;
     }
 
     public class CardTypeTemplateData
