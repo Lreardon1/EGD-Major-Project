@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // Jay NOTE : this class should not control the deck or the hand AT ALL, not movement nor state.
-//  This abstraction would have made my life so much easier. And been far better code practice just in general.
+//  This abstraction would have made my life so much easier.
 //  
 public class CombatManager : MonoBehaviour
 {

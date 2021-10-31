@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Jay note : this class should have been the one to control ALL movement of cards, 
-//   putting it in CombatManager is not only awful code practice, it is explicitly what I requested you NOT do.
-// I am suffering here
 public class CombatHandController : MonoBehaviour
 {
     public bool isActiveControlScheme = true;

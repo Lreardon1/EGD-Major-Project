@@ -10,6 +10,7 @@ public class CardParserManager : MonoBehaviour
     public CardParser.CustomCard currentCard;
     public CardParser cardParser;
     public RawImage goodSeeImage;
+    public GameObject[] cardPrefabs; // TODO : construct these in advance or use Deck to manage valid cards
 
     // Start is called before the first frame update
     void Start()
@@ -30,9 +31,14 @@ public class CardParserManager : MonoBehaviour
         // TODO : text data on card?
     }
 
-    public static void ConvertParseCardToCard(CardParser.CustomCard card)
+    public GameObject ConvertParseCardToCard(CardParser.CustomCard card)
     {
+        GameObject cardObj = Instantiate(cardPrefabs[card.cardID]);
+        // create Modifier() classes and ACTIVATE and attach them
+        // TODO : ask ?Tyler? about this.
+        //cardObj.GetComponent<Card>().modifiers[0].GetComponent<Modifier>().
 
+        return cardObj;
     }
 
     public void HandleStableUpdate(CardParser.CustomCard card)
@@ -60,6 +66,11 @@ public class CardParserManager : MonoBehaviour
     }
 
     // TODO 
-        // figure out dropzone system and use it to select zones : DISCARD, 
-        // manage cards on your own, ignore the other guy
+        // figure out dropzone system and use it to select zones : DISCARD, APPLY
+        // display the card and card data
+        // flag disable everything
+        // manage cards on your own, ignore the other guy, make your own deck and hand, manage the relations yourself
+        // 
+        // POSSIBLE BUG : CAN DRAG THE NEWLY CREATED CARDS BACK ONTO THE HAND THAT SHOULDN'T EXIST?? WE'LL SEE
+        // 
 }
