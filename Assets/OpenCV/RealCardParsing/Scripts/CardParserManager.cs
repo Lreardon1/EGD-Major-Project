@@ -58,4 +58,8 @@ public class CardParserManager : MonoBehaviour
 
         currentCard = card;
     }
+
+    // TODO 
+        // figure out dropzone system and use it to select zones : DISCARD, 
+        // manage cards on your own, ignore the other guy
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 // I am suffering here
 public class CombatHandController : MonoBehaviour
 {
+    public bool isActiveControlScheme = true;
     public List<GameObject> cardsInHand = new List<GameObject>();
     public GameObject drawPile;
     public GameObject discardPile;
@@ -23,12 +24,18 @@ public class CombatHandController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (!isActiveControlScheme)
+            return;
+
         mainCam = FindObjectOfType<Camera>();
     }
 
     private void Awake()
     {
-        for(int i = 0; i < startingHandSize; i++)
+        if (!isActiveControlScheme)
+            return;
+
+        for (int i = 0; i < startingHandSize; i++)
         {
             GameObject card = Deck.instance.Draw();
             card.transform.localScale = transform.localScale;
@@ -45,12 +52,6 @@ public class CombatHandController : MonoBehaviour
             utwc.rb = cardWorldCollider.GetComponent<Rigidbody2D>();
             cardsInHand.Add(card);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void DisableDrag()
