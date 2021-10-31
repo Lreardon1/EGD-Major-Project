@@ -10,7 +10,17 @@ public class CardParserManager : MonoBehaviour
     public CardParser.CustomCard currentCard;
     public CardParser cardParser;
     public RawImage goodSeeImage;
-    public GameObject[] cardPrefabs; // TODO : construct these in advance or use Deck to manage valid cards
+
+    public Dictionary<int, List<GameObject>> orderedCards = new Dictionary<int, List<GameObject>>();
+
+    private void SetUpOrderedCards(List<GameObject> cards)
+    {
+        foreach(GameObject c in cards)
+        {
+            Card card = c.GetComponent<Card>();
+            //card.type
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +31,7 @@ public class CardParserManager : MonoBehaviour
         cardParser.ToNewUpdateEvent.AddListener(HandleNewUpdate);
 
         cardParser.SetLookForInput(false);
+
     }
 
     public void DisplayCardData(CardParser.CustomCard card, Mat goodImage)
@@ -31,14 +42,14 @@ public class CardParserManager : MonoBehaviour
         // TODO : text data on card?
     }
 
+    public GameObject HashLookUpFromList(List<GameObject> cardList, CardParser.CustomCard card)
+    {
+        return cardList[card.cardID]; // BIG TODO
+    }
+
     public GameObject ConvertParseCardToCard(CardParser.CustomCard card)
     {
-        GameObject cardObj = Instantiate(cardPrefabs[card.cardID]);
-        // create Modifier() classes and ACTIVATE and attach them
-        // TODO : ask ?Tyler? about this.
-        //cardObj.GetComponent<Card>().modifiers[0].GetComponent<Modifier>().
-
-        return cardObj;
+        return HashLookUpFromList(Deck.instance.allCards, card);
     }
 
     public void HandleStableUpdate(CardParser.CustomCard card)
@@ -66,6 +77,9 @@ public class CardParserManager : MonoBehaviour
     }
 
     // TODO 
+        // ask the combat manager to update me on state : have to wait on half of this
+        // Disable functionality based on STATIC bool flag in combatManager
+
         // figure out dropzone system and use it to select zones : DISCARD, APPLY
         // display the card and card data
         // flag disable everything

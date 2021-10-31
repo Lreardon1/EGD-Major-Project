@@ -11,6 +11,8 @@ public class Card : MonoBehaviour
 
     [Header("Initial Settings")]
     [SerializeField]
+    public string cardName;
+    [SerializeField]
     public int manaCost = 0;
     [SerializeField]
     public CardType type;

@@ -352,20 +352,15 @@ public class CardParser : MonoBehaviour
         public BoundingBox bb;
         public CardType cardType;
         public CardElement cardElement;
-        public CardMod[] cardMods;
 
-        public CustomCard(float certainty, BoundingBox inSceneBB, CardType type, CardElement element, int cardID, CardMod[] cardMods)
+        public CustomCard(float certainty, BoundingBox inSceneBB, CardType type, CardElement element, int cardID)
         {
             this.certainty = certainty;
             this.cardID = cardID;
             this.bb = inSceneBB;
             this.cardType = type;
             this.cardElement = element;
-            this.cardMods = new CardMod[cardMods.Length];
-
-            for (int i = 0; i < cardMods.Length; ++i)
-                this.cardMods[i] = cardMods[i];
-
+            
         }
 
         public static bool Equiv(CustomCard card1, CustomCard card2)
@@ -373,19 +368,7 @@ public class CardParser : MonoBehaviour
             if (card1 == card2) return true;
             if (card1 == null || card2 == null) return false;
 
-            int compCount = 0;
-            for (int i = 0; i < card1.cardMods.Length && i < card2.cardMods.Length; ++i)
-            {
-                compCount += card1.cardMods[i] == card2.cardMods[i] ? 1 : 0;
-            }
-
-            // TODO?
-            return card1.cardID == card2.cardID  && compCount >= 3;
-        }
-
-        public enum CardMod
-        {
-
+            return card1.cardID == card2.cardID;
         }
     }
 
@@ -1188,7 +1171,7 @@ public class CardParser : MonoBehaviour
             // TODO : bound the bounding box less strictly and perhaps axis aligned?
             // TODO : ID function, by array or similar? : add to card template data
             return new CustomCard(1.0f, new BoundingBox(possibleCard[0], possibleCard[1], possibleCard[2], possibleCard[3]),
-                cardType, cardElement, ID, new CustomCard.CardMod[0]);
+                cardType, cardElement, ID);
             // TODO : function to reaquire from old BB, 
         }
         return null;

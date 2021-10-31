@@ -1473,6 +1473,246 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783471619}
   m_CullTransparentMesh: 1
+--- !u!1 &786808763
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 786808764}
+  - component: {fileID: 786808766}
+  - component: {fileID: 786808765}
+  m_Layer: 0
+  m_Name: CVCardManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &786808764
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786808763}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -369.7872, y: 141.43619, z: 1419.1241}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &786808765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786808763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f08c4b19fd1292b48ae0726d93b6fb73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardParser: {fileID: 0}
+  goodSeeImage: {fileID: 805868268}
+  cardPrefabs: []
+--- !u!114 &786808766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786808763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20207fcf6ab55b54faa1a662df242386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staticTestImage: {fileID: 0}
+  bottomRightBoundingBox:
+    ul:
+      X: 0.776639
+      Y: 0.846041
+    ur:
+      X: 0.776639
+      Y: 0.979472
+    lr:
+      X: 0.963115
+      Y: 0.979472
+    ll:
+      X: 0.963115
+      Y: 0.846041
+  upperLeftBoundingBox:
+    ul:
+      X: 0.02459
+      Y: 0.020528
+    ur:
+      X: 0.02459
+      Y: 0.153959
+    lr:
+      X: 0.211066
+      Y: 0.153959
+    ll:
+      X: 0.211066
+      Y: 0.020528
+  stickerBoundingBox1:
+    ul:
+      X: 0.768443
+      Y: 0.041056
+    ur:
+      X: 0.768443
+      Y: 0.140762
+    lr:
+      X: 0.907787
+      Y: 0.140762
+    ll:
+      X: 0.907787
+      Y: 0.041056
+  stickerBoundingBox2:
+    ul:
+      X: 0.770492
+      Y: 0.177419
+    ur:
+      X: 0.770492
+      Y: 0.274194
+    lr:
+      X: 0.905738
+      Y: 0.274194
+    ll:
+      X: 0.905738
+      Y: 0.177419
+  stickerBoundingBox3:
+    ul:
+      X: 0.770492
+      Y: 0.306452
+    ur:
+      X: 0.770492
+      Y: 0.404692
+    lr:
+      X: 0.905738
+      Y: 0.404692
+    ll:
+      X: 0.905738
+      Y: 0.306452
+  elementColorBoundingBox:
+    ul:
+      X: 0.655738
+      Y: 0.912023
+    ur:
+      X: 0.655738
+      Y: 0.958944
+    lr:
+      X: 0.715164
+      Y: 0.958944
+    ll:
+      X: 0.715164
+      Y: 0.912023
+  cornerReplaneOffset: 25
+  matchThresh: 0.8
+  tagLineIntersectThresh: 4
+  borderAmount: 10
+  defaultCardResizeAmount: 0.5
+  cardTemplates: []
+  StableUpdateEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  ToNullUpdateEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  ToNewUpdateEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  timeRequiredForNull: 0.4
+  timeRequiredForNew: 0.2
+  loweRatio: 0.7
+  kpDist: 0
+  boundBoxText: '0.024590,0.020528,0.211066,0.153959
+
+    0.776639,0.846041,0.963115,0.979472
+
+    0.655738,0.912023,0.715164,0.958944
+
+    0.768443,0.041056,0.907787,0.140762
+
+    0.770492,0.177419,0.905738,0.274194
+
+    0.770492,0.306452,0.905738,0.404692'
+--- !u!1 &805868266
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 805868267}
+  - component: {fileID: 805868269}
+  - component: {fileID: 805868268}
+  m_Layer: 5
+  m_Name: GoodSeeCard
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &805868267
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805868266}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1350052439}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 251.20001, y: -83.8}
+  m_SizeDelta: {x: 125, y: 175}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &805868268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805868266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &805868269
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805868266}
+  m_CullTransparentMesh: 1
 --- !u!1 &940410048
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,6 +1764,7 @@ MonoBehaviour:
   actionOrder: []
   maxMana: 30
   currentMana: 20
+  discardCost: 1
   canDraw: 0
   canPlay: 1
 --- !u!4 &940410050
@@ -1986,6 +2227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6077018babfca1f4a9955679af57998f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActiveControlScheme: 1
   cardsInHand: []
   drawPile: {fileID: 783471619}
   discardPile: {fileID: 89712373}
@@ -2167,6 +2409,7 @@ RectTransform:
   - {fileID: 1180013901}
   - {fileID: 1729460091}
   - {fileID: 1875805847}
+  - {fileID: 805868267}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
