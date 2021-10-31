@@ -576,6 +576,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hunter
       objectReference: {fileID: 0}
+    - target: {fileID: 5033110867934627454, guid: 260ba61df3638904997d8253487d3066, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7037650131283339228, guid: 260ba61df3638904997d8253487d3066, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 260ba61df3638904997d8253487d3066, type: 3}
 --- !u!4 &244591422 stripped
@@ -876,6 +884,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slime
       objectReference: {fileID: 0}
+    - target: {fileID: 1166623438246772225, guid: a7cb02d4d7147f249b01ab3a75914869, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1166623438246772227, guid: a7cb02d4d7147f249b01ab3a75914869, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -931,6 +943,10 @@ PrefabInstance:
     - target: {fileID: 1166623438246772227, guid: a7cb02d4d7147f249b01ab3a75914869, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8266041255352770873, guid: a7cb02d4d7147f249b01ab3a75914869, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7cb02d4d7147f249b01ab3a75914869, type: 3}
@@ -1005,6 +1021,14 @@ PrefabInstance:
     - target: {fileID: 864925912970867163, guid: a38c32b5804da4d47967547d4c1a2c21, type: 3}
       propertyPath: m_Name
       value: Ghoul
+      objectReference: {fileID: 0}
+    - target: {fileID: 864925912970867163, guid: a38c32b5804da4d47967547d4c1a2c21, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7964221108771221219, guid: a38c32b5804da4d47967547d4c1a2c21, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a38c32b5804da4d47967547d4c1a2c21, type: 3}
@@ -1519,7 +1543,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardParser: {fileID: 0}
   goodSeeImage: {fileID: 805868268}
-  cardPrefabs: []
 --- !u!114 &786808766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2244,9 +2267,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 10360833}
     m_Modifications:
+    - target: {fileID: 585833341185718776, guid: c90e78e96191c4f469232d500c36a489, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 7685112655293785792, guid: c90e78e96191c4f469232d500c36a489, type: 3}
       propertyPath: m_Name
       value: Cobra
+      objectReference: {fileID: 0}
+    - target: {fileID: 7685112655293785792, guid: c90e78e96191c4f469232d500c36a489, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7685112655293785794, guid: c90e78e96191c4f469232d500c36a489, type: 3}
       propertyPath: m_RootOrder
@@ -2429,6 +2460,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slime (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1166623438246772225, guid: a7cb02d4d7147f249b01ab3a75914869, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1166623438246772227, guid: a7cb02d4d7147f249b01ab3a75914869, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -2484,6 +2519,10 @@ PrefabInstance:
     - target: {fileID: 1166623438246772227, guid: a7cb02d4d7147f249b01ab3a75914869, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8266041255352770873, guid: a7cb02d4d7147f249b01ab3a75914869, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7cb02d4d7147f249b01ab3a75914869, type: 3}
@@ -2766,6 +2805,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 84717424}
     m_Modifications:
+    - target: {fileID: 2262816848532664411, guid: d08908fcee48617479c737820e8ea31c, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4257258188698014196, guid: d08908fcee48617479c737820e8ea31c, type: 3}
       propertyPath: m_FlipX
       value: 1
@@ -2829,6 +2872,10 @@ PrefabInstance:
     - target: {fileID: 4257258188698014201, guid: d08908fcee48617479c737820e8ea31c, type: 3}
       propertyPath: m_Name
       value: Warrior
+      objectReference: {fileID: 0}
+    - target: {fileID: 4257258188698014201, guid: d08908fcee48617479c737820e8ea31c, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d08908fcee48617479c737820e8ea31c, type: 3}
@@ -3545,6 +3592,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Priest
       objectReference: {fileID: 0}
+    - target: {fileID: 5631541174819381394, guid: 40f5d3057f5d6a04db2ebfa11b6bdc79, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 5631541174819381405, guid: 40f5d3057f5d6a04db2ebfa11b6bdc79, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -3600,6 +3651,10 @@ PrefabInstance:
     - target: {fileID: 5631541174819381405, guid: 40f5d3057f5d6a04db2ebfa11b6bdc79, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7661945641767092528, guid: 40f5d3057f5d6a04db2ebfa11b6bdc79, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40f5d3057f5d6a04db2ebfa11b6bdc79, type: 3}
@@ -3679,6 +3734,14 @@ PrefabInstance:
     - target: {fileID: 6272639951522897273, guid: a02df2b30c237634da61a932e01618f4, type: 3}
       propertyPath: m_Name
       value: Mechanist
+      objectReference: {fileID: 0}
+    - target: {fileID: 6272639951522897273, guid: a02df2b30c237634da61a932e01618f4, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8322395814652230875, guid: a02df2b30c237634da61a932e01618f4, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a02df2b30c237634da61a932e01618f4, type: 3}

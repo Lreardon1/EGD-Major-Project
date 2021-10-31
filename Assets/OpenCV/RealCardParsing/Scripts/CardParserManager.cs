@@ -7,18 +7,22 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CardParser))]
 public class CardParserManager : MonoBehaviour
 {
-    public CardParser.CustomCard currentCard;
+    public GameObject currentCard;
     public CardParser cardParser;
+    public CombatManager cm;
     public RawImage goodSeeImage;
-
-    public Dictionary<int, List<GameObject>> orderedCards = new Dictionary<int, List<GameObject>>();
+    public GameObject currentTarget = null;
+    public Dictionary<string, List<GameObject>> orderedCards = new Dictionary<string, List<GameObject>>();
 
     private void SetUpOrderedCards(List<GameObject> cards)
     {
         foreach(GameObject c in cards)
         {
             Card card = c.GetComponent<Card>();
-            //card.type
+            if (orderedCards.ContainsKey(card.cardName))
+                orderedCards.Add(card.cardName, new List<GameObject>());
+
+            orderedCards[card.cardName].Add(c);
         }
     }
 
@@ -30,11 +34,31 @@ public class CardParserManager : MonoBehaviour
         cardParser.ToNullUpdateEvent.AddListener(HandleNullUpdate);
         cardParser.ToNewUpdateEvent.AddListener(HandleNewUpdate);
 
+        SetUpOrderedCards(Deck.instance.allCards);
+
         cardParser.SetLookForInput(false);
+    }
+
+    private void Update()
+    {
+        currentTarget = null;
+        Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(r, out RaycastHit hitInfo, 1000.0f, LayerMask.GetMask("Combatant")))
+        {
+            currentTarget = hitInfo.collider.gameObject;
+        }
+        if (cm)
+
+
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
 
     }
 
-    public void DisplayCardData(CardParser.CustomCard card, Mat goodImage)
+    public void DisplayCardData(GameObject card, Mat goodImage)
     {
         if (goodSeeImage.texture)
             Destroy(goodSeeImage.texture);
@@ -42,49 +66,37 @@ public class CardParserManager : MonoBehaviour
         // TODO : text data on card?
     }
 
-    public GameObject HashLookUpFromList(List<GameObject> cardList, CardParser.CustomCard card)
+    public void HandleStableUpdate(GameObject card)
     {
-        return cardList[card.cardID]; // BIG TODO
-    }
-
-    public GameObject ConvertParseCardToCard(CardParser.CustomCard card)
-    {
-        return HashLookUpFromList(Deck.instance.allCards, card);
-    }
-
-    public void HandleStableUpdate(CardParser.CustomCard card)
-    {
-
         currentCard = card;
+        DisplayCardData(card, cardParser.GetLastGoodReplane());
     }
 
-    public void HandleNullUpdate(CardParser.CustomCard card)
+    public void HandleNullUpdate(GameObject card)
     {
-        if (goodSeeImage.texture)
-            Destroy(goodSeeImage.texture);
-
         currentCard = card;
+        DisplayCardData(card, cardParser.GetLastGoodReplane());
     }
 
-    public void HandleNewUpdate(CardParser.CustomCard card)
+    public void HandleNewUpdate(GameObject card)
     {
-        Mat seenCard = cardParser.GetLastGoodReplane();
-        if (goodSeeImage.texture)
-            Destroy(goodSeeImage.texture);
-        goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(seenCard);
-
         currentCard = card;
+        DisplayCardData(card, cardParser.GetLastGoodReplane());
     }
 
+
+    public List<GameObject> GetCardsOfName(string name)
+    {
+        if (orderedCards.TryGetValue(name, out List<GameObject> lis))
+            return lis;
+        else
+            return new List<GameObject>();
+    }
     // TODO 
-        // ask the combat manager to update me on state : have to wait on half of this
-        // Disable functionality based on STATIC bool flag in combatManager
-
-        // figure out dropzone system and use it to select zones : DISCARD, APPLY
-        // display the card and card data
-        // flag disable everything
-        // manage cards on your own, ignore the other guy, make your own deck and hand, manage the relations yourself
-        // 
-        // POSSIBLE BUG : CAN DRAG THE NEWLY CREATED CARDS BACK ONTO THE HAND THAT SHOULDN'T EXIST?? WE'LL SEE
-        // 
+    // ask the combat manager to update me on state : TODO : have to wait on half of this
+    // Disable functionality based on STATIC bool flag in combatManager : TODO : wait
+    // display the card and card data
+    // 
+    // POSSIBLE BUG : CAN DRAG THE NEWLY CREATED CARDS BACK ONTO THE HAND THAT SHOULDN'T EXIST?? WE'LL SEE
+    // 
 }

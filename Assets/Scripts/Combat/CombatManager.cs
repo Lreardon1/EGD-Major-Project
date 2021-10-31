@@ -241,11 +241,13 @@ public class CombatManager : MonoBehaviour
         
     }
 
+    public GameObject currentCB = null;
     public IEnumerator StartActions()
     {
         for(int i = 0; i < actionOrder.Count; i++)
         {
             CombatantBasis cb = actionOrder[i].GetComponent<CombatantBasis>();
+            currentCB = cb;
             bool cardAlreadyPlayed = false;
 
             if (cb.appliedCard != null)
