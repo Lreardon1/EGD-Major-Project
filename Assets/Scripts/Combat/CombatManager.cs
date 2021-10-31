@@ -247,7 +247,7 @@ public class CombatManager : MonoBehaviour
         for(int i = 0; i < actionOrder.Count; i++)
         {
             CombatantBasis cb = actionOrder[i].GetComponent<CombatantBasis>();
-            currentCB = cb;
+            currentCB = actionOrder[i];
             bool cardAlreadyPlayed = false;
 
             if (cb.appliedCard != null)
