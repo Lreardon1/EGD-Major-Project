@@ -24,6 +24,7 @@ public class Deck : MonoBehaviour
     //enforcing singleton of deck on game start
     void Awake()
     {
+        print("DECK");
         if (instance != this && instance != null)
             Destroy(gameObject);
         else

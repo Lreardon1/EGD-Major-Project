@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Jay NOTE : this class should not control the deck or the hand AT ALL, not movement nor state.
+//  This abstraction would have made my life so much easier.
+//
 public class CombatManager : MonoBehaviour
 {
     public enum CombatPhase {DrawPhase, PlayPhase, DiscardPhase, ActionPhase};
@@ -24,13 +27,13 @@ public class CombatManager : MonoBehaviour
     public int maxMana = 30;
     public int currentMana = 20;
     public int discardCost = 1;
-    
+
 
     public bool canDraw = false;
     public bool canPlay = true;
-    private bool enoughMana = true;    
+    private bool enoughMana = true;
 
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -134,7 +137,7 @@ public class CombatManager : MonoBehaviour
         foreach (GameObject enemy in enemies)
         {
             CombatantBasis enemyScript = enemy.GetComponent<CombatantBasis>();
-            enemyScript.SelectAction(); 
+            enemyScript.SelectAction();
             enemyScript.SelectTarget(activePartyMembers);
             if (enemyScript.nextAction == CombatantBasis.Action.Block)
             {
@@ -235,14 +238,16 @@ public class CombatManager : MonoBehaviour
         currentPhaseText.text = "Action Phase";
         // Party members and enemies take turns attacking in action order, death prevents attacking, transition to Draw Phase
         StartCoroutine("StartActions");
-        
+
     }
 
+    public GameObject currentCB = null;
     public IEnumerator StartActions()
     {
         while (actionOrder.Count > 0)
         {
             CombatantBasis cb = actionOrder[0].GetComponent<CombatantBasis>();
+            currentCB = actionOrder[0];
             bool cardAlreadyPlayed = false;
 
             if (cb.appliedCard != null)
@@ -450,7 +455,7 @@ public class CombatManager : MonoBehaviour
             card.transform.localScale = new Vector3(1, 1, 1);
             Debug.Log("Card Already Played On This Combatant");
             return;
-        } 
+        }
         if(currentMana - cardScript.manaCost < 0)
         {
             Debug.Log("Not Enough Mana To Play This Card");
