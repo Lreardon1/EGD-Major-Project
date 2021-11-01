@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackCardAction : CardActionTemplate
+public class BlockCardAction : CardActionTemplate
 {
     public override void OnPlay(Card c, GameObject combatant, List<GameObject> otherCombatants)
     {
@@ -18,7 +18,7 @@ public class AttackCardAction : CardActionTemplate
 
             case Card.AoE.Adjascent:
                 int pos = otherCombatants.IndexOf(combatant);
-                if (pos < otherCombatants.Count-1)
+                if (pos < otherCombatants.Count - 1)
                 {
                     ApplyCard(c, otherCombatants[pos + 1]);
                 }
@@ -41,16 +41,22 @@ public class AttackCardAction : CardActionTemplate
     public override void ApplyCard(Card c, GameObject combatant)
     {
         int baseNum = c.baseNum;
-        Card.Element type = c.element;
         int numModifier = c.numMod;
         Card.Element secondaryElement = c.secondaryElem;
         bool givePriority = c.givePrio;
 
         CombatantBasis cb = combatant.GetComponent<CombatantBasis>();
-        cb.attackCardBonus += baseNum + numModifier;
-        cb.nextActionPrimaryElem = type;
-        cb.nextActionSecondaryElem = secondaryElement;
-        
+        if (c.shieldWithThorns)
+        {
+            cb.temporaryHitPoints += baseNum;
+            cb.shieldReturnDmg += numModifier;
+        }
+        else
+        {
+            cb.temporaryHitPoints += baseNum + numModifier;
+        }
+        //cb.nextActionSecondaryElem = secondaryElement;  //UNSURE HOW TO IMPLEMENT RESISTANCES
+
         if (givePriority)
         {
             CombatManager cm = FindObjectOfType<CombatManager>();
