@@ -7,17 +7,18 @@ public class OverworldMovement : MonoBehaviour
     public GameObject ground;
     public int movementspeed = 100;
     string direction;
-    SpriteRenderer characterRenderer;
-    public Animator animator;
+    SpriteRenderer playerRenderer;
+    SpriteRenderer godfatherRenderer;
+    SpriteRenderer warriorRenderer;
+    public Animator player_animator;
+    public Animator warrior_animator;
+    public Animator godfather_animator;
     public CharacterController cc;
-    bool rotated;
-    string rotation_way;
     public bool canMove = true;
     public List<UnityEngine.Vector3> movements = new List<UnityEngine.Vector3>();
     private LinkedList<TimePairTransform> walkLine = new LinkedList<TimePairTransform>();
     private float walkTime = 0;
 
-    float elapsed = 0f;
     public GameObject[] party_members;
 
     public class TimePairTransform
@@ -35,12 +36,14 @@ public class OverworldMovement : MonoBehaviour
     void Start()
     {
         direction = "left";
-        //Fetch the SpriteRenderer from the GameObject
-        characterRenderer = GetComponent<SpriteRenderer>();
-        characterRenderer.flipX = false;
+        //Fetch the SpriteRenderer from the GameObject and other party gameobjects
+        playerRenderer = GetComponent<SpriteRenderer>();
+        playerRenderer.flipX = false;
+        godfatherRenderer = party_members[1].GetComponent<SpriteRenderer>();
+        godfatherRenderer.flipX = false;
+        warriorRenderer = party_members[0].GetComponent<SpriteRenderer>();
+        warriorRenderer.flipX = false;
         cc = GetComponent<CharacterController>();
-        rotated = false;
-        rotation_way = "";
         movements.Add(Vector3.zero);
     }
 
@@ -107,39 +110,53 @@ public class OverworldMovement : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.D))
             {
-                animator.SetBool("Walking", true);
+                player_animator.SetBool("Walking", true);
+                warrior_animator.SetBool("Walking", true);
+                godfather_animator.SetBool("Walking", true);
                 //transform.Translate(Vector3.right * movementspeed * Time.fixedDeltaTime);
                 if (direction != "right" || direction != "forward")
                 {
-                    characterRenderer.flipX = true;
+                    playerRenderer.flipX = true;
+                    godfatherRenderer.flipX = true;
+                    warriorRenderer.flipX = true;
                     direction = "right";
                 }
             }
             else if (Input.GetKey(KeyCode.A))
             {
-                animator.SetBool("Walking", true);
+                player_animator.SetBool("Walking", true);
+                warrior_animator.SetBool("Walking", true);
+                godfather_animator.SetBool("Walking", true);
                 //transform.Translate(Vector3.left * movementspeed * Time.fixedDeltaTime);
                 if (direction != "left" || direction != "back")
                 {
-                    characterRenderer.flipX = false;
+                    playerRenderer.flipX = false;
+                    godfatherRenderer.flipX = false;
+                    warriorRenderer.flipX = false;
                     direction = "left";
                 }
             }
             else if (Input.GetKey(KeyCode.W))
             {
-                animator.SetBool("Walking", true);
+                player_animator.SetBool("Walking", true);
+                warrior_animator.SetBool("Walking", true);
+                godfather_animator.SetBool("Walking", true);
                 //transform.Translate(Vector3.forward * movementspeed * Time.fixedDeltaTime);
 
             }
             else if (Input.GetKey(KeyCode.S))
             {
-                animator.SetBool("Walking", true);
+                player_animator.SetBool("Walking", true);
+                warrior_animator.SetBool("Walking", true);
+                godfather_animator.SetBool("Walking", true);
                 //transform.Translate(Vector3.back * movementspeed * Time.fixedDeltaTime);
 
             }
             else
             {
-                animator.SetBool("Walking", false);
+                player_animator.SetBool("Walking", false);
+                warrior_animator.SetBool("Walking", false);
+                godfather_animator.SetBool("Walking", false);
             }
         }
     }
