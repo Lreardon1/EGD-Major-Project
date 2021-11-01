@@ -53,6 +53,7 @@ public class Card : MonoBehaviour
     [Header("Combat Affected Stats")]
     public int baseNum = 6;
     public int numMod = 0;
+    public List<Buff.Stat> buffedStats = new List<Buff.Stat>();
     public Element secondaryElem = Element.None;
     public AoE targetting = AoE.Single;
     public bool givePrio = false;
