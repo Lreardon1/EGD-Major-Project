@@ -62,6 +62,7 @@ public class BuffCardAction : CardActionTemplate
         }
         b.duration = baseNum + numModifier;
         b.StartBuff();
+        cb.attachedBuffs.Add(b);
 
         CombatManager cm = FindObjectOfType<CombatManager>();
         if (givePriority)
