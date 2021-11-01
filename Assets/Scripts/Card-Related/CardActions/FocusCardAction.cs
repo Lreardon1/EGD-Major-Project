@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackCardAction : CardActionTemplate
+public class FocusCardAction : CardActionTemplate
 {
     public override void OnPlay(Card c, GameObject combatant, List<GameObject> otherCombatants)
     {
@@ -18,7 +18,7 @@ public class AttackCardAction : CardActionTemplate
 
             case Card.AoE.Adjascent:
                 int pos = otherCombatants.IndexOf(combatant);
-                if (pos < otherCombatants.Count-1)
+                if (pos < otherCombatants.Count - 1)
                 {
                     ApplyCard(c, otherCombatants[pos + 1]);
                 }
@@ -40,20 +40,21 @@ public class AttackCardAction : CardActionTemplate
 
     public override void ApplyCard(Card c, GameObject combatant)
     {
-        int baseNum = c.baseNum;
-        Card.Element type = c.element;
-        int numModifier = c.numMod;
-        Card.Element secondaryElement = c.secondaryElem;
         bool givePriority = c.givePrio;
 
         CombatantBasis cb = combatant.GetComponent<CombatantBasis>();
-        cb.attackCardBonus += baseNum + numModifier;
-        cb.nextActionPrimaryElem = type;
-        cb.nextActionSecondaryElem = secondaryElement;
-        
+        CombatManager cm = FindObjectOfType<CombatManager>();
+        if (cb.isEnemy) //enemy gets targetted by all party
+        {
+            cm.FocusOnEnemy(combatant);
+        }
+        else //otherwise, party member is targetted by all enemy
+        {
+            cm.FocusOnAlly(combatant);
+        }
+
         if (givePriority)
         {
-            CombatManager cm = FindObjectOfType<CombatManager>();
             cm.GivePriority(combatant);
         }
     }

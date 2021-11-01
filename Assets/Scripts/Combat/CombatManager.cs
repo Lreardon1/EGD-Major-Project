@@ -555,6 +555,52 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    public void FocusOnEnemy(GameObject combatant)
+    {
+        //focuses any remaining ally actions onto this enemy
+        foreach (GameObject action in actionOrder)
+        {
+            CombatantBasis cb = action.GetComponent<CombatantBasis>();
+            if (!cb.isEnemy && cb.target != null)
+            {
+                cb.target = combatant;
+            }
+        }
+    }
+
+    public void FocusOnAlly(GameObject combatant)
+    {
+        //focuses any remaining ally actions onto this enemy
+        foreach (GameObject action in actionOrder)
+        {
+            CombatantBasis cb = action.GetComponent<CombatantBasis>();
+            if (cb.isEnemy && cb.target != null)
+            {
+                cb.target = combatant;
+            }
+        }
+    }
+
+    public void ClearTarget(GameObject combatant)
+    {
+        //focuses any remaining ally actions onto untarget this combatant
+        foreach (GameObject action in actionOrder)
+        {
+            CombatantBasis cb = action.GetComponent<CombatantBasis>();
+            if (cb.target == combatant)
+            {
+                if (cb.isEnemy)
+                {
+                    cb.SelectTarget(activePartyMembers);
+                }
+                else
+                {
+                    cb.SelectTarget(activeEnemies);
+                }
+            }
+        }
+    }
+
     public void CheckWinCondition()
     {
         if (activeEnemies.Count == 0)

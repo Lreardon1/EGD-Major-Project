@@ -56,6 +56,7 @@ public class Card : MonoBehaviour
     public int baseNum = 6;
     public int numMod = 0;
     public List<Buff.Stat> buffedStats = new List<Buff.Stat>();
+    public bool shieldWithThorns = false;
     public Element secondaryElem = Element.None;
     public AoE targetting = AoE.Single;
     public bool givePrio = false;

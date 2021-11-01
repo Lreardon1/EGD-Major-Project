@@ -64,6 +64,7 @@ public class CombatantBasis : MonoBehaviour
 
         previousAction = nextAction;
         hasPriority = false;
+        untargettable = false;
 
         //buffs tick down after an action
         foreach (Buff b in attachedBuffs)
@@ -161,7 +162,7 @@ public class CombatantBasis : MonoBehaviour
         }
     }
 
-    public virtual void SelectTarget(List<GameObject> targets)
+    public virtual void SelectTarget(List<GameObject> targets) //TODO:: STILL NEEDS TO HANDLE RETARGETTING IF RANDOMLY CHOOSING UNTARGETTABLE COMBATANT
     {
         if(nextAction == Action.Block)
         {
