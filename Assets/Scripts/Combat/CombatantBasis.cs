@@ -16,8 +16,13 @@ public class CombatantBasis : MonoBehaviour
     public int currentHitPoints;
     public int attack;
     public int speed;
+    //handling buffs
+    public List<Buff> attachedBuffs = new List<Buff>();
+    public float attackMultiplier = 1f;
     public float defenseMultiplier = 1f;
+    public float speedMultiplier = 1f;
     public Card.Element resistance = Card.Element.None;
+
     public int temporaryHitPoints = 0;
     public int negativeHitPointShield = 0;
 
@@ -26,6 +31,7 @@ public class CombatantBasis : MonoBehaviour
     public int shieldReturnDmg = 0;
     public bool untargettable = false;
     public bool canCounterAttack = false;
+    public bool hasPriority = false;
 
     public TMPro.TextMeshPro text;
 
@@ -42,7 +48,7 @@ public class CombatantBasis : MonoBehaviour
     {
         if (previousAction == Action.Block)
         {
-            defenseMultiplier = 1f;
+            defenseMultiplier -= 1f;
             attackCardBonus = 0;
             canCounterAttack = false;
             nextActionPrimaryElem = Card.Element.None;
@@ -57,6 +63,14 @@ public class CombatantBasis : MonoBehaviour
             Special();
 
         previousAction = nextAction;
+        hasPriority = false;
+        untargettable = false;
+
+        //buffs tick down after an action
+        foreach (Buff b in attachedBuffs)
+        {
+            b.TickDuration();
+        }
 
         //clearing card stats on attack
         if (previousAction == Action.Attack)
@@ -67,7 +81,7 @@ public class CombatantBasis : MonoBehaviour
         }
     }
 
-    public virtual void TakeDamage(int damageAmount, Card.Element damageType1, Card.Element damageType2, GameObject attacker)
+    public virtual void TakeDamage(float damageAmount, Card.Element damageType1, Card.Element damageType2, GameObject attacker)
     {
         // Check for elemental combo
         float elementalComboMultiplier = 1f;
@@ -100,7 +114,7 @@ public class CombatantBasis : MonoBehaviour
         {
             if (canCounterAttack)
             {
-                attacker.GetComponent<CombatantBasis>().TakeDamage(attackCardBonus, damageType1, damageType2, gameObject);
+                attacker.GetComponent<CombatantBasis>().TakeDamage(attackCardBonus * attackMultiplier, damageType1, damageType2, gameObject);
                 print("Counter attack");
             }
         }
@@ -148,7 +162,7 @@ public class CombatantBasis : MonoBehaviour
         }
     }
 
-    public virtual void SelectTarget(List<GameObject> targets)
+    public virtual void SelectTarget(List<GameObject> targets) //TODO:: STILL NEEDS TO HANDLE RETARGETTING IF RANDOMLY CHOOSING UNTARGETTABLE COMBATANT
     {
         if(nextAction == Action.Block)
         {
@@ -171,7 +185,7 @@ public class CombatantBasis : MonoBehaviour
     {
         CombatantBasis cb = target.GetComponent<CombatantBasis>();
 
-        int damageTotal = attack + attackCardBonus; // Get modifier from card here
+        float damageTotal = (attack + attackCardBonus) * attackMultiplier; // Get modifier from card here
 
         cb.TakeDamage(damageTotal, nextActionPrimaryElem, nextActionSecondaryElem, gameObject);
 
@@ -181,7 +195,7 @@ public class CombatantBasis : MonoBehaviour
     public virtual void Block()
     {
         // Increase defense multipler to 2X
-        defenseMultiplier = 2f;
+        defenseMultiplier += 1f;
 
         //counterattack from attack card
         if (attackCardBonus > 0)

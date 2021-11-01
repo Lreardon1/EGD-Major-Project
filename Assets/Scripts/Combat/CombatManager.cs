@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 // Jay NOTE : this class should not control the deck or the hand AT ALL, not movement nor state.
 //  This abstraction would have made my life so much easier.
-//  
+//
 public class CombatManager : MonoBehaviour
 {
     public enum CombatPhase {DrawPhase, PlayPhase, DiscardPhase, ActionPhase};
@@ -27,13 +27,13 @@ public class CombatManager : MonoBehaviour
     public int maxMana = 30;
     public int currentMana = 20;
     public int discardCost = 1;
-    
+
 
     public bool canDraw = false;
     public bool canPlay = true;
-    private bool enoughMana = true;    
+    private bool enoughMana = true;
 
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -137,7 +137,7 @@ public class CombatManager : MonoBehaviour
         foreach (GameObject enemy in enemies)
         {
             CombatantBasis enemyScript = enemy.GetComponent<CombatantBasis>();
-            enemyScript.SelectAction(); 
+            enemyScript.SelectAction();
             enemyScript.SelectTarget(activePartyMembers);
             if (enemyScript.nextAction == CombatantBasis.Action.Block)
             {
@@ -238,16 +238,16 @@ public class CombatManager : MonoBehaviour
         currentPhaseText.text = "Action Phase";
         // Party members and enemies take turns attacking in action order, death prevents attacking, transition to Draw Phase
         StartCoroutine("StartActions");
-        
+
     }
 
     public GameObject currentCB = null;
     public IEnumerator StartActions()
     {
-        for(int i = 0; i < actionOrder.Count; i++)
+        while (actionOrder.Count > 0)
         {
-            CombatantBasis cb = actionOrder[i].GetComponent<CombatantBasis>();
-            currentCB = actionOrder[i];
+            CombatantBasis cb = actionOrder[0].GetComponent<CombatantBasis>();
+            currentCB = actionOrder[0];
             bool cardAlreadyPlayed = false;
 
             if (cb.appliedCard != null)
@@ -255,12 +255,12 @@ public class CombatManager : MonoBehaviour
 
             if (enoughMana && !cardAlreadyPlayed && chc.transform.childCount != 0)
             {
-                Debug.Log("Play card on " + actionOrder[i].name);
+                Debug.Log("Play card on " + actionOrder[0].name);
                 foreach (GameObject card in Deck.instance.viewOrder)
                 {
                     DragDrop dd = card.GetComponent<DragDrop>();
                     List<GameObject> allZones = new List<GameObject>();
-                    allZones.Add(actionOrder[i]);
+                    allZones.Add(actionOrder[0]);
                     dd.allowedDropZones.Clear();
                     dd.allowedDropZones = allZones;
                 }
@@ -287,6 +287,7 @@ public class CombatManager : MonoBehaviour
             }
 
             cb.ExecuteAction();
+            actionOrder.RemoveAt(0);
             RemoveFallenCombatants();
             CheckWinCondition();
             UpdateTargets();
@@ -412,6 +413,7 @@ public class CombatManager : MonoBehaviour
             CombatantBasis cb = activePartyMembers[i].GetComponent<CombatantBasis>();
             if (cb.isSlain == true)
             {
+                actionOrder.Remove(activePartyMembers[i]);
                 activePartyMembers.RemoveAt(i);
                 i--;
             }
@@ -421,6 +423,7 @@ public class CombatManager : MonoBehaviour
             CombatantBasis cb = activeEnemies[i].GetComponent<CombatantBasis>();
             if (cb.isSlain == true)
             {
+                actionOrder.Remove(activeEnemies[i]);
                 activeEnemies.RemoveAt(i);
                 i--;
             }
@@ -452,7 +455,7 @@ public class CombatManager : MonoBehaviour
             card.transform.localScale = new Vector3(1, 1, 1);
             Debug.Log("Card Already Played On This Combatant");
             return;
-        } 
+        }
         if(currentMana - cardScript.manaCost < 0)
         {
             Debug.Log("Not Enough Mana To Play This Card");
@@ -495,39 +498,107 @@ public class CombatManager : MonoBehaviour
 
     public void CreateActionQueue()
     {
-        actionOrder.Clear();
-        List<GameObject> allCombatants = new List<GameObject>();
         foreach(GameObject member in activePartyMembers)
         {
-            allCombatants.Add(member);
+            actionOrder.Add(member);
         }
         foreach (GameObject enemy in activeEnemies)
         {
-            allCombatants.Add(enemy);
+            actionOrder.Add(enemy);
         }
 
-        while(allCombatants.Count != 0)
+        UpdateActionQueue();
+    }
+
+    public void UpdateActionQueue()
+    {
+        List<GameObject> newOrder = new List<GameObject>();
+
+        //first, maintain order of combatants with priority
+        while (actionOrder.Count > 0 && actionOrder[0].GetComponent<CombatantBasis>().hasPriority)
+        {
+            newOrder.Add(actionOrder[0]);
+            actionOrder.RemoveAt(0);
+        }
+
+        //then recalculate the order based on speed
+        while (actionOrder.Count != 0)
         {
             GameObject fastestCombatant = null;
-            int maxSpeed = -1;
-            foreach (GameObject combatant in allCombatants)
+            float maxSpeed = -1;
+            foreach (GameObject combatant in actionOrder)
             {
                 CombatantBasis cb = combatant.GetComponent<CombatantBasis>();
-                if(cb.speed > maxSpeed)
+                float spd = cb.speed * cb.speedMultiplier;
+                if (spd > maxSpeed)
                 {
-                    maxSpeed = cb.speed;
+                    maxSpeed = spd;
                     fastestCombatant = combatant;
                 }
             }
 
-            actionOrder.Add(fastestCombatant);
-            allCombatants.Remove(fastestCombatant);
+            newOrder.Add(fastestCombatant);
+            actionOrder.Remove(fastestCombatant);
         }
+
+        actionOrder = newOrder;
     }
 
     public void GivePriority(GameObject combatant)
     {
+        combatant.GetComponent<CombatantBasis>().hasPriority = true;
+        //if combatant is still in queue, move them to top of the order
+        if (actionOrder.Contains(combatant))
+        {
+            actionOrder.Remove(combatant);
+            actionOrder.Insert(0, combatant);
+        }
+    }
 
+    public void FocusOnEnemy(GameObject combatant)
+    {
+        //focuses any remaining ally actions onto this enemy
+        foreach (GameObject action in actionOrder)
+        {
+            CombatantBasis cb = action.GetComponent<CombatantBasis>();
+            if (!cb.isEnemy && cb.target != null)
+            {
+                cb.target = combatant;
+            }
+        }
+    }
+
+    public void FocusOnAlly(GameObject combatant)
+    {
+        //focuses any remaining ally actions onto this enemy
+        foreach (GameObject action in actionOrder)
+        {
+            CombatantBasis cb = action.GetComponent<CombatantBasis>();
+            if (cb.isEnemy && cb.target != null)
+            {
+                cb.target = combatant;
+            }
+        }
+    }
+
+    public void ClearTarget(GameObject combatant)
+    {
+        //focuses any remaining ally actions onto untarget this combatant
+        foreach (GameObject action in actionOrder)
+        {
+            CombatantBasis cb = action.GetComponent<CombatantBasis>();
+            if (cb.target == combatant)
+            {
+                if (cb.isEnemy)
+                {
+                    cb.SelectTarget(activePartyMembers);
+                }
+                else
+                {
+                    cb.SelectTarget(activeEnemies);
+                }
+            }
+        }
     }
 
     public void CheckWinCondition()

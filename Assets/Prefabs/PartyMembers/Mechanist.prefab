@@ -14,20 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextAction: 0
   statusCondition: 0
+  nextActionPrimaryElem: 0
+  nextActionSecondaryElem: 0
   combatantName: Mechanist
   totalHitPoints: 20
   currentHitPoints: 20
   attack: 6
   speed: 13
+  attackMultiplier: 1
   defenseMultiplier: 1
+  speedMultiplier: 1
   resistance: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
+  attackCardBonus: 0
+  shieldReturnDmg: 0
+  untargettable: 0
+  canCounterAttack: 0
   text: {fileID: 5022943810321618168}
   appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   isSlain: 0
+  isEnemy: 0
 --- !u!1001 &7578279150225114531
 PrefabInstance:
   m_ObjectHideFlags: 0
