@@ -8,7 +8,7 @@ using UnityEngine.UI;
 //
 public class CombatManager : MonoBehaviour
 {
-    public static bool isInCVMode = false;
+    public static bool IsInCVMode = false;
 
     public enum CombatPhase {DrawPhase, PlayPhase, DiscardPhase, ActionPhase};
 

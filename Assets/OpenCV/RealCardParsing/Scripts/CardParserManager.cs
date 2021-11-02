@@ -24,6 +24,8 @@ public class CardParserManager : MonoBehaviour
 
     public Dictionary<string, List<GameObject>> orderedCards = new Dictionary<string, List<GameObject>>();
 
+    public List<GameObject> handCards = new List<GameObject>();
+
     private void SetUpOrderedCards(List<GameObject> cards)
     {
         foreach(GameObject c in cards)
@@ -47,7 +49,7 @@ public class CardParserManager : MonoBehaviour
 
         SetUpOrderedCards(Deck.instance.allCards);
 
-        cardParser.SetLookForInput(CombatManager.isInCVMode);
+        cardParser.SetLookForInput(CombatManager.IsInCVMode);
 
         DisplayCardData(null, null);
     }
@@ -56,11 +58,13 @@ public class CardParserManager : MonoBehaviour
     {
         
         currentTarget = null;
+        validTarget = false;
         Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(r, out RaycastHit hitInfo, 1000.0f, LayerMask.GetMask("Combatant")))
         {
             currentTarget = hitInfo.collider.gameObject;
         }
+
         if (cm.currentPhase == CombatManager.CombatPhase.ActionPhase)
         {
             validTarget = currentTarget == cm.currentCB;
@@ -72,8 +76,9 @@ public class CardParserManager : MonoBehaviour
                     cm.ApplyCard(currentCard, currentTarget);
                 }
             }
-        } 
-        if (cm.currentPhase == CombatManager.CombatPhase.PlayPhase)
+            UpdateUIPlay();
+        }
+        else if (cm.currentPhase == CombatManager.CombatPhase.PlayPhase)
         {
             validTarget = currentTarget != null;
             if (validTarget)
@@ -84,16 +89,33 @@ public class CardParserManager : MonoBehaviour
                     cm.ApplyCard(currentCard, currentTarget);
                 }
             }
+            UpdateUIPlay();
         }
-        
+        else if (cm.currentPhase == CombatManager.CombatPhase.DrawPhase)
+        {
+            //Deck.instance.deck.Contains();
 
-
-        UpdateUI();
+            UpdateUIDraw();
+        }
+        else
+        {
+            UpdateUINoAction();
+        }
     }
 
-    private void UpdateUI()
+    private void UpdateUIPlay()
     {
-        playText.text = "Current Target: " + ((currentTarget == null) ? "None" : currentTarget.name);
+        playText.text = "Current Target: " + ((!validTarget) ? "None" : currentTarget.name);
+    }
+
+    private void UpdateUIDraw()
+    {
+
+    }
+
+    private void UpdateUINoAction()
+    {
+
     }
 
     public void DisplayCardData(GameObject card, Mat goodImage)
@@ -138,13 +160,9 @@ public class CardParserManager : MonoBehaviour
             return new List<GameObject>();
     }
 
-    // TODO : this is a test class using my system cause I can't hit Tyler's yet...
-    //OneOnCombatManager manager;
-    //bool inAction;
+    // TODO : delete this on clear
     public void RequestCardAction(OneOnCombatManager oneOnCombatManager)
     {
-       // manager = oneOnCombatManager;
-       // inAction = true;
     }
     // TODO 
     // Disable functionality based on STATIC bool flag in combatManager : TODO : wait
