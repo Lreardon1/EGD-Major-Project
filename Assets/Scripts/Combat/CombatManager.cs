@@ -98,6 +98,8 @@ public class CombatManager : MonoBehaviour
             Debug.Log(combatant.name);
         }
 
+        // TODO : for CV I need an initial draw phase before play to allow the player to tell me their cards 
+        // (or we can honestly just forego trying to track that)
         ActivatePlayPhase();
     }
 

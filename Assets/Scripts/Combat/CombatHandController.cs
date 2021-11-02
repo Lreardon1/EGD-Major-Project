@@ -22,7 +22,7 @@ public class CombatHandController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (!isActiveControlScheme)
+        if (!isActiveControlScheme || CombatManager.IsInCVMode)
             return;
 
         mainCam = FindObjectOfType<Camera>();
@@ -30,7 +30,7 @@ public class CombatHandController : MonoBehaviour
 
     private void Awake()
     {
-        if (!isActiveControlScheme)
+        if (!isActiveControlScheme || CombatManager.IsInCVMode)
             return;
 
         for (int i = 0; i < startingHandSize; i++)
