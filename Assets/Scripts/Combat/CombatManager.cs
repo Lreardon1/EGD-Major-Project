@@ -104,8 +104,11 @@ public class CombatManager : MonoBehaviour
     public void ActivateDrawPhase()
     {
         currentPhase = CombatPhase.DrawPhase;
-        UpdateDropZones();
-        ToggleDrawButtons(true);
+        if (!IsInCVMode)
+        {
+            UpdateDropZones();
+            ToggleDrawButtons(true);
+        }
         foreach (GameObject member in partyMembers)
         {
             CombatantBasis cb = member.GetComponent<CombatantBasis>();
@@ -181,9 +184,12 @@ public class CombatManager : MonoBehaviour
     public void ActivatePlayPhase()
     {
         currentPhase = CombatPhase.PlayPhase;
-        UpdateDropZones();
+        if (!IsInCVMode)
+        {
+            UpdateDropZones();
 
-        ToggleDrawButtons(false);
+            ToggleDrawButtons(false);
+        }
         // Allow player to move cards to play on allies/enemies, update action order accordingly, ends when player clicks done or something, transition to Discard Phase
         StartCoroutine("PlayPhaseCoroutine");
     }
@@ -209,7 +215,10 @@ public class CombatManager : MonoBehaviour
     public void ActivateDiscardPhase()
     {
         currentPhase = CombatPhase.DiscardPhase;
-        UpdateDropZones();
+        if (!IsInCVMode)
+        {
+            UpdateDropZones();
+        }
         // Player can drag cards to discard pile to discard them, ends when player clicks done or something, transition to Action Phase
         StartCoroutine("DiscardPhaseCoroutine");
     }
@@ -235,7 +244,8 @@ public class CombatManager : MonoBehaviour
     public void ActivateActionPhase()
     {
         currentPhase = CombatPhase.ActionPhase;
-        UpdateDropZones();
+        if (!IsInCVMode)
+            UpdateDropZones();
 
         currentPhaseText.text = "Action Phase";
         // Party members and enemies take turns attacking in action order, death prevents attacking, transition to Draw Phase
@@ -278,7 +288,9 @@ public class CombatManager : MonoBehaviour
 
                     // Need code to detect if card has been applied
 
-                    if (cb.appliedCard != null)
+                    // TODO : this would continue if the player has already played a card, giving them no opportunity to play another...
+                    // TODO : For many of these while (!done) loops I'd recommend making a request to the controller (CV or Hand) which in turn calls back with a function when it's has an update, and then you continue
+                    if (cb.appliedCard != null) 
                     {
                         // Activate Card Effect
                         done = true;
@@ -447,24 +459,40 @@ public class CombatManager : MonoBehaviour
         enoughMana = tempEnoughMana;
     }
 
-    public void ApplyCard(GameObject card, GameObject combatant)
+    public bool ApplyCard(GameObject card, GameObject combatant)
     {
         CombatantBasis cb = combatant.GetComponent<CombatantBasis>();
         Card cardScript = card.GetComponent<Card>();
-        if(cb.appliedCard != null)
+        if (!IsInCVMode)
         {
-            card.transform.SetParent(chc.gameObject.transform);
-            card.transform.localScale = new Vector3(1, 1, 1);
-            Debug.Log("Card Already Played On This Combatant");
-            return;
+            if (cb.appliedCard != null)
+            {
+                card.transform.SetParent(chc.gameObject.transform);
+                card.transform.localScale = new Vector3(1, 1, 1);
+                Debug.Log("Card Already Played On This Combatant");
+                return false;
+            }
+            if (currentMana - cardScript.manaCost < 0)
+            {
+                Debug.Log("Not Enough Mana To Play This Card");
+                card.transform.SetParent(chc.gameObject.transform);
+                card.transform.localScale = new Vector3(1, 1, 1);
+                cb.appliedCard = null;
+                return false;
+            }
         }
-        if(currentMana - cardScript.manaCost < 0)
+        else
         {
-            Debug.Log("Not Enough Mana To Play This Card");
-            card.transform.SetParent(chc.gameObject.transform);
-            card.transform.localScale = new Vector3(1, 1, 1);
-            cb.appliedCard = null;
-            return;
+            if (cb.appliedCard != null)
+            {
+                Debug.Log("Card Already Played On This Combatant");
+                return false;
+            }
+            if (currentMana - cardScript.manaCost < 0)
+            {
+                Debug.Log("Not Enough Mana To Play This Card");
+                return false;
+            }
         }
         cb.appliedCard = card;
         currentMana -= cardScript.manaCost;
@@ -477,18 +505,22 @@ public class CombatManager : MonoBehaviour
         {
             //cardScript.Play(combatant, enemies);
         }
+
+        return true;
     }
 
     public void DrawCards(int cardsToDraw)
     {
-        chc.DrawCards(cardsToDraw);
+        if (!IsInCVMode)
+            chc.DrawCards(cardsToDraw);
     }
 
     public void DiscardCard(GameObject card)
     {
         currentMana -= discardCost;
         manaText.text = "Mana: " + currentMana + "/" + maxMana;
-        chc.DiscardCard(card);
+        if (!IsInCVMode)
+            chc.DiscardCard(card);
     }
 
     public void AddMana(int manaAmount)
