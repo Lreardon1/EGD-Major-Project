@@ -1541,7 +1541,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f08c4b19fd1292b48ae0726d93b6fb73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardParser: {fileID: 0}
+  currentCard: {fileID: 0}
+  cardParser: {fileID: 786808766}
+  cm: {fileID: 940410049}
   goodSeeImage: {fileID: 805868268}
 --- !u!114 &786808766
 MonoBehaviour:
@@ -1555,6 +1557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20207fcf6ab55b54faa1a662df242386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardParserManager: {fileID: 0}
   staticTestImage: {fileID: 0}
   bottomRightBoundingBox:
     ul:
@@ -1640,6 +1643,7 @@ MonoBehaviour:
   borderAmount: 10
   defaultCardResizeAmount: 0.5
   cardTemplates: []
+  stickerTemplates: []
   StableUpdateEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -1790,6 +1794,7 @@ MonoBehaviour:
   discardCost: 1
   canDraw: 0
   canPlay: 1
+  currentCB: {fileID: 0}
 --- !u!4 &940410050
 Transform:
   m_ObjectHideFlags: 0

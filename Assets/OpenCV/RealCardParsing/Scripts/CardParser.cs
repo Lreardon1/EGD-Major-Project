@@ -334,6 +334,7 @@ public class CardParser : MonoBehaviour
             CustomCard card = ParseCard(cardScene, null);
 
             List<GameObject> possibleCards = cardParserManager.GetCardsOfName(card.cardName);
+            print("COUNT: " + possibleCards.Count);
             GameObject bestCard = AttemptToGetMods(card, lastGoodReplane, possibleCards);
             UpdateCardDetected(bestCard);
         }
