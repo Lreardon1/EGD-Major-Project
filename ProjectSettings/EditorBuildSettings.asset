@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/OverworldTest.unity
     guid: 8c45b66b70b42a243a4648dd6ef7498c
+  - enabled: 1
+    path: Assets/Scenes/BattleSceneWithCV.unity
+    guid: 4dee65eedb094bd4d92fdf8483e710aa
   m_configObjects: {}

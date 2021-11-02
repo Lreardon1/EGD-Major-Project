@@ -1,8 +1,10 @@
 using OpenCvSharp;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 [RequireComponent(typeof(CardParser))]
 public class CardParserManager : MonoBehaviour
@@ -10,19 +12,34 @@ public class CardParserManager : MonoBehaviour
     public GameObject currentCard;
     public CardParser cardParser;
     public CombatManager cm;
+
+    [Header("UI")]
     public RawImage goodSeeImage;
-    public GameObject currentTarget = null;
+    public TMP_Text cardText;
+    public TMP_Text playText;
+
+    private GameObject currentTarget = null;
+    private int currentID = -1;
+    private bool validTarget = true;
+
     public Dictionary<string, List<GameObject>> orderedCards = new Dictionary<string, List<GameObject>>();
+
+    public List<GameObject> handCards = new List<GameObject>();
 
     private void SetUpOrderedCards(List<GameObject> cards)
     {
         foreach(GameObject c in cards)
         {
             Card card = c.GetComponent<Card>();
-            if (orderedCards.ContainsKey(card.cardName))
+            if (!orderedCards.ContainsKey(card.cardName))
                 orderedCards.Add(card.cardName, new List<GameObject>());
 
             orderedCards[card.cardName].Add(c);
+            print("Adding " + card.cardName + " which is " + c);
+
+            // TODO : current used to add all element cards to the hand, WILL IMMEDIATELY BREAK UPON NEW NAMES
+            if (card.cardName != "")
+                handCards.Add(c);
         }
     }
 
@@ -36,51 +53,134 @@ public class CardParserManager : MonoBehaviour
 
         SetUpOrderedCards(Deck.instance.allCards);
 
-        cardParser.SetLookForInput(false);
+        cardParser.SetLookForInput(CombatManager.IsInCVMode);
+
+        DisplayCardData(null, null);
     }
 
     private void Update()
     {
+        // TODO : starting phase: ask to draw cards and show them, can't be done right now...
+
         currentTarget = null;
-        Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(r, out RaycastHit hitInfo, 1000.0f, LayerMask.GetMask("Combatant")))
+        validTarget = false;
+        RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 100.0f, LayerMask.GetMask("Combatant"));
+        if (hitInfo.collider != null)
         {
             currentTarget = hitInfo.collider.gameObject;
         }
-        if (cm)
 
+        if (cm.currentPhase == CombatManager.CombatPhase.ActionPhase)
+        {
+            validTarget = currentTarget == cm.currentCB;
+            if (validTarget)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    if (handCards.Contains(currentCard) || currentCard == null)
+                    {
+                        // TODO : manage card hand and deck here, make the apply card return a boolean of valid, or even a reason?
+                        cm.ApplyCard(currentCard, currentTarget);
+                        handCards.Remove(currentCard);
+                    }
+                    else
+                    {
+                        Debug.LogError("CV: Card played is not in HAND");
+                    }
+                }
+            }
+            UpdateUIPlay();
+        }
+        else if (cm.currentPhase == CombatManager.CombatPhase.PlayPhase)
+        {
+            validTarget = currentTarget != null;
+            if (validTarget)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    if (handCards.Contains(currentCard) || currentCard == null)
+                    {
+                        // TODO : manage card hand and deck here, make the apply card return a boolean of valid, or even a reason?
+                        cm.ApplyCard(currentCard, currentTarget);
+                        handCards.Remove(currentCard);
+                    } else
+                    {
+                        Debug.LogError("CV: Card played is not in HAND");
+                    }
 
-        UpdateUI();
+                }
+            }
+            UpdateUIPlay();
+        }
+        else if (cm.currentPhase == CombatManager.CombatPhase.DrawPhase)
+        {
+            if (Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                if (Deck.instance.deck.Contains(currentCard))
+                {
+                    handCards.Add(currentCard);
+                    Deck.instance.deck.Remove(currentCard);
+                } else
+                {
+                    Debug.LogError("Shown card not in DECK");
+                }
+            }
+            //Deck.instance.deck.Contains();
+
+            UpdateUIDraw();
+        }
+        else
+        {
+            UpdateUINoAction();
+        }
     }
 
-    private void UpdateUI()
+    private void UpdateUIPlay()
+    {
+        playText.text = "Current Target: " + ((!validTarget) ? "None" : currentTarget.name);
+    }
+
+    private void UpdateUIDraw()
+    {
+
+    }
+
+    private void UpdateUINoAction()
     {
 
     }
 
     public void DisplayCardData(GameObject card, Mat goodImage)
     {
+        bool inHand = handCards.Contains(card);
         if (goodSeeImage.texture)
             Destroy(goodSeeImage.texture);
-        goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(goodImage);
-        // TODO : text data on card?
+        if (card != null) 
+            goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(goodImage);
+        if (card != null)
+            cardText.text = card.GetComponent<Card>().cardName + (inHand ? "" : " which is not in your HAND!");
+        else
+            cardText.text = "No Card Found";
     }
 
-    public void HandleStableUpdate(GameObject card)
+    public void HandleStableUpdate(GameObject card, int id)
     {
         currentCard = card;
+        currentID = id;
         DisplayCardData(card, cardParser.GetLastGoodReplane());
     }
 
-    public void HandleNullUpdate(GameObject card)
+    public void HandleNullUpdate(GameObject card, int id)
     {
         currentCard = card;
-        DisplayCardData(card, cardParser.GetLastGoodReplane());
+        currentID = id;
+        DisplayCardData(card, null);
     }
 
-    public void HandleNewUpdate(GameObject card)
+    public void HandleNewUpdate(GameObject card, int id)
     {
         currentCard = card;
+        currentID = id;
         DisplayCardData(card, cardParser.GetLastGoodReplane());
     }
 
@@ -92,10 +192,13 @@ public class CardParserManager : MonoBehaviour
         else
             return new List<GameObject>();
     }
+
+    // TODO : delete this on clear
+    public void RequestCardAction(OneOnCombatManager oneOnCombatManager)
+    {
+    }
     // TODO 
-    // ask the combat manager to update me on state : TODO : have to wait on half of this
     // Disable functionality based on STATIC bool flag in combatManager : TODO : wait
-    // display the card and card data
     // 
     // POSSIBLE BUG : CAN DRAG THE NEWLY CREATED CARDS BACK ONTO THE HAND THAT SHOULDN'T EXIST?? WE'LL SEE
     // 

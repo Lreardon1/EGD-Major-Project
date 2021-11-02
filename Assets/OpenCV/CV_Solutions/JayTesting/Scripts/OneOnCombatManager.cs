@@ -57,7 +57,7 @@ public class OneOnCombatManager : MonoBehaviour
     public PlayMode currentPlayMode;
     public List<OneOnPartyMember> party;
     public List<OneOnEnemy> enemies;
-    public OneOnPlayerController player;
+    public CardParserManager player;
 
     public OneOnActionOrderBar actionBar;
     public List<OneOnTurnActor> turnOrderActors;

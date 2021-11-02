@@ -34,6 +34,7 @@ public class Card : MonoBehaviour
     public GameObject typeIcon;
 
     [Header("OnPlay Script")]
+    [SerializeField]
     public CardActionTemplate onPlayScript;
 
     [Header("Quick Data References")]
@@ -53,7 +54,7 @@ public class Card : MonoBehaviour
     public GameObject spriteComp;
 
     [Header("Combat Affected Stats")]
-    public int baseNum = 6;
+    public int baseNum = 0;
     public int numMod = 0;
     public List<Buff.Stat> buffedStats = new List<Buff.Stat>();
     public bool shieldWithThorns = false;
@@ -72,7 +73,7 @@ public class Card : MonoBehaviour
             Modifier template = ModifierLookup.modifierLookupTable[availableModifiers[i]];
             modifiers[i].GetComponent<Image>().sprite = template.icon;
             GameObject spriteMod = Instantiate(spriteComp, modifiers[i].transform.GetChild(0).transform);
-            if (spriteModifierVals[spriteModC] != null)
+            if (spriteModifierVals.Count < spriteModC && spriteModifierVals[spriteModC] != null)
             {
                 spriteMod.GetComponent<Image>().sprite = spriteModifierVals[spriteModC];
             }
@@ -88,6 +89,8 @@ public class Card : MonoBehaviour
         {
             modifiers[i].SetActive(false);
         }
+
+        print("mods");
 
         //updating element icon to match
         GameObject elemIcon = null;
@@ -108,6 +111,14 @@ public class Card : MonoBehaviour
             case Element.Air:
                 elemIcon = Instantiate(draggableElements[3], elementIcon.transform);
                 break;
+
+            case Element.Light:
+                elemIcon = Instantiate(draggableElements[4], elementIcon.transform);
+                break;
+
+            case Element.Dark:
+                elemIcon = Instantiate(draggableElements[5], elementIcon.transform);
+                break;
         }
         if (elemIcon != null)
         {
@@ -116,6 +127,7 @@ public class Card : MonoBehaviour
 
         //setting mana text to the right cost
         manaText.text = manaCost.ToString();
+        print(gameObject.name);
     }
 
     public void Play(GameObject combatant, List<GameObject> otherCombatants)
@@ -157,6 +169,14 @@ public class Card : MonoBehaviour
 
             case Element.Air:
                 elemIcon = Instantiate(draggableElements[3], elementIcon.transform);
+                break;
+
+            case Element.Light:
+                elemIcon = Instantiate(draggableElements[4], elementIcon.transform);
+                break;
+
+            case Element.Dark:
+                elemIcon = Instantiate(draggableElements[5], elementIcon.transform);
                 break;
         }
         if (elemIcon != null)

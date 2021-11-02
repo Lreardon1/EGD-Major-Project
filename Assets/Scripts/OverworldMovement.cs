@@ -58,6 +58,8 @@ public class OverworldMovement : MonoBehaviour
         {
             float rightTurn = Input.GetAxisRaw("Rotate");
             transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
+            party_members[1].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
+            party_members[0].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
             /*
             //player camera rotation
             if (Input.GetKeyDown(KeyCode.E) && rotated != true)

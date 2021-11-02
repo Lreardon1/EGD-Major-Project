@@ -39,6 +39,7 @@ public class Deck : MonoBehaviour
         ModifierLookup.LoadModifierTable();
         foreach (GameObject card in allCards)
         {
+            print(card.GetComponent<Card>());
             card.GetComponent<Card>().InitializeCard();
         }
 
