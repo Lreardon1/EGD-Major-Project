@@ -118,12 +118,12 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0.2
     - _GlossyReflections: 0
-    - _ID: 1
+    - _ID: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PixelSize: 4
+    - _PixelSize: 2
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0.2
@@ -140,7 +140,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColorUI: {r: 1, g: 1, b: 1, a: 1}
-    - _OutlineColor: {r: 0.33278748, g: 0.34703827, b: 0.3584906, a: 1}
+    - _OutlineColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
     - _PixelGridOrigin: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
