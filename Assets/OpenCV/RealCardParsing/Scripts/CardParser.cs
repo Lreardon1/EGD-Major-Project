@@ -119,7 +119,7 @@ public class CardParser : MonoBehaviour
         
         foreach (ScriptableCardImage card in cardTemplates)
         {
-            float resizeAmount = 1;
+            float resizeAmount = 1.0f / defaultCardResizeAmount;
             defaultCardWidth = Mathf.RoundToInt(card.cardTexture.width / resizeAmount);
             defaultCardHeight = Mathf.RoundToInt(card.cardTexture.height / resizeAmount);
             defaultCardPlusBorderWidth = defaultCardWidth + (borderAmount * 2);
@@ -129,7 +129,7 @@ public class CardParser : MonoBehaviour
             int cardType = ConvertToIntMask(card.cardElement);
             int cardElement = ConvertToIntMask(card.cardType);
 
-            using (Mat cardMat = OpenCvSharp.Unity.TextureToMat(card.cardTexture)/*.Resize(new Size(defaultCardWidth, defaultCardHeight))*/)
+            using (Mat cardMat = OpenCvSharp.Unity.TextureToMat(card.cardTexture).Resize(new Size(defaultCardWidth, defaultCardHeight)))
             {
 
                 // extract card type and elements if new, BEFORE WE MAKE A BORDER FOR THE IMAGE!!!
@@ -151,7 +151,7 @@ public class CardParser : MonoBehaviour
                 GetKeypoints(cardMat, out KeyPoint[] kp, out Mat des);
 
                 // make data to store
-                TemplateCardData cardKeypointData = new TemplateCardData(kp, des, card.cardID, card.cardName, card.cardType, card.cardElement);
+                TemplateCardData cardKeypointData = new TemplateCardData(MakeHSHistrogram(cardMat), kp, des, card.cardID, card.cardName, card.cardType, card.cardElement);
 
                 // if the current card element and/or card type doesn't have a list, make one
                 if (!templateCardDict.ContainsKey(cardType | cardElement))
@@ -337,6 +337,7 @@ public class CardParser : MonoBehaviour
                 UpdateCardDetected(null, -1);
                 return true;
             }
+            print("Got " + card.cardName);
             List<GameObject> possibleCards = cardParserManager.GetCardsOfName(card.cardName);
             print("COUNT: " + possibleCards.Count);
             GameObject bestCard = AttemptToGetMods(card, lastGoodReplane, possibleCards);
@@ -1301,10 +1302,8 @@ public class CardParser : MonoBehaviour
             bestLowerRight.mostLikelyElement = GetMostLikelyElement(replaned, cornerReplaneOffset);
 
             // get the homography matrix from the replaned image to the template image space
-            print("Made it to keypoints");
             Mat hMat = KeypointMatchToTemplate(replaned, bestLowerRight, out CardType cardType, out CardElement cardElement, out int ID, out string cardName);
             if (hMat == null) return null;
-            print("Made it out of keypoints");
             // REMINDER! THE HOMOGRAPHY MATRIX RETURNED HAS A BORDER ATTACHED TO IT!
             Cv2.WarpPerspective(cardScene, replaned, hMat * firstTMat, new Size(defaultCardPlusBorderWidth, defaultCardPlusBorderHeight));
 
@@ -1315,31 +1314,7 @@ public class CardParser : MonoBehaviour
 
 
             croppedReplaned.CopyTo(lastGoodReplane);
-
-            /* DEBUG
-            if (debugCardImage.texture)
-                Destroy(debugCardImage.texture);
-            debugCardImage.texture = OpenCvSharp.Unity.MatToTexture(replaned);
-
-            if (replaneImage.texture != null)
-            {
-                Destroy(replaneImage.texture);
-            }
-            replaneImage.texture = OpenCvSharp.Unity.MatToTexture(croppedReplaned);
-
-            if (stickerImages[0].texture)
-                Destroy(stickerImages[0].texture);
-            stickerImages[0].texture = OpenCvSharp.Unity.MatToTexture(stickerBoundingBox1.CropByBox(croppedReplaned));
-
-            if (stickerImages[1].texture)
-                Destroy(stickerImages[1].texture);
-            stickerImages[1].texture = OpenCvSharp.Unity.MatToTexture(stickerBoundingBox2.CropByBox(croppedReplaned));
-
-            if (stickerImages[2].texture)
-                Destroy(stickerImages[2].texture);
-            stickerImages[2].texture = OpenCvSharp.Unity.MatToTexture(stickerBoundingBox3.CropByBox(croppedReplaned));
-            */
-
+            
             replaned.Release();
             replaned.Dispose();
 
@@ -1365,7 +1340,7 @@ public class CardParser : MonoBehaviour
         print("Keypoints took: " + (Time.realtimeSinceStartup - t));
         // ITERATE THRU THE MOST LIKELY CARDS
         bool hasList = templateCardDict.TryGetValue(
-            (int)bestLowerRight.mostLikelyType | (int)bestLowerRight.mostLikelyElement, 
+            (int)bestLowerRight.mostLikelyType, 
             out List<TemplateCardData> cardDataList);
 
 
@@ -1373,32 +1348,28 @@ public class CardParser : MonoBehaviour
         int bestGoodMatches = 0;
         TemplateCardData bestCardData = null;
         Mat bestHomographyMat = null;
+        print("Card List is " + cardDataList.Count);
         foreach (TemplateCardData cardData in cardDataList)
         {
+            print("Getting card data for " + cardData.name + " from " + cardDataList.Count);
             KeyPoint[] kp1 = cardData.keypoints;
             Mat des1 = cardData.des;
             MatchKeypoints(kp1, kp2, des1, des2, out DMatch[] goodMatches);
 
             GetMatchedKeypoints(kp1, kp2, goodMatches, out Point2f[] m_kp1, out Point2f[] m_kp2);
             int initMatches = goodMatches.Length;
-            float t2 = Time.realtimeSinceStartup;
             if (FilterByFundy(ref m_kp1, ref m_kp2, ref goodMatches, 1.5f))
             {
-                print("Fundy took: " + (Time.realtimeSinceStartup - t2));
                 if (CheckIfEnoughMatch(goodMatches, initMatches) && bestGoodMatches < goodMatches.Length)
                 {
-                    float t3 = Time.realtimeSinceStartup;
                     Mat homo = GetHomographyMatrix(m_kp2, m_kp1);
-                    print("Homo took: " + (Time.realtimeSinceStartup - t3));
-                    if (!(bestHomographyMat == null 
-                        || (bestHomographyMat.Type() != MatType.CV_32F && bestHomographyMat.Type() != MatType.CV_64F)
-                        || bestHomographyMat.Width != 3 || bestHomographyMat.Height != 3))
+                    if (homo != null && homo.Width == 3 && homo.Height == 3)
                     {
                         bestHomographyMat = homo;
                         bestGoodMatches = goodMatches.Length;
                         bestCardData = cardData;
                     }
-                    
+                    print("For hist " + cardData.name + ": " + Cv2.CompareHist(cardData.hist, MakeHSHistrogram(replaned), HistCompMethods.Correl));
                     /* DEBUG
                     if (debugSceneImage.texture)
                         Destroy(debugSceneImage.texture);
@@ -1414,7 +1385,7 @@ public class CardParser : MonoBehaviour
             }
         }
 
-        // TODO : do others and match cardType, element, and ID to keypoint matching!!!
+
         print("The entire templating took " + (Time.realtimeSinceStartup - t) + " seconds");
         cardType = bestCardData.cardType;
         cardElement = bestCardData.cardElement;
@@ -1439,7 +1410,7 @@ public class CardParser : MonoBehaviour
 
             
             Scalar rMean = crop.Mean();
-            print("Response: " + (float)rMean.Val0 + ", " + (float)rMean.Val1 + ", " + (float)rMean.Val2);
+            //print("Response: " + (float)rMean.Val0 + ", " + (float)rMean.Val1 + ", " + (float)rMean.Val2);
             Color.RGBToHSV(new Color((float)rMean.Val2, (float)rMean.Val1, (float)rMean.Val0),
                 out float rH, out float rS, out float rV);
 
@@ -1449,7 +1420,7 @@ public class CardParser : MonoBehaviour
             foreach (CardElement element in cardElementDict.Keys)
             {
                 Scalar tMean = cardElementDict[element].typeScalar;
-                print("Template: " + (float)tMean.Val0 + ", " + (float)tMean.Val1 + ", " + (float)tMean.Val2);
+                //print("Template for " + element + ": " + (float)tMean.Val0 + ", " + (float)tMean.Val1 + ", " + (float)tMean.Val2);
                 Color.RGBToHSV(new Color((float)tMean.Val2, (float)tMean.Val1, (float)tMean.Val0),
                     out float tH, out float tS, out float tV);
 
@@ -1457,10 +1428,10 @@ public class CardParser : MonoBehaviour
                     ((tH - rH) * (tH - rH) +
                     (tS - rS) * (tS - rS)));
 
-                print("Response Dist: " + dist);
+                print("Response Dist for " + element + ": " + dist);
                 if (dist < bestDist)
                 {
-                    dist = bestDist;
+                    bestDist = dist;
                     bestElement = element;
                 }
             }
@@ -1527,8 +1498,6 @@ public class CardParser : MonoBehaviour
                     float dist1 = (float)kp1[m_n[1].QueryIdx].Pt.DistanceTo(kp2[m_n[1].TrainIdx].Pt);
                     if (dist0 < dist1 && dist0 < kpDist && !goodMatchesList.Contains(m_n[1]))
                         goodMatchesList.Add(m_n[0]);
-                    if (dist1 < dist0 && dist1 < kpDist && !goodMatchesList.Contains(m_n[0]))
-                        goodMatchesList.Add(m_n[1]);
                 }
 
             }
@@ -1681,11 +1650,13 @@ public class CardParser : MonoBehaviour
 
     public class TemplateCardData
     {
-        public TemplateCardData(KeyPoint[] k, Mat d, int id, string name, CardType type, CardElement element)
+        public TemplateCardData(Mat hist, KeyPoint[] k, Mat d, int id, string name, CardType type, CardElement element)
         {
+            this.hist = hist;
             keypoints = k;
             des = d;
             ID = id;
+            this.name = name;
             cardType = type;
             cardElement = element;
         }
@@ -1696,6 +1667,7 @@ public class CardParser : MonoBehaviour
             des.Release();
         }
 
+        public Mat hist;
         public KeyPoint[] keypoints;
         public Mat des;
         public int ID;

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55e5fcf729f303645b5896d6057926ee, type: 3}
-  m_Name: FireCard
+  m_Name: EarthCard
   m_EditorClassIdentifier: 
-  cardName: Orion's Fire
-  cardID: 0
-  cardElement: 2
+  cardName: Earth
+  cardID: 3
+  cardElement: 16
   cardType: 256
-  cardTexture: {fileID: 2800000, guid: ddc80c3a9fb2f164c8e395e90bbaf4b8, type: 3}
+  cardTexture: {fileID: 2800000, guid: 54e9596733a14fe48b308dec51d85434, type: 3}

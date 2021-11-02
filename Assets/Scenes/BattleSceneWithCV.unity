@@ -2644,7 +2644,12 @@ MonoBehaviour:
   borderAmount: 10
   defaultCardResizeAmount: 0.5
   cardTemplates:
+  - {fileID: 11400000, guid: 34536231089c9eb4cbbb26854ec6b6c4, type: 2}
+  - {fileID: 11400000, guid: f4c4aee228c7ddc488d9b8885b4ed2af, type: 2}
+  - {fileID: 11400000, guid: 963ce43ab03913f47801c9c314b51a2b, type: 2}
   - {fileID: 11400000, guid: 3809b0d816758f848817db642f568347, type: 2}
+  - {fileID: 11400000, guid: f4016e3721142c74994a9e16eda09ed2, type: 2}
+  - {fileID: 11400000, guid: d0007aa7754ff2c40ba414a1d81753a6, type: 2}
   stickerTemplates: []
   StableUpdateEvent:
     m_PersistentCalls:
@@ -2655,10 +2660,10 @@ MonoBehaviour:
   ToNewUpdateEvent:
     m_PersistentCalls:
       m_Calls: []
-  timeRequiredForNull: 0.4
-  timeRequiredForNew: 0.2
+  timeRequiredForNull: 1.6
+  timeRequiredForNew: -1
   loweRatio: 0.7
-  kpDist: 30
+  kpDist: 40
   boundBoxText: '0.024590,0.020528,0.211066,0.153959
 
     0.776639,0.846041,0.963115,0.979472

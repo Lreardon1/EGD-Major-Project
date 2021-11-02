@@ -47,7 +47,9 @@ public class CardParserManager : MonoBehaviour
 
         SetUpOrderedCards(Deck.instance.allCards);
 
-        cardParser.SetLookForInput(false);
+        cardParser.SetLookForInput(CombatManager.isInCVMode);
+
+        DisplayCardData(null, null);
     }
 
     private void Update()
@@ -98,7 +100,7 @@ public class CardParserManager : MonoBehaviour
     {
         if (goodSeeImage.texture)
             Destroy(goodSeeImage.texture);
-        if (goodImage == null) 
+        if (card != null) 
             goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(goodImage);
         if (card != null)
             cardText.text = card.GetComponent<Card>().cardName;
@@ -137,16 +139,15 @@ public class CardParserManager : MonoBehaviour
     }
 
     // TODO : this is a test class using my system cause I can't hit Tyler's yet...
-    OneOnCombatManager manager;
-    bool inAction;
+    //OneOnCombatManager manager;
+    //bool inAction;
     public void RequestCardAction(OneOnCombatManager oneOnCombatManager)
     {
-        manager = oneOnCombatManager;
-        inAction = true;
+       // manager = oneOnCombatManager;
+       // inAction = true;
     }
     // TODO 
     // Disable functionality based on STATIC bool flag in combatManager : TODO : wait
-    // display the card and card data
     // 
     // POSSIBLE BUG : CAN DRAG THE NEWLY CREATED CARDS BACK ONTO THE HAND THAT SHOULDN'T EXIST?? WE'LL SEE
     // 
