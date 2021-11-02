@@ -19,7 +19,7 @@ public class CardParser : MonoBehaviour
     public RawImage debugSceneImage;
     public RawImage[] stickerImages; 
     */
-    public CardParserManager cardParserManager; // TODO : this is bad practice but is still properly abstracted from everything else...
+    public CardParserManager cardParserManager;
     [Space(10)]
     public Texture2D staticTestImage;
     
@@ -46,6 +46,8 @@ public class CardParser : MonoBehaviour
     public float tagLineIntersectThresh = 4.0f;
     private int defaultCardWidth = 0;
     private int defaultCardHeight = 0;
+    private int defaultStickerWidth;
+    private int defaultStickerHeight;
     private int defaultCardPlusBorderWidth = 0;
     private int defaultCardPlusBorderHeight = 0;
 
@@ -58,6 +60,8 @@ public class CardParser : MonoBehaviour
     private Dictionary<int, List<TemplateCardData>> templateCardDict = new Dictionary<int, List<TemplateCardData>>();
     private Dictionary<CardType, CardTypeTemplateData> cardTypeDict = new Dictionary<CardType, CardTypeTemplateData>();
     private Dictionary<CardElement, CardElementTemplateData> cardElementDict = new Dictionary<CardElement, CardElementTemplateData>();
+    public ScriptableCardSticker[] stickerTemplates;
+    private Dictionary<string, StickerTemplateData> cardStickerDict = new Dictionary<string, StickerTemplateData>();
     private WebCamDevice? webCamDevice = null;
     private WebCamTexture webCamTexture = null;
     
@@ -166,6 +170,31 @@ public class CardParser : MonoBehaviour
                 cards.Add(cardKeypointData);
                 templateCardDict.TryGetValue(0, out cards);
                 cards.Add(cardKeypointData); // this is the unknown category: 0.
+            }
+        }
+
+        // TODO : Get sticker data
+        foreach (ScriptableCardSticker sticker in stickerTemplates)
+        {
+            Mat si = OpenCvSharp.Unity.TextureToMat(sticker.stickerTexture);
+            Mat hist = MakeHSHistrogram(si);
+
+            defaultStickerWidth = si.Width;
+            defaultStickerHeight = si.Height;
+
+            using (Mat bin = new Mat()) {
+                Cv2.CopyMakeBorder(si, bin, 10, 10, 10, 10, BorderTypes.Constant, Scalar.Black);
+                Cv2.CvtColor(si, bin, ColorConversionCodes.BGR2GRAY);
+                Cv2.Threshold(bin, bin, 200, 255, ThresholdTypes.Otsu);
+                // TODO : we got the outward contour, we can also navigate the hierarchy index to get any inner contours.
+                Cv2.FindContours(bin, out Point[][] contours, out HierarchyIndex[] h, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+                if (contours.Length == 0)
+                {
+                    Debug.LogError("ERROR: Failed to find exterior contour!!!");
+                    continue;
+                }
+                StickerTemplateData stickerData = new StickerTemplateData(si, hist, contours[0]);
+                cardStickerDict.Add(sticker.stickerName, stickerData);
             }
         }
     }
@@ -311,10 +340,113 @@ public class CardParser : MonoBehaviour
         return true;
     }
 
+    private string GetBestSticker(Mat sticker, string[] possibleStickers, out float bestVal)
+    {
+        // TODO : handle no sticker in special
+        // TODO : mask the stcikers by contour so as to not poison the histograms...
+
+        Mat hist = MakeHSHistrogram(sticker);
+        string bestSticker = "NONE";
+        bestVal = 0.6f;
+        int i = -1;
+        foreach (string stickerStr in possibleStickers)
+        {
+            ++i;
+            if (stickerStr == "NONE") continue;
+
+            float comp = (float)Cv2.CompareHist(hist, cardStickerDict[stickerStr].hsHist, HistCompMethods.Correl);
+            if (bestVal < comp)
+            {
+                bestVal = comp;
+                bestSticker = stickerStr;
+            }
+        }
+        return bestSticker;
+
+        /*
+        using (Mat bin = new Mat())
+        {
+            Cv2.CvtColor(sticker, bin, ColorConversionCodes.BGR2GRAY);
+            Cv2.Threshold(bin, bin, 200, 255, ThresholdTypes.Otsu);
+            // TODO : we got the outward contour, we can also navigate the hierarchy index to get any inner contours.
+            Cv2.FindContours(bin, out Point[][] contours, out HierarchyIndex[] h, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+            if (contours.Length == 0)
+            {
+                Debug.LogError("ERROR: Failed to find exterior contour!!!");
+                continue;
+            }
+            StickerTemplateData stickerData = new StickerTemplateData(si, hist, contours[0]);
+            cardStickerDict.Add(sticker.modEnum, stickerData);
+        }*/
+    }
+
+    private void PopulateStickers(List<GameObject> possibleCards, List<string> possibleStickers, int i)
+    {
+        possibleStickers.Clear();
+
+        foreach (GameObject card in possibleCards)
+        {
+            if (card.GetComponent<CardEditHandler>().activeModifiers.TryGetValue(card.GetComponent<Card>().modifiers[i], out Modifier mod)) {
+                possibleStickers.Add(mod.spriteParsing);
+            } else
+            {
+                possibleStickers.Add("NONE");
+            }
+        }
+    }
+
+    private GameObject GetMostLikelyCard(List<GameObject> possibleCards, params string[] stickerStrs)
+    {
+        int best = 0;
+        GameObject bestCard = null;
+        foreach (GameObject card in possibleCards)
+        {
+            int matchCount = 0;
+            for (int i = 0; i < 3; ++i)
+            {
+                if (card.GetComponent<CardEditHandler>().activeModifiers.TryGetValue(card.GetComponent<Card>().modifiers[i], out Modifier mod))
+                {
+                    best += (mod.spriteParsing == stickerStrs[i]) ? 1 : 0;
+                }
+                else
+                {
+                    best += (stickerStrs[i] == "NONE") ? 1 : 0; // TODO : ask Tyler for this, cause he might not have a none
+                }
+            }
+            if (best < matchCount)
+            {
+                bestCard = card;
+                best = matchCount;
+            }
+        }
+
+        Debug.Log("Got the best for " + bestCard.name + " with match count: " + best);
+        return bestCard;
+    }
+
+
     private GameObject AttemptToGetMods(CustomCard card, Mat cardImage, List<GameObject> possibleCards)
     {
-        // TODO
+        // TODO : used for debugging
         return possibleCards[0];
+
+        Mat sticker1 = stickerBoundingBox1.CropByBox(cardImage, new Size(defaultStickerWidth, defaultStickerHeight));
+        Mat sticker2 = stickerBoundingBox2.CropByBox(cardImage, new Size(defaultStickerWidth, defaultStickerHeight));
+        Mat sticker3 = stickerBoundingBox3.CropByBox(cardImage, new Size(defaultStickerWidth, defaultStickerHeight));
+
+        List<string> possibleStickers1 = new List<string>();
+        List<string> possibleStickers2 = new List<string>();
+        List<string> possibleStickers3 = new List<string>();
+
+        PopulateStickers(possibleCards, possibleStickers1, 0);
+        PopulateStickers(possibleCards, possibleStickers2, 1);
+        PopulateStickers(possibleCards, possibleStickers3, 2);
+
+        string s1 = GetBestSticker(sticker1, possibleStickers1.ToArray(), out float confidence1);
+        string s2 = GetBestSticker(sticker2, possibleStickers2.ToArray(), out float confidence2);
+        string s3 = GetBestSticker(sticker3, possibleStickers3.ToArray(), out float confidence3);
+
+        return GetMostLikelyCard(possibleCards, s1, s2, s3);
     }
 
     [HideInInspector]
@@ -1565,6 +1697,20 @@ public class CardParser : MonoBehaviour
         public Scalar typeScalar;
     }
 
+    public class StickerTemplateData
+    {
+        public StickerTemplateData(Mat si, Mat hsHist, Point[] contours)
+        {
+            stickerMat = si;
+            this.hsHist = hsHist;
+            shape = contours;
+        }
+
+        public Mat stickerMat;
+        public Mat hsHist;
+        public Point[] shape;
+    }
+
     /**
      * Normalized bounding box (0 to 1 for width and height), users must convert to pixel space if needed.
      * Bounding box manages all corners so can be rotated.
@@ -1646,6 +1792,23 @@ public class CardParser : MonoBehaviour
             return Cv2.GetPerspectiveTransform(pixelCorners, newCorners);
         }
 
+        public Mat CropByBox(Mat im, Size size)
+        {
+            float offsetX = (im.Width * ul.X) + 2;
+            float offsetY = (im.Height * ul.Y) + 2;
+            int sizeX = Mathf.RoundToInt(im.Width * (lr.X - ul.X)) - 4;
+            int sizeY = Mathf.RoundToInt(im.Height * (lr.Y - ul.Y)) - 4;
+
+            using (Mat trans_mat = new Mat(2, 3, MatType.CV_32F))
+            {
+                Mat newIm = new Mat();
+                trans_mat.SetArray(0, 0, 1, 0, -offsetX, 0, 1, -offsetY);
+                Cv2.WarpAffine(im, newIm, trans_mat, new Size(sizeX, sizeY));
+                newIm = newIm.Resize(size);
+                return newIm;
+            }
+        }
+
         public Mat CropByBox(Mat im)
         {
             float offsetX = (im.Width * ul.X) + 2;
@@ -1658,6 +1821,8 @@ public class CardParser : MonoBehaviour
                 Mat newIm = new Mat();
                 trans_mat.SetArray(0, 0, 1, 0, -offsetX, 0, 1, -offsetY);
                 Cv2.WarpAffine(im, newIm, trans_mat, new Size(sizeX, sizeY));
+
+
                 return newIm;
             }
         }

@@ -778,6 +778,7 @@ GameObject:
   - component: {fileID: 1379647444}
   - component: {fileID: 1379647443}
   - component: {fileID: 1379647447}
+  - component: {fileID: 1379647448}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -885,14 +886,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20207fcf6ab55b54faa1a662df242386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainSeeImage: {fileID: 1975671178}
-  replaneImage: {fileID: 314472635}
-  debugCardImage: {fileID: 2076763954}
-  debugSceneImage: {fileID: 1289399208}
-  stickerImages:
-  - {fileID: 1351414702}
-  - {fileID: 881097418}
-  - {fileID: 1847200082}
+  cardParserManager: {fileID: 1379647448}
   staticTestImage: {fileID: 0}
   bottomRightBoundingBox:
     ul:
@@ -979,6 +973,7 @@ MonoBehaviour:
   defaultCardResizeAmount: 0.5
   cardTemplates:
   - {fileID: 11400000, guid: 3809b0d816758f848817db642f568347, type: 2}
+  stickerTemplates: []
   StableUpdateEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -1003,6 +998,22 @@ MonoBehaviour:
     0.770492,0.177419,0.905738,0.274194
 
     0.770492,0.306452,0.905738,0.404692'
+--- !u!114 &1379647448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379647442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f08c4b19fd1292b48ae0726d93b6fb73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentCard: {fileID: 0}
+  cardParser: {fileID: 0}
+  cm: {fileID: 0}
+  goodSeeImage: {fileID: 0}
 --- !u!1 &1847200080
 GameObject:
   m_ObjectHideFlags: 0

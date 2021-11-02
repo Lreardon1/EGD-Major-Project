@@ -11,7 +11,9 @@ public class CardParserManager : MonoBehaviour
     public CardParser cardParser;
     public CombatManager cm;
     public RawImage goodSeeImage;
-    public GameObject currentTarget = null;
+    private GameObject currentTarget = null;
+    private bool validTarget = true;
+
     public Dictionary<string, List<GameObject>> orderedCards = new Dictionary<string, List<GameObject>>();
 
     private void SetUpOrderedCards(List<GameObject> cards)
@@ -47,7 +49,30 @@ public class CardParserManager : MonoBehaviour
         {
             currentTarget = hitInfo.collider.gameObject;
         }
-        if (cm)
+        if (cm.currentPhase == CombatManager.CombatPhase.ActionPhase)
+        {
+            validTarget = currentTarget == cm.currentCB;
+            if (validTarget)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    // TODO : manage card hand and deck here, make the apply card return a boolean of valid, or even a reason?
+                    cm.ApplyCard(currentCard, currentTarget);
+                }
+            }
+        } 
+        if (cm.currentPhase == CombatManager.CombatPhase.PlayPhase)
+        {
+            validTarget = currentTarget != null;
+            if (validTarget)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    // TODO : manage card hand and deck here, make the apply card return a boolean of valid, or even a reason?
+                    cm.ApplyCard(currentCard, currentTarget);
+                }
+            }
+        }
 
 
         UpdateUI();
@@ -93,7 +118,6 @@ public class CardParserManager : MonoBehaviour
             return new List<GameObject>();
     }
     // TODO 
-    // ask the combat manager to update me on state : TODO : have to wait on half of this
     // Disable functionality based on STATIC bool flag in combatManager : TODO : wait
     // display the card and card data
     // 
