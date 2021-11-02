@@ -494,6 +494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d799edddbd7c1e6499dcf79ecdd9b45a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardName: 
   manaCost: 1
   type: 0
   element: 0
@@ -515,8 +516,17 @@ MonoBehaviour:
   - {fileID: 8161400679952285361, guid: 476fdcaa57f51f64d8a1525e66628c8d, type: 3}
   - {fileID: 5779682564785029349, guid: 1020b1f93331652468d9ea1f0040bfaf, type: 3}
   - {fileID: 4887907434014625763, guid: b4c193151010ee846b919147117b75f9, type: 3}
+  - {fileID: 8892924697231459370, guid: df83bd919d7c239498e06940530509b6, type: 3}
+  - {fileID: 8742784216186830812, guid: bfc37364a5db6704294b678f4663ecec, type: 3}
   textComp: {fileID: 4673489267725151235, guid: d159457675b20924c99ddde263b01214, type: 3}
   spriteComp: {fileID: 4206503165245869382, guid: 90620f2505832454fb58158e5f911614, type: 3}
+  baseNum: 0
+  numMod: 0
+  buffedStats: 
+  shieldWithThorns: 0
+  secondaryElem: 0
+  targetting: 0
+  givePrio: 0
 --- !u!114 &3828099858429366394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,6 +542,7 @@ MonoBehaviour:
   cardScript: {fileID: 3711955351833297983}
   deckCustomizer: {fileID: 0}
   isCustomizable: 0
+  displayOnClick: 1
   inCombat: 0
   spriteEditor: {fileID: 2774128207351011884, guid: 36b3bec1b6f488442acc26f3dd2a4c00, type: 3}
 --- !u!114 &-3361253106174749756

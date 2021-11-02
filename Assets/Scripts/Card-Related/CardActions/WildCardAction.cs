@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WildCardActiion : CardActionTemplate
+public class WildCardAction : CardActionTemplate
 {
     public override void OnPlay(Card c, GameObject combatant, List<GameObject> otherCombatants)
     {

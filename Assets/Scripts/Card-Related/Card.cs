@@ -34,6 +34,7 @@ public class Card : MonoBehaviour
     public GameObject typeIcon;
 
     [Header("OnPlay Script")]
+    [SerializeField]
     public CardActionTemplate onPlayScript;
 
     [Header("Quick Data References")]
@@ -53,7 +54,7 @@ public class Card : MonoBehaviour
     public GameObject spriteComp;
 
     [Header("Combat Affected Stats")]
-    public int baseNum = 6;
+    public int baseNum = 0;
     public int numMod = 0;
     public List<Buff.Stat> buffedStats = new List<Buff.Stat>();
     public bool shieldWithThorns = false;
@@ -108,6 +109,14 @@ public class Card : MonoBehaviour
             case Element.Air:
                 elemIcon = Instantiate(draggableElements[3], elementIcon.transform);
                 break;
+
+            case Element.Light:
+                elemIcon = Instantiate(draggableElements[4], elementIcon.transform);
+                break;
+
+            case Element.Dark:
+                elemIcon = Instantiate(draggableElements[5], elementIcon.transform);
+                break;
         }
         if (elemIcon != null)
         {
@@ -157,6 +166,14 @@ public class Card : MonoBehaviour
 
             case Element.Air:
                 elemIcon = Instantiate(draggableElements[3], elementIcon.transform);
+                break;
+
+            case Element.Light:
+                elemIcon = Instantiate(draggableElements[4], elementIcon.transform);
+                break;
+
+            case Element.Dark:
+                elemIcon = Instantiate(draggableElements[5], elementIcon.transform);
                 break;
         }
         if (elemIcon != null)
