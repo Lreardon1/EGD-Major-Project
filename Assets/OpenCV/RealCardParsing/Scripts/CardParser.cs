@@ -336,7 +336,7 @@ public class CardParser : MonoBehaviour
             List<GameObject> possibleCards = cardParserManager.GetCardsOfName(card.cardName);
             print("COUNT: " + possibleCards.Count);
             GameObject bestCard = AttemptToGetMods(card, lastGoodReplane, possibleCards);
-            UpdateCardDetected(bestCard);
+            UpdateCardDetected(bestCard, card.cardID);
         }
         return true;
     }
@@ -451,23 +451,23 @@ public class CardParser : MonoBehaviour
     }
 
     [HideInInspector]
-    public UnityEvent<GameObject> StableUpdateEvent = new UnityEvent<GameObject>();
+    public UnityEvent<GameObject, int> StableUpdateEvent = new UnityEvent<GameObject, int>();
     [HideInInspector]
-    public UnityEvent<GameObject> ToNullUpdateEvent = new UnityEvent<GameObject>();
+    public UnityEvent<GameObject, int> ToNullUpdateEvent = new UnityEvent<GameObject, int>();
     [HideInInspector]
-    public UnityEvent<GameObject> ToNewUpdateEvent = new UnityEvent<GameObject>();
+    public UnityEvent<GameObject, int> ToNewUpdateEvent = new UnityEvent<GameObject, int>();
 
     private float timeSinceLastUpdate = -1.0f;
     public float timeRequiredForNull = 0.4f;
     public float timeRequiredForNew = 0.2f;
 
-    private void UpdateCardDetected(GameObject card)
+    private void UpdateCardDetected(GameObject card, int id)
     {
         // if card is the same as last, don't update
         if (card == previousCard)
         {
             timeSinceLastUpdate = Time.time;
-            StableUpdateEvent.Invoke(card);
+            StableUpdateEvent.Invoke(card, id);
         }
 
         // update to null
@@ -475,7 +475,7 @@ public class CardParser : MonoBehaviour
         {
             previousCard = card;
             timeSinceLastUpdate = Time.time;
-            ToNullUpdateEvent.Invoke(card);
+            ToNullUpdateEvent.Invoke(card, id);
         }
 
         // update to different card
@@ -483,7 +483,7 @@ public class CardParser : MonoBehaviour
         {
             previousCard = card;
             timeSinceLastUpdate = Time.time;
-            ToNewUpdateEvent.Invoke(card);
+            ToNewUpdateEvent.Invoke(card, id);
         }
     }
 

@@ -1,4 +1,5 @@
 using OpenCvSharp;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class CardParserManager : MonoBehaviour
     public CombatManager cm;
     public RawImage goodSeeImage;
     private GameObject currentTarget = null;
+    private int currentID = -1;
     private bool validTarget = true;
 
     public Dictionary<string, List<GameObject>> orderedCards = new Dictionary<string, List<GameObject>>();
@@ -43,6 +45,7 @@ public class CardParserManager : MonoBehaviour
 
     private void Update()
     {
+        /*
         currentTarget = null;
         Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(r, out RaycastHit hitInfo, 1000.0f, LayerMask.GetMask("Combatant")))
@@ -73,6 +76,7 @@ public class CardParserManager : MonoBehaviour
                 }
             }
         }
+        */
 
 
         UpdateUI();
@@ -88,24 +92,29 @@ public class CardParserManager : MonoBehaviour
         if (goodSeeImage.texture)
             Destroy(goodSeeImage.texture);
         goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(goodImage);
+
+
         // TODO : text data on card?
     }
 
-    public void HandleStableUpdate(GameObject card)
+    public void HandleStableUpdate(GameObject card, int id)
     {
         currentCard = card;
+        currentID = id;
         DisplayCardData(card, cardParser.GetLastGoodReplane());
     }
 
-    public void HandleNullUpdate(GameObject card)
+    public void HandleNullUpdate(GameObject card, int id)
     {
         currentCard = card;
+        currentID = id;
         DisplayCardData(card, cardParser.GetLastGoodReplane());
     }
 
-    public void HandleNewUpdate(GameObject card)
+    public void HandleNewUpdate(GameObject card, int id)
     {
         currentCard = card;
+        currentID = id;
         DisplayCardData(card, cardParser.GetLastGoodReplane());
     }
 
@@ -116,6 +125,15 @@ public class CardParserManager : MonoBehaviour
             return lis;
         else
             return new List<GameObject>();
+    }
+
+    // TODO : this is a test class using my system cause I can't hit Tyler's yet...
+    OneOnCombatManager manager;
+    bool inAction;
+    public void RequestCardAction(OneOnCombatManager oneOnCombatManager)
+    {
+        manager = oneOnCombatManager;
+        inAction = true;
     }
     // TODO 
     // Disable functionality based on STATIC bool flag in combatManager : TODO : wait
