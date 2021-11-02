@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 [RequireComponent(typeof(CardParser))]
 public class CardParserManager : MonoBehaviour
@@ -11,7 +12,12 @@ public class CardParserManager : MonoBehaviour
     public GameObject currentCard;
     public CardParser cardParser;
     public CombatManager cm;
+
+    [Header("UI")]
     public RawImage goodSeeImage;
+    public TMP_Text cardText;
+    public TMP_Text playText;
+
     private GameObject currentTarget = null;
     private int currentID = -1;
     private bool validTarget = true;
@@ -23,10 +29,11 @@ public class CardParserManager : MonoBehaviour
         foreach(GameObject c in cards)
         {
             Card card = c.GetComponent<Card>();
-            if (orderedCards.ContainsKey(card.cardName))
+            if (!orderedCards.ContainsKey(card.cardName))
                 orderedCards.Add(card.cardName, new List<GameObject>());
 
             orderedCards[card.cardName].Add(c);
+            print("Adding " + card.cardName + " which is " + c);
         }
     }
 
@@ -45,7 +52,7 @@ public class CardParserManager : MonoBehaviour
 
     private void Update()
     {
-        /*
+        
         currentTarget = null;
         Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(r, out RaycastHit hitInfo, 1000.0f, LayerMask.GetMask("Combatant")))
@@ -76,7 +83,7 @@ public class CardParserManager : MonoBehaviour
                 }
             }
         }
-        */
+        
 
 
         UpdateUI();
@@ -84,17 +91,19 @@ public class CardParserManager : MonoBehaviour
 
     private void UpdateUI()
     {
-
+        playText.text = "Current Target: " + ((currentTarget == null) ? "None" : currentTarget.name);
     }
 
     public void DisplayCardData(GameObject card, Mat goodImage)
     {
         if (goodSeeImage.texture)
             Destroy(goodSeeImage.texture);
-        goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(goodImage);
-
-
-        // TODO : text data on card?
+        if (goodImage == null) 
+            goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(goodImage);
+        if (card != null)
+            cardText.text = card.GetComponent<Card>().cardName;
+        else
+            cardText.text = "No Card Found";
     }
 
     public void HandleStableUpdate(GameObject card, int id)
@@ -108,7 +117,7 @@ public class CardParserManager : MonoBehaviour
     {
         currentCard = card;
         currentID = id;
-        DisplayCardData(card, cardParser.GetLastGoodReplane());
+        DisplayCardData(card, null);
     }
 
     public void HandleNewUpdate(GameObject card, int id)
