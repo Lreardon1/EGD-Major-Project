@@ -20,7 +20,17 @@ public static class ModifierLookup
 
         spriteConversionTable = new Dictionary<Sprite, string>()
         {
-            { Resources.Load<Sprite>(path + "amogus"), "amogus" }
+            { Resources.Load<Sprite>(path + "amogus"), "fire" },
+            { Resources.Load<Sprite>(path + "amogus"), "water" },
+            { Resources.Load<Sprite>(path + "amogus"), "earth" },
+            { Resources.Load<Sprite>(path + "amogus"), "air" },
+            { Resources.Load<Sprite>(path + "amogus"), "light" },
+            { Resources.Load<Sprite>(path + "amogus"), "dark" },
+            { Resources.Load<Sprite>(path + "amogus"), "plus2" },
+            { Resources.Load<Sprite>(path + "amogus"), "mana2" },
+            { Resources.Load<Sprite>(path + "amogus"), "prio" },
+            { Resources.Load<Sprite>(path + "amogus"), "adj" },
+            { Resources.Load<Sprite>(path + "amogus"), "all" }
         };
     }
 }

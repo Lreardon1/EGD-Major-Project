@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Jay note : same note as on CombatHandController.
+//   this class (and the other) should have been the one to control ALL movement of cards, 
+//   putting it in CombatManager is not only awful code practice, it is explicitly what I requested you NOT do.
 public class DragDrop : MonoBehaviour
 {
     public bool isDraggable = true;

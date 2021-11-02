@@ -16,7 +16,7 @@ TextureImporter:
     second: godFather_idle_3
   - first:
       213: -7212106910715570385
-    second: godFather_idle_4
+    second: godFather_idle_1
   - first:
       213: 1580108473454596047
     second: godFather_idle_5
@@ -153,7 +153,7 @@ TextureImporter:
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -169,75 +169,12 @@ TextureImporter:
       name: godFather_idle_1
       rect:
         serializedVersion: 2
-        x: 40
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 73db9334c8e340ab0800000000000000
-      internalID: -5042836910603911881
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: godFather_idle_2
-      rect:
-        serializedVersion: 2
-        x: 80
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 046f5418ee656de80800000000000000
-      internalID: -8154234492936653248
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: godFather_idle_3
-      rect:
-        serializedVersion: 2
         x: 120
         y: 0
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bc2a76450cb5d96e0800000000000000
-      internalID: -1829204992034626869
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: godFather_idle_4
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -245,27 +182,6 @@ TextureImporter:
       bones: []
       spriteID: f2798a0e9f279eb90800000000000000
       internalID: -7212106910715570385
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: godFather_idle_5
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fcf88dae84cade510800000000000000
-      internalID: 1580108473454596047
       vertices: []
       indices: 
       edges: []

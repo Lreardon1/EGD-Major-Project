@@ -6,6 +6,11 @@ public class CardActionTemplate : MonoBehaviour, ICardAction
 {
     public virtual void OnPlay(Card c, GameObject combatant, List<GameObject> otherCombatants)
     {
-        print("Template ON PLAY");
+        
+    }
+
+    public virtual void ApplyCard(Card c, GameObject combatant)
+    {
+
     }
 }

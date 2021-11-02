@@ -20,6 +20,12 @@ TextureImporter:
   - first:
       213: -3113743391350861237
     second: godFather_walk_5
+  - first:
+      213: -6058644007879021757
+    second: godFather_walk_6
+  - first:
+      213: -102233157482298795
+    second: godFather_walk_7
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -270,10 +276,52 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: godFather_walk_6
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34b62d9ff5f5beba0800000000000000
+      internalID: -6058644007879021757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: godFather_walk_7
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55240042c7bc49ef0800000000000000
+      internalID: -102233157482298795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 660b8154cd5420e42923ea5a474733ff
+    spriteID: 93ea87bc642746a4bad0c0fa0e475d60
     internalID: 0
     vertices: []
     indices: 

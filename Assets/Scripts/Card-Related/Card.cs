@@ -11,6 +11,8 @@ public class Card : MonoBehaviour
 
     [Header("Initial Settings")]
     [SerializeField]
+    public string cardName;
+    [SerializeField]
     public int manaCost = 0;
     [SerializeField]
     public CardType type;
@@ -49,6 +51,15 @@ public class Card : MonoBehaviour
     public GameObject textComp;
     [SerializeField]
     public GameObject spriteComp;
+
+    [Header("Combat Affected Stats")]
+    public int baseNum = 6;
+    public int numMod = 0;
+    public List<Buff.Stat> buffedStats = new List<Buff.Stat>();
+    public bool shieldWithThorns = false;
+    public Element secondaryElem = Element.None;
+    public AoE targetting = AoE.Single;
+    public bool givePrio = false;
 
     // Start is called before the first frame update
     public void InitializeCard()
