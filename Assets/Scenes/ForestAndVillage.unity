@@ -6696,7 +6696,7 @@ PrefabInstance:
     - target: {fileID: 2367816, guid: ec3399d2c026f3d42be5a32a04d6a75c, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: d99fb2a16888ab54a9160cf879c5589f, type: 2}
+      objectReference: {fileID: 2100000, guid: 31b16fd87cf33014c946e9d512d1e03c, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec3399d2c026f3d42be5a32a04d6a75c, type: 3}
 --- !u!4 &349126885 stripped
@@ -11797,8 +11797,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1426100619405721258, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
+      propertyPath: m_Dithering
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426100619405721258, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
+      propertyPath: m_CameraType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426100619405721258, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: m_RenderPostProcessing
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426100619405721258, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
+      propertyPath: m_RequiresDepthTextureOption
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1426100619405721260, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: m_HDR
@@ -11806,6 +11818,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1426100619405721260, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: m_AllowMSAA
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426100619405721260, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
+      propertyPath: m_FOVAxisMode
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1426100620896122061, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
@@ -11887,7 +11903,7 @@ PrefabInstance:
     - target: {fileID: 1426100620896122062, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 9686d8c7462aea841b82a0e673c9efba, type: 2}
     - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: movementspeed
       value: 10
@@ -21060,7 +21076,7 @@ PrefabInstance:
     - target: {fileID: 674488719510518924, guid: 3029b409b095b274c8738876c675414a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 9686d8c7462aea841b82a0e673c9efba, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3029b409b095b274c8738876c675414a, type: 3}
 --- !u!1001 &1127485380
