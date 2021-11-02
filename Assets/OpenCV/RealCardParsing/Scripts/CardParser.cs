@@ -191,7 +191,7 @@ public class CardParser : MonoBehaviour
                 if (contours.Length == 0)
                 {
                     Debug.LogError("ERROR: Failed to find exterior contour!!!");
-                    continue;
+                    throw new Exception("STICKER FAILURE FOR " + sticker.stickerName);
                 }
                 StickerTemplateData stickerData = new StickerTemplateData(si, hist, contours[0]);
                 cardStickerDict.Add(sticker.stickerName, stickerData);
@@ -608,6 +608,34 @@ public class CardParser : MonoBehaviour
 
         Mat hist = new Mat();
         Cv2.CalcHist(new Mat[] { hsvIM }, channels, null, hist, 2, histSize, ranges);
+        return hist;
+    }
+
+    /**
+     * Make HSV histogram using H and S values, 
+     * this is much more lighting independent!!!
+     */
+    public Mat MakeHSHistrogram(Mat im, Mat mask)
+    {
+        Mat hsvIM = new Mat();
+
+        Cv2.CvtColor(im, hsvIM, ColorConversionCodes.BGR2HSV);
+        // Quantize the hue to 30 levels
+        // and the saturation to 32 levels
+        int hbins = 30, sbins = 32;
+        int[] histSize = { hbins, sbins };
+        // hue varies from 0 to 179, see cvtColor
+        float[] hranges = { 0, 180 };
+        // saturation varies from 0 (black-gray-white) to
+        // 255 (pure spectrum color)
+        float[] sranges = { 0, 256 };
+        float[][] ranges = { hranges, sranges };
+
+        // we compute the histogram from the 0-th and 1-st channels
+        int[] channels = { 0, 1 };
+
+        Mat hist = new Mat();
+        Cv2.CalcHist(new Mat[] { hsvIM }, channels, mask, hist, 2, histSize, ranges);
         return hist;
     }
 
