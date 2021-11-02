@@ -36,6 +36,10 @@ public class CardParserManager : MonoBehaviour
 
             orderedCards[card.cardName].Add(c);
             print("Adding " + card.cardName + " which is " + c);
+
+            // TODO : current used to add all element cards to the hand, WILL IMMEDIATELY BREAK UPON NEW NAMES
+            if (card.cardName != "")
+                handCards.Add(c);
         }
     }
 
@@ -56,10 +60,10 @@ public class CardParserManager : MonoBehaviour
 
     private void Update()
     {
-        // TODO : starting phase: ask to 
+        // TODO : starting phase: ask to draw cards and show them, can't be done right now...
+
         currentTarget = null;
         validTarget = false;
-        Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 100.0f, LayerMask.GetMask("Combatant"));
         if (hitInfo.collider != null)
         {
@@ -73,8 +77,16 @@ public class CardParserManager : MonoBehaviour
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    // TODO : manage card hand and deck here, make the apply card return a boolean of valid, or even a reason?
-                    cm.ApplyCard(currentCard, currentTarget);
+                    if (handCards.Contains(currentCard) || currentCard == null)
+                    {
+                        // TODO : manage card hand and deck here, make the apply card return a boolean of valid, or even a reason?
+                        cm.ApplyCard(currentCard, currentTarget);
+                        handCards.Remove(currentCard);
+                    }
+                    else
+                    {
+                        Debug.LogError("CV: Card played is not in HAND");
+                    }
                 }
             }
             UpdateUIPlay();
@@ -86,14 +98,33 @@ public class CardParserManager : MonoBehaviour
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    // TODO : manage card hand and deck here, make the apply card return a boolean of valid, or even a reason?
-                    cm.ApplyCard(currentCard, currentTarget);
+                    if (handCards.Contains(currentCard) || currentCard == null)
+                    {
+                        // TODO : manage card hand and deck here, make the apply card return a boolean of valid, or even a reason?
+                        cm.ApplyCard(currentCard, currentTarget);
+                        handCards.Remove(currentCard);
+                    } else
+                    {
+                        Debug.LogError("CV: Card played is not in HAND");
+                    }
+
                 }
             }
             UpdateUIPlay();
         }
         else if (cm.currentPhase == CombatManager.CombatPhase.DrawPhase)
         {
+            if (Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                if (Deck.instance.deck.Contains(currentCard))
+                {
+                    handCards.Add(currentCard);
+                    Deck.instance.deck.Remove(currentCard);
+                } else
+                {
+                    Debug.LogError("Shown card not in DECK");
+                }
+            }
             //Deck.instance.deck.Contains();
 
             UpdateUIDraw();

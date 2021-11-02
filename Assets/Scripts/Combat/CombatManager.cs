@@ -6,6 +6,10 @@ using UnityEngine.UI;
 // Jay NOTE : this class should not control the deck or the hand AT ALL, not movement nor state.
 //  This abstraction would have made my life so much easier.
 //
+
+// TODO : I would like to use UnityEvents, to subscribe to phase changes
+    // https://docs.unity3d.com/ScriptReference/Events.UnityEvent.html
+    // and maybe even requests from the combat manager to active control scheme
 public class CombatManager : MonoBehaviour
 {
     public static bool IsInCVMode = false;
@@ -496,6 +500,7 @@ public class CombatManager : MonoBehaviour
                 return false;
             }
         }
+        print("APPLIED " + card.name + " TO " + combatant);
         cb.appliedCard = card;
         currentMana -= cardScript.manaCost;
         manaText.text = "Mana: " + currentMana + "/" + maxMana;
