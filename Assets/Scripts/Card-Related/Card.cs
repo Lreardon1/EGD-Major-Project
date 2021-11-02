@@ -73,7 +73,7 @@ public class Card : MonoBehaviour
             Modifier template = ModifierLookup.modifierLookupTable[availableModifiers[i]];
             modifiers[i].GetComponent<Image>().sprite = template.icon;
             GameObject spriteMod = Instantiate(spriteComp, modifiers[i].transform.GetChild(0).transform);
-            if (spriteModifierVals[spriteModC] != null)
+            if (spriteModifierVals.Count < spriteModC && spriteModifierVals[spriteModC] != null)
             {
                 spriteMod.GetComponent<Image>().sprite = spriteModifierVals[spriteModC];
             }
@@ -89,6 +89,8 @@ public class Card : MonoBehaviour
         {
             modifiers[i].SetActive(false);
         }
+
+        print("mods");
 
         //updating element icon to match
         GameObject elemIcon = null;
@@ -125,6 +127,7 @@ public class Card : MonoBehaviour
 
         //setting mana text to the right cost
         manaText.text = manaCost.ToString();
+        print(gameObject.name);
     }
 
     public void Play(GameObject combatant, List<GameObject> otherCombatants)

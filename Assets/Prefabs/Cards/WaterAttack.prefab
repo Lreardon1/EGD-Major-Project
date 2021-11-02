@@ -45,7 +45,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: spriteModifierVals.Array.size
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: availableModifiers.Array.data[0]
