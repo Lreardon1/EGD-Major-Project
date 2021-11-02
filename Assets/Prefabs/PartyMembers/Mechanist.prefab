@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextAction: 0
   statusCondition: 0
+  statusScript: {fileID: 6038079559533083924}
   nextActionPrimaryElem: 0
   nextActionSecondaryElem: 0
   combatantName: Mechanist
@@ -21,6 +22,7 @@ MonoBehaviour:
   currentHitPoints: 20
   attack: 6
   speed: 13
+  attachedBuffs: []
   attackMultiplier: 1
   defenseMultiplier: 1
   speedMultiplier: 1
@@ -31,12 +33,15 @@ MonoBehaviour:
   shieldReturnDmg: 0
   untargettable: 0
   canCounterAttack: 0
+  hasPriority: 0
   text: {fileID: 5022943810321618168}
   appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   isSlain: 0
   isEnemy: 0
+  previousAction: 0
+  mechanistHealAmount: 5
 --- !u!1001 &7578279150225114531
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44,6 +49,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4242643608117639351, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+      propertyPath: cb
+      value: 
+      objectReference: {fileID: 3609361941438951918}
     - target: {fileID: 4478707169576409300, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: speed
       value: 13
@@ -139,6 +148,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4478707169576409306, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
   m_PrefabInstance: {fileID: 7578279150225114531}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6038079559533083924 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4242643608117639351, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+  m_PrefabInstance: {fileID: 7578279150225114531}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6272639951522897273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b82d872ddf111f0419f5e9993b179fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5022943810321618168 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3215113236145590619, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}

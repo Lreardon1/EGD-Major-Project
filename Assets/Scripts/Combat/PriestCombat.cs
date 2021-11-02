@@ -4,29 +4,15 @@ using UnityEngine;
 
 public class PriestCombat : CombatantBasis
 {
-    //public override void Attack()
-    //{
-    //    // Apply damage to target's enemy script
-    //    CombatantBasis cb = target.GetComponent<CombatantBasis>();
-
-    //    int damageTotal = attack + 0; // Get modifier from card here
-
-    //    cb.TakeDamage(damageTotal, damageType);
-    //    Debug.Log(combatantName + " Attack");
-    //}
-
-    //public override void Block()
-    //{
-    //    temporaryHitPoints += 0; // Get temporary hit points from card here
-
-    //    // Increase defense multipler to 2X
-    //    defenseMultiplier = 2f;
-    //    Debug.Log(combatantName + " Block");
-    //}
+    public int specialHealAmount = 10;
 
     public override void Special()
     {
-        // Do special random effect
-        Debug.Log(combatantName + " Special");
+        CombatManager cm = FindObjectOfType<CombatManager>();
+        foreach(GameObject activeMember in cm.activePartyMembers)
+        {
+            activeMember.GetComponent<CombatantBasis>().Heal(specialHealAmount);
+        }
+        Debug.Log(combatantName + " Special Heal");
     }
 }

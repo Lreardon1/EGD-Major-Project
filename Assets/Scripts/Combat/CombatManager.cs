@@ -19,8 +19,8 @@ public class CombatManager : MonoBehaviour
     public List<GameObject> partyMembers = new List<GameObject>();
     public List<GameObject> enemies = new List<GameObject>();
 
-    private List<GameObject> activePartyMembers = new List<GameObject>();
-    private List<GameObject> activeEnemies = new List<GameObject>();
+    public List<GameObject> activePartyMembers = new List<GameObject>();
+    public List<GameObject> activeEnemies = new List<GameObject>();
 
     public List<GameObject> actionOrder = new List<GameObject>();
 
@@ -107,18 +107,16 @@ public class CombatManager : MonoBehaviour
         foreach (GameObject member in partyMembers)
         {
             CombatantBasis cb = member.GetComponent<CombatantBasis>();
-            if (cb.appliedCard != null)
+            if (cb.appliedCard != null) // Check to see if card is delay turn card in which case to not set to null
             {
-                Deck.instance.Discard(cb.appliedCard);
                 cb.appliedCard = null;
             }
         }
         foreach (GameObject enemy in enemies)
         {
             CombatantBasis cb = enemy.GetComponent<CombatantBasis>();
-            if (cb.appliedCard != null)
+            if (cb.appliedCard != null) // Check to see if card is delay turn card in which case to not set to null
             {
-                Deck.instance.Discard(cb.appliedCard);
                 cb.appliedCard = null;
             }
         }
@@ -470,11 +468,12 @@ public class CombatManager : MonoBehaviour
 
         if(!cb.isEnemy)
         {
-            //cardScript.Play(combatant, partyMembers);
+            cardScript.Play(combatant, partyMembers);
         } else
         {
-            //cardScript.Play(combatant, enemies);
+            cardScript.Play(combatant, enemies);
         }
+        Deck.instance.Discard(card);
     }
 
     public void DrawCards(int cardsToDraw)
@@ -542,6 +541,39 @@ public class CombatManager : MonoBehaviour
         }
 
         actionOrder = newOrder;
+    }
+
+    public List<GameObject> GetAdjacentCombatants(GameObject combatant)
+    {
+        List<GameObject> adjacent = new List<GameObject>();
+
+        CombatantBasis cb = combatant.GetComponent<CombatantBasis>();
+        if(cb.isEnemy)
+        {
+            int index = enemies.IndexOf(combatant);
+            if(index >= 1 && activeEnemies.Contains(enemies[index-1]))
+            {
+                adjacent.Add(enemies[index - 1]);
+            }
+            if (index <= enemies.Count - 2 && activeEnemies.Contains(enemies[index + 1]))
+            {
+                adjacent.Add(enemies[index + 1]);
+            }
+
+        } else
+        {
+            int index = partyMembers.IndexOf(combatant);
+            if (index >= 1 && activePartyMembers.Contains(partyMembers[index - 1]))
+            {
+                adjacent.Add(partyMembers[index - 1]);
+            }
+            if (index <= partyMembers.Count - 2 && activePartyMembers.Contains(enemies[index + 1]))
+            {
+                adjacent.Add(partyMembers[index + 1]);
+            }
+        }
+
+        return adjacent;
     }
 
     public void GivePriority(GameObject combatant)

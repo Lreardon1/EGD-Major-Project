@@ -1521,11 +1521,15 @@ MonoBehaviour:
   - {fileID: 686693983}
   - {fileID: 1754622247}
   - {fileID: 1811753866}
+  activePartyMembers: []
+  activeEnemies: []
   actionOrder: []
   maxMana: 30
   currentMana: 20
+  discardCost: 1
   canDraw: 0
   canPlay: 1
+  currentCB: {fileID: 0}
 --- !u!4 &940410050
 Transform:
   m_ObjectHideFlags: 0
@@ -1557,7 +1561,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1066392557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1986,6 +1990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6077018babfca1f4a9955679af57998f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActiveControlScheme: 1
   cardsInHand: []
   drawPile: {fileID: 783471619}
   discardPile: {fileID: 89712373}

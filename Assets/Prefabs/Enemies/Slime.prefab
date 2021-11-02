@@ -14,21 +14,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextAction: 0
   statusCondition: 0
+  statusScript: {fileID: 1795249873261083449}
+  nextActionPrimaryElem: 0
+  nextActionSecondaryElem: 0
   combatantName: Slime
   totalHitPoints: 10
   currentHitPoints: 10
   attack: 5
   speed: 12
+  attachedBuffs: []
+  attackMultiplier: 1
   defenseMultiplier: 1
+  speedMultiplier: 1
   resistance: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
+  attackCardBonus: 0
+  shieldReturnDmg: 0
+  untargettable: 0
+  canCounterAttack: 0
+  hasPriority: 0
   text: {fileID: 2147232144169677366}
   appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   isSlain: 0
   isEnemy: 1
+  previousAction: 0
 --- !u!1001 &2369301503570432375
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -100,6 +112,10 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4038445828373211726, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+      propertyPath: cb
+      value: 
+      objectReference: {fileID: 6749128653938084158}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
 --- !u!1 &1166623438246772225 stripped
@@ -107,6 +123,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3517837958156300150, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
   m_PrefabInstance: {fileID: 2369301503570432375}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1795249873261083449 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4038445828373211726, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+  m_PrefabInstance: {fileID: 2369301503570432375}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166623438246772225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b82d872ddf111f0419f5e9993b179fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2147232144169677366 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4408447238898312001, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
