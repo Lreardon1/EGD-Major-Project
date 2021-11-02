@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CombatantBasis : MonoBehaviour
 {
-    public enum Action { Attack, Block, Special };
+    public enum Action { None, Attack, Block, Special };
     public enum Status { None, Burn, Wet, Earthbound, Gust, Holy, Fallen, Molten, Vaporise, Lightning, Hellfire, Ice, HolyWater, Blight, Corruption};
 
     public Action nextAction;
@@ -43,7 +43,7 @@ public class CombatantBasis : MonoBehaviour
     public bool isSlain = false;
     public bool isEnemy = false;
 
-    public Action previousAction;
+    public Action previousAction = Action.None;
 
     public void ExecuteAction()
     {
