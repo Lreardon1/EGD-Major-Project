@@ -56,11 +56,12 @@ public class CardParserManager : MonoBehaviour
 
     private void Update()
     {
-        
+        // TODO : starting phase: ask to 
         currentTarget = null;
         validTarget = false;
         Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(r, out RaycastHit hitInfo, 1000.0f, LayerMask.GetMask("Combatant")))
+        RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 100.0f, LayerMask.GetMask("Combatant"));
+        if (hitInfo.collider != null)
         {
             currentTarget = hitInfo.collider.gameObject;
         }
@@ -120,12 +121,13 @@ public class CardParserManager : MonoBehaviour
 
     public void DisplayCardData(GameObject card, Mat goodImage)
     {
+        bool inHand = handCards.Contains(card);
         if (goodSeeImage.texture)
             Destroy(goodSeeImage.texture);
         if (card != null) 
             goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(goodImage);
         if (card != null)
-            cardText.text = card.GetComponent<Card>().cardName;
+            cardText.text = card.GetComponent<Card>().cardName + (inHand ? "" : " which is not in your HAND!");
         else
             cardText.text = "No Card Found";
     }
