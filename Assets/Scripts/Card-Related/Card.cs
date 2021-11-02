@@ -73,7 +73,7 @@ public class Card : MonoBehaviour
             Modifier template = ModifierLookup.modifierLookupTable[availableModifiers[i]];
             modifiers[i].GetComponent<Image>().sprite = template.icon;
             GameObject spriteMod = Instantiate(spriteComp, modifiers[i].transform.GetChild(0).transform);
-            if (spriteModifierVals.Count > spriteModC && spriteModifierVals[spriteModC] != null)
+            if (spriteModifierVals[spriteModC] != null)
             {
                 spriteMod.GetComponent<Image>().sprite = spriteModifierVals[spriteModC];
             }

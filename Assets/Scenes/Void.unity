@@ -515,7 +515,7 @@ MonoBehaviour:
   - {fileID: 926444037}
   - {fileID: 1161119769}
   - {fileID: 1051123638}
-  sceneToLoad: BattleSceneWithCV
+  sceneToLoad: BattleScene
 --- !u!114 &816220764
 MonoBehaviour:
   m_ObjectHideFlags: 0
