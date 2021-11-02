@@ -133,11 +133,6 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 8082902666830540938, guid: f795ee76625a5004798f9317ee4837b5, type: 3}
   m_PrefabInstance: {fileID: 9038355342559515454}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &534433084 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 1426100620896122058, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
-  m_PrefabInstance: {fileID: 1426100619612952383}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &950003148
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,14 +539,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 674488719510518924, guid: 3029b409b095b274c8738876c675414a, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 5628341579453269715, guid: e532689917ee602499f04829470dbf9b, type: 3}
-    - target: {fileID: 674488719510518924, guid: 3029b409b095b274c8738876c675414a, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3029b409b095b274c8738876c675414a, type: 3}
 --- !u!1 &1728571430 stripped
@@ -559,25 +546,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 674488719510518914, guid: 3029b409b095b274c8738876c675414a, type: 3}
   m_PrefabInstance: {fileID: 1728571429}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &1728571432
+--- !u!95 &1728571432 stripped
 Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 1728571432, guid: 3029b409b095b274c8738876c675414a, type: 3}
+  m_PrefabInstance: {fileID: 1728571429}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1728571430}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ba9389238a8e1354fa1460050342ab8f, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1756750045
 GameObject:
   m_ObjectHideFlags: 0
@@ -672,10 +645,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1426100620896122060, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
-      propertyPath: m_UseGravity
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1426100620896122061, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -721,18 +690,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
-      propertyPath: backoff
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
-      propertyPath: movementspeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
-      propertyPath: player_animator
-      value: 
-      objectReference: {fileID: 534433084}
-    - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: warrior_animator
       value: 
       objectReference: {fileID: 1728571432}
@@ -740,10 +697,6 @@ PrefabInstance:
       propertyPath: godfather_animator
       value: 
       objectReference: {fileID: 8637954}
-    - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
-      propertyPath: party_members.Array.size
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: party_members.Array.data[0]
       value: 
