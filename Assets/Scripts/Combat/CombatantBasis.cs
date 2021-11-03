@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatantBasis : MonoBehaviour
 {
@@ -36,7 +37,32 @@ public class CombatantBasis : MonoBehaviour
 
     public TMPro.TextMeshPro text;
 
-    public GameObject appliedCard = null;
+    // TODO : solution because no function is called to inform combatbasis of changed applied card
+    public GameObject appliedCard
+    {
+        get
+        {
+            return appliedCardReal;
+        }
+        set
+        {
+            if (value == appliedCardReal) return;
+
+            if (value != null)
+            {
+                if (value.GetComponent<Card>() == null) return;
+                Card c = value.GetComponent<Card>();
+                MakePopup(
+                    GetColorStringOfElement(c.element) + "Played " + c.name + " on " + name + "</color>",
+                    (Texture2D)value.GetComponent<Image>().mainTexture, 
+                    value.GetComponent<Image>().color);
+            }
+
+            appliedCardReal = value;
+        }
+    }
+    private GameObject appliedCardReal = null;
+
     public GameObject heldItem = null;
 
     public GameObject target = null;
@@ -46,6 +72,37 @@ public class CombatantBasis : MonoBehaviour
     public GameObject uiCollider;
 
     public Action previousAction = Action.None;
+
+    public GameObject combatPopupPrefab;
+
+    private void MakePopup(string text, Texture2D image, Color col)
+    {
+        GameObject popup = Instantiate(combatPopupPrefab, transform.position + transform.up * 0.4f, transform.rotation);
+        popup.GetComponent<CombatPopup>().Init(text, image, col);
+    }
+
+    private string GetColorStringOfElement(Card.Element ele)
+    {
+        switch (ele)
+        {
+            //black, blue, green, orange, purple, red, white, and yellow
+            default:
+            case Card.Element.None:
+                return "<color=\"white\">";
+            case Card.Element.Fire:
+                return "<color=\"red\">";
+            case Card.Element.Water:
+                return "<color=\"blue\">";
+            case Card.Element.Air:
+                return "<color=\"yellow\">";
+            case Card.Element.Earth:
+                return "<color=\"orange\">";
+            case Card.Element.Light:
+                return "<color=\"white\">";
+            case Card.Element.Dark:
+                return "<color=\"purple\">";
+        }
+    }
 
     public void ExecuteAction()
     {
@@ -66,6 +123,8 @@ public class CombatantBasis : MonoBehaviour
             nextActionPrimaryElem = Card.Element.None;
             nextActionSecondaryElem = Card.Element.None;
         }
+        // visuals
+        MakePopup("Using " + nextAction + " Action", null, Color.white);
 
         if (nextAction == Action.Attack)
             Attack();
@@ -99,11 +158,18 @@ public class CombatantBasis : MonoBehaviour
     public void Heal(int healingAmount)
     {
         currentHitPoints = Mathf.Clamp(currentHitPoints + healingAmount, 0, totalHitPoints);
+
+        // visuals
+        MakePopup("<color=\"green\"> Healed for " + healingAmount + "</color>", null, Color.white);
+
     }
 
     public void TakeStatusDamage(float damageAmount, Status status)
     {
         currentHitPoints -= (int)(damageAmount);
+
+        // visuals
+        MakePopup("<color=\"red\"> Took " + damageAmount + " status damange for " + status + "</color>", null, Color.white);
         CheckIsSlain();
     }
 
@@ -118,6 +184,9 @@ public class CombatantBasis : MonoBehaviour
 
         currentHitPoints -= (int)((damageAmount * elementalComboMultiplier) / defenseMultiplier);
         Debug.Log(combatantName + " took " + damageAmount + " of " + damageType1 + " type and " + damageType2);
+
+        // visuals, TODO : make a string construction system to color elements differently?
+        MakePopup("<color=\"red\"> Took " + damageAmount + " of " + damageType1 + " type and " + damageType2 + "<\\color>", null, Color.white);
 
         //if damage shielded during attack
         if (shieldValue > 0 && shieldReturnDmg > 0)

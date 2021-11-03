@@ -35,12 +35,13 @@ MonoBehaviour:
   canCounterAttack: 0
   hasPriority: 0
   text: {fileID: 143262092470255084}
-  appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   isSlain: 0
   isEnemy: 1
+  uiCollider: {fileID: 0}
   previousAction: 0
+  combatPopupPrefab: {fileID: 4730867921388399689, guid: d79b7f53d915fa84b81ad869b2e19850, type: 3}
 --- !u!1001 &4382296509931200173
 PrefabInstance:
   m_ObjectHideFlags: 0
