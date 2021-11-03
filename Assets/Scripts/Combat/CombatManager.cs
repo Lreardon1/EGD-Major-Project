@@ -30,6 +30,11 @@ public class CombatManager : MonoBehaviour
 
     public List<GameObject> actionOrder = new List<GameObject>();
 
+    public GameObject uiColliderPrefab;
+    public Transform uiColliderParent;
+    public Vector3 cameraPosition;
+    public Quaternion cameraRotation;
+
     public int maxMana = 30;
     public int currentMana = 20;
     public int discardCost = 1;
@@ -46,10 +51,23 @@ public class CombatManager : MonoBehaviour
         foreach (GameObject member in partyMembers)
         {
             activePartyMembers.Add(member);
+            // This gameobject is used to detect collisions for dragging UI cards but also as a UI layer transform for cards to be placed to show a character has been played on
+            GameObject uiCollider = Instantiate(uiColliderPrefab, Vector3.zero, Quaternion.identity ,uiColliderParent);
+            WorldToUICollider wtuic = uiCollider.GetComponent<WorldToUICollider>();
+            wtuic.combatant = member.transform;
+            wtuic.worldSpaceBC = member.GetComponent<BoxCollider>();
+            member.GetComponent<CombatantBasis>().uiCollider = uiCollider;
         }
         foreach (GameObject enemy in enemies)
         {
             activeEnemies.Add(enemy);
+
+            // This gameobject is used to detect collisions for dragging UI cards but also as a UI layer transform for cards to be placed to show a character has been played on
+            GameObject uiCollider = Instantiate(uiColliderPrefab, Vector3.zero, Quaternion.identity, uiColliderParent);
+            WorldToUICollider wtuic = uiCollider.GetComponent<WorldToUICollider>();
+            wtuic.combatant = enemy.transform;
+            wtuic.worldSpaceBC = enemy.GetComponent<BoxCollider>();
+            enemy.GetComponent<CombatantBasis>().uiCollider = uiCollider;
         }
         // Populate Partymembers and enemies
 
@@ -110,9 +128,11 @@ public class CombatManager : MonoBehaviour
     public void ActivateDrawPhase()
     {
         currentPhase = CombatPhase.DrawPhase;
+        currentPhaseText.text = "Draw Phase";
+
         if (!IsInCVMode)
         {
-            UpdateDropZones();
+            chc.UpdateDropZones();
             ToggleDrawButtons(true);
         }
         foreach (GameObject member in partyMembers)
@@ -120,6 +140,10 @@ public class CombatManager : MonoBehaviour
             CombatantBasis cb = member.GetComponent<CombatantBasis>();
             if (cb.appliedCard != null) // Check to see if card is delay turn card in which case to not set to null
             {
+                cb.appliedCard.transform.SetParent(chc.discardPile.transform);
+                cb.appliedCard.transform.position = chc.discardPile.transform.position;
+                cb.appliedCard.transform.localScale = new Vector3(1,1,1);
+
                 cb.appliedCard = null;
             }
         }
@@ -128,6 +152,9 @@ public class CombatManager : MonoBehaviour
             CombatantBasis cb = enemy.GetComponent<CombatantBasis>();
             if (cb.appliedCard != null) // Check to see if card is delay turn card in which case to not set to null
             {
+                cb.appliedCard.transform.SetParent(chc.discardPile.transform);
+                cb.appliedCard.transform.position = chc.discardPile.transform.position;
+                cb.appliedCard.transform.localScale = new Vector3(1, 1, 1);
                 cb.appliedCard = null;
             }
         }
@@ -190,7 +217,7 @@ public class CombatManager : MonoBehaviour
         currentPhase = CombatPhase.PlayPhase;
         if (!IsInCVMode)
         {
-            UpdateDropZones();
+            chc.UpdateDropZones();
 
             ToggleDrawButtons(false);
         }
@@ -221,7 +248,7 @@ public class CombatManager : MonoBehaviour
         currentPhase = CombatPhase.DiscardPhase;
         if (!IsInCVMode)
         {
-            UpdateDropZones();
+            chc.UpdateDropZones();
         }
         // Player can drag cards to discard pile to discard them, ends when player clicks done or something, transition to Action Phase
         StartCoroutine("DiscardPhaseCoroutine");
@@ -249,7 +276,7 @@ public class CombatManager : MonoBehaviour
     {
         currentPhase = CombatPhase.ActionPhase;
         if (!IsInCVMode)
-            UpdateDropZones();
+            chc.UpdateDropZones();
 
         currentPhaseText.text = "Action Phase";
         // Party members and enemies take turns attacking in action order, death prevents attacking, transition to Draw Phase
@@ -307,7 +334,10 @@ public class CombatManager : MonoBehaviour
             cb.ExecuteAction();
             actionOrder.RemoveAt(0);
             RemoveFallenCombatants();
-            CheckWinCondition();
+            if(CheckWinCondition())
+            {
+                yield break;
+            }
             UpdateTargets();
             CheckEnoughMana();
             yield return new WaitForSeconds(1f);
@@ -342,52 +372,6 @@ public class CombatManager : MonoBehaviour
                     cb.SelectTarget(activePartyMembers);
                 }
             }
-        }
-    }
-
-    public void UpdateDropZones()
-    {
-        switch (currentPhase)
-        {
-            case CombatPhase.DrawPhase:
-                foreach (GameObject card in Deck.instance.viewOrder)
-                {
-                    DragDrop dd = card.GetComponent<DragDrop>();
-                    dd.isDraggable = false;
-                    dd.allowedDropZones.Clear();
-                }
-                break;
-            case CombatPhase.PlayPhase:
-                foreach (GameObject card in Deck.instance.viewOrder)
-                {
-                    DragDrop dd = card.GetComponent<DragDrop>();
-                    List<GameObject> allZones = new List<GameObject>();
-                    allZones.AddRange(partyMembers);
-                    allZones.AddRange(enemies);
-                    dd.isDraggable = true;
-                    dd.allowedDropZones.Clear();
-                    dd.allowedDropZones = allZones;
-                }
-                break;
-            case CombatPhase.DiscardPhase:
-                foreach (GameObject card in Deck.instance.viewOrder)
-                {
-                    DragDrop dd = card.GetComponent<DragDrop>();
-                    List<GameObject> allZones = new List<GameObject>();
-                    allZones.Add(chc.discardPile);
-                    dd.isDraggable = true;
-                    dd.allowedDropZones.Clear();
-                    dd.allowedDropZones = allZones;
-                }
-                break;
-            case CombatPhase.ActionPhase:
-                foreach (GameObject card in Deck.instance.viewOrder)
-                {
-                    DragDrop dd = card.GetComponent<DragDrop>();
-                    dd.isDraggable = true;
-                    dd.allowedDropZones.Clear();
-                }
-                break;
         }
     }
 
@@ -433,6 +417,12 @@ public class CombatManager : MonoBehaviour
             {
                 actionOrder.Remove(activePartyMembers[i]);
                 activePartyMembers.RemoveAt(i);
+                if(cb.appliedCard != null)
+                {
+                    cb.appliedCard.transform.SetParent(chc.discardPile.transform);
+                    cb.appliedCard.transform.position = chc.discardPile.transform.position;
+                    cb.appliedCard.transform.localScale = new Vector3(1, 1, 1);
+                }
                 i--;
             }
         }
@@ -443,6 +433,12 @@ public class CombatManager : MonoBehaviour
             {
                 actionOrder.Remove(activeEnemies[i]);
                 activeEnemies.RemoveAt(i);
+                if(cb.appliedCard != null)
+                {
+                    cb.appliedCard.transform.SetParent(chc.discardPile.transform);
+                    cb.appliedCard.transform.position = chc.discardPile.transform.position;
+                    cb.appliedCard.transform.localScale = new Vector3(1, 1, 1);
+                }
                 i--;
             }
         }
@@ -502,6 +498,9 @@ public class CombatManager : MonoBehaviour
         cb.appliedCard = card;
         currentMana -= cardScript.manaCost;
         manaText.text = "Mana: " + currentMana + "/" + maxMana;
+
+        card.transform.SetParent(combatant.GetComponent<CombatantBasis>().uiCollider.transform);
+        card.GetComponent<DragDrop>().isDraggable = false;
 
         if(!cb.isEnemy)
         {
@@ -674,17 +673,20 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    public void CheckWinCondition()
+    public bool CheckWinCondition()
     {
         if (activeEnemies.Count == 0)
         {
             Debug.Log("You Win!");
             StopAllCoroutines();
+            return true;
         }
         else if (activePartyMembers.Count == 0)
         {
             Debug.Log("You Lose...");
             StopAllCoroutines();
+            return true;
         }
+        return false;
     }
 }

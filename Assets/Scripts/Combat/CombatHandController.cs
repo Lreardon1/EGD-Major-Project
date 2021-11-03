@@ -45,15 +45,7 @@ public class CombatHandController : MonoBehaviour
             card.transform.localScale = transform.localScale;
             card.GetComponent<RectTransform>().SetParent(transform);
             card.GetComponent<CardEditHandler>().inCombat = true;
-
-            UIToWorldCollider utwc = card.GetComponent<UIToWorldCollider>();
-            utwc.mainCam = mainCam;
-            utwc.inHand = true;
-            GameObject cardWorldCollider = Instantiate(cardWorldColliderPrefab, Vector3.zero, Quaternion.identity, cardWorldColliderParent);
-            cardWorldCollider.GetComponent<CardWorldColliderDetection>().dragDrop = card.GetComponent<DragDrop>();
-            utwc.colliderGO = cardWorldCollider;
-            utwc.bc = cardWorldCollider.GetComponent<BoxCollider2D>();
-            utwc.rb = cardWorldCollider.GetComponent<Rigidbody2D>();
+            
             cardsInHand.Add(card);
         }
     }
@@ -71,6 +63,58 @@ public class CombatHandController : MonoBehaviour
         foreach (GameObject card in cardsInHand)
         {
             card.GetComponent<DragDrop>().isDraggable = true;
+        }
+    }
+
+    public void UpdateDropZones()
+    {
+        switch (cm.currentPhase)
+        {
+            case CombatManager.CombatPhase.DrawPhase:
+                foreach (GameObject card in Deck.instance.viewOrder)
+                {
+                    DragDrop dd = card.GetComponent<DragDrop>();
+                    dd.isDraggable = false;
+                    dd.allowedDropZones.Clear();
+                }
+                break;
+            case CombatManager.CombatPhase.PlayPhase:
+                foreach (GameObject card in Deck.instance.viewOrder)
+                {
+                    DragDrop dd = card.GetComponent<DragDrop>();
+                    List<GameObject> allZones = new List<GameObject>();
+                    foreach(GameObject member in cm.activePartyMembers)
+                    {
+                        allZones.Add(member.GetComponent<CombatantBasis>().uiCollider);
+                    }
+                    foreach (GameObject enemy in cm.activeEnemies)
+                    {
+                        allZones.Add(enemy.GetComponent<CombatantBasis>().uiCollider);
+                    }
+                    dd.isDraggable = true;
+                    dd.allowedDropZones.Clear();
+                    dd.allowedDropZones = allZones;
+                }
+                break;
+            case CombatManager.CombatPhase.DiscardPhase:
+                foreach (GameObject card in Deck.instance.viewOrder)
+                {
+                    DragDrop dd = card.GetComponent<DragDrop>();
+                    List<GameObject> allZones = new List<GameObject>();
+                    allZones.Add(discardPile);
+                    dd.isDraggable = true;
+                    dd.allowedDropZones.Clear();
+                    dd.allowedDropZones = allZones;
+                }
+                break;
+            case CombatManager.CombatPhase.ActionPhase:
+                foreach (GameObject card in Deck.instance.viewOrder)
+                {
+                    DragDrop dd = card.GetComponent<DragDrop>();
+                    dd.isDraggable = true;
+                    dd.allowedDropZones.Clear();
+                }
+                break;
         }
     }
 
@@ -93,15 +137,7 @@ public class CombatHandController : MonoBehaviour
             card.transform.localScale = transform.localScale;
             card.GetComponent<RectTransform>().SetParent(transform);
             card.GetComponent<CardEditHandler>().inCombat = true;
-
-            UIToWorldCollider utwc = card.GetComponent<UIToWorldCollider>();
-            utwc.mainCam = mainCam;
-            utwc.inHand = true;
-            GameObject cardWorldCollider = Instantiate(cardWorldColliderPrefab, Vector3.zero, Quaternion.identity, cardWorldColliderParent);
-            cardWorldCollider.GetComponent<CardWorldColliderDetection>().dragDrop = card.GetComponent<DragDrop>();
-            utwc.colliderGO = cardWorldCollider;
-            utwc.bc = cardWorldCollider.GetComponent<BoxCollider2D>();
-            utwc.rb = cardWorldCollider.GetComponent<Rigidbody2D>();
+            
             cardsInHand.Add(card);
         }
         switch (cardAmount)

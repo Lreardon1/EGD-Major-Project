@@ -43,6 +43,8 @@ public class CombatantBasis : MonoBehaviour
     public bool isSlain = false;
     public bool isEnemy = false;
 
+    public GameObject uiCollider;
+
     public Action previousAction = Action.None;
 
     public void ExecuteAction()
@@ -77,9 +79,12 @@ public class CombatantBasis : MonoBehaviour
         untargettable = false;
 
         //buffs tick down after an action
-        foreach (Buff b in attachedBuffs)
+        for(int i = 0; i < attachedBuffs.Count; i++)
         {
-            b.TickDuration();
+            Buff tempBuff = attachedBuffs[i];
+            attachedBuffs[i].TickDuration();
+            if (tempBuff == null)
+                i--;
         }
 
         //clearing card stats on attack

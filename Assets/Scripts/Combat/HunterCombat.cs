@@ -31,6 +31,8 @@ public class HunterCombat : CombatantBasis
         specialAttack = true;
         foreach(GameObject enemy in cm.activeEnemies)
         {
+            if (enemy.GetComponent<CombatantBasis>().isSlain)
+                continue;
             target = enemy;
             Attack();
         }
