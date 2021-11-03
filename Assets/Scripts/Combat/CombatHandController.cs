@@ -16,6 +16,9 @@ public class CombatHandController : MonoBehaviour
     public GameObject cardWorldColliderPrefab;
     public Transform cardWorldColliderParent;
     public CombatManager cm;
+    public GameObject dragger;
+
+    public Transform originalCardTransform;
 
     Camera mainCam;
 
@@ -38,10 +41,12 @@ public class CombatHandController : MonoBehaviour
 
     public void DrawStartingHand()
     {
+        Deck.instance.SetDragger(dragger, false);
         Deck.instance.Shuffle();
         for (int i = 0; i < startingHandSize; i++)
         {
             GameObject card = Deck.instance.Draw();
+            originalCardTransform = card.transform.parent;
             card.transform.localScale = transform.localScale;
             card.GetComponent<RectTransform>().SetParent(transform);
             card.GetComponent<CardEditHandler>().inCombat = true;
@@ -71,7 +76,7 @@ public class CombatHandController : MonoBehaviour
         switch (cm.currentPhase)
         {
             case CombatManager.CombatPhase.DrawPhase:
-                foreach (GameObject card in Deck.instance.viewOrder)
+                foreach (GameObject card in Deck.instance.allCards)
                 {
                     DragDrop dd = card.GetComponent<DragDrop>();
                     dd.isDraggable = false;
@@ -79,7 +84,7 @@ public class CombatHandController : MonoBehaviour
                 }
                 break;
             case CombatManager.CombatPhase.PlayPhase:
-                foreach (GameObject card in Deck.instance.viewOrder)
+                foreach (GameObject card in Deck.instance.allCards)
                 {
                     DragDrop dd = card.GetComponent<DragDrop>();
                     List<GameObject> allZones = new List<GameObject>();
@@ -97,7 +102,7 @@ public class CombatHandController : MonoBehaviour
                 }
                 break;
             case CombatManager.CombatPhase.DiscardPhase:
-                foreach (GameObject card in Deck.instance.viewOrder)
+                foreach (GameObject card in Deck.instance.allCards)
                 {
                     DragDrop dd = card.GetComponent<DragDrop>();
                     List<GameObject> allZones = new List<GameObject>();
@@ -108,7 +113,7 @@ public class CombatHandController : MonoBehaviour
                 }
                 break;
             case CombatManager.CombatPhase.ActionPhase:
-                foreach (GameObject card in Deck.instance.viewOrder)
+                foreach (GameObject card in Deck.instance.allCards)
                 {
                     DragDrop dd = card.GetComponent<DragDrop>();
                     dd.isDraggable = true;
@@ -168,5 +173,16 @@ public class CombatHandController : MonoBehaviour
     {
         cardsInDiscard = 0;
         Deck.instance.Shuffle();
+    }
+
+    public void ResetCardParents()
+    {
+        Deck.instance.HideCards();
+        foreach(GameObject card in Deck.instance.allCards)
+        {
+            DragDrop dd = card.GetComponent<DragDrop>();
+            dd.allowedDropZones.Clear();
+            card.transform.localScale = new Vector3(1, 1, 1);
+        }
     }
 }
