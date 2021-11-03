@@ -186,7 +186,7 @@ public class CombatantBasis : MonoBehaviour
         Debug.Log(combatantName + " took " + damageAmount + " of " + damageType1 + " type and " + damageType2);
 
         // visuals, TODO : make a string construction system to color elements differently?
-        MakePopup("<color=\"red\"> Took " + damageAmount + " of " + damageType1 + " type and " + damageType2 + "<\\color>", null, Color.white);
+        MakePopup("<color=\"red\"> Took " + damageAmount + "</color>", null, Color.white);
 
         //if damage shielded during attack
         if (shieldValue > 0 && shieldReturnDmg > 0)

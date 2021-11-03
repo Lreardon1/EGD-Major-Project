@@ -10,7 +10,7 @@ public class CombatPopup : MonoBehaviour
     private float startingTime;
 
     public TMP_Text text;
-    public Image image;
+    public RawImage image;
 
     public AnimationCurve ascendCurve;
     public float ascendAmp;
@@ -55,11 +55,8 @@ public class CombatPopup : MonoBehaviour
                     this.image.rectTransform.sizeDelta.x,
                     this.image.rectTransform.sizeDelta.y * ((float)popImage.height / (float)popImage.width));
 
-            this.image.materialForRendering.mainTexture = null;
-            this.image.materialForRendering.color = Color.white;
-            this.image.material.mainTexture = null;
-            this.image.canvasRenderer.SetTexture(null);
-            this.image.canvasRenderer.SetColor(Color.white);
+            this.image.texture = popImage;
+            this.image.color = col;
         }
     }
 
