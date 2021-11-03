@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Party
   - DiscardPile
+  - NPC
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Cards
   - Ground
   - Combatant
-  - 
+  - Character
   - 
   - 
   - 
@@ -42,4 +43,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Sprites
+    uniqueID: 632554531
     locked: 0

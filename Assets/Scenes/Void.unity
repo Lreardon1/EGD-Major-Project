@@ -495,7 +495,7 @@ MonoBehaviour:
   - {fileID: 582796126}
   - {fileID: 1274333006}
   - {fileID: 2039332}
-  sceneToLoad: BattleScene
+  sceneToLoad: OverworldTest
 --- !u!114 &816220764
 MonoBehaviour:
   m_ObjectHideFlags: 0
