@@ -14,20 +14,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextAction: 0
   statusCondition: 0
+  statusScript: {fileID: 5395370968802541823}
+  nextActionPrimaryElem: 0
+  nextActionSecondaryElem: 0
   combatantName: Priest
   totalHitPoints: 15
   currentHitPoints: 15
   attack: 30
   speed: 16
+  attachedBuffs: []
+  attackMultiplier: 1
   defenseMultiplier: 1
+  speedMultiplier: 1
   resistance: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
+  attackCardBonus: 0
+  shieldReturnDmg: 0
+  untargettable: 0
+  canCounterAttack: 0
+  hasPriority: 0
   text: {fileID: 6673966145099131155}
   appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   isSlain: 0
+  isEnemy: 0
+  previousAction: 0
+  specialHealAmount: 10
 --- !u!1001 &8070679975717550152
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35,6 +49,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4242643608117639351, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+      propertyPath: cb
+      value: 
+      objectReference: {fileID: -4775545481915900555}
     - target: {fileID: 4478707169576409300, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: speed
       value: 16
@@ -92,6 +110,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Size.x
       value: 0.48
       objectReference: {fileID: 0}
@@ -102,18 +124,18 @@ PrefabInstance:
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 2611541048023404966, guid: fd3fda5b6300188459213d3db6861d9c, type: 3}
+      objectReference: {fileID: 8805386104263402869, guid: d0a89f52bf10ff64caf74e543986438a, type: 3}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Color.b
-      value: 0.57146084
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Color.r
-      value: 0.6320754
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_WasSpriteAssigned
@@ -123,6 +145,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Priest
       objectReference: {fileID: 0}
+    - target: {fileID: 7425997742795056569, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7425997742795056569, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 0.4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
 --- !u!1 &5631541174819381394 stripped
@@ -130,6 +160,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4478707169576409306, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
   m_PrefabInstance: {fileID: 8070679975717550152}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5395370968802541823 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4242643608117639351, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+  m_PrefabInstance: {fileID: 8070679975717550152}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5631541174819381394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b82d872ddf111f0419f5e9993b179fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6673966145099131155 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3215113236145590619, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}

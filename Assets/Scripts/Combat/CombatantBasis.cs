@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class CombatantBasis : MonoBehaviour
 {
-    public enum Action { Attack, Block, Special };
+    public enum Action { None, Attack, Block, Special };
     public enum Status { None, Burn, Wet, Earthbound, Gust, Holy, Fallen, Molten, Vaporise, Lightning, Hellfire, Ice, HolyWater, Blight, Corruption};
 
     public Action nextAction;
     public Status statusCondition;
+    public StatusScript statusScript;
     public Card.Element nextActionPrimaryElem;
     public Card.Element nextActionSecondaryElem;
     public string combatantName;
@@ -42,10 +43,19 @@ public class CombatantBasis : MonoBehaviour
     public bool isSlain = false;
     public bool isEnemy = false;
 
-    private Action previousAction;
+    public Action previousAction = Action.None;
 
     public void ExecuteAction()
     {
+        if(statusCondition == Status.Burn)
+        {
+            TakeStatusDamage(StatusScript.burnDamage, Status.Burn);
+            if(CheckIsSlain())
+            {
+                return;
+            }
+        }
+
         if (previousAction == Action.Block)
         {
             defenseMultiplier -= 1f;
@@ -81,10 +91,23 @@ public class CombatantBasis : MonoBehaviour
         }
     }
 
+    public void Heal(int healingAmount)
+    {
+        currentHitPoints = Mathf.Clamp(currentHitPoints + healingAmount, 0, totalHitPoints);
+    }
+
+    public void TakeStatusDamage(float damageAmount, Status status)
+    {
+        currentHitPoints -= (int)(damageAmount);
+        CheckIsSlain();
+    }
+
     public virtual void TakeDamage(float damageAmount, Card.Element damageType1, Card.Element damageType2, GameObject attacker)
     {
         // Check for elemental combo
         float elementalComboMultiplier = 1f;
+
+        statusScript.OnTakeDamageStatusHandler(statusCondition, attacker, (int)damageAmount);
 
         int shieldValue = temporaryHitPoints;
 
@@ -103,14 +126,14 @@ public class CombatantBasis : MonoBehaviour
             }
         }
 
-        if (currentHitPoints <= negativeHitPointShield)
+        Status newStatus = statusScript.GetStatusResult(damageType1, damageType2);
+        if(newStatus != Status.None)
         {
-            Debug.Log(combatantName + " Slain");
-            isSlain = true;
-            this.GetComponent<SpriteRenderer>().enabled = false;
-            text.enabled = false;
+            statusScript.ApplyNewStatus(newStatus, attacker);
         }
-        else //check counterattack if survived hit
+
+
+        if (!CheckIsSlain()) //check counterattack if survived hit
         {
             if (canCounterAttack)
             {
@@ -118,6 +141,19 @@ public class CombatantBasis : MonoBehaviour
                 print("Counter attack");
             }
         }
+    }
+
+    public bool CheckIsSlain()
+    {
+        if (currentHitPoints <= negativeHitPointShield)
+        {
+            Debug.Log(combatantName + " Slain");
+            isSlain = true;
+            this.GetComponent<SpriteRenderer>().enabled = false;
+            text.enabled = false;
+            return true;
+        }
+        return false;
     }
 
     public virtual void SelectAction()

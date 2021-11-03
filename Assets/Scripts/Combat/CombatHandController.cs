@@ -33,6 +33,12 @@ public class CombatHandController : MonoBehaviour
         if (!isActiveControlScheme || CombatManager.IsInCVMode)
             return;
 
+        Invoke("DrawStartingHand", 0.1f);
+    }
+
+    public void DrawStartingHand()
+    {
+        Deck.instance.Shuffle();
         for (int i = 0; i < startingHandSize; i++)
         {
             GameObject card = Deck.instance.Draw();
@@ -43,7 +49,7 @@ public class CombatHandController : MonoBehaviour
             UIToWorldCollider utwc = card.GetComponent<UIToWorldCollider>();
             utwc.mainCam = mainCam;
             utwc.inHand = true;
-            GameObject cardWorldCollider = Instantiate(cardWorldColliderPrefab, Vector3.zero, Quaternion.identity ,cardWorldColliderParent);
+            GameObject cardWorldCollider = Instantiate(cardWorldColliderPrefab, Vector3.zero, Quaternion.identity, cardWorldColliderParent);
             cardWorldCollider.GetComponent<CardWorldColliderDetection>().dragDrop = card.GetComponent<DragDrop>();
             utwc.colliderGO = cardWorldCollider;
             utwc.bc = cardWorldCollider.GetComponent<BoxCollider2D>();

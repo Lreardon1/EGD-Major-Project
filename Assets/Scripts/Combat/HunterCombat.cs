@@ -4,30 +4,38 @@ using UnityEngine;
 
 public class HunterCombat : CombatantBasis
 {
-    //public override void Attack()
-    //{
-    //    // Apply damage to target's enemy script
-    //    CombatantBasis cb = target.GetComponent<CombatantBasis>();
+    public bool specialAttack = false;
 
-    //    int damageTotal = attack + 0; // Get modifier from card here
+    public override void Attack()
+    {
+        CombatantBasis cb = target.GetComponent<CombatantBasis>();
 
-    //    cb.TakeDamage(damageTotal, damageType);
+        float damageTotal = 0; 
 
-    //    Debug.Log(combatantName + " Attack");
-    //}
+        if(specialAttack) // Special attack does 1/3 regular attack damage to all enemies
+        {
+            damageTotal = (attack/3f + attackCardBonus) * attackMultiplier; // Get modifier from card here
+        } else
+        {
+            damageTotal = (attack + attackCardBonus) * attackMultiplier; // Get modifier from card here
+        }
 
-    //public override void Block()
-    //{
-    //    temporaryHitPoints += 0; // Get temporary hit points from card here
+        cb.TakeDamage(damageTotal, nextActionPrimaryElem, nextActionSecondaryElem, gameObject);
 
-    //    // Increase defense multipler to 2X
-    //    defenseMultiplier = 2f;
-    //    Debug.Log(combatantName + " Block");
-    //}
+        Debug.Log("Hunter Attack");
+    }
 
     public override void Special()
     {
-        // Do special multi attack
-        Debug.Log(combatantName + " Special");
+        CombatManager cm = FindObjectOfType<CombatManager>();
+        specialAttack = true;
+        foreach(GameObject enemy in cm.activeEnemies)
+        {
+            target = enemy;
+            Attack();
+        }
+
+        specialAttack = false;
+        Debug.Log(combatantName + " Special Attack");
     }
 }
