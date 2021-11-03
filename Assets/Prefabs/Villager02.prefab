@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uitext: {fileID: 0}
+  text_back: {fileID: 0}
   opening: Yeeeeehaw
 --- !u!65 &2619123685769412727
 BoxCollider:
