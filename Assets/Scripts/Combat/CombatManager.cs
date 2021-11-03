@@ -35,6 +35,11 @@ public class CombatManager : MonoBehaviour
     public Vector3 cameraPosition;
     public Quaternion cameraRotation;
 
+    public LoadEncounter encounterScript;
+
+    public GameObject pointer;
+    public ActionOrderUI actionOrderUI;
+
     public int maxMana = 30;
     public int currentMana = 20;
     public int discardCost = 1;
@@ -48,6 +53,7 @@ public class CombatManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        List<GameObject> allCombatants = new List<GameObject>();
         foreach (GameObject member in partyMembers)
         {
             activePartyMembers.Add(member);
@@ -57,6 +63,7 @@ public class CombatManager : MonoBehaviour
             wtuic.combatant = member.transform;
             wtuic.worldSpaceBC = member.GetComponent<BoxCollider>();
             member.GetComponent<CombatantBasis>().uiCollider = uiCollider;
+            allCombatants.Add(member);
         }
         foreach (GameObject enemy in enemies)
         {
@@ -68,28 +75,12 @@ public class CombatManager : MonoBehaviour
             wtuic.combatant = enemy.transform;
             wtuic.worldSpaceBC = enemy.GetComponent<BoxCollider>();
             enemy.GetComponent<CombatantBasis>().uiCollider = uiCollider;
+            allCombatants.Add(enemy);
         }
         // Populate Partymembers and enemies
 
+
         ToggleDrawButtons(false);
-        foreach (GameObject member in partyMembers)
-        {
-            CombatantBasis cb = member.GetComponent<CombatantBasis>();
-            if (cb.appliedCard != null)
-            {
-                Deck.instance.Discard(cb.appliedCard);
-                cb.appliedCard = null;
-            }
-        }
-        foreach (GameObject enemy in enemies)
-        {
-            CombatantBasis cb = enemy.GetComponent<CombatantBasis>();
-            if (cb.appliedCard != null)
-            {
-                Deck.instance.Discard(cb.appliedCard);
-                cb.appliedCard = null;
-            }
-        }
 
         foreach (GameObject member in partyMembers)
         {
@@ -119,6 +110,10 @@ public class CombatManager : MonoBehaviour
         {
             Debug.Log(combatant.name);
         }
+
+
+        actionOrderUI.Init(allCombatants, this);
+        actionOrderUI.UpdateOrder(actionOrder);
 
         // TODO : for CV I need an initial draw phase before play to allow the player to tell me their cards 
         // (or we can honestly just forego trying to track that)
@@ -187,6 +182,8 @@ public class CombatManager : MonoBehaviour
         {
             Debug.Log(combatant.name);
         }
+        actionOrderUI.SetAllActive(actionOrder);
+        actionOrderUI.UpdateOrder(actionOrder);
 
         StartCoroutine("DrawPhaseCoroutine");
         // Allies and enemies select actions to perform, Player selects number of cards to draw, transition to Play Phase
@@ -291,6 +288,20 @@ public class CombatManager : MonoBehaviour
         {
             CombatantBasis cb = actionOrder[0].GetComponent<CombatantBasis>();
             currentCB = actionOrder[0];
+
+            pointer.SetActive(true);
+            Vector3 pointerPos = cb.uiCollider.transform.position;
+            if(cb.isEnemy)
+            {
+                pointerPos.x += cb.uiCollider.GetComponent<WorldToUICollider>().cardLocationOffset * -2;
+                pointer.transform.rotation = Quaternion.Euler(0, 0, 90);
+            } else
+            {
+                pointerPos.x += cb.uiCollider.GetComponent<WorldToUICollider>().cardLocationOffset * 2;
+                pointer.transform.rotation = Quaternion.Euler(0, 0, -90);
+            }
+            pointer.transform.position = pointerPos;
+
             bool cardAlreadyPlayed = false;
 
             if (cb.appliedCard != null)
@@ -333,6 +344,7 @@ public class CombatManager : MonoBehaviour
 
             cb.ExecuteAction();
             actionOrder.RemoveAt(0);
+            actionOrderUI.UpdateOrder(actionOrder);
             RemoveFallenCombatants();
             if(CheckWinCondition())
             {
@@ -340,6 +352,7 @@ public class CombatManager : MonoBehaviour
             }
             UpdateTargets();
             CheckEnoughMana();
+            pointer.SetActive(false);
             yield return new WaitForSeconds(1f);
             // Check if any combatant was killed and update the action queue
         }
@@ -627,6 +640,7 @@ public class CombatManager : MonoBehaviour
             actionOrder.Remove(combatant);
             actionOrder.Insert(0, combatant);
         }
+        actionOrderUI.UpdateOrder(actionOrder);
     }
 
     public void FocusOnEnemy(GameObject combatant)
@@ -681,12 +695,16 @@ public class CombatManager : MonoBehaviour
         {
             Debug.Log("You Win!");
             StopAllCoroutines();
+            chc.ResetCardParents();
+            encounterScript.ReturnToOverWorld();
             return true;
         }
         else if (activePartyMembers.Count == 0)
         {
             Debug.Log("You Lose...");
             StopAllCoroutines();
+            chc.ResetCardParents();
+            encounterScript.ReturnToOverWorld();
             return true;
         }
         return false;
