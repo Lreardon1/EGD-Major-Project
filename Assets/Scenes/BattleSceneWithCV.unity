@@ -524,6 +524,52 @@ MonoBehaviour:
   cardWorldColliderPrefab: {fileID: 3219779073509697202, guid: d851cb974d4e42e45b879ee0942f3717, type: 3}
   cardWorldColliderParent: {fileID: 1265009292}
   cm: {fileID: 1542965685}
+--- !u!1 &232158535
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 232158537}
+  - component: {fileID: 232158536}
+  m_Layer: 0
+  m_Name: TestSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &232158536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 232158535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 238dfc23768a5384ab90e153edadec14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  image: {fileID: 2800000, guid: e1acff4c47630984da84aa01dab3e534, type: 3}
+  text: <color="red">HELLOW</color>
+  prefab: {fileID: 4730867921388399689, guid: d79b7f53d915fa84b81ad869b2e19850, type: 3}
+--- !u!4 &232158537
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 232158535}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.8444936, y: -2.4398499, z: -0.42598888}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &258119412
 GameObject:
   m_ObjectHideFlags: 0
@@ -3353,7 +3399,13 @@ MonoBehaviour:
   - {fileID: 1037735362}
   - {fileID: 999455511}
   - {fileID: 381201314}
+  activePartyMembers: []
+  activeEnemies: []
   actionOrder: []
+  uiColliderPrefab: {fileID: 0}
+  uiColliderParent: {fileID: 0}
+  cameraPosition: {x: 0, y: 0, z: 0}
+  cameraRotation: {x: 0, y: 0, z: 0, w: 0}
   maxMana: 30
   currentMana: 20
   discardCost: 1

@@ -12,7 +12,7 @@ using UnityEngine.UI;
     // and maybe even requests from the combat manager to active control scheme
 public class CombatManager : MonoBehaviour
 {
-    public static bool IsInCVMode = false;
+    public static bool IsInCVMode = true;
 
     public enum CombatPhase {DrawPhase, PlayPhase, DiscardPhase, ActionPhase};
 
@@ -524,6 +524,8 @@ public class CombatManager : MonoBehaviour
         }
 
         Deck.instance.Discard(card);
+        print(card.transform.lossyScale);
+        card.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         return true;
     }
 
