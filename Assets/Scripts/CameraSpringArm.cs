@@ -17,7 +17,8 @@ public class CameraSpringArm : MonoBehaviour
         float desiredDist = armLength;
         if (Physics.Raycast(origin.position, dir, out RaycastHit hitInfo, 1000, ~LayerMask.GetMask("Character")))
         {
-            desiredDist = Mathf.Min(hitInfo.distance - 0.6f, desiredDist);
+            if (!hitInfo.collider.isTrigger)
+                desiredDist = Mathf.Min(hitInfo.distance - 0.6f, desiredDist);
         }
 
         float dist = Mathf.Lerp((cameraPos.position - origin.position).magnitude, desiredDist, Time.deltaTime * 7);
