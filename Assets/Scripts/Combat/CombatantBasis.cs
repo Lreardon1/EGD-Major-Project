@@ -175,18 +175,18 @@ public class CombatantBasis : MonoBehaviour
 
     public virtual void TakeDamage(float damageAmount, Card.Element damageType1, Card.Element damageType2, GameObject attacker)
     {
-        // Check for elemental combo
-        float elementalComboMultiplier = 1f;
 
         statusScript.OnTakeDamageStatusHandler(statusCondition, attacker, (int)damageAmount);
 
         int shieldValue = temporaryHitPoints;
 
-        currentHitPoints -= (int)((damageAmount * elementalComboMultiplier) / defenseMultiplier);
-        Debug.Log(combatantName + " took " + damageAmount + " of " + damageType1 + " type and " + damageType2);
+        int totalDamageAmount = (int)((damageAmount) / defenseMultiplier);
+
+        currentHitPoints -= (int)((damageAmount) / defenseMultiplier);
+        Debug.Log(combatantName + " took " + totalDamageAmount + " of " + damageType1 + " type and " + damageType2);
 
         // visuals, TODO : make a string construction system to color elements differently?
-        MakePopup("<color=\"red\"> Took " + damageAmount + "</color>", null, Color.white);
+        MakePopup("<color=\"red\"> Took " + totalDamageAmount + "</color>", null, Color.white);
 
         //if damage shielded during attack
         if (shieldValue > 0 && shieldReturnDmg > 0)
@@ -270,7 +270,7 @@ public class CombatantBasis : MonoBehaviour
             }
             nextAction = Action.Special;
         }
-        nextAction = Action.Attack;
+
     }
 
     public virtual void SelectTarget(List<GameObject> targets) //TODO:: STILL NEEDS TO HANDLE RETARGETTING IF RANDOMLY CHOOSING UNTARGETTABLE COMBATANT

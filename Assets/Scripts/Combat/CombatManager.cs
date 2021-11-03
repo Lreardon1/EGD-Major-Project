@@ -310,11 +310,11 @@ public class CombatManager : MonoBehaviour
             if (enoughMana && !cardAlreadyPlayed && chc.transform.childCount != 0)
             {
                 Debug.Log("Play card on " + actionOrder[0].name);
-                foreach (GameObject card in Deck.instance.viewOrder)
+                foreach (GameObject card in Deck.instance.allCards)
                 {
                     DragDrop dd = card.GetComponent<DragDrop>();
                     List<GameObject> allZones = new List<GameObject>();
-                    allZones.Add(actionOrder[0]);
+                    allZones.Add(cb.uiCollider);
                     dd.allowedDropZones.Clear();
                     dd.allowedDropZones = allZones;
                 }
@@ -513,7 +513,7 @@ public class CombatManager : MonoBehaviour
         manaText.text = "Mana: " + currentMana + "/" + maxMana;
 
         card.transform.SetParent(combatant.GetComponent<CombatantBasis>().uiCollider.transform);
-        card.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        card.transform.localScale = new Vector3(1, 1, 1);
         card.GetComponent<DragDrop>().isDraggable = false;
 
         if(!cb.isEnemy)
