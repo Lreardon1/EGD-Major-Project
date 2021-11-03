@@ -22,7 +22,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: PolyKnights_Mat_01
   m_Shader: {fileID: 4800000, guid: 71d6765ad72e11541bc1448c891bbcf9, type: 3}
-  m_ShaderKeywords: RECEIVE_SHADOWS_ON
+  m_ShaderKeywords: RECEIVE_SHADOWS_ON USE_ALPHA_ON
   m_LightmapFlags: 6
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
