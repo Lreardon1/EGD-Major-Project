@@ -32,6 +32,14 @@ public class Card : MonoBehaviour
     public GameObject elementIcon;
     [SerializeField]
     public GameObject typeIcon;
+    [SerializeField]
+    public Image cardArt;
+    [SerializeField]
+    public Image cardBase;
+    [SerializeField]
+    public Image bannerArt;
+    [SerializeField]
+    public Image constantArt;
 
     [Header("OnPlay Script")]
     [SerializeField]
@@ -48,6 +56,8 @@ public class Card : MonoBehaviour
     [Header("Prefab References")]
     [SerializeField]
     public List<GameObject> draggableElements;
+    [SerializeField]
+    public List<Color> elementColors;
     [SerializeField]
     public GameObject textComp;
     [SerializeField]
@@ -92,35 +102,44 @@ public class Card : MonoBehaviour
 
         //updating element icon to match
         GameObject elemIcon = null;
+        Color cardColor = Color.white;
         switch(element)
         {
             case Element.Fire:
                 elemIcon = Instantiate(draggableElements[0], elementIcon.transform);
+                cardColor = elementColors[0];
                 break;
 
             case Element.Water:
                 elemIcon = Instantiate(draggableElements[1], elementIcon.transform);
+                cardColor = elementColors[1];
                 break;
 
             case Element.Earth:
                 elemIcon = Instantiate(draggableElements[2], elementIcon.transform);
+                cardColor = elementColors[2];
                 break;
 
             case Element.Air:
                 elemIcon = Instantiate(draggableElements[3], elementIcon.transform);
+                cardColor = elementColors[3];
                 break;
 
             case Element.Light:
                 elemIcon = Instantiate(draggableElements[4], elementIcon.transform);
+                cardColor = elementColors[4];
                 break;
 
             case Element.Dark:
                 elemIcon = Instantiate(draggableElements[5], elementIcon.transform);
+                cardColor = elementColors[5];
                 break;
         }
         if (elemIcon != null)
         {
             elemIcon.GetComponent<DragDrop>().isDraggable = false;
+            bannerArt.color = cardColor;
+            constantArt.color = cardColor;
         }
 
         //setting mana text to the right cost
@@ -141,8 +160,11 @@ public class Card : MonoBehaviour
     public void CopyCardSprites(Card c)
     {
         //updating all default set sprites
-        GetComponent<Image>().sprite = c.gameObject.GetComponent<Image>().sprite;
-        GetComponent<Image>().color = c.gameObject.GetComponent<Image>().color;
+        cardArt.sprite = c.cardArt.sprite;
+        cardBase.sprite = c.cardBase.sprite;
+        bannerArt.sprite = c.bannerArt.sprite;
+        bannerArt.color = c.bannerArt.color;
+        constantArt.color = c.constantArt.color;
         typeIcon.GetComponent<Image>().sprite = c.typeIcon.GetComponent<Image>().sprite;
         cardText.sprite = c.cardText.sprite;
         UpdateManaCost(c.manaCost);
@@ -187,8 +209,11 @@ public class Card : MonoBehaviour
     public void VisualCopy(Card c)
     {
         //updating all default set sprites
-        GetComponent<Image>().sprite = c.gameObject.GetComponent<Image>().sprite;
-        GetComponent<Image>().color = c.gameObject.GetComponent<Image>().color;
+        cardArt.sprite = c.cardArt.sprite;
+        cardBase.sprite = c.cardBase.sprite;
+        bannerArt.sprite = c.bannerArt.sprite;
+        bannerArt.color = c.bannerArt.color;
+        constantArt.color = c.constantArt.color;
         typeIcon.GetComponent<Image>().sprite = c.typeIcon.GetComponent<Image>().sprite;
         cardText.sprite = c.cardText.sprite;
         UpdateManaCost(c.manaCost);

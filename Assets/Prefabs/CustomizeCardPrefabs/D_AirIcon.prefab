@@ -8,16 +8,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 915733496617541599, guid: 2ef014d84fa75804f8ba2946fb247552, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6155503cf25f866428d679b56b208b28, type: 3}
+    - target: {fileID: 915733496617541599, guid: 2ef014d84fa75804f8ba2946fb247552, type: 3}
       propertyPath: m_Color.b
-      value: 0.58771414
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 915733496617541599, guid: 2ef014d84fa75804f8ba2946fb247552, type: 3}
       propertyPath: m_Color.g
-      value: 0.6037736
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 915733496617541599, guid: 2ef014d84fa75804f8ba2946fb247552, type: 3}
       propertyPath: m_Color.r
-      value: 0.5439658
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 915733496617541599, guid: 2ef014d84fa75804f8ba2946fb247552, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7275102447201176692, guid: 2ef014d84fa75804f8ba2946fb247552, type: 3}
       propertyPath: m_Name
@@ -50,6 +58,14 @@ PrefabInstance:
     - target: {fileID: 7709656654324299733, guid: 2ef014d84fa75804f8ba2946fb247552, type: 3}
       propertyPath: m_AnchorMin.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7709656654324299733, guid: 2ef014d84fa75804f8ba2946fb247552, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7709656654324299733, guid: 2ef014d84fa75804f8ba2946fb247552, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7709656654324299733, guid: 2ef014d84fa75804f8ba2946fb247552, type: 3}
       propertyPath: m_LocalPosition.x
