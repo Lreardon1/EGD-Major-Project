@@ -12,8 +12,8 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (cm == null)
         {
-            //cm = FindObjectOfType<CanvasManager>();
-           // cm.player = gameObject;
+            cm = FindObjectOfType<CanvasManager>();
+            cm.player = gameObject;
         }
     }
 

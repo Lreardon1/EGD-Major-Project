@@ -24,7 +24,6 @@ public class Deck : MonoBehaviour
     //enforcing singleton of deck on game start
     void Awake()
     {
-        print("DECK");
         if (instance != this && instance != null)
             Destroy(gameObject);
         else
@@ -39,7 +38,6 @@ public class Deck : MonoBehaviour
         ModifierLookup.LoadModifierTable();
         foreach (GameObject card in allCards)
         {
-            print(card.GetComponent<Card>());
             card.GetComponent<Card>().InitializeCard();
         }
 
@@ -112,6 +110,24 @@ public class Deck : MonoBehaviour
             trans.anchorMin = new Vector2(0.5f, 0.5f);
             trans.anchoredPosition = new Vector2(0.5f, 0.5f);
             trans.localPosition = new Vector3(0, 0, 0);
+        }
+    }
+
+    public void SetDragger(GameObject dragger, bool isCustomization)
+    {
+        foreach (GameObject card in allCards)
+        {
+            card.GetComponent<DragDrop>().dragger = dragger;
+        }
+        if (isCustomization)
+        {
+            foreach (KeyValuePair<string, List<GameObject>> list in freeDraggables)
+            {
+                foreach (GameObject drag in list.Value)
+                {
+                    drag.GetComponent<DragDrop>().dragger = dragger;
+                }
+            }
         }
     }
 }
