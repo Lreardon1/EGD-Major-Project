@@ -526,7 +526,7 @@ public class CombatManager : MonoBehaviour
 
         Deck.instance.Discard(card);
         print(card.transform.lossyScale);
-        card.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        //card.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         return true;
     }
 
