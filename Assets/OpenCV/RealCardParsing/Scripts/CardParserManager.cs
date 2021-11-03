@@ -66,11 +66,13 @@ public class CardParserManager : MonoBehaviour
         validTarget = false;
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitInfo, 100.0f, LayerMask.GetMask("Combatant"))) {
             currentTarget = hitInfo.collider.gameObject;
+            print(hitInfo.collider.gameObject.name);
         }
 
         if (cm.currentPhase == CombatManager.CombatPhase.ActionPhase)
         {
             validTarget = currentTarget == cm.currentCB;
+            print(validTarget);
             if (validTarget)
             {
                 if (Input.GetMouseButtonDown(0))
@@ -93,6 +95,7 @@ public class CardParserManager : MonoBehaviour
         else if (cm.currentPhase == CombatManager.CombatPhase.PlayPhase)
         {
             validTarget = currentTarget != null;
+            print(validTarget);
             if (validTarget)
             {
                 if (Input.GetMouseButtonDown(0))
