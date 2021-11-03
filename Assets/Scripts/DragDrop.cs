@@ -27,10 +27,6 @@ public class DragDrop : MonoBehaviour
         {
             dragger = d.gameObject;
         }
-        else
-        {
-            print("ERROR: CANNOT FIND DRAGGERPOS PREFAB");
-        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

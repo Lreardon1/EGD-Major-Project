@@ -90,8 +90,6 @@ public class Card : MonoBehaviour
             modifiers[i].SetActive(false);
         }
 
-        print("mods");
-
         //updating element icon to match
         GameObject elemIcon = null;
         switch(element)
@@ -127,7 +125,6 @@ public class Card : MonoBehaviour
 
         //setting mana text to the right cost
         manaText.text = manaCost.ToString();
-        print(gameObject.name);
     }
 
     public void Play(GameObject combatant, List<GameObject> otherCombatants)

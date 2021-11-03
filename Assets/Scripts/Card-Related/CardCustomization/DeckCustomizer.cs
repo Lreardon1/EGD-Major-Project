@@ -35,6 +35,8 @@ public class DeckCustomizer : MonoBehaviour
     public GameObject cardEditor;
     [SerializeField]
     public GameObject cardDisplay;
+    [SerializeField]
+    public GameObject dragger;
 
     void Start()
     {
@@ -43,6 +45,7 @@ public class DeckCustomizer : MonoBehaviour
 
     public void SetUp()
     {
+        Deck.instance.SetDragger(dragger, true);
         cardEditor.SetActive(false);
         cardDisplay.SetActive(false);
         customizationWindow.SetActive(false);

@@ -13,6 +13,7 @@ public class CanvasManager : MonoBehaviour
 
     public void ToggleEditOption(bool state)
     {
+        print("toggled" + state);
         editOptionPopup.SetActive(state);
     }
 
