@@ -270,6 +270,7 @@ public class CombatantBasis : MonoBehaviour
             }
             nextAction = Action.Special;
         }
+        nextAction = Action.Attack;
     }
 
     public virtual void SelectTarget(List<GameObject> targets) //TODO:: STILL NEEDS TO HANDLE RETARGETTING IF RANDOMLY CHOOSING UNTARGETTABLE COMBATANT

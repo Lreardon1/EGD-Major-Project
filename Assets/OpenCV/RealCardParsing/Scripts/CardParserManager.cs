@@ -64,28 +64,29 @@ public class CardParserManager : MonoBehaviour
 
         currentTarget = null;
         validTarget = false;
-        RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 100.0f, LayerMask.GetMask("Combatant"));
-        if (hitInfo.collider != null)
-        {
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitInfo, 100.0f, LayerMask.GetMask("Combatant"))) {
             currentTarget = hitInfo.collider.gameObject;
+            print(hitInfo.collider.gameObject.name);
         }
 
         if (cm.currentPhase == CombatManager.CombatPhase.ActionPhase)
         {
             validTarget = currentTarget == cm.currentCB;
+            print(validTarget);
             if (validTarget)
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    if (handCards.Contains(currentCard) || currentCard == null)
+                    print("PLAYING CARD");
+                    if (true || handCards.Contains(currentCard) || currentCard == null)
                     {
                         // TODO : manage card hand and deck here, make the apply card return a boolean of valid, or even a reason?
                         cm.ApplyCard(currentCard, currentTarget);
-                        handCards.Remove(currentCard);
+                        //handCards.Remove(currentCard);
                     }
                     else
                     {
-                        Debug.LogError("CV: Card played is not in HAND");
+                        Debug.LogError("CV: Card played is not in HAND" + currentCard);
                     }
                 }
             }
@@ -94,18 +95,19 @@ public class CardParserManager : MonoBehaviour
         else if (cm.currentPhase == CombatManager.CombatPhase.PlayPhase)
         {
             validTarget = currentTarget != null;
+            print(validTarget);
             if (validTarget)
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    if (handCards.Contains(currentCard) || currentCard == null)
+                    if (true || handCards.Contains(currentCard) || currentCard == null)
                     {
                         // TODO : manage card hand and deck here, make the apply card return a boolean of valid, or even a reason?
                         cm.ApplyCard(currentCard, currentTarget);
-                        handCards.Remove(currentCard);
+                        //handCards.Remove(currentCard);
                     } else
                     {
-                        Debug.LogError("CV: Card played is not in HAND");
+                        Debug.LogError("CV: Card played is not in HAND" + currentCard);
                     }
 
                 }
