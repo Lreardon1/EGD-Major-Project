@@ -495,7 +495,7 @@ MonoBehaviour:
   - {fileID: 582796126}
   - {fileID: 1274333006}
   - {fileID: 2039332}
-  sceneToLoad: BattleScene
+  sceneToLoad: BattleSceneWithCV
 --- !u!114 &816220764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -595,7 +595,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &925945268
 MonoBehaviour:
   m_ObjectHideFlags: 0

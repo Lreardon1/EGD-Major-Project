@@ -47,6 +47,7 @@ public class DragDrop : MonoBehaviour
 
     public void StartDrag()
     {
+        dropZones.Clear();
         if (isDraggable)
         {
             startPosition = trans.localPosition;
@@ -70,6 +71,7 @@ public class DragDrop : MonoBehaviour
         List<GameObject> valid = new List<GameObject>();
         GameObject retVal = null;
         //first performing validation checks
+
         foreach (GameObject dropZone in dropZones)
         {
             CustomizationDropZone cdz = dropZone.GetComponent<CustomizationDropZone>();

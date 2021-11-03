@@ -12,6 +12,7 @@ using UnityEditor;
 
 public class CardParser : MonoBehaviour
 {
+    public RawImage mainSeeImage;
     /*
     public RawImage mainSeeImage;
     public RawImage replaneImage;
@@ -207,6 +208,7 @@ public class CardParser : MonoBehaviour
             // this must be called continuously
             ReadTextureConversionParameters();
             // process texture with whatever method sub-class might have in mind
+            mainSeeImage.texture = webCamTexture;
             ProcessTexture(webCamTexture);
         }
     }
@@ -463,8 +465,8 @@ public class CardParser : MonoBehaviour
     public UnityEvent<GameObject, int> ToNewUpdateEvent = new UnityEvent<GameObject, int>();
 
     private float timeSinceLastUpdate = -1.0f;
-    public float timeRequiredForNull = 0.4f;
-    public float timeRequiredForNew = 0.2f;
+    public float timeRequiredForNull;
+    public float timeRequiredForNew;
 
     private void UpdateCardDetected(GameObject card, int id)
     {
@@ -484,7 +486,12 @@ public class CardParser : MonoBehaviour
         }
 
         // update to different card
-        if (card != null && timeSinceLastUpdate + timeRequiredForNew <= Time.time)
+        if (card != null && previousCard == null && timeSinceLastUpdate + (timeRequiredForNew / 2) <= Time.time)
+        {
+            previousCard = card;
+            timeSinceLastUpdate = Time.time;
+            ToNewUpdateEvent.Invoke(card, id);
+        } else if (card != null && timeSinceLastUpdate + timeRequiredForNew <= Time.time)
         {
             previousCard = card;
             timeSinceLastUpdate = Time.time;
@@ -1349,6 +1356,8 @@ public class CardParser : MonoBehaviour
         TemplateCardData bestCardData = null;
         Mat bestHomographyMat = null;
         print("Card List is " + cardDataList.Count);
+        float bestPercent = 0;
+        TemplateCardData bestPercentCardData = null;
         foreach (TemplateCardData cardData in cardDataList)
         {
             print("Getting card data for " + cardData.name + " from " + cardDataList.Count);
@@ -1382,15 +1391,33 @@ public class CardParser : MonoBehaviour
                     replaneImage.texture = OpenCvSharp.Unity.MatToTexture(replaned);
                     */
                 }
+                if (bestPercent < (float)goodMatches.Length / (float)initMatches)
+                {
+                    bestPercent = (float)goodMatches.Length / (float)initMatches;
+                    bestPercentCardData = cardData;
+                }
             }
         }
 
 
         print("The entire templating took " + (Time.realtimeSinceStartup - t) + " seconds");
-        cardType = bestCardData.cardType;
-        cardElement = bestCardData.cardElement;
-        ID = bestCardData.ID;
-        cardName = bestCardData.name;
+        if (bestCardData != null && bestPercentCardData != null)
+            print("Predicted by keys: " + bestGoodMatches + " for " + bestCardData.name + " but " + bestPercent + " for " + bestPercentCardData.name);
+
+        if (bestCardData != null)
+        {
+            cardType = bestCardData.cardType;
+            cardElement = bestCardData.cardElement;
+            ID = bestCardData.ID;
+            cardName = bestCardData.name;
+        } else
+        {
+            cardType = CardType.None;
+            cardElement = CardElement.None;
+            ID = -1;
+            cardName = "None";
+
+        }
 
         return bestHomographyMat;
    }
@@ -1538,9 +1565,12 @@ public class CardParser : MonoBehaviour
         }
     }
 
+    public int keypointMatchesRequired = 20;
+    public float keypointMatchPercentRequired = 0.5f;
     public bool CheckIfEnoughMatch(DMatch[] matches, int initialMatchCount)
     {
-        return matches.Length >= 4;// && matches.Length > initialMatchCount * 0.5f; // TODO : do better here
+        return matches.Length >= keypointMatchesRequired
+               && matches.Length > initialMatchCount * keypointMatchPercentRequired;
     }
 
 
