@@ -20,7 +20,7 @@ MonoBehaviour:
   combatantName: Priest
   totalHitPoints: 15
   currentHitPoints: 15
-  attack: 30
+  attack: 4
   speed: 16
   attachedBuffs: []
   attackMultiplier: 1
