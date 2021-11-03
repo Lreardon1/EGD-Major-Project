@@ -437,6 +437,8 @@ MonoBehaviour:
   cardWorldColliderPrefab: {fileID: 3219779073509697202, guid: d851cb974d4e42e45b879ee0942f3717, type: 3}
   cardWorldColliderParent: {fileID: 1462311071}
   cm: {fileID: 814797521}
+  dragger: {fileID: 0}
+  originalCardTransform: {fileID: 0}
 --- !u!114 &39250509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1945,6 +1947,9 @@ MonoBehaviour:
   uiColliderParent: {fileID: 1654053999}
   cameraPosition: {x: 0, y: 234.81001, z: -2.5200005}
   cameraRotation: {x: 0.38268346, y: 0, z: 0, w: 0.9238795}
+  encounterScript: {fileID: 0}
+  pointer: {fileID: 0}
+  actionOrderUI: {fileID: 0}
   maxMana: 30
   currentMana: 20
   discardCost: 1
@@ -2505,10 +2510,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   timeRequiredForNull: 1.6
-  timeRequiredForNew: -1
+  timeRequiredForNew: 0.6
   loweRatio: 0.7
   kpDist: 20
-  keypointMatchesRequired: 30
+  keypointMatchesRequired: 25
   keypointMatchPercentRequired: 0.5
   boundBoxText: '0.024590,0.020528,0.211066,0.153959
 
@@ -2838,8 +2843,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -293, y: -145}
-  m_SizeDelta: {x: 188.64, y: 100}
+  m_AnchoredPosition: {x: -279, y: -182}
+  m_SizeDelta: {x: 320, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1478046658
 MonoBehaviour:
@@ -3578,6 +3583,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e2f4dafd7615a3418ffc11eb318a875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCam: {fileID: 0}
+  eventSystem: {fileID: 0}
+  cameraParent: {fileID: 0}
+  originalCameraPos: {x: 0, y: 0, z: 0}
+  originalCameraRot: {x: 0, y: 0, z: 0, w: 1}
+  overWorldDragger: {fileID: 0}
+  player: {fileID: 0}
+  encounterRate: 0.2
+  canGetEncounter: 0
+  inEncounter: 0
 --- !u!4 &1871839936
 Transform:
   m_ObjectHideFlags: 0

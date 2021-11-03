@@ -465,8 +465,8 @@ public class CardParser : MonoBehaviour
     public UnityEvent<GameObject, int> ToNewUpdateEvent = new UnityEvent<GameObject, int>();
 
     private float timeSinceLastUpdate = -1.0f;
-    public float timeRequiredForNull = 0.8f;
-    public float timeRequiredForNew = 0.5f;
+    public float timeRequiredForNull;
+    public float timeRequiredForNew;
 
     private void UpdateCardDetected(GameObject card, int id)
     {
