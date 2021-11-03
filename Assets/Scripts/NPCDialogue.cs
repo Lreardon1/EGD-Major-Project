@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class NPCDialogue : MonoBehaviour
 {
-    public Text uitext;
+    public TMPro.TextMeshProUGUI uitext;
     public RawImage text_back;
     public string opening;
 

@@ -20,6 +20,9 @@ public class LoadEncounter : MonoBehaviour
     public float encounterRate = 0.2f;
     public bool canGetEncounter = false;
     public bool inEncounter = false;
+
+    public float encounterCoolDown = 5f;
+    public float timer = 0f;
     
     
         // Start is called before the first frame update
@@ -31,7 +34,7 @@ public class LoadEncounter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        timer -= Time.deltaTime;
     }
 
     public IEnumerator CheckEncounter()
@@ -41,7 +44,7 @@ public class LoadEncounter : MonoBehaviour
             float random = Random.Range(0f, 1f);
             Debug.Log(random);
 
-            if(random < encounterRate)
+            if(random < encounterRate && timer <= 0f)
             {
                 inEncounter = true;
                 LoadCombatScene();
@@ -85,6 +88,7 @@ public class LoadEncounter : MonoBehaviour
         Deck.instance.SetDragger(overWorldDragger, true);
         inEncounter = false;
         player.canMove = true;
+        timer = encounterCoolDown;
         StartCoroutine("CheckEncounter");
     }
 

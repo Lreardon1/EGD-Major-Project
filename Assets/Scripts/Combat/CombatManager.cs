@@ -12,7 +12,7 @@ using UnityEngine.UI;
     // and maybe even requests from the combat manager to active control scheme
 public class CombatManager : MonoBehaviour
 {
-    public static bool IsInCVMode = true;
+    public static bool IsInCVMode = false;
 
     public enum CombatPhase {DrawPhase, PlayPhase, DiscardPhase, ActionPhase};
 
@@ -513,6 +513,7 @@ public class CombatManager : MonoBehaviour
         manaText.text = "Mana: " + currentMana + "/" + maxMana;
 
         card.transform.SetParent(combatant.GetComponent<CombatantBasis>().uiCollider.transform);
+        card.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         card.GetComponent<DragDrop>().isDraggable = false;
 
         if(!cb.isEnemy)
