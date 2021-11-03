@@ -218,13 +218,15 @@ public class Card : MonoBehaviour
         cardText.sprite = c.cardText.sprite;
         UpdateManaCost(c.manaCost);
 
-        GameObject elemIcon = elementIcon.transform.GetChild(0).gameObject;
-        if (c.element != Element.None) {
-            
+        GameObject elemIcon = elementIcon;
+        if (c.element != Element.None)
+        {
+            elemIcon.GetComponent<Image>().enabled = true;
             elemIcon.GetComponent<Image>().sprite = c.elementIcon.transform.GetChild(0).gameObject.GetComponent<Image>().sprite;
         }
         else
         {
+            elemIcon.GetComponent<Image>().enabled = false;
             elemIcon.GetComponent<Image>().sprite = transparentSprite;
         }
 
