@@ -1,25 +1,31 @@
 fileFormatVersion: 2
-guid: adc546cbcc67289448ba98ec69cb4ecd
+guid: baa8a094bdfd41448950dfde3fc31268
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2471468092568484093
-    second: MC_Walk0
+      213: -3183588101901826152
+    second: mianCharacter_backWalk_0
   - first:
-      213: -5360289590720410684
-    second: MC_Walk2
+      213: 6004952317861262589
+    second: mianCharacter_backWalk_1
   - first:
-      213: -6715651490922199456
-    second: MC_Walk5&7
+      213: 7896734869129236707
+    second: mianCharacter_backWalk_2
   - first:
-      213: -6443241925534221642
-    second: MC_Walk4
+      213: 2378030855055016109
+    second: mianCharacter_backWalk_3
   - first:
-      213: 4941017386394668184
-    second: MC_Walk6
+      213: 2668598528397147116
+    second: mianCharacter_backWalk_4
   - first:
-      213: 106418015206031639
-    second: MC_Walk1&3
+      213: 3365169105033703786
+    second: mianCharacter_backWalk_5
+  - first:
+      213: -6800487517513250449
+    second: mianCharacter_backWalk_6
+  - first:
+      213: -8646946598722996820
+    second: mianCharacter_backWalk_7
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -55,7 +61,7 @@ TextureImporter:
     mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -145,127 +151,169 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MC_Walk0
+      name: mianCharacter_backWalk_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 3
-        width: 32
-        height: 33
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3074ebc3dd493bdd0800000000000000
-      internalID: -2471468092568484093
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MC_Walk2
-      rect:
-        serializedVersion: 2
-        x: 43
+        x: 0
         y: 0
-        width: 32
-        height: 33
+        width: 40
+        height: 40
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4cbc2eb640d6c95b0800000000000000
-      internalID: -5360289590720410684
+      spriteID: 8974bfa1d7f91d3d0800000000000000
+      internalID: -3183588101901826152
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MC_Walk5&7
+      name: mianCharacter_backWalk_1
       rect:
         serializedVersion: 2
-        x: 83
-        y: 2
-        width: 32
-        height: 35
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0668240dc863dc2a0800000000000000
-      internalID: -6715651490922199456
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MC_Walk4
-      rect:
-        serializedVersion: 2
-        x: 123
-        y: 3
-        width: 32
-        height: 34
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6baf0a24b910596a0800000000000000
-      internalID: -6443241925534221642
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MC_Walk6
-      rect:
-        serializedVersion: 2
-        x: 163
+        x: 40
         y: 0
-        width: 32
-        height: 34
+        width: 40
+        height: 40
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 89c45116225029440800000000000000
-      internalID: 4941017386394668184
+      spriteID: df477474150e55350800000000000000
+      internalID: 6004952317861262589
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MC_Walk1&3
+      name: mianCharacter_backWalk_2
       rect:
         serializedVersion: 2
-        x: 203
-        y: 2
-        width: 32
-        height: 35
+        x: 80
+        y: 0
+        width: 40
+        height: 40
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 711ce0afe921a7100800000000000000
-      internalID: 106418015206031639
+      spriteID: 3e093e75686d69d60800000000000000
+      internalID: 7896734869129236707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mianCharacter_backWalk_3
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da0097c9676700120800000000000000
+      internalID: 2378030855055016109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mianCharacter_backWalk_4
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cebfd350934c80520800000000000000
+      internalID: 2668598528397147116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mianCharacter_backWalk_5
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6137aab87b73be20800000000000000
+      internalID: 3365169105033703786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mianCharacter_backWalk_6
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 0
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f69052322a0df91a0800000000000000
+      internalID: -6800487517513250449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mianCharacter_backWalk_7
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 0
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca5f757c1efdff780800000000000000
+      internalID: -8646946598722996820
       vertices: []
       indices: 
       edges: []
@@ -273,7 +321,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5bcbe91c1873ff3429d171a3e4013d8c
+    spriteID: 0ab80a6406205ed4bad9b2bd3833cbd6
     internalID: 0
     vertices: []
     indices: 
