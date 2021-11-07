@@ -53,7 +53,6 @@ public class CardEditHandler : MonoBehaviour
             deckCustomizer = FindObjectOfType<DeckCustomizer>();
             cardEditor = deckCustomizer.cardEditor.GetComponent<CardEditor>();
         }
-        print(Time.time - startHeldTime);
         if (displayOnClick)
         {
             if (isCustomizable)

@@ -51,7 +51,6 @@ public class DeckCustomizer : MonoBehaviour
         customizationWindow.SetActive(false);
         cardSelectionWindow.SetActive(true);
 
-        print("setting up");
         GridLayoutGroup cardGrid = customizeStorage.GetComponent<GridLayoutGroup>();
         GridLayoutGroup allCardGrid = fullDeckStorage.GetComponent<GridLayoutGroup>();
         GridLayoutGroup currDeckGrid = currentDeckStorage.GetComponent<GridLayoutGroup>();
