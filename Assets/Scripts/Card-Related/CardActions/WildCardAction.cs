@@ -9,6 +9,8 @@ public class WildCardAction : CardActionTemplate
         base.OnPlay(c, combatant, otherCombatants);
 
         //implement Wild Card mirroring
+        CombatManager cm = FindObjectOfType<CombatManager>();
+        cm.ApplyCard(cm.lastPlayedCard, combatant);
     }
 
     public override void ApplyCard(Card c, GameObject combatant)

@@ -68,6 +68,8 @@ public class CombatantBasis : MonoBehaviour
     public GameObject target = null;
     public bool isSlain = false;
     public bool isEnemy = false;
+    public bool isChanneling = false;
+    public bool bonusAttack = false;
 
     public GameObject uiCollider;
 
@@ -124,16 +126,34 @@ public class CombatantBasis : MonoBehaviour
             nextActionSecondaryElem = Card.Element.None;
         }
         // visuals
-        MakePopup("Using " + nextAction + " Action", null, Color.white);
+        if (!isChanneling) { //skips action if channeling
+            MakePopup("Using " + nextAction + " Action", null, Color.white);
 
-        if (nextAction == Action.Attack)
+            if (nextAction == Action.Attack)
+                Attack();
+            else if (nextAction == Action.Block)
+                Block();
+            else if (nextAction == Action.Special)
+                Special();
+
+            previousAction = nextAction;
+        }
+        else
+        {
+            MakePopup("Channeling for next turn's Attack", null, Color.white);
+            previousAction = Action.None;
+        }
+
+        //special case for handling bonus attack card
+        if (bonusAttack)
+        {
+            CombatManager cm = FindObjectOfType<CombatManager>();
+            nextAction = Action.Attack;
+            SelectTarget(cm.activeEnemies);
             Attack();
-        else if (nextAction == Action.Block)
-            Block();
-        else if (nextAction == Action.Special)
-            Special();
+            bonusAttack = false;
+        }
 
-        previousAction = nextAction;
         hasPriority = false;
         untargettable = false;
 
@@ -232,6 +252,13 @@ public class CombatantBasis : MonoBehaviour
 
     public virtual void SelectAction()
     {
+        //special case if channeling for attack
+        if (isChanneling)
+        {
+            nextAction = Action.Attack;
+            isChanneling = false;
+        }
+
         int rand = Random.Range(0, 3);
         if(rand == 0)
         {

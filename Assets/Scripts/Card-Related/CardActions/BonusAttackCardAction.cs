@@ -47,6 +47,7 @@ public class BonusAttackCardAction : CardActionTemplate
         cb.nextActionSecondaryElem = secondaryElement;
 
         //handle hardcoding bonus attack after action
+        cb.bonusAttack = true;
 
         if (givePriority)
         {

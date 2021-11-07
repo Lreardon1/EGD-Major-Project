@@ -40,6 +40,8 @@ public class CombatManager : MonoBehaviour
     public GameObject pointer;
     public ActionOrderUI actionOrderUI;
 
+    public GameObject lastPlayedCard;
+
     public int maxMana = 30;
     public int currentMana = 20;
     public int discardCost = 1;
@@ -133,7 +135,7 @@ public class CombatManager : MonoBehaviour
         foreach (GameObject member in partyMembers)
         {
             CombatantBasis cb = member.GetComponent<CombatantBasis>();
-            if (cb.appliedCard != null) // Check to see if card is delay turn card in which case to not set to null
+            if (cb.appliedCard != null && !cb.isChanneling) // Check to see if card is delay turn card in which case to not set to null
             {
                 cb.appliedCard.transform.SetParent(chc.discardPile.transform);
                 cb.appliedCard.transform.position = chc.discardPile.transform.position;
@@ -145,7 +147,7 @@ public class CombatManager : MonoBehaviour
         foreach (GameObject enemy in enemies)
         {
             CombatantBasis cb = enemy.GetComponent<CombatantBasis>();
-            if (cb.appliedCard != null) // Check to see if card is delay turn card in which case to not set to null
+            if (cb.appliedCard != null && !cb.isChanneling) // Check to see if card is delay turn card in which case to not set to null
             {
                 cb.appliedCard.transform.SetParent(chc.discardPile.transform);
                 cb.appliedCard.transform.position = chc.discardPile.transform.position;
@@ -476,6 +478,14 @@ public class CombatManager : MonoBehaviour
     {
         CombatantBasis cb = combatant.GetComponent<CombatantBasis>();
         Card cardScript = card.GetComponent<Card>();
+        if (cardScript.isWild && lastPlayedCard == null)
+        {
+            Debug.Log("cannot play Wild Card without a previously played card");
+            card.transform.SetParent(chc.gameObject.transform);
+            card.transform.localScale = new Vector3(1, 1, 1);
+            cb.appliedCard = null;
+            return false;
+        }
         if (!IsInCVMode)
         {
             if (cb.appliedCard != null)
@@ -511,7 +521,10 @@ public class CombatManager : MonoBehaviour
         cb.appliedCard = card;
         currentMana -= cardScript.manaCost;
         manaText.text = "Mana: " + currentMana + "/" + maxMana;
-
+        if (!cardScript.isWild)
+        {
+            lastPlayedCard = card;
+        }
         card.transform.SetParent(combatant.GetComponent<CombatantBasis>().uiCollider.transform);
         card.transform.localScale = new Vector3(1, 1, 1);
         card.GetComponent<DragDrop>().isDraggable = false;
