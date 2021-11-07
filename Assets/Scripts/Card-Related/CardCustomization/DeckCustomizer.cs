@@ -22,6 +22,8 @@ public class DeckCustomizer : MonoBehaviour
     [SerializeField]
     public GameObject cantAcceptWindow;
     [SerializeField]
+    public GameObject refWindow;
+    [SerializeField]
     public GameObject customizationWindow;
     [SerializeField]
     public GameObject cardSelectionWindow;
@@ -287,5 +289,15 @@ public class DeckCustomizer : MonoBehaviour
         print(transform.parent.gameObject);
         transform.parent.gameObject.GetComponent<CanvasManager>().UnlockPlayer();
         customizationWindow.SetActive(false);
+    }
+
+    public void ShowReferences()
+    {
+        refWindow.SetActive(true);
+    }
+
+    public void HideReferences()
+    {
+        refWindow.SetActive(false);
     }
 }

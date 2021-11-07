@@ -149,7 +149,10 @@ public class CombatantBasis : MonoBehaviour
         {
             CombatManager cm = FindObjectOfType<CombatManager>();
             nextAction = Action.Attack;
-            SelectTarget(cm.activeEnemies);
+            if (target == null) //TODO:: ALSO NEEDS TO RETARGET IF PREVIOUS ATTACK KILLED TARGET
+            {
+                SelectTarget(cm.activeEnemies);
+            }
             Attack();
             bonusAttack = false;
         }
