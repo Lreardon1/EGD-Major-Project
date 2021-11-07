@@ -29,6 +29,9 @@ public class CombatManager : MonoBehaviour
     public List<GameObject> activeEnemies = new List<GameObject>();
 
     public List<GameObject> actionOrder = new List<GameObject>();
+    //public List<GameObject> encounterSets;
+
+    public Transform enemySetLocation;
 
     public GameObject uiColliderPrefab;
     public Transform uiColliderParent;
@@ -65,6 +68,11 @@ public class CombatManager : MonoBehaviour
             member.GetComponent<CombatantBasis>().uiCollider = uiCollider;
             allCombatants.Add(member);
         }
+        //int random = Random.Range(0, encounterSets.Count);
+        //GameObject set = Instantiate(encounterSets[random]);
+
+        //Game
+
         foreach (GameObject enemy in enemies)
         {
             activeEnemies.Add(enemy);

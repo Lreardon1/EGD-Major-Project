@@ -23,6 +23,8 @@ public class LoadEncounter : MonoBehaviour
 
     public float encounterCoolDown = 5f;
     public float timer = 0f;
+
+    public List<GameObject> possibleEnemyPrefabs;
     
     
         // Start is called before the first frame update
