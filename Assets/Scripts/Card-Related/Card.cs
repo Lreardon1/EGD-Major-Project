@@ -71,6 +71,7 @@ public class Card : MonoBehaviour
     public Element secondaryElem = Element.None;
     public AoE targetting = AoE.Single;
     public bool givePrio = false;
+    public bool isWild = false;
 
     // Start is called before the first frame update
     public void InitializeCard()

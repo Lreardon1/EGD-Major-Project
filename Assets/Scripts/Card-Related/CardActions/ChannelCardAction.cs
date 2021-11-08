@@ -46,7 +46,15 @@ public class ChannelCardAction : CardActionTemplate
         CombatantBasis cb = combatant.GetComponent<CombatantBasis>();
         cb.nextActionSecondaryElem = secondaryElement;
 
-        //handle hard coding force attack + damage multiplier, allow no card to be played??
+        //handle hard coding force attack + damage multiplier
+        cb.isChanneling = true;
+        //instantiate and apply Buff Component
+        Buff b = combatant.AddComponent(typeof(Buff)) as Buff;
+        b.affectedValues.Add(Buff.Stat.Attack);
+        b.value = 1.5f;
+        b.duration = 2;
+        b.StartBuff();
+        cb.attachedBuffs.Add(b);
 
         if (givePriority)
         {
