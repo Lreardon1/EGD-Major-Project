@@ -10,22 +10,55 @@ using TMPro;
 public class CardParserManager : MonoBehaviour
 {
     public static CardParserManager instance;
-    
     public GameObject currentCard;
     public CardParser cardParser;
-    public CombatManager cm;
-
-    [Header("UI")]
-    public RawImage goodSeeImage;
-    public TMP_Text cardText;
-    public TMP_Text playText;
-
     private GameObject currentTarget = null;
+    public CVControllerBackLoader cInterface;
 
-    internal void ActivateCVForCombat(CVControllerBackLoader cVControllerBackLoader)
+    public CombatManager cm;
+    public RawImage planeImage;
+    public RawImage goodSeeImage;
+    public RawImage stickerImage1;
+    public RawImage stickerImage2;
+    public RawImage stickerImage3;
+
+    public TMP_Text playText;
+    public TMP_Text cardText;
+
+    private bool activeController;
+
+    // CVReadyToContinueActions
+    // IsReadyToContinueActions
+
+    public void HandlePhaseStep(CombatManager.CombatPhase lastPhase, CombatManager.CombatPhase newPhase)
     {
         // TODO
-        throw new NotImplementedException();
+    }
+
+    public void HandlePhaseInitDone(CombatManager.CombatPhase currentPhase)
+    {
+        // TODO : try not to use this if you can help it
+    }
+
+    public void ActivateCVForCombat(CVControllerBackLoader backLoader)
+    {
+        cInterface = backLoader;
+        cm = backLoader.cm;
+        planeImage = backLoader.planeImage;
+        stickerImage1 = backLoader.stickerImage1;
+        stickerImage2 = backLoader.stickerImage2;
+        stickerImage3 = backLoader.stickerImage3;
+        playText = backLoader.playText;
+        cardText = backLoader.cardText;
+        cm.SubscribeAsController(HandlePhaseStep, HandlePhaseInitDone);
+
+        // TODO : sanity check but might just muddle things
+        HandlePhaseStep(CombatManager.CombatPhase.None, CombatManager.CombatPhase.DrawPhase);
+
+        activeController = CombatManager.IsInCVMode;
+        cardParser.SetLookForInput(CombatManager.IsInCVMode);
+
+        DisplayCardData(null, null);
     }
 
     private int currentID = -1;
@@ -69,9 +102,6 @@ public class CardParserManager : MonoBehaviour
 
         SetUpOrderedCards(Deck.instance.allCards);
 
-        cardParser.SetLookForInput(false); // TODO : re up while you work
-
-        DisplayCardData(null, null);
     }
 
     private void Update()
@@ -215,9 +245,29 @@ public class CardParserManager : MonoBehaviour
     public void RequestCardAction(OneOnCombatManager oneOnCombatManager)
     {
     }
+
+    internal void UpdateSeenImage(WebCamTexture webCamTexture)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateStickerDebugs(Mat sticker1, Mat sticker2, Mat sticker3)
+    {
+        stickerImage1.enabled = stickerImage2.enabled = stickerImage3.enabled = true;
+
+        if (stickerImage1.texture != null)
+            Destroy(stickerImage1.texture);
+        if (stickerImage2.texture != null)
+            Destroy(stickerImage2.texture);
+        if (stickerImage3.texture != null)
+            Destroy(stickerImage3.texture);
+
+        stickerImage1.texture = OpenCvSharp.Unity.MatToTexture(sticker1);
+        stickerImage2.texture = OpenCvSharp.Unity.MatToTexture(sticker2);
+        stickerImage3.texture = OpenCvSharp.Unity.MatToTexture(sticker3);
+    }
+
     // TODO 
-    // Disable functionality based on STATIC bool flag in combatManager : TODO : wait
-    // 
     // POSSIBLE BUG : CAN DRAG THE NEWLY CREATED CARDS BACK ONTO THE HAND THAT SHOULDN'T EXIST?? WE'LL SEE
     // 
 }

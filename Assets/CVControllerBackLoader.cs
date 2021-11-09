@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class CVControllerBackLoader : MonoBehaviour
 {
+    public CombatManager cm;
     public RawImage planeImage;
     public RawImage goodSeeImage;
     public RawImage stickerImage1;
@@ -16,14 +17,8 @@ public class CVControllerBackLoader : MonoBehaviour
     public TMP_Text cardText;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         CardParserManager.instance.ActivateCVForCombat(this);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
