@@ -13358,6 +13358,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
+      propertyPath: godfatherBack
+      value: 
+      objectReference: {fileID: 597938947}
+    - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: warrior_animator
       value: 
       objectReference: {fileID: 2100651354}
@@ -13365,22 +13369,6 @@ PrefabInstance:
       propertyPath: godfather_animator
       value: 
       objectReference: {fileID: 1253629500}
-    - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
-      propertyPath: playerBackRenderer
-      value: 
-      objectReference: {fileID: 972987244}
-    - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
-      propertyPath: player_back_animator
-      value: 
-      objectReference: {fileID: 597938949}
-    - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
-      propertyPath: godfatherBackRenderer
-      value: 
-      objectReference: {fileID: 597938947}
-    - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
-      propertyPath: warrior_back_animator
-      value: 
-      objectReference: {fileID: 2100651354}
     - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: godfather_back_animator
       value: 
@@ -13400,10 +13388,6 @@ PrefabInstance:
     - target: {fileID: 1426100620896122064, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 6583551548666953802, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
@@ -19227,11 +19211,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.4572563, y: 1.3913485, z: 0.14956057}
   m_Center: {x: -1.1367531, y: 0.69567424, z: 0.0000039301826}
---- !u!1 &972987244 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5905490234984378891, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
-  m_PrefabInstance: {fileID: 677977145}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &974613152 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1083037774166382, guid: e52a0aab2df8e4c49a7b1463d4eff218, type: 3}
@@ -23714,7 +23693,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 674488719510518924, guid: 3029b409b095b274c8738876c675414a, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 674488719510518924, guid: 3029b409b095b274c8738876c675414a, type: 3}
       propertyPath: m_CastShadows
@@ -27206,10 +27185,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1327290976677976833, guid: f795ee76625a5004798f9317ee4837b5, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5858212409044707529, guid: f795ee76625a5004798f9317ee4837b5, type: 3}
       propertyPath: m_RootOrder
       value: 3

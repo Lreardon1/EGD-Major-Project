@@ -249,10 +249,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ground: {fileID: 1426100620003866594}
+  playerBack: {fileID: 5905490234984378891}
+  godfatherBack: {fileID: 0}
   movementspeed: 8
   player_animator: {fileID: 1426100620896122058}
   warrior_animator: {fileID: 0}
   godfather_animator: {fileID: 0}
+  player_back_animator: {fileID: 7282794483475963782}
+  godfather_back_animator: {fileID: 0}
   cc: {fileID: 1426100620896122057}
   canMove: 1
   movements: []
@@ -402,8 +406,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5905490234984378891}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.72533, y: 1.03, z: -21.317}
-  m_LocalScale: {x: 0.20408162, y: 0.20408162, z: 0.20408162}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1426100620896122061}
   m_RootOrder: 2

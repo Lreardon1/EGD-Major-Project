@@ -184,6 +184,12 @@ public class OverworldMovement : MonoBehaviour
                 godfather_back_animator.SetBool("Walking", true);
                 if (directionY != "forward")
                 {
+                    playerRenderer.enabled = false;
+                    godfatherRenderer.enabled = false;
+                    //warriorRenderer.enabled = false;
+                    playerBackRenderer.enabled = true;
+                    godfatherBackRenderer.enabled = true;
+                    //warriorRenderer.enabled = true;
                     playerRenderer.flipX = false;
                     godfatherRenderer.flipX = false;
                     warriorRenderer.flipX = false;
@@ -200,9 +206,15 @@ public class OverworldMovement : MonoBehaviour
                 godfather_back_animator.SetBool("Walking", true);
                 if (directionY != "backward")
                 {
-                    playerRenderer.flipX = false;
-                    godfatherRenderer.flipX = false;
-                    warriorRenderer.flipX = false;
+                    playerRenderer.enabled = true;
+                    godfatherRenderer.enabled = true;
+                    //warriorRenderer.enabled = true;
+                    playerBackRenderer.enabled = false;
+                    godfatherBackRenderer.enabled = false;
+                    //warriorRenderer.enabled = false;
+                    playerRenderer.flipX = true;
+                    godfatherRenderer.flipX = true;
+                    warriorRenderer.flipX = true;
                     directionY = "backward";
                 }
             }
