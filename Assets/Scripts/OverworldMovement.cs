@@ -5,14 +5,24 @@ using UnityEngine;
 public class OverworldMovement : MonoBehaviour
 {
     public GameObject ground;
+    //public GameObject warriorBack;
+    public GameObject playerBack;
+    public GameObject godfatherBack;
     public int movementspeed = 100;
-    string direction;
+    string directionY;
+    string directionX;
     SpriteRenderer playerRenderer;
     SpriteRenderer godfatherRenderer;
     SpriteRenderer warriorRenderer;
+    SpriteRenderer playerBackRenderer;
+    SpriteRenderer godfatherBackRenderer;
+    //SpriteRenderer warriorBackRenderer;
     public Animator player_animator;
     public Animator warrior_animator;
     public Animator godfather_animator;
+    public Animator player_back_animator;
+    //public Animator warrior_back_animator;
+    public Animator godfather_back_animator;
     public CharacterController cc;
     public bool canMove = true;
     public List<UnityEngine.Vector3> movements = new List<UnityEngine.Vector3>();
@@ -35,7 +45,8 @@ public class OverworldMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        direction = "left";
+        directionY = "left";
+        directionX = "forward";
         //Fetch the SpriteRenderer from the GameObject and other party gameobjects
         playerRenderer = GetComponent<SpriteRenderer>();
         playerRenderer.flipX = false;
@@ -43,6 +54,12 @@ public class OverworldMovement : MonoBehaviour
         godfatherRenderer.flipX = false;
         warriorRenderer = party_members[0].GetComponent<SpriteRenderer>();
         warriorRenderer.flipX = false;
+        playerBackRenderer = playerBack.GetComponent<SpriteRenderer>();
+        playerBackRenderer.flipX = false;
+        godfatherBackRenderer = godfatherBack.GetComponent<SpriteRenderer>();
+        godfatherBackRenderer.flipX = false;
+        //warriorBackRenderer = warriorBack.GetComponent<SpriteRenderer>();
+        //warriorBackRenderer.flipX = false;
         cc = GetComponent<CharacterController>();
         movements.Add(Vector3.zero);
     }
@@ -115,13 +132,23 @@ public class OverworldMovement : MonoBehaviour
                 player_animator.SetBool("Walking", true);
                 warrior_animator.SetBool("Walking", true);
                 godfather_animator.SetBool("Walking", true);
+                player_back_animator.SetBool("Walking", true);
+                //warrior_back_animator.SetBool("Walking", true);
+                godfather_back_animator.SetBool("Walking", true);
                 //transform.Translate(Vector3.right * movementspeed * Time.fixedDeltaTime);
-                if (direction != "right" || direction != "forward")
+                if (directionX != "right" && directionY == "forward")
+                {
+                    playerBackRenderer.flipX = true;
+                    godfatherBackRenderer.flipX = true;
+                    warriorRenderer.flipX = true; //needs edit
+                    directionX = "right";
+                }
+                else if (directionX != "right" && directionY == "backward")
                 {
                     playerRenderer.flipX = true;
                     godfatherRenderer.flipX = true;
                     warriorRenderer.flipX = true;
-                    direction = "right";
+                    directionX = "right";
                 }
             }
             else if (Input.GetKey(KeyCode.A))
@@ -129,13 +156,22 @@ public class OverworldMovement : MonoBehaviour
                 player_animator.SetBool("Walking", true);
                 warrior_animator.SetBool("Walking", true);
                 godfather_animator.SetBool("Walking", true);
-                //transform.Translate(Vector3.left * movementspeed * Time.fixedDeltaTime);
-                if (direction != "left" || direction != "back")
+                player_back_animator.SetBool("Walking", true);
+                //warrior_back_animator.SetBool("Walking", true);
+                godfather_back_animator.SetBool("Walking", true);
+                if (directionX != "left" && directionY == "forward")
+                {
+                    playerBackRenderer.flipX = false;
+                    godfatherBackRenderer.flipX = false;
+                    warriorRenderer.flipX = false; //needs edit
+                    directionX = "left";
+                }
+                else if (directionX != "left" && directionY == "backward")
                 {
                     playerRenderer.flipX = false;
                     godfatherRenderer.flipX = false;
                     warriorRenderer.flipX = false;
-                    direction = "left";
+                    directionX = "left";
                 }
             }
             else if (Input.GetKey(KeyCode.W))
@@ -143,22 +179,41 @@ public class OverworldMovement : MonoBehaviour
                 player_animator.SetBool("Walking", true);
                 warrior_animator.SetBool("Walking", true);
                 godfather_animator.SetBool("Walking", true);
-                //transform.Translate(Vector3.forward * movementspeed * Time.fixedDeltaTime);
-
+                player_back_animator.SetBool("Walking", true);
+                //warrior_back_animator.SetBool("Walking", true);
+                godfather_back_animator.SetBool("Walking", true);
+                if (directionY != "forward")
+                {
+                    playerRenderer.flipX = false;
+                    godfatherRenderer.flipX = false;
+                    warriorRenderer.flipX = false;
+                    directionY = "forward";
+                }
             }
             else if (Input.GetKey(KeyCode.S))
             {
                 player_animator.SetBool("Walking", true);
                 warrior_animator.SetBool("Walking", true);
                 godfather_animator.SetBool("Walking", true);
-                //transform.Translate(Vector3.back * movementspeed * Time.fixedDeltaTime);
-
+                player_back_animator.SetBool("Walking", true);
+                //warrior_back_animator.SetBool("Walking", true);
+                godfather_back_animator.SetBool("Walking", true);
+                if (direction != "backward")
+                {
+                    playerRenderer.flipX = false;
+                    godfatherRenderer.flipX = false;
+                    warriorRenderer.flipX = false;
+                    directionY = "backward";
+                }
             }
             else
             {
                 player_animator.SetBool("Walking", false);
                 warrior_animator.SetBool("Walking", false);
                 godfather_animator.SetBool("Walking", false);
+                player_back_animator.SetBool("Walking", false);
+                //warrior_back_animator.SetBool("Walking", false);
+                godfather_back_animator.SetBool("Walking", false);
             }
         }
     }

@@ -1,30 +1,12 @@
 fileFormatVersion: 2
-guid: b3f75d0f12fa5e24e914f75f0a7471db
+guid: f1051ee509ddc0e4d826c552e1b72e45
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -2394859407263335657
-    second: mianCharacter_backIdle_0
-  - first:
-      213: 7168340408205895423
-    second: mianCharacter_backIdle_1
-  - first:
-      213: 8925519651574021181
-    second: mianCharacter_backIdle_2
-  - first:
-      213: 930055025990794690
-    second: mianCharacter_backIdle_1
-  - first:
-      213: 4958677461632551980
-    second: mianCharacter_backIdle_4
-  - first:
-      213: -3100237486293236354
-    second: mianCharacter_backIdle_5
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -50,16 +32,16 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 2
     mipBias: 0
-    wrapU: 1
-    wrapV: 1
+    wrapU: 0
+    wrapV: 0
     wrapW: 0
-  nPOTScale: 0
+  nPOTScale: 1
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 0
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -68,9 +50,9 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 1
+  alphaIsTransparency: 0
   spriteTessellationDetail: -1
-  textureType: 8
+  textureType: 0
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -86,7 +68,7 @@ TextureImporter:
     maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -98,7 +80,7 @@ TextureImporter:
     maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -143,53 +125,11 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: mianCharacter_backIdle_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 2
-        width: 36
-        height: 34
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 71bf01fbe00c3ced0800000000000000
-      internalID: -2394859407263335657
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: mianCharacter_backIdle_1
-      rect:
-        serializedVersion: 2
-        x: 120
-        y: 3
-        width: 35
-        height: 30
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2cd7fb55e1838ec00800000000000000
-      internalID: 930055025990794690
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 84c4ee47143bcf543a98f5bf72bc1a4f
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 

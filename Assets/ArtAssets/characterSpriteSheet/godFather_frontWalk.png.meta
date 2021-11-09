@@ -154,12 +154,12 @@ TextureImporter:
       name: godFather_frontWalk_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 3
-        width: 32
-        height: 33
+        x: 10
+        y: 6
+        width: 22
+        height: 28
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -175,12 +175,12 @@ TextureImporter:
       name: godFather_frontWalk_1
       rect:
         serializedVersion: 2
-        x: 43
-        y: 0
-        width: 32
-        height: 33
+        x: 50
+        y: 3
+        width: 22
+        height: 30
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -196,12 +196,12 @@ TextureImporter:
       name: godFather_frontWalk_2
       rect:
         serializedVersion: 2
-        x: 83
-        y: 2
-        width: 32
-        height: 35
+        x: 90
+        y: 4
+        width: 22
+        height: 31
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -217,12 +217,12 @@ TextureImporter:
       name: godFather_frontWalk_3
       rect:
         serializedVersion: 2
-        x: 123
-        y: 3
-        width: 32
-        height: 34
+        x: 130
+        y: 5
+        width: 22
+        height: 30
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -238,12 +238,12 @@ TextureImporter:
       name: godFather_frontWalk_4
       rect:
         serializedVersion: 2
-        x: 163
-        y: 0
-        width: 32
-        height: 34
+        x: 170
+        y: 6
+        width: 22
+        height: 28
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -259,12 +259,12 @@ TextureImporter:
       name: godFather_frontWalk_5
       rect:
         serializedVersion: 2
-        x: 203
-        y: 2
-        width: 32
-        height: 35
+        x: 210
+        y: 3
+        width: 22
+        height: 30
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -280,12 +280,12 @@ TextureImporter:
       name: godFather_frontWalk_6
       rect:
         serializedVersion: 2
-        x: 240
-        y: 0
-        width: 40
-        height: 40
+        x: 250
+        y: 3
+        width: 23
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -301,12 +301,12 @@ TextureImporter:
       name: godFather_frontWalk_7
       rect:
         serializedVersion: 2
-        x: 280
-        y: 0
-        width: 40
-        height: 40
+        x: 290
+        y: 5
+        width: 22
+        height: 30
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
