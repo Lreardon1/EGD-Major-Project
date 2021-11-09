@@ -35,10 +35,13 @@ public class CardParserManager : MonoBehaviour
         // TODO
     }
 
-    public void HandlePhaseInitDone(CombatManager.CombatPhase currentPhase)
+    public void HandleRequestForInput(CombatManager.CombatPhase currentPhase)
     {
         // TODO : try not to use this if you can help it
     }
+
+    // Note for Jay: Can be called to switch phase for all phases except ActionPhase, which is handled by CVReadyToContinueActions() instead
+    // public void NextPhase()
 
     public void ActivateCVForCombat(CVControllerBackLoader backLoader)
     {
@@ -50,7 +53,7 @@ public class CardParserManager : MonoBehaviour
         stickerImage3 = backLoader.stickerImage3;
         playText = backLoader.playText;
         cardText = backLoader.cardText;
-        cm.SubscribeAsController(HandlePhaseStep, HandlePhaseInitDone);
+        cm.SubscribeAsController(HandlePhaseStep, HandleRequestForInput);
 
         // TODO : sanity check but might just muddle things
         HandlePhaseStep(CombatManager.CombatPhase.None, CombatManager.CombatPhase.DrawPhase);
