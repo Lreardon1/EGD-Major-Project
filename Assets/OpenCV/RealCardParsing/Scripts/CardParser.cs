@@ -13,12 +13,13 @@ using UnityEditor;
 public class CardParser : MonoBehaviour
 {
     public RawImage mainSeeImage;
+    public RawImage[] stickerImages;
+
     /*
     public RawImage mainSeeImage;
     public RawImage replaneImage;
     public RawImage debugCardImage;
     public RawImage debugSceneImage;
-    public RawImage[] stickerImages; 
     */
     public CardParserManager cardParserManager;
     [Space(10)]
@@ -99,8 +100,6 @@ public class CardParser : MonoBehaviour
 
     private Mat ExtractCardType(Mat cardMat)
     {
-        print(bottomRightBoundingBox);
-        print(cardMat);
         return bottomRightBoundingBox.CropByBox(cardMat);
     }
     private Scalar ExtractCardElement(Mat cardMat)
@@ -435,12 +434,24 @@ public class CardParser : MonoBehaviour
 
     private GameObject AttemptToGetMods(CustomCard card, Mat cardImage, List<GameObject> possibleCards)
     {
-        // TODO : used for debugging
-        return possibleCards[0];
-
+        defaultStickerWidth = defaultStickerHeight = 128;
         Mat sticker1 = stickerBoundingBox1.CropByBox(cardImage, new Size(defaultStickerWidth, defaultStickerHeight));
         Mat sticker2 = stickerBoundingBox2.CropByBox(cardImage, new Size(defaultStickerWidth, defaultStickerHeight));
         Mat sticker3 = stickerBoundingBox3.CropByBox(cardImage, new Size(defaultStickerWidth, defaultStickerHeight));
+
+        if (stickerImages[0].texture != null)
+            Destroy(stickerImages[0].texture);
+        if (stickerImages[1].texture != null)
+            Destroy(stickerImages[1].texture);
+        if (stickerImages[2].texture != null)
+            Destroy(stickerImages[2].texture);
+
+        stickerImages[0].texture = OpenCvSharp.Unity.MatToTexture(sticker1);
+        stickerImages[1].texture = OpenCvSharp.Unity.MatToTexture(sticker2);
+        stickerImages[2].texture = OpenCvSharp.Unity.MatToTexture(sticker3);
+
+        // TODO : used for debugging
+        return possibleCards[0];
 
         List<string> possibleStickers1 = new List<string>();
         List<string> possibleStickers2 = new List<string>();

@@ -5,14 +5,24 @@ using UnityEngine;
 public class OverworldMovement : MonoBehaviour
 {
     public GameObject ground;
+    //public GameObject warriorBack;
+    public GameObject playerBack;
+    public GameObject godfatherBack;
     public int movementspeed = 100;
-    string direction;
+    string directionY;
+    string directionX;
     SpriteRenderer playerRenderer;
     SpriteRenderer godfatherRenderer;
     SpriteRenderer warriorRenderer;
+    SpriteRenderer playerBackRenderer;
+    SpriteRenderer godfatherBackRenderer;
+    //SpriteRenderer warriorBackRenderer;
     public Animator player_animator;
     public Animator warrior_animator;
     public Animator godfather_animator;
+    public Animator player_back_animator;
+    //public Animator warrior_back_animator;
+    public Animator godfather_back_animator;
     public CharacterController cc;
     public bool canMove = true;
     public List<UnityEngine.Vector3> movements = new List<UnityEngine.Vector3>();
@@ -35,7 +45,8 @@ public class OverworldMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        direction = "left";
+        directionY = "left";
+        directionX = "forward";
         //Fetch the SpriteRenderer from the GameObject and other party gameobjects
         playerRenderer = GetComponent<SpriteRenderer>();
         playerRenderer.flipX = false;
@@ -43,6 +54,12 @@ public class OverworldMovement : MonoBehaviour
         godfatherRenderer.flipX = false;
         warriorRenderer = party_members[0].GetComponent<SpriteRenderer>();
         warriorRenderer.flipX = false;
+        playerBackRenderer = playerBack.GetComponent<SpriteRenderer>();
+        playerBackRenderer.flipX = false;
+        godfatherBackRenderer = godfatherBack.GetComponent<SpriteRenderer>();
+        godfatherBackRenderer.flipX = false;
+        //warriorBackRenderer = warriorBack.GetComponent<SpriteRenderer>();
+        //warriorBackRenderer.flipX = false;
         cc = GetComponent<CharacterController>();
         movements.Add(Vector3.zero);
     }
@@ -54,35 +71,14 @@ public class OverworldMovement : MonoBehaviour
     {
         Vector3 right = new Vector3(0, 0, 0);
         Vector3 up = new Vector3(0,0,0);
+
         if (canMove)
         {
             float rightTurn = Input.GetAxisRaw("Rotate");
             transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
             party_members[1].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
             party_members[0].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
-            /*
-            //player camera rotation
-            if (Input.GetKeyDown(KeyCode.E) && rotated != true)
-            {
-                transform.Rotate(0, 90, 0);
-                rotated = true;
-                rotation_way = "E";
-            }
-            else if (Input.GetKeyDown(KeyCode.Q) && rotated != true)
-            {
-                transform.Rotate(0, -90, 0);
-                rotated = true;
-                rotation_way = "Q";
-            }
-            else if (Input.GetKeyUp(KeyCode.E) && rotation_way == "E")
-            {
-                rotated = false;
-            }
-            else if (Input.GetKeyUp(KeyCode.Q) && rotation_way == "Q")
-            {
-                rotated = false;
-            }*/
-
+           
             right = Input.GetAxisRaw("Horizontal") * transform.right;
             up = Input.GetAxisRaw("Vertical") * transform.forward;
         }
@@ -110,18 +106,73 @@ public class OverworldMovement : MonoBehaviour
 
         if (canMove)
         {
+            // Keegan, I touched your code cause this deeply upset me, sorry. 
+            // Your code is commented out, not delete if I broke anything. 
+
+            // set vars that stay solid when not moving
+            if (Input.GetAxisRaw("Horizontal") > 0.0f)
+                directionX = "right";
+            else if (Input.GetAxisRaw("Horizontal") < 0.0f)
+                directionX = "left";
+            if (Input.GetAxisRaw("Vertical") > 0.0f)
+                directionY = "forward";
+            else if (Input.GetAxisRaw("Vertical") < 0.0f)
+                directionY = "backward";
+            else
+                directionY = "backward"; // TODO : so when you stop moving in Y, characters face you again
+
+            // Moving Animation
+            bool isMoving = (right + up).sqrMagnitude > 0.0001;
+            player_animator.SetBool("Walking", isMoving);
+            warrior_animator.SetBool("Walking", isMoving);
+            godfather_animator.SetBool("Walking", isMoving);
+            player_back_animator.SetBool("Walking", isMoving);
+            // warrior_back_animator.SetBool("Walking", (right + up).sqrMagnitude > 0.001);
+            godfather_back_animator.SetBool("Walking", isMoving);
+
+            // Left Right Flip
+            bool movingRight = directionX == "right";
+            playerRenderer.flipX = movingRight;
+            godfatherRenderer.flipX = movingRight;
+            warriorRenderer.flipX = movingRight;
+            playerBackRenderer.flipX = movingRight;
+            godfatherBackRenderer.flipX = movingRight;
+            warriorRenderer.flipX = movingRight; //needs edit
+
+            // TODO : why are you using a different spriteRenderer? 
+            //       Can't you just make a new animation for the animator?
+            bool backToCamera = directionY == "forward";
+            playerRenderer.enabled = !backToCamera;
+            godfatherRenderer.enabled = !backToCamera;
+            //warriorRenderer.enabled = !backToCamera;
+            playerBackRenderer.enabled = backToCamera;
+            godfatherBackRenderer.enabled = backToCamera;
+            //warriorRenderer.enabled = backToCamera;
+            // * End of code tampering
+
+            /*
             if (Input.GetKey(KeyCode.D))
             {
                 player_animator.SetBool("Walking", true);
                 warrior_animator.SetBool("Walking", true);
                 godfather_animator.SetBool("Walking", true);
+                player_back_animator.SetBool("Walking", true);
+                //warrior_back_animator.SetBool("Walking", true);
+                godfather_back_animator.SetBool("Walking", true);
                 //transform.Translate(Vector3.right * movementspeed * Time.fixedDeltaTime);
-                if (direction != "right" || direction != "forward")
+                if (directionX != "right" && directionY == "forward")
+                {
+                    playerBackRenderer.flipX = true;
+                    godfatherBackRenderer.flipX = true;
+                    warriorRenderer.flipX = true; //needs edit
+                    directionX = "right";
+                }
+                else if (directionX != "right" && directionY == "backward")
                 {
                     playerRenderer.flipX = true;
                     godfatherRenderer.flipX = true;
                     warriorRenderer.flipX = true;
-                    direction = "right";
+                    directionX = "right";
                 }
             }
             else if (Input.GetKey(KeyCode.A))
@@ -129,13 +180,22 @@ public class OverworldMovement : MonoBehaviour
                 player_animator.SetBool("Walking", true);
                 warrior_animator.SetBool("Walking", true);
                 godfather_animator.SetBool("Walking", true);
-                //transform.Translate(Vector3.left * movementspeed * Time.fixedDeltaTime);
-                if (direction != "left" || direction != "back")
+                player_back_animator.SetBool("Walking", true);
+                //warrior_back_animator.SetBool("Walking", true);
+                godfather_back_animator.SetBool("Walking", true);
+                if (directionX != "left" && directionY == "forward")
+                {
+                    playerBackRenderer.flipX = false;
+                    godfatherBackRenderer.flipX = false;
+                    warriorRenderer.flipX = false; //needs edit
+                    directionX = "left";
+                }
+                else if (directionX != "left" && directionY == "backward")
                 {
                     playerRenderer.flipX = false;
                     godfatherRenderer.flipX = false;
                     warriorRenderer.flipX = false;
-                    direction = "left";
+                    directionX = "left";
                 }
             }
             else if (Input.GetKey(KeyCode.W))
@@ -143,23 +203,54 @@ public class OverworldMovement : MonoBehaviour
                 player_animator.SetBool("Walking", true);
                 warrior_animator.SetBool("Walking", true);
                 godfather_animator.SetBool("Walking", true);
-                //transform.Translate(Vector3.forward * movementspeed * Time.fixedDeltaTime);
-
+                player_back_animator.SetBool("Walking", true);
+                //warrior_back_animator.SetBool("Walking", true);
+                godfather_back_animator.SetBool("Walking", true);
+                if (directionY != "forward")
+                {
+                    playerRenderer.enabled = false;
+                    godfatherRenderer.enabled = false;
+                    //warriorRenderer.enabled = false;
+                    playerBackRenderer.enabled = true;
+                    godfatherBackRenderer.enabled = true;
+                    //warriorRenderer.enabled = true;
+                    playerRenderer.flipX = false;
+                    godfatherRenderer.flipX = false;
+                    warriorRenderer.flipX = false;
+                    directionY = "forward";
+                }
             }
             else if (Input.GetKey(KeyCode.S))
             {
                 player_animator.SetBool("Walking", true);
                 warrior_animator.SetBool("Walking", true);
                 godfather_animator.SetBool("Walking", true);
-                //transform.Translate(Vector3.back * movementspeed * Time.fixedDeltaTime);
-
+                player_back_animator.SetBool("Walking", true);
+                //warrior_back_animator.SetBool("Walking", true);
+                godfather_back_animator.SetBool("Walking", true);
+                if (directionY != "backward")
+                {
+                    playerRenderer.enabled = true;
+                    godfatherRenderer.enabled = true;
+                    //warriorRenderer.enabled = true;
+                    playerBackRenderer.enabled = false;
+                    godfatherBackRenderer.enabled = false;
+                    //warriorRenderer.enabled = false;
+                    playerRenderer.flipX = true;
+                    godfatherRenderer.flipX = true;
+                    warriorRenderer.flipX = true;
+                    directionY = "backward";
+                }
             }
             else
             {
                 player_animator.SetBool("Walking", false);
                 warrior_animator.SetBool("Walking", false);
                 godfather_animator.SetBool("Walking", false);
-            }
+                player_back_animator.SetBool("Walking", false);
+                //warrior_back_animator.SetBool("Walking", false);
+                godfather_back_animator.SetBool("Walking", false);
+            }*/
         }
     }
 

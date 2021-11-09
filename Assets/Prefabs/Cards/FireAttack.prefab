@@ -19,6 +19,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1821395784224566282, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5ff786afaf9b41f478f0551510dd157b, type: 3}
+    - target: {fileID: 2669859812542877783, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: dc261a0e7f46a3847a8a8bb680b2b646, type: 3}
     - target: {fileID: 2669859812542877783, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: m_Color.a
       value: 0.72156864
@@ -34,6 +42,10 @@ PrefabInstance:
     - target: {fileID: 2669859812542877783, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: m_Color.r
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2669859812542877783, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: type
@@ -95,6 +107,10 @@ PrefabInstance:
       propertyPath: spriteModifierVals.Array.data[1]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3760819992735398633, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0563416d182d74843a8ceb62295dedf1, type: 3}
     - target: {fileID: 3828099858429366394, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: displayOnClick
       value: 1
