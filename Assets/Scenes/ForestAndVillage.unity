@@ -33784,6 +33784,193 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraToLookAt: {fileID: 1405728425}
+--- !u!1 &1567943722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1567943725}
+  - component: {fileID: 1567943724}
+  - component: {fileID: 1567943723}
+  m_Layer: 0
+  m_Name: CVController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1567943723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1567943722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20207fcf6ab55b54faa1a662df242386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainSeeImage: {fileID: 0}
+  stickerImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  cardParserManager: {fileID: 1567943724}
+  staticTestImage: {fileID: 0}
+  bottomRightBoundingBox:
+    ul:
+      X: 0.776639
+      Y: 0.846041
+    ur:
+      X: 0.776639
+      Y: 0.979472
+    lr:
+      X: 0.963115
+      Y: 0.979472
+    ll:
+      X: 0.963115
+      Y: 0.846041
+  upperLeftBoundingBox:
+    ul:
+      X: 0.02459
+      Y: 0.020528
+    ur:
+      X: 0.02459
+      Y: 0.153959
+    lr:
+      X: 0.211066
+      Y: 0.153959
+    ll:
+      X: 0.211066
+      Y: 0.020528
+  stickerBoundingBox1:
+    ul:
+      X: 0.768443
+      Y: 0.041056
+    ur:
+      X: 0.768443
+      Y: 0.140762
+    lr:
+      X: 0.907787
+      Y: 0.140762
+    ll:
+      X: 0.907787
+      Y: 0.041056
+  stickerBoundingBox2:
+    ul:
+      X: 0.770492
+      Y: 0.177419
+    ur:
+      X: 0.770492
+      Y: 0.274194
+    lr:
+      X: 0.905738
+      Y: 0.274194
+    ll:
+      X: 0.905738
+      Y: 0.177419
+  stickerBoundingBox3:
+    ul:
+      X: 0.770492
+      Y: 0.306452
+    ur:
+      X: 0.770492
+      Y: 0.404692
+    lr:
+      X: 0.905738
+      Y: 0.404692
+    ll:
+      X: 0.905738
+      Y: 0.306452
+  elementColorBoundingBox:
+    ul:
+      X: 0.655738
+      Y: 0.912023
+    ur:
+      X: 0.655738
+      Y: 0.958944
+    lr:
+      X: 0.715164
+      Y: 0.958944
+    ll:
+      X: 0.715164
+      Y: 0.912023
+  cornerReplaneOffset: 25
+  matchThresh: 0.7
+  tagLineIntersectThresh: 4
+  borderAmount: 10
+  defaultCardResizeAmount: 0.5
+  cardTemplates:
+  - {fileID: 11400000, guid: 34536231089c9eb4cbbb26854ec6b6c4, type: 2}
+  - {fileID: 11400000, guid: f4c4aee228c7ddc488d9b8885b4ed2af, type: 2}
+  - {fileID: 11400000, guid: 963ce43ab03913f47801c9c314b51a2b, type: 2}
+  - {fileID: 11400000, guid: 3809b0d816758f848817db642f568347, type: 2}
+  - {fileID: 11400000, guid: f4016e3721142c74994a9e16eda09ed2, type: 2}
+  - {fileID: 11400000, guid: d0007aa7754ff2c40ba414a1d81753a6, type: 2}
+  stickerTemplates: []
+  StableUpdateEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  ToNullUpdateEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  ToNewUpdateEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  timeRequiredForNull: 1.6
+  timeRequiredForNew: 0.3
+  loweRatio: 0.7
+  kpDist: 30
+  keypointMatchesRequired: 25
+  keypointMatchPercentRequired: 0.3
+  boundBoxText: '0.024590,0.020528,0.211066,0.153959
+
+    0.776639,0.846041,0.963115,0.979472
+
+    0.655738,0.912023,0.715164,0.958944
+
+    0.768443,0.041056,0.907787,0.140762
+
+    0.770492,0.177419,0.905738,0.274194
+
+    0.770492,0.306452,0.905738,0.404692'
+--- !u!114 &1567943724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1567943722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f08c4b19fd1292b48ae0726d93b6fb73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentCard: {fileID: 0}
+  cardParser: {fileID: 1567943723}
+  cm: {fileID: 0}
+  goodSeeImage: {fileID: 0}
+  cardText: {fileID: 0}
+  playText: {fileID: 0}
+  handCards: []
+--- !u!4 &1567943725
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1567943722}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1573839737
 PrefabInstance:
   m_ObjectHideFlags: 0

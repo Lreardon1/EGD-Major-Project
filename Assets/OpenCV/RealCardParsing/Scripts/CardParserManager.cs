@@ -9,6 +9,8 @@ using TMPro;
 [RequireComponent(typeof(CardParser))]
 public class CardParserManager : MonoBehaviour
 {
+    public static CardParserManager instance;
+    
     public GameObject currentCard;
     public CardParser cardParser;
     public CombatManager cm;
@@ -19,6 +21,13 @@ public class CardParserManager : MonoBehaviour
     public TMP_Text playText;
 
     private GameObject currentTarget = null;
+
+    internal void ActivateCVForCombat(CVControllerBackLoader cVControllerBackLoader)
+    {
+        // TODO
+        throw new NotImplementedException();
+    }
+
     private int currentID = -1;
     private bool validTarget = true;
 
@@ -46,6 +55,13 @@ public class CardParserManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+
         cardParser = GetComponent<CardParser>();
         cardParser.StableUpdateEvent.AddListener(HandleStableUpdate);
         cardParser.ToNullUpdateEvent.AddListener(HandleNullUpdate);
