@@ -71,35 +71,14 @@ public class OverworldMovement : MonoBehaviour
     {
         Vector3 right = new Vector3(0, 0, 0);
         Vector3 up = new Vector3(0,0,0);
+
         if (canMove)
         {
             float rightTurn = Input.GetAxisRaw("Rotate");
             transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
             party_members[1].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
             party_members[0].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
-            /*
-            //player camera rotation
-            if (Input.GetKeyDown(KeyCode.E) && rotated != true)
-            {
-                transform.Rotate(0, 90, 0);
-                rotated = true;
-                rotation_way = "E";
-            }
-            else if (Input.GetKeyDown(KeyCode.Q) && rotated != true)
-            {
-                transform.Rotate(0, -90, 0);
-                rotated = true;
-                rotation_way = "Q";
-            }
-            else if (Input.GetKeyUp(KeyCode.E) && rotation_way == "E")
-            {
-                rotated = false;
-            }
-            else if (Input.GetKeyUp(KeyCode.Q) && rotation_way == "Q")
-            {
-                rotated = false;
-            }*/
-
+           
             right = Input.GetAxisRaw("Horizontal") * transform.right;
             up = Input.GetAxisRaw("Vertical") * transform.forward;
         }
@@ -127,6 +106,51 @@ public class OverworldMovement : MonoBehaviour
 
         if (canMove)
         {
+            // Keegan, I touched your code cause this deeply upset me, sorry. 
+            // Your code is commented out, not delete if I broke anything. 
+
+            // set vars that stay solid when not moving
+            if (Input.GetAxisRaw("Horizontal") > 0.0f)
+                directionX = "right";
+            else if (Input.GetAxisRaw("Horizontal") < 0.0f)
+                directionX = "left";
+            if (Input.GetAxisRaw("Vertical") > 0.0f)
+                directionY = "forward";
+            else if (Input.GetAxisRaw("Vertical") < 0.0f)
+                directionY = "backward";
+            else
+                directionY = "backward"; // TODO : so when you stop moving in Y, characters face you again
+
+            // Moving Animation
+            bool isMoving = (right + up).sqrMagnitude > 0.0001;
+            player_animator.SetBool("Walking", isMoving);
+            warrior_animator.SetBool("Walking", isMoving);
+            godfather_animator.SetBool("Walking", isMoving);
+            player_back_animator.SetBool("Walking", isMoving);
+            // warrior_back_animator.SetBool("Walking", (right + up).sqrMagnitude > 0.001);
+            godfather_back_animator.SetBool("Walking", isMoving);
+
+            // Left Right Flip
+            bool movingRight = directionX == "right";
+            playerRenderer.flipX = movingRight;
+            godfatherRenderer.flipX = movingRight;
+            warriorRenderer.flipX = movingRight;
+            playerBackRenderer.flipX = movingRight;
+            godfatherBackRenderer.flipX = movingRight;
+            warriorRenderer.flipX = movingRight; //needs edit
+
+            // TODO : why are you using a different spriteRenderer? 
+            //       Can't you just make a new animation for the animator?
+            bool backToCamera = directionY == "forward";
+            playerRenderer.enabled = !backToCamera;
+            godfatherRenderer.enabled = !backToCamera;
+            //warriorRenderer.enabled = !backToCamera;
+            playerBackRenderer.enabled = backToCamera;
+            godfatherBackRenderer.enabled = backToCamera;
+            //warriorRenderer.enabled = backToCamera;
+            // * End of code tampering
+
+            /*
             if (Input.GetKey(KeyCode.D))
             {
                 player_animator.SetBool("Walking", true);
@@ -226,7 +250,7 @@ public class OverworldMovement : MonoBehaviour
                 player_back_animator.SetBool("Walking", false);
                 //warrior_back_animator.SetBool("Walking", false);
                 godfather_back_animator.SetBool("Walking", false);
-            }
+            }*/
         }
     }
 
