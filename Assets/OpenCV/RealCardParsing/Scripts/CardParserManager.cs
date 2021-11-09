@@ -53,7 +53,7 @@ public class CardParserManager : MonoBehaviour
 
         SetUpOrderedCards(Deck.instance.allCards);
 
-        cardParser.SetLookForInput(CombatManager.IsInCVMode);
+        cardParser.SetLookForInput(false); // TODO : re up while you work
 
         DisplayCardData(null, null);
     }
