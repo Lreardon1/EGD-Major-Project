@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 // Jay NOTE : this class should not control the deck or the hand AT ALL, not movement nor state.
@@ -8,15 +10,21 @@ using UnityEngine.UI;
 //
 
 // TODO : I would like to use UnityEvents, to subscribe to phase changes
-    // https://docs.unity3d.com/ScriptReference/Events.UnityEvent.html
-    // and maybe even requests from the combat manager to active control scheme
+// https://docs.unity3d.com/ScriptReference/Events.UnityEvent.html
+// and maybe even requests from the combat manager to active control scheme
 public class CombatManager : MonoBehaviour
 {
     public static bool IsInCVMode = false;
 
-    public enum CombatPhase {DrawPhase, PlayPhase, DiscardPhase, ActionPhase};
 
-    public CombatPhase currentPhase = CombatPhase.PlayPhase;
+    public enum CombatPhase {DrawPhase, PlayPhase, DiscardPhase, ActionPhase, None};
+
+
+
+    private UnityEvent<CombatPhase, CombatPhase> PhaseStepEvent = new UnityEvent<CombatPhase, CombatPhase>();
+    private UnityEvent<CombatPhase> RequestInputForPhaseEvent = new UnityEvent<CombatPhase>();
+
+    public CombatPhase currentPhase = CombatPhase.None;
     public CombatHandController chc;
     public List<Button> drawButtons = new List<Button>();
     public Text currentPhaseText;
@@ -35,6 +43,7 @@ public class CombatManager : MonoBehaviour
 
     public GameObject uiColliderPrefab;
     public Transform uiColliderParent;
+
     public Vector3 cameraPosition;
     public Quaternion cameraRotation;
 
@@ -135,11 +144,26 @@ public class CombatManager : MonoBehaviour
 
         // TODO : for CV I need an initial draw phase before play to allow the player to tell me their cards 
         // (or we can honestly just forego trying to track that)
-        ActivatePlayPhase();
+        if (!IsInCVMode) {
+            ActivatePlayPhase();
+        }
+        else  {
+            ActivateDrawPhase();
+        }
+    }
+
+    // Used by CV to have a better understanding of the manager's state and respond in real time
+    public void SubscribeAsController(
+        UnityAction<CombatPhase, CombatPhase> handleStepFunc,
+        UnityAction<CombatPhase> handleInputRequestFunc)
+    {
+        PhaseStepEvent.AddListener(handleStepFunc);
+        RequestInputForPhaseEvent.AddListener(handleInputRequestFunc);
     }
 
     public void ActivateDrawPhase()
     {
+        PhaseStepEvent.Invoke(currentPhase, CombatPhase.DrawPhase);
         currentPhase = CombatPhase.DrawPhase;
         currentPhaseText.text = "Draw Phase";
 
@@ -205,30 +229,35 @@ public class CombatManager : MonoBehaviour
 
         StartCoroutine("DrawPhaseCoroutine");
         // Allies and enemies select actions to perform, Player selects number of cards to draw, transition to Play Phase
+        RequestInputForPhaseEvent.Invoke(CombatPhase.DrawPhase);
     }
 
     public IEnumerator DrawPhaseCoroutine()
     {
-        bool done = false;
-        while (!done)
+        if (!IsInCVMode) // in CV mode, the CV manager will make this call
         {
-            // skips when space is hit
-            if (Input.GetKeyDown(KeyCode.Space))
+            bool done = false;
+            while (!done)
             {
-                done = true;
+                // skips when space is hit
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    done = true;
+                }
+
+                // This code waits until either a card amount to draw has been selected or for cv, a number of cards is shown to the camera
+
+                // Need code to detect if card has been applied
+                yield return null;
             }
-
-            // This code waits until either a card amount to draw has been selected or for cv, a number of cards is shown to the camera
-
-            // Need code to detect if card has been applied
-            yield return null;
+            NextPhase();
         }
-        NextPhase();
         yield return null;
     }
 
     public void ActivatePlayPhase()
     {
+        PhaseStepEvent.Invoke(currentPhase, CombatPhase.PlayPhase);
         currentPhase = CombatPhase.PlayPhase;
         if (!IsInCVMode)
         {
@@ -238,28 +267,33 @@ public class CombatManager : MonoBehaviour
         }
         // Allow player to move cards to play on allies/enemies, update action order accordingly, ends when player clicks done or something, transition to Discard Phase
         StartCoroutine("PlayPhaseCoroutine");
+        RequestInputForPhaseEvent.Invoke(CombatPhase.PlayPhase);
     }
 
     public IEnumerator PlayPhaseCoroutine()
     {
-        bool done = false;
-        while (!done)
+        if (!IsInCVMode) // if in CV mode, the CV controller will take care of switching
         {
-            // skips when space is hit
-            if (Input.GetKeyDown(KeyCode.Space))
+            bool done = false;
+            while (!done)
             {
-                done = true;
-            }
+                // skips when space is hit
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    done = true;
+                }
 
-            // Need code to detect if card has been applied
-            yield return null;
+                // Need code to detect if card has been applied
+                yield return null;
+            }
+            NextPhase();
         }
-        NextPhase();
         yield return null;
     }
 
     public void ActivateDiscardPhase()
     {
+        PhaseStepEvent.Invoke(currentPhase, CombatPhase.DiscardPhase);
         currentPhase = CombatPhase.DiscardPhase;
         if (!IsInCVMode)
         {
@@ -267,28 +301,33 @@ public class CombatManager : MonoBehaviour
         }
         // Player can drag cards to discard pile to discard them, ends when player clicks done or something, transition to Action Phase
         StartCoroutine("DiscardPhaseCoroutine");
+        RequestInputForPhaseEvent.Invoke(CombatPhase.DiscardPhase);
     }
 
     public IEnumerator DiscardPhaseCoroutine()
     {
-        bool done = false;
-        while (!done)
+        if (!IsInCVMode) // if in CV mode, the CV controller will take care of switching
         {
-            // skips when space is hit
-            if (Input.GetKeyDown(KeyCode.Space))
+            bool done = false;
+            while (!done)
             {
-                done = true;
-            }
+                // skips when space is hit
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    done = true;
+                }
 
-            // Need code to detect if card has been applied
-            yield return null;
+                // Need code to detect if card has been applied
+                yield return null;
+            }
+            NextPhase();
         }
-        NextPhase();
         yield return null;
     }
 
     public void ActivateActionPhase()
     {
+        PhaseStepEvent.Invoke(currentPhase, CombatPhase.ActionPhase);
         currentPhase = CombatPhase.ActionPhase;
         if (!IsInCVMode)
             chc.UpdateDropZones();
@@ -296,7 +335,25 @@ public class CombatManager : MonoBehaviour
         currentPhaseText.text = "Action Phase";
         // Party members and enemies take turns attacking in action order, death prevents attacking, transition to Draw Phase
         StartCoroutine("StartActions");
+    }
 
+    private bool cvReadyForMoreActions = false;
+    public void CVReadyToContinueActions()
+    {
+        cvReadyForMoreActions = true;
+    }
+    public bool IsReadyToContinueActions()
+    {
+        if (!IsInCVMode)
+            return Input.GetKeyDown(KeyCode.Space)
+                || (currentCB != null && currentCB.GetComponent<CombatantBasis>().appliedCard != null);
+        else if (cvReadyForMoreActions)
+        {
+            cvReadyForMoreActions = false;
+            return true;
+        }
+        else
+            return false;
     }
 
     public GameObject currentCB = null;
@@ -320,11 +377,9 @@ public class CombatManager : MonoBehaviour
             }
             pointer.transform.position = pointerPos;
 
-            bool cardAlreadyPlayed = false;
+            bool cardAlreadyPlayed = cb.appliedCard != null;
 
-            if (cb.appliedCard != null)
-                cardAlreadyPlayed = true;
-
+            // TODO : might be nice to overwite cards, which this does not allow
             if (enoughMana && !cardAlreadyPlayed && chc.transform.childCount != 0)
             {
                 Debug.Log("Play card on " + actionOrder[0].name);
@@ -336,12 +391,14 @@ public class CombatManager : MonoBehaviour
                     dd.allowedDropZones.Clear();
                     dd.allowedDropZones = allZones;
                 }
-
-                bool done = false;
-                while(!done)
+                RequestInputForPhaseEvent.Invoke(CombatPhase.ActionPhase);
+                yield return new WaitUntil(IsReadyToContinueActions);
+                
+                /*bool done = false;
+                while (!done)
                 {
                     // skips when space is hit
-                    if(Input.GetKeyDown(KeyCode.Space))
+                    if (Input.GetKeyDown(KeyCode.Space))
                     {
                         done = true;
                     }
@@ -349,15 +406,16 @@ public class CombatManager : MonoBehaviour
                     // Need code to detect if card has been applied
 
                     // TODO : this would continue if the player has already played a card, giving them no opportunity to play another...
-                    // TODO : For many of these while (!done) loops I'd recommend making a request to the controller (CV or Hand) which in turn calls back with a function when it's has an update, and then you continue
-                    if (cb.appliedCard != null) 
+                    // TODO : For many of these while (!done) loops I'd recommend making a request to the controller (CV or Hand) 
+                    //        which in turn calls back with a function when it's has an update, and then you continue
+                    if (cb.appliedCard != null)
                     {
                         // Activate Card Effect
                         done = true;
 
                     }
                     yield return null;
-                }
+                }*/
             }
 
             cb.ExecuteAction();
@@ -373,9 +431,13 @@ public class CombatManager : MonoBehaviour
             pointer.SetActive(false);
             yield return new WaitForSeconds(1f);
             // Check if any combatant was killed and update the action queue
+            // 
+
+            if (actionOrder.Count > 0)
+                PhaseStepEvent.Invoke(currentPhase, CombatPhase.ActionPhase);
+
         }
 
-        currentPhase = CombatPhase.DrawPhase;
         ActivateDrawPhase();
         yield return null;
     }
@@ -414,6 +476,7 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    // Note for Jay: Can be called to switch phase for all phases except ActionPhase, which is handled by CVReadyToContinueActions() instead
     public void NextPhase()
     {
         if (currentPhase == CombatPhase.ActionPhase)

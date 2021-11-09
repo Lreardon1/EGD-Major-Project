@@ -12,15 +12,6 @@ using UnityEditor;
 
 public class CardParser : MonoBehaviour
 {
-    public RawImage mainSeeImage;
-    public RawImage[] stickerImages;
-
-    /*
-    public RawImage mainSeeImage;
-    public RawImage replaneImage;
-    public RawImage debugCardImage;
-    public RawImage debugSceneImage;
-    */
     public CardParserManager cardParserManager;
     [Space(10)]
     public Texture2D staticTestImage;
@@ -207,7 +198,7 @@ public class CardParser : MonoBehaviour
             // this must be called continuously
             ReadTextureConversionParameters();
             // process texture with whatever method sub-class might have in mind
-            mainSeeImage.texture = webCamTexture;
+            cardParserManager.UpdateSeenImage(webCamTexture);
             ProcessTexture(webCamTexture);
         }
     }
@@ -439,16 +430,7 @@ public class CardParser : MonoBehaviour
         Mat sticker2 = stickerBoundingBox2.CropByBox(cardImage, new Size(defaultStickerWidth, defaultStickerHeight));
         Mat sticker3 = stickerBoundingBox3.CropByBox(cardImage, new Size(defaultStickerWidth, defaultStickerHeight));
 
-        if (stickerImages[0].texture != null)
-            Destroy(stickerImages[0].texture);
-        if (stickerImages[1].texture != null)
-            Destroy(stickerImages[1].texture);
-        if (stickerImages[2].texture != null)
-            Destroy(stickerImages[2].texture);
-
-        stickerImages[0].texture = OpenCvSharp.Unity.MatToTexture(sticker1);
-        stickerImages[1].texture = OpenCvSharp.Unity.MatToTexture(sticker2);
-        stickerImages[2].texture = OpenCvSharp.Unity.MatToTexture(sticker3);
+        cardParserManager.UpdateStickerDebugs(sticker1, sticker2, sticker3);
 
         // TODO : used for debugging
         return possibleCards[0];
