@@ -23,6 +23,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: f8de3c6209ab3384a80fb7da813361fe, type: 3}
+    - target: {fileID: 2669859812542877783, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: dd1f5f639701e13428b9810a7f0475e3, type: 3}
     - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: type
       value: 3
@@ -47,6 +51,10 @@ PrefabInstance:
       propertyPath: availableModifiers.Array.data[0]
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3760819992735398633, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 539c47925903395498de4984b90a2ea0, type: 3}
     - target: {fileID: 4604274906329554768, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: m_Name
       value: ClearTarget
