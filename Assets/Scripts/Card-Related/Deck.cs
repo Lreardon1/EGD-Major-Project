@@ -14,8 +14,8 @@ public class Deck : MonoBehaviour
     public static Deck instance;
 
     public List<GameObject> deck = new List<GameObject>();
+    public List<GameObject> starterDeck;
     public List<GameObject> allCards;
-    public List<GameObject> viewOrder;
     List<GameObject> discard = new List<GameObject>();
     public Dictionary<string, List<GameObject>> freeDraggables = new Dictionary<string, List<GameObject>>();
 
@@ -31,8 +31,9 @@ public class Deck : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        GameObject[] cards = new GameObject[viewOrder.Count];
-        viewOrder.CopyTo(cards);
+        //handle initial deck - CHANGE THIS ONCE ALL CARDS IN
+        GameObject[] cards = new GameObject[starterDeck.Count];
+        starterDeck.CopyTo(cards);
         deck.AddRange(cards);
 
         ModifierLookup.LoadModifierTable();

@@ -23,7 +23,7 @@ public class CombatantBasis : MonoBehaviour
     public float attackMultiplier = 1f;
     public float defenseMultiplier = 1f;
     public float speedMultiplier = 1f;
-    public Card.Element resistance = Card.Element.None;
+    public float resistance = 0.0f;
 
     public int temporaryHitPoints = 0;
     public int negativeHitPointShield = 0;
@@ -31,6 +31,7 @@ public class CombatantBasis : MonoBehaviour
     //card onPlay variables
     public int attackCardBonus = 0;
     public int shieldReturnDmg = 0;
+    public float shieldResistance = 0.0f;
     public bool untargettable = false;
     public bool canCounterAttack = false;
     public bool hasPriority = false;
@@ -223,10 +224,11 @@ public class CombatantBasis : MonoBehaviour
         {
             //return damage
             attacker.GetComponent<CombatantBasis>().TakeDamage(shieldReturnDmg, Card.Element.None, Card.Element.None, gameObject);
-            //lose return damage on shield loss
+            //lose return damage and resistance on shield loss
             if (temporaryHitPoints <= 0)
             {
                 shieldReturnDmg = 0;
+                shieldResistance = 0;
             }
         }
 

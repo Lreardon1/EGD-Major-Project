@@ -25,8 +25,8 @@ public class Buff : MonoBehaviour
                     cb.defenseMultiplier += value;
                     break;
 
-                case Stat.Resistance: //TODO:: DETERMINE HOW TO HANDLE RESISTANCE BUFF
-                    //cb.attackMultiplier -= value;
+                case Stat.Resistance:
+                    cb.resistance += value;
                     break;
 
                 case Stat.Speed:
@@ -55,8 +55,8 @@ public class Buff : MonoBehaviour
                         cb.defenseMultiplier -= value;
                         break;
 
-                    case Stat.Resistance: //TODO:: DETERMINE HOW TO HANDLE RESISTANCE BUFF
-                        //cb.attackMultiplier -= value;
+                    case Stat.Resistance:
+                        cb.resistance -= value;
                         break;
 
                     case Stat.Speed:

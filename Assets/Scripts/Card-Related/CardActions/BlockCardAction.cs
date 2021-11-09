@@ -55,7 +55,10 @@ public class BlockCardAction : CardActionTemplate
         {
             cb.temporaryHitPoints += baseNum + numModifier;
         }
-        //cb.nextActionSecondaryElem = secondaryElement;  //UNSURE HOW TO IMPLEMENT RESISTANCES
+        if (secondaryElement != Card.Element.None)
+        {
+            cb.shieldResistance += .2f;
+        }
 
         if (givePriority)
         {
