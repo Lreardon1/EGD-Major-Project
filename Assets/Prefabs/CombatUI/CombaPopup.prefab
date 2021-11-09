@@ -85,7 +85,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4730867921388399691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,7 +117,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 4730867921569320216}
   image: {fileID: 625223468541180500}
-  visCard: {fileID: 4875270623482970090}
   ascendCurve:
     serializedVersion: 2
     m_Curve:
@@ -535,14 +534,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4604274906329554769, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
   m_PrefabInstance: {fileID: 8082821638082214869}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4875270623482970090 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
-  m_PrefabInstance: {fileID: 8082821638082214869}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d799edddbd7c1e6499dcf79ecdd9b45a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -149,9 +149,11 @@ public class DragDrop : MonoBehaviour
                     if(dropZone.GetComponent<WorldToUICollider>() != null)
                     {
                         FindObjectOfType<CombatManager>().ApplyCard(this.gameObject, dropZone.GetComponent<WorldToUICollider>().combatant.gameObject);
+                        trans.localScale = new Vector3(0.4f, 0.4f, 0.4f);
                     } if(dropZone.CompareTag("DiscardPile"))
                     {
                         FindObjectOfType<CombatManager>().DiscardCard(this.gameObject);
+                        trans.localScale = new Vector3(0.8f, 0.8f, 0.8f);
                     }
                 }
             }

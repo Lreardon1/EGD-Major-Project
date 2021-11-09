@@ -13,6 +13,8 @@ public class CombatHandController : MonoBehaviour
     public int maxHandSize = 7;
     public int cardsInDiscard = 0;
 
+    public float cardLocalScale = 0.8f;
+
     public GameObject cardWorldColliderPrefab;
     public Transform cardWorldColliderParent;
     public CombatManager cm;
@@ -47,8 +49,8 @@ public class CombatHandController : MonoBehaviour
         {
             GameObject card = Deck.instance.Draw();
             originalCardTransform = card.transform.parent;
-            card.transform.localScale = transform.localScale;
             card.GetComponent<RectTransform>().SetParent(transform);
+            card.transform.localScale = new Vector3(cardLocalScale, cardLocalScale, cardLocalScale);
             card.GetComponent<CardEditHandler>().inCombat = true;
             
             cardsInHand.Add(card);
@@ -139,8 +141,8 @@ public class CombatHandController : MonoBehaviour
         for(int i = 0; i < cardAmount; i++)
         {
             GameObject card = Deck.instance.Draw();
-            card.transform.localScale = transform.localScale;
             card.GetComponent<RectTransform>().SetParent(transform);
+            card.transform.localScale = new Vector3(cardLocalScale, cardLocalScale, cardLocalScale);
             card.GetComponent<CardEditHandler>().inCombat = true;
             
             cardsInHand.Add(card);
