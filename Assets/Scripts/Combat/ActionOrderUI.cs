@@ -26,6 +26,7 @@ public class ActionOrderUI : MonoBehaviour
             GameObject i = Instantiate(indicatorPrefab, transform.parent, false);
             i.GetComponent<Image>().color = actor.GetComponent<SpriteRenderer>().color;
             i.GetComponent<Image>().sprite = actor.GetComponent<SpriteRenderer>().sprite;
+            i.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
 
             indicators.Add(actor, i);
         }
@@ -59,11 +60,12 @@ public class ActionOrderUI : MonoBehaviour
             GameObject indic = indicPair.Value;
 
             Vector3 pos = transform.localPosition;
-            pos.y = (rect.localPosition.y - rect.rect.height / 2f) + turnStatus * (rect.rect.height / 8f);
+            pos.y = (rect.localPosition.y - rect.rect.height / 2f) + turnStatus * (rect.rect.height / 7f);
             //pos.y = Mathf.Lerp(rect.localPosition.y - rect.rect.height / 2, rect.localPosition.y + rect.rect.height / 2, turnStatus);
             pos.x += indicPair.Key.GetComponent<CombatantBasis>().isEnemy ? (-rect.rect.width / 3) : (rect.rect.width / 3);
             indic.GetComponent<RectTransform>().localPosition = pos;
             indic.GetComponent<RectTransform>().sizeDelta = new Vector2(rect.rect.width * 1.4f, rect.rect.width * 1.4f);
+            indic.GetComponent<Image>().SetNativeSize();
         }
     }
 }

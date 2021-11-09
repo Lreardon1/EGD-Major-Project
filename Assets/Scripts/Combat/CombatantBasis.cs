@@ -53,10 +53,10 @@ public class CombatantBasis : MonoBehaviour
             {
                 if (value.GetComponent<Card>() == null) return;
                 Card c = value.GetComponent<Card>();
-                MakePopup(
-                    GetColorStringOfElement(c.element) + "Played " + c.name + " on " + name + "</color>",
-                    (Texture2D)value.GetComponent<Image>().mainTexture, 
-                    value.GetComponent<Image>().color);
+                //MakePopup(
+                //    GetColorStringOfElement(c.element) + "Played " + c.name + " on " + name + "</color>",
+                //    (Texture2D)value.GetComponent<Image>().mainTexture, 
+                //    value.GetComponent<Image>().color);
             }
 
             appliedCardReal = value;

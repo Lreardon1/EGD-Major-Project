@@ -33801,7 +33801,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1567943723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34741,6 +34741,10 @@ MonoBehaviour:
   inEncounter: 0
   encounterCoolDown: 5
   timer: 0
+  encounters:
+  - {fileID: 7225910416098152409, guid: 2e3f82a8d9fe88446b70883422de88db, type: 3}
+  - {fileID: 9968026051325628, guid: 064e545df87391640a3406a59a9c0f1b, type: 3}
+  - {fileID: 4387392908081174443, guid: 6367a8d5eb39aa142985a9ae1fefc700, type: 3}
 --- !u!65 &1615647584
 BoxCollider:
   m_ObjectHideFlags: 0

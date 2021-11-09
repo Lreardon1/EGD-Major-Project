@@ -37,6 +37,9 @@ public class CombatManager : MonoBehaviour
     public List<GameObject> activeEnemies = new List<GameObject>();
 
     public List<GameObject> actionOrder = new List<GameObject>();
+    //public List<GameObject> encounterSets;
+
+    public Transform enemySetLocation;
 
     public GameObject uiColliderPrefab;
     public Transform uiColliderParent;
@@ -48,6 +51,7 @@ public class CombatManager : MonoBehaviour
 
     public GameObject pointer;
     public ActionOrderUI actionOrderUI;
+    public Canvas canvas;
 
     public GameObject lastPlayedCard;
 
@@ -73,9 +77,20 @@ public class CombatManager : MonoBehaviour
             WorldToUICollider wtuic = uiCollider.GetComponent<WorldToUICollider>();
             wtuic.combatant = member.transform;
             wtuic.worldSpaceBC = member.GetComponent<BoxCollider>();
+            wtuic.canvas = canvas;
             member.GetComponent<CombatantBasis>().uiCollider = uiCollider;
             allCombatants.Add(member);
         }
+
+        GameObject encounter = GameObject.FindGameObjectWithTag("Encounter");
+        Transform[] encounterCombatants = encounter.GetComponentsInChildren<Transform>();
+        enemies.Clear();
+        foreach (Transform enemy in encounterCombatants)
+        {
+            if(enemy.gameObject.GetComponent<CombatantBasis>() != null)
+                enemies.Add(enemy.gameObject);
+        }
+
         foreach (GameObject enemy in enemies)
         {
             activeEnemies.Add(enemy);
@@ -85,6 +100,7 @@ public class CombatManager : MonoBehaviour
             WorldToUICollider wtuic = uiCollider.GetComponent<WorldToUICollider>();
             wtuic.combatant = enemy.transform;
             wtuic.worldSpaceBC = enemy.GetComponent<BoxCollider>();
+            wtuic.canvas = canvas;
             enemy.GetComponent<CombatantBasis>().uiCollider = uiCollider;
             allCombatants.Add(enemy);
         }
