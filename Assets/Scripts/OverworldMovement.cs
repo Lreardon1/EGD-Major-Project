@@ -198,7 +198,7 @@ public class OverworldMovement : MonoBehaviour
                 player_back_animator.SetBool("Walking", true);
                 //warrior_back_animator.SetBool("Walking", true);
                 godfather_back_animator.SetBool("Walking", true);
-                if (direction != "backward")
+                if (directionY != "backward")
                 {
                     playerRenderer.flipX = false;
                     godfatherRenderer.flipX = false;
