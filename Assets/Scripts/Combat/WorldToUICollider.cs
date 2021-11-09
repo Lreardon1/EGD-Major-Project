@@ -11,6 +11,8 @@ public class WorldToUICollider : MonoBehaviour
     public RectTransform combatantUITransform;
     public BoxCollider2D uiBC;
 
+    public Canvas canvas;
+
     public float cardLocationOffset = 100f;
     
     Camera mainCam;
@@ -38,14 +40,14 @@ public class WorldToUICollider : MonoBehaviour
         {
             uiPos.x += cardLocationOffset;
             combatantUITransform.position = uiPos;
-            uiBC.size = new Vector2(colliderWidth, colliderHeight);
-            uiBC.offset = new Vector2(-cardLocationOffset, 0);
+            uiBC.size = new Vector2(colliderWidth / canvas.transform.localScale.x , colliderHeight / canvas.transform.localScale.y);
+            uiBC.offset = new Vector2(-cardLocationOffset / canvas.transform.localScale.x, 0);
         } else
         {
             uiPos.x -= cardLocationOffset;
             combatantUITransform.position = uiPos;
-            uiBC.size = new Vector2(colliderWidth, colliderHeight);
-            uiBC.offset = new Vector2(cardLocationOffset, 0);
+            uiBC.size = new Vector2(colliderWidth / canvas.transform.localScale.x, colliderHeight / canvas.transform.localScale.y);
+            uiBC.offset = new Vector2(cardLocationOffset / canvas.transform.localScale.x, 0);
         }
         
     }

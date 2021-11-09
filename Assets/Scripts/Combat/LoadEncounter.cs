@@ -24,7 +24,9 @@ public class LoadEncounter : MonoBehaviour
     public float encounterCoolDown = 5f;
     public float timer = 0f;
 
-    public List<GameObject> possibleEnemyPrefabs;
+    public List<GameObject> encounters;
+
+    private GameObject encounter;
     
     
         // Start is called before the first frame update
@@ -62,6 +64,10 @@ public class LoadEncounter : MonoBehaviour
     {
         player.canMove = false;
         eventSystem.SetActive(false);
+
+        int rand = Random.Range(0, encounters.Count);
+        encounter = Instantiate(encounters[rand]);
+
         SceneManager.LoadScene("BattleScene", LoadSceneMode.Additive);
         originalCameraPos = mainCam.transform.position;
         originalCameraRot = mainCam.transform.rotation;
@@ -80,6 +86,7 @@ public class LoadEncounter : MonoBehaviour
 
     public void ReturnToOverWorld()
     {
+        Destroy(encounter);
         cameraParent.gameObject.SetActive(true);
         mainCam.transform.SetParent(cameraParent);
         SceneManager.UnloadSceneAsync("BattleScene");
