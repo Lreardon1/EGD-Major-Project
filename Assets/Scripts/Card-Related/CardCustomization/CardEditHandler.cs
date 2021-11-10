@@ -57,7 +57,7 @@ public class CardEditHandler : MonoBehaviour
         {
             if (isCustomizable)
             {
-                gameObject.GetComponent<Button>().interactable = false;
+                //gameObject.GetComponent<Button>().interactable = false;
                 deckCustomizer.cardEditor.SetActive(true);
                 //instantiate editable card UI, allowing for changes with more buttons 
                 Card displayCard = cardEditor.editedCardRender.GetComponent<Card>();
@@ -67,7 +67,7 @@ public class CardEditHandler : MonoBehaviour
             }
             else
             {
-                gameObject.GetComponent<Button>().interactable = false;
+                //gameObject.GetComponent<Button>().interactable = false;
                 deckCustomizer.cardDisplay.SetActive(true);
                 Card displayCard = deckCustomizer.cardDisplay.transform.GetChild(0).gameObject.GetComponent<Card>();
                 displayCard.VisualCopy(cardScript);
@@ -128,7 +128,7 @@ public class CardEditHandler : MonoBehaviour
     {
         cardEditor.checkForChanges = false;
         //save changes on editable card UI, and return
-        gameObject.GetComponent<Button>().interactable = true;
+        //gameObject.GetComponent<Button>().interactable = true;
         deckCustomizer.cardEditor.SetActive(false);
     }
 
