@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1633151258934774406}
   - component: {fileID: 8373853927984163328}
   - component: {fileID: 3215113236145590619}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Action Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 4478707169576409303}
   - component: {fileID: 4242643608117639351}
   - component: {fileID: 6683688488785976861}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PartyMember
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -296,7 +296,7 @@ GameObject:
   - component: {fileID: 5316153623601722837}
   - component: {fileID: 1641316874066277452}
   - component: {fileID: 4973790651503665238}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -395,7 +395,7 @@ GameObject:
   - component: {fileID: 355915035210037693}
   - component: {fileID: 7350685269988436706}
   - component: {fileID: 3610475511963655286}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -471,7 +471,7 @@ GameObject:
   - component: {fileID: 1754284825407329071}
   - component: {fileID: 7264823564923456946}
   - component: {fileID: 7024338769683762411}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -613,7 +613,7 @@ GameObject:
   - component: {fileID: 7013869157546064312}
   - component: {fileID: 8692090203906371928}
   - component: {fileID: 927300162587525775}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}

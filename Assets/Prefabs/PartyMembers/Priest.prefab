@@ -50,6 +50,7 @@ MonoBehaviour:
   negativeHitPointShield: 0
   attackCardBonus: 0
   shieldReturnDmg: 0
+  shieldResistance: 0
   untargettable: 0
   canCounterAttack: 0
   hasPriority: 0
@@ -74,7 +75,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1897249482008033656, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4242643608117639351, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: cb
@@ -178,7 +179,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409306, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7425997742795056569, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
