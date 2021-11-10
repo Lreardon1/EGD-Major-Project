@@ -197,7 +197,7 @@ public class CardParserManager : MonoBehaviour
             playText.text = "Apply cards to combatants...";
         else if (!hand.Contains(currentCard))
             playText.text = "You focus on " + currentTarget.name + "... What card will you play?";
-        else
+        else if (currentCard != null)
         {
             playText.text = "Playing " + currentCard.GetComponent<Card>().cardName + " on " + currentTarget.name + "...";
             progressIndicator.fillAmount = fillMeter;
@@ -517,11 +517,31 @@ public class CardParserManager : MonoBehaviour
 
     public List<GameObject> GetCardsOfName(string name)
     {
+        List<GameObject> cardList = new List<GameObject>();
+
+        if (currentPhase == CombatManager.CombatPhase.DrawPhase)
+        {
+            foreach (GameObject c in Deck.instance.deck)
+            {
+                if (c.GetComponent<Card>().cardName == name)
+                    cardList.Add(c);
+            }
+        } else
+        {
+            foreach (GameObject c in hand)
+            {
+                if (c.GetComponent<Card>().cardName == name)
+                    cardList.Add(c);
+            }
+        }
+        return cardList;
+        /*
         // TODO : dependnig
         if (orderedCards.TryGetValue(name, out List<GameObject> lis))
             return lis;
         else
             return new List<GameObject>();
+            */
     }
     
     public void UpdateStickerDebugs(Mat sticker1, Mat sticker2, Mat sticker3)
