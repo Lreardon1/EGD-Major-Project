@@ -39,7 +39,7 @@ public class CVControllerBackLoader : MonoBehaviour
             cvPanel.SetActive(true);
             regularPanel.SetActive(false);
         }
-        else
+        else if (CombatManager.IsInCVMode)
         {
             StartCoroutine(StartCV());
         }

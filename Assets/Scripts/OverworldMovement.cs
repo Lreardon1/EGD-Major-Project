@@ -116,10 +116,8 @@ public class OverworldMovement : MonoBehaviour
                 directionX = "left";
             if (Input.GetAxisRaw("Vertical") > 0.0f)
                 directionY = "forward";
-            else if (Input.GetAxisRaw("Vertical") < 0.0f)
+            else if ((right + up).sqrMagnitude > 0.0001) // face the camera if moving in any direction but away
                 directionY = "backward";
-            else
-                directionY = "backward"; // TODO : so when you stop moving in Y, characters face you again
 
             // Moving Animation
             bool isMoving = (right + up).sqrMagnitude > 0.0001;

@@ -623,7 +623,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &339715432
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2609,7 +2609,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1473275026
 Transform:
   m_ObjectHideFlags: 0
@@ -2646,6 +2646,7 @@ MonoBehaviour:
   stickerImage3: {fileID: 2735403716862469426}
   playText: {fileID: 2735403716862469425}
   cardText: {fileID: 2735403716862469424}
+  cvManagerPrefab: {fileID: 4642193870367902648, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
 --- !u!1001 &1484044414
 PrefabInstance:
   m_ObjectHideFlags: 0

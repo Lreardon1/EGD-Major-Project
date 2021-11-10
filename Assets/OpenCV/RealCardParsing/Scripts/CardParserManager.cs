@@ -15,16 +15,16 @@ public class CardParserManager : MonoBehaviour
     private GameObject currentTarget = null;
     public CVControllerBackLoader cInterface;
 
-    public CombatManager cm;
-    public Image progressWheelImage;
-    public RawImage planeImage;
-    public RawImage goodSeeImage;
-    public RawImage stickerImage1;
-    public RawImage stickerImage2;
-    public RawImage stickerImage3;
+    private CombatManager cm;
+    private Image progressWheelImage;
+    private RawImage planeImage;
+    private RawImage goodSeeImage;
+    private RawImage stickerImage1;
+    private RawImage stickerImage2;
+    private RawImage stickerImage3;
 
-    public TMP_Text playText;
-    public TMP_Text cardText;
+    private TMP_Text playText;
+    private TMP_Text cardText;
 
     private bool activeController;
 
@@ -32,8 +32,6 @@ public class CardParserManager : MonoBehaviour
     private CombatManager.CombatPhase lastPhase = CombatManager.CombatPhase.None;
     private CombatManager.CombatPhase currentPhase = CombatManager.CombatPhase.None;
 
-    // CVReadyToContinueActions
-    // IsReadyToContinueActions
 
     public void HandlePhaseStep(CombatManager.CombatPhase lastPhase, CombatManager.CombatPhase newPhase)
     {
@@ -385,7 +383,9 @@ public class CardParserManager : MonoBehaviour
                 currentInputHandler = StartCoroutine(RunActionPhase());
                 break;
             case CombatManager.CombatPhase.EndPhase:
-
+                Deck.instance.discard.AddRange(hand); // reset deck on end
+                hand.Clear();
+                Deck.instance.Shuffle();
                 break;
             case CombatManager.CombatPhase.None:
                 break;

@@ -18,7 +18,9 @@ public class Deck : MonoBehaviour
     public List<GameObject> starterDeck;
     [SerializeField]
     public List<GameObject> allCards;
-    List<GameObject> discard = new List<GameObject>();
+    [HideInInspector]
+    public List<GameObject> discard = new List<GameObject>();
+
     public Dictionary<string, List<GameObject>> freeDraggables = new Dictionary<string, List<GameObject>>();
     [SerializeField]
     public List<GameObject> numMods;
