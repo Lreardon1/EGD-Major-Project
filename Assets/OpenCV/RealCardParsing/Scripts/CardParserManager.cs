@@ -16,7 +16,7 @@ public class CardParserManager : MonoBehaviour
     public CVControllerBackLoader cInterface;
 
     private CombatManager cm;
-    private Image progressWheelImage;
+    private Image progressIndicator;
     private RawImage planeImage;
     private RawImage goodSeeImage;
     private RawImage stickerImage1;
@@ -36,7 +36,7 @@ public class CardParserManager : MonoBehaviour
     public void HandlePhaseStep(CombatManager.CombatPhase lastPhase, CombatManager.CombatPhase newPhase)
     {
         if (this.lastPhase != lastPhase)
-            Debug.LogError("Phase Mismatch!");
+            Debug.LogError("Phase Mismatch!" + "Expected Last Phase: " + this.lastPhase + ", this actual last: " + lastPhase + ". Current: " + newPhase);
 
         this.lastPhase = lastPhase;
         this.currentPhase = newPhase;
@@ -48,9 +48,9 @@ public class CardParserManager : MonoBehaviour
 
     private List<GameObject> hand = new List<GameObject>();
 
-    private float drawFinishWaitTime = 0.5f;
-    private float playFinishWaitTime = 0.5f;
-    private float discardFinishWaitTime = 0.5f;
+    private float drawFinishWaitTime = 1.5f;
+    private float playFinishWaitTime = 1.5f;
+    private float discardFinishWaitTime = 1.5f;
 
 
 
@@ -70,7 +70,7 @@ public class CardParserManager : MonoBehaviour
                 {
                     // update and progress
                     playText.text = "Drawing Card " + currentCard.GetComponent<Card>().cardName;
-                    progressWheelImage.fillAmount = Mathf.Max(1.0f, timeSpentWithCard / timeToCompleteDraw);
+                    progressIndicator.fillAmount = Mathf.Min(1.0f, timeSpentWithCard / timeToCompleteDraw);
                     timeSpentWithCard += Time.deltaTime;
 
                     if (Input.GetKeyDown(KeyCode.Space))
@@ -78,6 +78,7 @@ public class CardParserManager : MonoBehaviour
                 } else
                 {
                     playText.text = "You must draw " + numberToDraw + " more cards, show them to the portal.";
+                    progressIndicator.fillAmount = 0.0f;
                 }
 
                 yield return null;
@@ -100,10 +101,12 @@ public class CardParserManager : MonoBehaviour
         playText.text = "Initial Cards Drawn, progressing...";
         for (float t = 0; t < drawFinishWaitTime; t += Time.deltaTime)
         {
-            progressWheelImage.fillAmount = (t / drawFinishWaitTime);
+            progressIndicator.fillAmount = (t / drawFinishWaitTime);
             yield return null;
         }
-        progressWheelImage.fillAmount = 0.0f;
+        timeSpentWithCard = 0.0f;
+        playText.text = "";
+        progressIndicator.fillAmount = 0.0f;
         currentInputHandler = null;
         // TODO : next phase
         cm.NextPhase();
@@ -126,7 +129,7 @@ public class CardParserManager : MonoBehaviour
                 {
                     // update and progress
                     playText.text = "Drawing Card " + currentCard.GetComponent<Card>().cardName;
-                    progressWheelImage.fillAmount = Mathf.Max(1.0f, timeSpentWithCard / timeToCompleteDraw);
+                    progressIndicator.fillAmount = Mathf.Max(1.0f, timeSpentWithCard / timeToCompleteDraw);
                     timeSpentWithCard += Time.deltaTime;
 
                     if (Input.GetKeyDown(KeyCode.Space))
@@ -134,10 +137,11 @@ public class CardParserManager : MonoBehaviour
                 }
                 else
                 {
-                    playText.text = "Drawing cards, max of " + maxCardsInHand + ". Press space to stop.";
+                    playText.text = "Drawing cards, max hand size of " + maxCardsInHand + ". Press space to stop.";
+                    progressIndicator.fillAmount = 0.0f;
                     if (Input.GetKeyDown(KeyCode.Space))
                     {
-                        goto FinishDraw; // yea, I'm not sure about this one either...
+                        goto FinishDraw;
                     }
                 }
 
@@ -159,13 +163,14 @@ public class CardParserManager : MonoBehaviour
 
     FinishDraw:
         // visual of progressing and then
+        timeSpentWithCard = 0.0f;
         playText.text = "Cards Drawn, progressing...";
         for (float t = 0; t < drawFinishWaitTime; t += Time.deltaTime)
         {
-            progressWheelImage.fillAmount = (t / drawFinishWaitTime);
+            progressIndicator.fillAmount = (t / drawFinishWaitTime);
             yield return null;
         }
-        progressWheelImage.fillAmount = 0.0f;
+        progressIndicator.fillAmount = 0.0f;
         currentInputHandler = null;
         // TODO : next phase
         cm.NextPhase();
@@ -183,26 +188,26 @@ public class CardParserManager : MonoBehaviour
     private void UpdatePlayActionUI(bool validTarget, bool hasCardAttached, 
         GameObject currentCard, GameObject currentTarget, float fillMeter)
     {
-        progressWheelImage.fillAmount = 0.0f;
+        progressIndicator.fillAmount = 0.0f;
 
         if (!validTarget || hasCardAttached)
             playText.text = "Apply cards to combatants...";
-        else if (currentCard == null)
+        else if (!hand.Contains(currentCard))
             playText.text = "You focus on " + currentTarget.name + "... What card will you play?";
         else
         {
             playText.text = "Playing " + currentCard.GetComponent<Card>().cardName + " on " + currentTarget.name + "...";
-            progressWheelImage.fillAmount = fillMeter;
+            progressIndicator.fillAmount = fillMeter;
         }
     }
 
     private bool CanPlayMore()
     {
         foreach (GameObject c in cm.activeEnemies)
-            if (c.GetComponent<CombatantBasis>().appliedCard != null)
+            if (c.GetComponent<CombatantBasis>().appliedCard == null)
                 return true;
         foreach (GameObject c in cm.activePartyMembers)
-            if (c.GetComponent<CombatantBasis>().appliedCard != null)
+            if (c.GetComponent<CombatantBasis>().appliedCard == null)
                 return true;
         return false;
     }
@@ -224,9 +229,11 @@ public class CardParserManager : MonoBehaviour
                     currentTarget = hitInfo.collider.gameObject;
                 }
                 else timeSpentWithCard = 0.0f;
-                bool hasCardAttached = currentTarget.GetComponent<CombatantBasis>().appliedCard != null;
+                bool hasCardAttached = currentTarget != null && currentTarget.GetComponent<CombatantBasis>().appliedCard != null;
                 validTarget = currentTarget != null && !hasCardAttached;
                 timeSpentWithCard = validTarget ? timeSpentWithCard : 0.0f;
+                timeSpentWithCard = currentCard != null ? timeSpentWithCard : 0.0f;
+                timeSpentWithCard = hand.Contains(currentCard) ? timeSpentWithCard : 0.0f; 
 
                 UpdatePlayActionUI(validTarget, hasCardAttached, currentCard, currentTarget, timeSpentWithCard / timeToCompletePlay);
 
@@ -250,12 +257,13 @@ public class CardParserManager : MonoBehaviour
         playText.text = "Cards played, progressing...";
         for (float t = 0; t < playFinishWaitTime; t += Time.deltaTime)
         {
-            progressWheelImage.fillAmount = (t / playFinishWaitTime);
+            progressIndicator.fillAmount = (t / playFinishWaitTime);
             yield return null;
         }
-        progressWheelImage.fillAmount = 0.0f;
+        progressIndicator.fillAmount = 0.0f;
         currentInputHandler = null;
         cm.NextPhase();
+        print("MOVING ON TO NEXT PHASE FROM PLAY");
         // TODO : next phase
     }
 
@@ -274,11 +282,11 @@ public class CardParserManager : MonoBehaviour
                 if (hand.Contains(currentCard))
                 {
                     playText.text = "Discarding " + currentCard.GetComponent<Card>().cardName + "... (Mana Increase: " + 1 + ")"; // TODO :
-                    progressWheelImage.fillAmount = timeSpentWithCard / timeToCompleteDiscard;
+                    progressIndicator.fillAmount = timeSpentWithCard / timeToCompleteDiscard;
                 } else
                 {
                     playText.text = "Show cards from your hand to discard for mana " + ". (Total Mana Reup: " + manaUp + ")"; // TODO :
-                    progressWheelImage.fillAmount = 0.0f;
+                    progressIndicator.fillAmount = 0.0f;
                 }
                 if (Input.GetKeyDown(KeyCode.Space)) goto FinishDiscard;
                 yield return null;
@@ -299,10 +307,10 @@ public class CardParserManager : MonoBehaviour
         playText.text = "Cards discarded, mana awarded progressing...";
         for (float t = 0; t < discardFinishWaitTime; t += Time.deltaTime)
         {
-            progressWheelImage.fillAmount = (t / discardFinishWaitTime);
+            progressIndicator.fillAmount = (t / discardFinishWaitTime);
             yield return null;
         }
-        progressWheelImage.fillAmount = 0.0f;
+        progressIndicator.fillAmount = 0.0f;
         playText.text = "";
         currentInputHandler = null;
         cm.AddMana(manaUp);
@@ -335,7 +343,7 @@ public class CardParserManager : MonoBehaviour
                 else
                 {
                     playText.text = "Playing " + currentCard.GetComponent<Card>().cardName + " on " + cb.combatantName + "...";
-                    progressWheelImage.fillAmount = timeSpentWithCard / timeToCompletePlay;
+                    progressIndicator.fillAmount = timeSpentWithCard / timeToCompletePlay;
 
                     if (Input.GetKeyDown(KeyCode.Space)) break;
                     if (Input.GetKeyDown(KeyCode.Q)) goto FinishAction;
@@ -350,7 +358,7 @@ public class CardParserManager : MonoBehaviour
         }
 
     FinishAction:
-        progressWheelImage.fillAmount = 0.0f;
+        progressIndicator.fillAmount = 0.0f;
         playText.text = "";
         currentInputHandler = null;
         // TODO : next phase
@@ -386,6 +394,7 @@ public class CardParserManager : MonoBehaviour
                 Deck.instance.discard.AddRange(hand); // reset deck on end
                 hand.Clear();
                 Deck.instance.Shuffle();
+                cardParser.SetLookForInput(false);
                 break;
             case CombatManager.CombatPhase.None:
                 break;
@@ -402,12 +411,14 @@ public class CardParserManager : MonoBehaviour
         stickerImage1 = backLoader.stickerImage1;
         stickerImage2 = backLoader.stickerImage2;
         stickerImage3 = backLoader.stickerImage3;
+        progressIndicator = backLoader.progressIndicator;
         playText = backLoader.playText;
         cardText = backLoader.cardText;
         cm.SubscribeAsController(HandlePhaseStep, HandleRequestForInput);
 
         // TODO : sanity check but might just muddle things
         HandlePhaseStep(CombatManager.CombatPhase.None, CombatManager.CombatPhase.DrawPhase);
+        currentInputHandler = StartCoroutine(RunInitDrawPhase(4));
 
         activeController = CombatManager.IsInCVMode;
         cardParser.SetLookForInput(CombatManager.IsInCVMode);
@@ -429,7 +440,7 @@ public class CardParserManager : MonoBehaviour
                 orderedCards.Add(card.cardName, new List<GameObject>());
 
             orderedCards[card.cardName].Add(c);
-            print("Adding " + card.cardName + " which is " + c);
+            print("CV: Adding " + card.cardName + " which is " + c);
         }
     }
 
@@ -468,7 +479,9 @@ public class CardParserManager : MonoBehaviour
 
         if (card != null)
         {
-            goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(goodImage);
+            if (goodImage != null && goodImage.CvPtr != null)
+                goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(goodImage);
+
             cardText.text = "Card " + card.GetComponent<Card>().cardName + (inHand ? ", in HAND" : " not in HAND");
         }
         else

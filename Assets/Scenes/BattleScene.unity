@@ -2644,6 +2644,7 @@ MonoBehaviour:
   stickerImage1: {fileID: 2735403716862469428}
   stickerImage2: {fileID: 2735403716862469427}
   stickerImage3: {fileID: 2735403716862469426}
+  progressIndicator: {fileID: 2735403716862469432}
   playText: {fileID: 2735403716862469425}
   cardText: {fileID: 2735403716862469424}
   cvManagerPrefab: {fileID: 4642193870367902648, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
@@ -4496,6 +4497,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2735403716679986198, guid: f1ee3bc51b15f1b4e85212b5052bd797, type: 3}
   m_PrefabInstance: {fileID: 2735403716862469423}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2735403716862469432 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4244721815065707045, guid: f1ee3bc51b15f1b4e85212b5052bd797, type: 3}
+  m_PrefabInstance: {fileID: 2735403716862469423}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3887129562537129078
 Transform:
   m_ObjectHideFlags: 0

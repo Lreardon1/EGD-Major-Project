@@ -33,8 +33,8 @@ public class Deck : MonoBehaviour
 
     IEnumerator LoadNextSceneAfterAllInits()
     {
-        SceneManager.LoadScene(sceneToLoad);
         yield return null;
+        SceneManager.LoadScene(sceneToLoad);
     }
 
     //enforcing singleton of deck on game start

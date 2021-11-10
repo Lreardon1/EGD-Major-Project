@@ -482,6 +482,7 @@ public class CombatManager : MonoBehaviour
     // Note for Jay: Can be called to switch phase for all phases except ActionPhase, which is handled by CVReadyToContinueActions() instead
     public void NextPhase()
     {
+        print("Current Phase " + currentPhase);
         if (currentPhase == CombatPhase.ActionPhase)
             return;
         StopAllCoroutines();

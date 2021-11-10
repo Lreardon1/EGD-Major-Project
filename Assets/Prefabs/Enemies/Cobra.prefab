@@ -74,6 +74,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3366424728461768410, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 3517837958156300148, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -122,6 +126,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cobra
       objectReference: {fileID: 0}
+    - target: {fileID: 3517837958156300150, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 3517837958156300151, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
       propertyPath: m_Size.x
       value: 0.32
@@ -142,6 +150,22 @@ PrefabInstance:
       propertyPath: cb
       value: 
       objectReference: {fileID: -1675813738337571217}
+    - target: {fileID: 5271195981654850880, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5933373297446875214, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7035206416283529683, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 9006736444928803242, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
 --- !u!1 &7685112655293785792 stripped
