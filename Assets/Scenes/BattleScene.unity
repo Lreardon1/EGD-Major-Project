@@ -2768,6 +2768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e0d7b53dc0e48444b3118fec1d4a3dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cm: {fileID: 0}
   planeImage: {fileID: 0}
   goodSeeImage: {fileID: 0}
   stickerImage1: {fileID: 0}
@@ -4214,6 +4215,30 @@ PrefabInstance:
     - target: {fileID: 2735403716679986198, guid: f1ee3bc51b15f1b4e85212b5052bd797, type: 3}
       propertyPath: m_Name
       value: CV_Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735403716679986198, guid: f1ee3bc51b15f1b4e85212b5052bd797, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735403718531892027, guid: f1ee3bc51b15f1b4e85212b5052bd797, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.52521
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735403718531892027, guid: f1ee3bc51b15f1b4e85212b5052bd797, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.52521
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735403718531892027, guid: f1ee3bc51b15f1b4e85212b5052bd797, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.52521
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735403718531892027, guid: f1ee3bc51b15f1b4e85212b5052bd797, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 326
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735403718531892027, guid: f1ee3bc51b15f1b4e85212b5052bd797, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -129
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1ee3bc51b15f1b4e85212b5052bd797, type: 3}
