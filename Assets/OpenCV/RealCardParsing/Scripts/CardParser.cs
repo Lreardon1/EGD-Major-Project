@@ -375,7 +375,7 @@ public class CardParser : MonoBehaviour
                 List<GameObject> possibleCards = cardParserManager.GetCardsOfName(card.cardName);
                 print("COUNT: " + possibleCards.Count);
                 GameObject bestCard = AttemptToGetMods(card, lastGoodReplane, possibleCards);
-                UpdateCardDetected(bestCard, card.cardID);
+                UpdateCardDetected(bestCard, bestCard != null ? card.cardID : -1);
 
             }
         }
@@ -509,7 +509,10 @@ public class CardParser : MonoBehaviour
         cardParserManager.UpdateStickerDebugs(sticker1, sticker2, sticker3);
 
         // TODO : used for debugging
-        return possibleCards[0];
+        if (possibleCards.Count > 0)
+            return possibleCards[0];
+        else
+            return null;
 
         List<string> possibleStickers1 = new List<string>();
         List<string> possibleStickers2 = new List<string>();
