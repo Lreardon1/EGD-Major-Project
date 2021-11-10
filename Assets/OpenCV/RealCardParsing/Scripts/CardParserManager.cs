@@ -108,6 +108,7 @@ public class CardParserManager : MonoBehaviour
         progressWheelImage.fillAmount = 0.0f;
         currentInputHandler = null;
         // TODO : next phase
+        cm.NextPhase();
     }
 
 
@@ -169,9 +170,17 @@ public class CardParserManager : MonoBehaviour
         progressWheelImage.fillAmount = 0.0f;
         currentInputHandler = null;
         // TODO : next phase
+        cm.NextPhase();
     }
 
 
+
+
+
+
+
+
+    public float timeToCompletePlay = 2.5f;
 
     private void UpdatePlayActionUI(bool validTarget, bool hasCardAttached, 
         GameObject currentCard, GameObject currentTarget, float fillMeter)
@@ -188,8 +197,6 @@ public class CardParserManager : MonoBehaviour
             progressWheelImage.fillAmount = fillMeter;
         }
     }
-
-    public float timeToCompletePlay = 2.5f;
 
     private bool CanPlayMore()
     {
@@ -250,6 +257,7 @@ public class CardParserManager : MonoBehaviour
         }
         progressWheelImage.fillAmount = 0.0f;
         currentInputHandler = null;
+        cm.NextPhase();
         // TODO : next phase
     }
 
@@ -301,6 +309,7 @@ public class CardParserManager : MonoBehaviour
         currentInputHandler = null;
         cm.AddMana(manaUp);
         // TODO : next phase
+        cm.NextPhase();
     }
 
 
@@ -311,8 +320,7 @@ public class CardParserManager : MonoBehaviour
         if (cb.appliedCard != null)
         {
             playText.text = "Currently cannot play because " + cb.combatantName + " already has played card.";
-            yield return new WaitForSeconds(0.5f); // TODO : this is a bad conflict with other stuff
-            currentInputHandler = null; // TODO : this is bad too
+            yield return new WaitForSeconds(0.6f);
             goto FinishAction;
         } else
         {
@@ -321,8 +329,11 @@ public class CardParserManager : MonoBehaviour
             timeSpentWithCard = 0.0f;
             while (timeSpentWithCard < timeToCompletePlay)
             {
-                if (currentCard == null)
+                if (!hand.Contains(currentCard))
+                {
                     playText.text = "Play Card on " + cb.combatantName + "?";
+                    timeSpentWithCard = 0.0f;
+                }
                 else
                 {
                     playText.text = "Playing " + currentCard.GetComponent<Card>().cardName + " on " + cb.combatantName + "...";
@@ -335,6 +346,9 @@ public class CardParserManager : MonoBehaviour
                 }
                 yield return null;
             }
+
+            cm.ApplyCard(currentCard, cm.actionOrder[0]);
+            hand.Remove(currentCard);
         }
 
     FinishAction:
@@ -342,6 +356,7 @@ public class CardParserManager : MonoBehaviour
         playText.text = "";
         currentInputHandler = null;
         // TODO : next phase
+        cm.CVReadyToContinueActions();
         yield return null;
     }
 
@@ -350,7 +365,10 @@ public class CardParserManager : MonoBehaviour
     public void HandleRequestForInput(CombatManager.CombatPhase phase)
     {
         if (currentPhase != phase || currentInputHandler != null)
-            throw new Exception("ERROR: Incorrect Data or Phase Provided to CV Controller");
+        {
+            Debug.LogError("ERROR: Incorrect Data or Phase Provided to CV Controller, in " + currentPhase);
+            return;
+        }
 
         switch (phase)
         {
@@ -369,12 +387,8 @@ public class CardParserManager : MonoBehaviour
             case CombatManager.CombatPhase.None:
                 break;
         }
-
-        // TODO
     }
-
-    // Note for Jay: Can be called to switch phase for all phases except ActionPhase, which is handled by CVReadyToContinueActions() instead
-    // public void NextPhase()
+    
 
     public void ActivateCVForCombat(CVControllerBackLoader backLoader)
     {
@@ -418,6 +432,7 @@ public class CardParserManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // singleton pattern
         if (instance != null)
         {
             Destroy(gameObject);
@@ -425,18 +440,19 @@ public class CardParserManager : MonoBehaviour
         }
         instance = this;
 
+        // card parser true init
         cardParser = GetComponent<CardParser>();
         cardParser.StableUpdateEvent.AddListener(HandleStableUpdate);
         cardParser.ToNullUpdateEvent.AddListener(HandleNullUpdate);
         cardParser.ToNewUpdateEvent.AddListener(HandleNewUpdate);
+        cardParser.UpdateMode(CardParser.ParseMode.AllMode);
 
         SetUpOrderedCards(Deck.instance.allCards);
-
     }
     
-    internal void UpdateSeenImage(WebCamTexture webCamTexture)
+    public void UpdateSeenImage(WebCamTexture webCamTexture)
     {
-        throw new NotImplementedException();
+        goodSeeImage.texture = webCamTexture;
     }
 
     public void DisplayCardData(GameObject card, Mat goodImage)

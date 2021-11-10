@@ -342,11 +342,14 @@ public class CombatManager : MonoBehaviour
     {
         cvReadyForMoreActions = true;
     }
+
     public bool IsReadyToContinueActions()
     {
         if (!IsInCVMode)
+        {
             return Input.GetKeyDown(KeyCode.Space)
                 || (currentCB != null && currentCB.GetComponent<CombatantBasis>().appliedCard != null);
+        } 
         else if (cvReadyForMoreActions)
         {
             cvReadyForMoreActions = false;
