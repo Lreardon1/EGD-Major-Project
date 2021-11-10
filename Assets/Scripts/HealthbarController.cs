@@ -26,7 +26,10 @@ public class HealthbarController : MonoBehaviour
 
     public void SetHealth(int health)
     {
-        slider.value = health;
+        if (health == 1) // For some reason when health is 0 the healthbar appears empty
+            slider.value = 1.5f;
+        else
+            slider.value = health;
 
         fill.color = gradient.Evaluate(slider.normalizedValue);
     }

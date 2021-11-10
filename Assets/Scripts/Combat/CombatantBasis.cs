@@ -38,6 +38,8 @@ public class CombatantBasis : MonoBehaviour
 
     public TMPro.TextMeshPro text;
     public HealthbarController healthBar;
+    public LineRenderer lr;
+    public Transform targetLineStart;
 
     // TODO : solution because no function is called to inform combatbasis of changed applied card
     public GameObject appliedCard
@@ -183,6 +185,7 @@ public class CombatantBasis : MonoBehaviour
             nextActionPrimaryElem = Card.Element.None;
             nextActionSecondaryElem = Card.Element.None;
         }
+        lr.enabled = false;
     }
 
     public void Heal(int healingAmount)
@@ -256,6 +259,8 @@ public class CombatantBasis : MonoBehaviour
             Debug.Log(combatantName + " Slain");
             isSlain = true;
             this.GetComponent<SpriteRenderer>().enabled = false;
+            healthBar.gameObject.SetActive(false);
+            lr.gameObject.SetActive(false);
             text.enabled = false;
             return true;
         }
@@ -269,6 +274,7 @@ public class CombatantBasis : MonoBehaviour
         {
             nextAction = Action.Attack;
             isChanneling = false;
+            return;
         }
 
         int rand = Random.Range(0, 3);
@@ -329,6 +335,10 @@ public class CombatantBasis : MonoBehaviour
             text.text = "Special " + target.GetComponent<CombatantBasis>().combatantName;
         }
         Debug.Log("Target Selected");
+        lr.positionCount = 2;
+        lr.SetPosition(0, targetLineStart.position);
+        lr.SetPosition(1, target.transform.position);
+        lr.enabled = true;
     }
 
     public virtual void Attack()

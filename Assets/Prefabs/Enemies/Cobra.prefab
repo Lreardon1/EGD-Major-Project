@@ -56,6 +56,8 @@ MonoBehaviour:
   hasPriority: 0
   text: {fileID: 7447595518004980471}
   healthBar: {fileID: 2415185846226590691}
+  lr: {fileID: 5067293504755242239}
+  targetLineStart: {fileID: 8068978356985619032}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   isSlain: 0
@@ -204,3 +206,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a7fd7cc5c7b964479c01d8a66564228, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!120 &5067293504755242239 stripped
+LineRenderer:
+  m_CorrespondingSourceObject: {fileID: 2027881360034307401, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+  m_PrefabInstance: {fileID: 6518643535064828342}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8068978356985619032 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3858488472018807790, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+  m_PrefabInstance: {fileID: 6518643535064828342}
+  m_PrefabAsset: {fileID: 0}
