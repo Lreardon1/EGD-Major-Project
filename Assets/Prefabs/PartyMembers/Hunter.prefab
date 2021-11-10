@@ -31,11 +31,14 @@ MonoBehaviour:
   negativeHitPointShield: 0
   attackCardBonus: 0
   shieldReturnDmg: 0
+  shieldResistance: 0
   untargettable: 0
   canCounterAttack: 0
   hasPriority: 0
   text: {fileID: 6296247438686769151}
   healthBar: {fileID: 1911168083666358863}
+  lr: {fileID: 110858995768291046}
+  targetLineStart: {fileID: 3520208962881906484}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   isSlain: 0
@@ -131,7 +134,7 @@ PrefabInstance:
       objectReference: {fileID: 2611541048023404966, guid: fd3fda5b6300188459213d3db6861d9c, type: 3}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Color.g
@@ -139,7 +142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Color.r
-      value: 0.058127522
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_WasSpriteAssigned
@@ -193,3 +196,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a7fd7cc5c7b964479c01d8a66564228, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!120 &110858995768291046 stripped
+LineRenderer:
+  m_CorrespondingSourceObject: {fileID: 8824656619113738306, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+  m_PrefabInstance: {fileID: 8934758875802771108}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3520208962881906484 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5414708552302786960, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+  m_PrefabInstance: {fileID: 8934758875802771108}
+  m_PrefabAsset: {fileID: 0}

@@ -48,6 +48,7 @@ public class CombatHandController : MonoBehaviour
         for (int i = 0; i < startingHandSize; i++)
         {
             GameObject card = Deck.instance.Draw();
+            Debug.Log(Deck.instance.deck.Count);
             originalCardTransform = card.transform.parent;
             card.GetComponent<RectTransform>().SetParent(transform);
             card.transform.localScale = new Vector3(cardLocalScale, cardLocalScale, cardLocalScale);
