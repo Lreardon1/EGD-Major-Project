@@ -37,6 +37,7 @@ public class CombatantBasis : MonoBehaviour
     public bool hasPriority = false;
 
     public TMPro.TextMeshPro text;
+    public HealthbarController healthBar;
 
     // TODO : solution because no function is called to inform combatbasis of changed applied card
     public GameObject appliedCard
@@ -77,6 +78,11 @@ public class CombatantBasis : MonoBehaviour
     public Action previousAction = Action.None;
 
     public GameObject combatPopupPrefab;
+
+    public void Start()
+    {
+        healthBar.SetMaxHealth(totalHitPoints, currentHitPoints);
+    }
 
     private void MakePopup(string text, Texture2D image, Color col)
     {
@@ -185,7 +191,7 @@ public class CombatantBasis : MonoBehaviour
 
         // visuals
         MakePopup("<color=\"green\"> Healed for " + healingAmount + "</color>", null, Color.white);
-
+        healthBar.SetHealth(currentHitPoints);
     }
 
     public void TakeStatusDamage(float damageAmount, Status status)
@@ -194,6 +200,7 @@ public class CombatantBasis : MonoBehaviour
 
         // visuals
         MakePopup("<color=\"red\"> Took " + damageAmount + " status damange for " + status + "</color>", null, Color.white);
+        healthBar.SetHealth(currentHitPoints);
         CheckIsSlain();
     }
 
@@ -231,7 +238,7 @@ public class CombatantBasis : MonoBehaviour
             statusScript.ApplyNewStatus(newStatus, attacker);
         }
 
-
+        healthBar.SetHealth(currentHitPoints);
         if (!CheckIsSlain()) //check counterattack if survived hit
         {
             if (canCounterAttack)

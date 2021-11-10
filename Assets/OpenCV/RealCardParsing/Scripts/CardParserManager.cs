@@ -27,17 +27,30 @@ public class CardParserManager : MonoBehaviour
 
     private bool activeController;
 
+
+    private CombatManager.CombatPhase lastPhase = CombatManager.CombatPhase.None;
+    private CombatManager.CombatPhase currentPhase = CombatManager.CombatPhase.None;
+    private bool currentlyLookingForInput = false;
+
     // CVReadyToContinueActions
     // IsReadyToContinueActions
 
     public void HandlePhaseStep(CombatManager.CombatPhase lastPhase, CombatManager.CombatPhase newPhase)
     {
+        if (this.lastPhase != lastPhase)
+            Debug.LogError("Phase Mismatch!");
+
+        this.lastPhase = lastPhase;
+        this.currentPhase = currentPhase;
         // TODO
     }
 
-    public void HandleRequestForInput(CombatManager.CombatPhase currentPhase)
+    public void HandleRequestForInput(CombatManager.CombatPhase phase)
     {
-        // TODO : try not to use this if you can help it
+        if (currentPhase != phase || currentlyLookingForInput)
+            throw new Exception("ERROR: Incorrect Data or Phase Provided to CV Controller");
+
+        // TODO
     }
 
     // Note for Jay: Can be called to switch phase for all phases except ActionPhase, which is handled by CVReadyToContinueActions() instead
