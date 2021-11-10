@@ -10,8 +10,18 @@ using System;
 using UnityEngine.Events;
 using UnityEditor;
 
+
+// TODO HERE : update to function as best as possible with all these different modes, shouldn't be terrible but won't be super nice.
 public class CardParser : MonoBehaviour
 {
+    public enum ParseMode
+    {
+        DeckMode,
+        HandMode,
+        AllMode,
+        StickerlessMode
+    }
+
     public CardParserManager cardParserManager;
     [Space(10)]
     public Texture2D staticTestImage;
@@ -44,6 +54,10 @@ public class CardParser : MonoBehaviour
     private int defaultCardPlusBorderWidth = 0;
     private int defaultCardPlusBorderHeight = 0;
 
+    internal void UpdateMode(ParseMode handMode)
+    {
+        throw new NotImplementedException();
+    }
 
     [Space(10)]
     [Header("Template Cards")]
@@ -75,7 +89,6 @@ public class CardParser : MonoBehaviour
     {
         //MakeBoundingBoxFromEditorStr(boundBoxText);
         BakeCardTemplateData();
-        SetLookForInput(true);
     }
 
 
@@ -207,7 +220,7 @@ public class CardParser : MonoBehaviour
     public void SetLookForInput(bool b, int deviceIndex = -1)
     {
         if (deviceIndex == -1)
-            deviceIndex = WebCamTexture.devices.Length - 2;
+            deviceIndex = WebCamTexture.devices.Length - 1;
 
         if (b)
         {
@@ -238,6 +251,7 @@ public class CardParser : MonoBehaviour
             if (null != webCamTexture && webCamTexture.isPlaying)
                 webCamTexture.Stop();
             webCamTexture = null;
+            webCamDevice = null;
 
             if (value == null) return;
 

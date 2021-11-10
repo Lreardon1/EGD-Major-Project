@@ -134,7 +134,6 @@ public class OneOnCombatManager : MonoBehaviour
         if (turnOrderActors[0].GetTurnStatus() <= 0.0f)
         {
             currentPlayMode = PlayMode.CardAction;
-            player.RequestCardAction(this);
             // TODO : highlight current actor or something
         } else {
             foreach (OneOnTurnActor actor in turnOrderActors)

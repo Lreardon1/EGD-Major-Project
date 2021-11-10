@@ -33814,11 +33814,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20207fcf6ab55b54faa1a662df242386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainSeeImage: {fileID: 0}
-  stickerImages:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   cardParserManager: {fileID: 1567943724}
   staticTestImage: {fileID: 0}
   bottomRightBoundingBox:
@@ -33952,10 +33947,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentCard: {fileID: 0}
   cardParser: {fileID: 1567943723}
+  cInterface: {fileID: 0}
   cm: {fileID: 0}
+  planeImage: {fileID: 0}
   goodSeeImage: {fileID: 0}
-  cardText: {fileID: 0}
+  stickerImage1: {fileID: 0}
+  stickerImage2: {fileID: 0}
+  stickerImage3: {fileID: 0}
   playText: {fileID: 0}
+  cardText: {fileID: 0}
   handCards: []
 --- !u!4 &1567943725
 Transform:
