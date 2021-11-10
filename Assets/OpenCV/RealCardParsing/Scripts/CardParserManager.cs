@@ -397,6 +397,7 @@ public class CardParserManager : MonoBehaviour
     {
         cInterface = backLoader;
         cm = backLoader.cm;
+        goodSeeImage = backLoader.goodSeeImage;
         planeImage = backLoader.planeImage;
         stickerImage1 = backLoader.stickerImage1;
         stickerImage2 = backLoader.stickerImage2;
