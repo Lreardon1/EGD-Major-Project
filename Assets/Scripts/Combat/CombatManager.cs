@@ -793,6 +793,7 @@ public class CombatManager : MonoBehaviour
             Debug.Log("You Win!");
             StopAllCoroutines();
             chc.ResetCardParents();
+            chc.ReShuffle();
             encounterScript.ReturnToOverWorld();
             PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);
             return true;
@@ -802,6 +803,7 @@ public class CombatManager : MonoBehaviour
             Debug.Log("You Lose...");
             StopAllCoroutines();
             chc.ResetCardParents();
+            chc.ReShuffle();
             encounterScript.ReturnToOverWorld();
             PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);
             return true;

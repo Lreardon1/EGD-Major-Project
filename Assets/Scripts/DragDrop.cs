@@ -153,7 +153,7 @@ public class DragDrop : MonoBehaviour
                     } if(dropZone.CompareTag("DiscardPile"))
                     {
                         FindObjectOfType<CombatManager>().DiscardCard(this.gameObject);
-                        trans.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                        trans.localScale = new Vector3(1f, 1f, 1f);
                     }
                 }
             }

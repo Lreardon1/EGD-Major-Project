@@ -13,15 +13,15 @@ public class HunterCombat : CombatantBasis
             target = null;
             return;
         } 
-        int highestHP = 0;
-        GameObject highestHPTarget = targets[0];
+        int lowestHP = int.MaxValue;
+        GameObject lowestHPTarget = targets[0];
 
         foreach(GameObject enemy in targets)
         {
             CombatantBasis cb = enemy.GetComponent<CombatantBasis>();
-            if(!cb.untargettable && cb.currentHitPoints > highestHP)
+            if(!cb.untargettable && cb.currentHitPoints < lowestHP)
             {
-                highestHP = cb.currentHitPoints;
+                lowestHP = cb.currentHitPoints;
                 target = enemy;
             }
         }
@@ -49,7 +49,7 @@ public class HunterCombat : CombatantBasis
 
         if(specialAttack) // Special attack does 1/3 regular attack damage to all enemies
         {
-            damageTotal = (attack/3f + attackCardBonus) * attackMultiplier; // Get modifier from card here
+            damageTotal = ((attack + attackCardBonus)/3f) * attackMultiplier; // Get modifier from card here
         } else
         {
             damageTotal = (attack + attackCardBonus) * attackMultiplier; // Get modifier from card here

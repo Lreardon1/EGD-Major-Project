@@ -25,6 +25,8 @@ public class CombatantBasis : MonoBehaviour
     public float speedMultiplier = 1f;
     public float resistance = 0.0f;
 
+    public bool specialHasTarget = false;
+
     public int temporaryHitPoints = 0;
     public int negativeHitPointShield = 0;
 

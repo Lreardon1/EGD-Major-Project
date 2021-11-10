@@ -19,7 +19,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &-1675813738337571217
+--- !u!114 &8946559181527378315
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -28,12 +28,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7685112655293785792}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 826eca48ee718114ebdcc2e4c43368ee, type: 3}
+  m_Script: {fileID: 11500000, guid: 33ad1475ce7e35441bad733e96a7cf53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   nextAction: 0
   statusCondition: 0
-  statusScript: {fileID: 7097020828666586104}
+  statusScript: {fileID: 0}
   nextActionPrimaryElem: 0
   nextActionSecondaryElem: 0
   combatantName: Cobra
@@ -46,6 +46,7 @@ MonoBehaviour:
   defenseMultiplier: 1
   speedMultiplier: 1
   resistance: 0
+  specialHasTarget: 1
   temporaryHitPoints: 0
   negativeHitPointShield: 0
   attackCardBonus: 0
@@ -61,7 +62,7 @@ MonoBehaviour:
   heldItem: {fileID: 0}
   target: {fileID: 0}
   isSlain: 0
-  isEnemy: 1
+  isEnemy: 0
   isChanneling: 0
   bonusAttack: 0
   uiCollider: {fileID: 0}
@@ -149,7 +150,7 @@ PrefabInstance:
     - target: {fileID: 4038445828373211726, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
       propertyPath: cb
       value: 
-      objectReference: {fileID: -1675813738337571217}
+      objectReference: {fileID: 0}
     - target: {fileID: 5271195981654850880, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -173,17 +174,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3517837958156300150, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
   m_PrefabInstance: {fileID: 6518643535064828342}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7097020828666586104 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4038445828373211726, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
-  m_PrefabInstance: {fileID: 6518643535064828342}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7685112655293785792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b82d872ddf111f0419f5e9993b179fa7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7447595518004980471 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4408447238898312001, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
