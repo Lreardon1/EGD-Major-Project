@@ -16,6 +16,7 @@ public class CVControllerBackLoader : MonoBehaviour
     public RawImage stickerImage1;
     public RawImage stickerImage2;
     public RawImage stickerImage3;
+    public Image progressIndicator;
     [Header("Controller Text")]
     public TMP_Text playText;
     public TMP_Text cardText;

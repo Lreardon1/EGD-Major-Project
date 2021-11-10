@@ -25,7 +25,6 @@ public class OverworldMovement : MonoBehaviour
     public Animator godfather_back_animator;
     public CharacterController cc;
     public bool canMove = true;
-    public List<UnityEngine.Vector3> movements = new List<UnityEngine.Vector3>();
     private LinkedList<TimePairTransform> walkLine = new LinkedList<TimePairTransform>();
     private float walkTime = 0;
 
@@ -61,7 +60,12 @@ public class OverworldMovement : MonoBehaviour
         //warriorBackRenderer = warriorBack.GetComponent<SpriteRenderer>();
         //warriorBackRenderer.flipX = false;
         cc = GetComponent<CharacterController>();
-        movements.Add(Vector3.zero);
+
+        // init movement conga line
+        for (float t = walkTime - 2; t < walkTime; t += 0.1f)
+        {
+            walkLine.AddFirst(new TimePairTransform(t, transform.position));
+        }
     }
 
     public Vector3 velocity = Vector3.zero;

@@ -359,30 +359,35 @@ public class CardParser : MonoBehaviour
            
         }
         */
-            if (Input.GetKey(KeyCode.Alpha0))
-            {
-                UpdateCardDetected(Deck.instance.allCards[0], 0);
-            }
-            if (Input.GetKey(KeyCode.Alpha1))
-            {
-                UpdateCardDetected(Deck.instance.allCards[1], 1);
-            }
-            if (Input.GetKey(KeyCode.Alpha2))
-            {
-                UpdateCardDetected(Deck.instance.allCards[2], 2);
-            }
-            if (Input.GetKey(KeyCode.Alpha3))
-            {
-                UpdateCardDetected(Deck.instance.allCards[3], 3);
-            }
-            if (Input.GetKey(KeyCode.Alpha4))
-            {
-                UpdateCardDetected(Deck.instance.allCards[4], 4);
-            }
-            if (Input.GetKey(KeyCode.Alpha5))
-            {
-                UpdateCardDetected(Deck.instance.allCards[5], 5);
-            }
+        int i = -1;
+        if (Input.GetKey(KeyCode.Alpha0))
+        {
+            UpdateCardDetected(Deck.instance.deck[0], 0);
+        }
+        else if (Input.GetKey(KeyCode.Alpha1))
+        {
+            UpdateCardDetected(Deck.instance.deck[1], 1);
+        }
+        else if (Input.GetKey(KeyCode.Alpha2))
+        {
+            UpdateCardDetected(Deck.instance.deck[2], 2);
+        }
+        else if (Input.GetKey(KeyCode.Alpha3))
+        {
+            UpdateCardDetected(Deck.instance.deck[3], 3);
+        }
+        else if(Input.GetKey(KeyCode.Alpha4))
+        {
+            UpdateCardDetected(Deck.instance.deck[4], 4);
+        }
+        else if (Input.GetKey(KeyCode.Alpha5))
+        {
+            UpdateCardDetected(Deck.instance.deck[5], 5);
+        }
+        else
+        {
+            UpdateCardDetected(null, -1);
+        }
             return true;
     }
 
@@ -511,7 +516,8 @@ public class CardParser : MonoBehaviour
 
     private void UpdateCardDetected(GameObject card, int id)
     {
-        print("Updating for card: " + card.GetComponent<Card>().name + " with previous " + previousCard.GetComponent<Card>().cardName);
+        print("Updating for card: " + (card != null ? card.GetComponent<Card>().name : "NULL") + " with previous " + 
+            (previousCard != null ? previousCard.GetComponent<Card>().cardName : " NULL"));
 
         // if card is the same as last, don't update
         if (card == previousCard)
@@ -1298,6 +1304,7 @@ public class CardParser : MonoBehaviour
     private Mat lastGoodReplane = new Mat();
     public Mat GetLastGoodReplane()
     {
+        return null; // TODO : for debugginh
         return lastGoodReplane;
     }
 
