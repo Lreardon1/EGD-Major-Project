@@ -17,7 +17,7 @@ public class CombatManager : MonoBehaviour
     public static bool IsInCVMode = false;
 
 
-    public enum CombatPhase {DrawPhase, PlayPhase, DiscardPhase, ActionPhase, None};
+    public enum CombatPhase {DrawPhase, PlayPhase, DiscardPhase, ActionPhase, EndPhase, None };
 
 
 
@@ -803,6 +803,7 @@ public class CombatManager : MonoBehaviour
             encounterScript.ReturnToOverWorld();
             return true;
         }
+        PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);
         return false;
     }
 }

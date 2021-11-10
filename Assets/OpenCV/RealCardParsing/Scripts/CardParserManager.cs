@@ -346,7 +346,7 @@ public class CardParserManager : MonoBehaviour
                 }
                 yield return null;
             }
-
+            // TODO : applycard should add the card back to the discard pile of the deck
             cm.ApplyCard(currentCard, cm.actionOrder[0]);
             hand.Remove(currentCard);
         }
@@ -457,13 +457,6 @@ public class CardParserManager : MonoBehaviour
 
     public void DisplayCardData(GameObject card, Mat goodImage)
     {
-        /*
-        --Card X in HAND.
-       -- Card X, not in hand.
-       -- No card detected.
-       -- No card detected but one was suspected.
-       -- TODO TODO : TODO
-       */
         bool inHand = hand.Contains(card);
         if (goodSeeImage.texture)
             Destroy(goodSeeImage.texture);
@@ -471,11 +464,11 @@ public class CardParserManager : MonoBehaviour
         if (card != null)
         {
             goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(goodImage);
-            cardText.text = card.GetComponent<Card>().cardName + (inHand ? "" : " which is not in your HAND!");
+            cardText.text = "Card " + card.GetComponent<Card>().cardName + (inHand ? ", in HAND" : " not in HAND");
         }
         else
         {
-            cardText.text = "No Card Found";
+            cardText.text = "No Card Detected";
         }
     }
 

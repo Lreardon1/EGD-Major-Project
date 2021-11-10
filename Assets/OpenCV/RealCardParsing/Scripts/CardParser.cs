@@ -335,9 +335,9 @@ public class CardParser : MonoBehaviour
     {
         using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
         {
-            //print(cardScene.Size());
+            // TODO : here is where to configure modes, pass in eligible cards!
 
-            CustomCard card = ParseCard(cardScene, null);
+            /* CustomCard card = ParseCard(cardScene, null);
             if (card == null)
             {
                 UpdateCardDetected(null, -1);
@@ -347,7 +347,32 @@ public class CardParser : MonoBehaviour
             List<GameObject> possibleCards = cardParserManager.GetCardsOfName(card.cardName);
             print("COUNT: " + possibleCards.Count);
             GameObject bestCard = AttemptToGetMods(card, lastGoodReplane, possibleCards);
-            UpdateCardDetected(bestCard, card.cardID);
+            UpdateCardDetected(bestCard, card.cardID);*/
+
+            if (Input.GetKey(KeyCode.Alpha0))
+            {
+                UpdateCardDetected(Deck.instance.allCards[0], 0);
+            }
+            if (Input.GetKey(KeyCode.Alpha1))
+            {
+                UpdateCardDetected(Deck.instance.allCards[1], 1);
+            }
+            if (Input.GetKey(KeyCode.Alpha2))
+            {
+                UpdateCardDetected(Deck.instance.allCards[2], 2);
+            }
+            if (Input.GetKey(KeyCode.Alpha3))
+            {
+                UpdateCardDetected(Deck.instance.allCards[3], 3);
+            }
+            if (Input.GetKey(KeyCode.Alpha4))
+            {
+                UpdateCardDetected(Deck.instance.allCards[4], 4);
+            }
+            if (Input.GetKey(KeyCode.Alpha5))
+            {
+                UpdateCardDetected(Deck.instance.allCards[5], 5);
+            }
         }
         return true;
     }
