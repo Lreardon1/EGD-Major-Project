@@ -216,6 +216,9 @@ public class CardParser : MonoBehaviour
             // process texture with whatever method sub-class might have in mind
             cardParserManager.UpdateSeenImage(webCamTexture);
             ProcessTexture(webCamTexture);
+        } else if (DeviceName != null)
+        {
+            ProcessTexture(null); // TODO : debugging
         }
     }
 
@@ -229,6 +232,7 @@ public class CardParser : MonoBehaviour
         {
             if (WebCamTexture.devices.Length > 0)
                 DeviceName = WebCamTexture.devices[deviceIndex % WebCamTexture.devices.Length].name;
+            print("SET DEVICE NAME");
         } else
         {
             DeviceName = null;
@@ -336,11 +340,12 @@ public class CardParser : MonoBehaviour
 
     protected bool ProcessTexture(WebCamTexture input)
     {
-        using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
+        /*
+         * using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
         {
             // TODO : here is where to configure modes, pass in eligible cards!
 
-            /* CustomCard card = ParseCard(cardScene, null);
+            CustomCard card = ParseCard(cardScene, null);
             if (card == null)
             {
                 UpdateCardDetected(null, -1);
@@ -350,8 +355,10 @@ public class CardParser : MonoBehaviour
             List<GameObject> possibleCards = cardParserManager.GetCardsOfName(card.cardName);
             print("COUNT: " + possibleCards.Count);
             GameObject bestCard = AttemptToGetMods(card, lastGoodReplane, possibleCards);
-            UpdateCardDetected(bestCard, card.cardID);*/
-
+            UpdateCardDetected(bestCard, card.cardID);
+           
+        }
+        */
             if (Input.GetKey(KeyCode.Alpha0))
             {
                 UpdateCardDetected(Deck.instance.allCards[0], 0);
@@ -376,8 +383,7 @@ public class CardParser : MonoBehaviour
             {
                 UpdateCardDetected(Deck.instance.allCards[5], 5);
             }
-        }
-        return true;
+            return true;
     }
 
     private string GetBestSticker(Mat sticker, string[] possibleStickers, out float bestVal)
@@ -505,6 +511,8 @@ public class CardParser : MonoBehaviour
 
     private void UpdateCardDetected(GameObject card, int id)
     {
+        print("Updating for card: " + card.GetComponent<Card>().name + " with previous " + previousCard.GetComponent<Card>().cardName);
+
         // if card is the same as last, don't update
         if (card == previousCard)
         {

@@ -36,7 +36,7 @@ public class CardParserManager : MonoBehaviour
     public void HandlePhaseStep(CombatManager.CombatPhase lastPhase, CombatManager.CombatPhase newPhase)
     {
         if (this.lastPhase != lastPhase)
-            Debug.LogError("Phase Mismatch!");
+            Debug.LogError("Phase Mismatch!" + "Expected Last Phase: " + this.lastPhase + ", this actual last: " + lastPhase + ". Current: " + newPhase);
 
         this.lastPhase = lastPhase;
         this.currentPhase = newPhase;
@@ -386,6 +386,7 @@ public class CardParserManager : MonoBehaviour
                 Deck.instance.discard.AddRange(hand); // reset deck on end
                 hand.Clear();
                 Deck.instance.Shuffle();
+                cardParser.SetLookForInput(false);
                 break;
             case CombatManager.CombatPhase.None:
                 break;
@@ -469,7 +470,9 @@ public class CardParserManager : MonoBehaviour
 
         if (card != null)
         {
-            goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(goodImage);
+            if (goodImage != null)
+                goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(goodImage);
+
             cardText.text = "Card " + card.GetComponent<Card>().cardName + (inHand ? ", in HAND" : " not in HAND");
         }
         else
