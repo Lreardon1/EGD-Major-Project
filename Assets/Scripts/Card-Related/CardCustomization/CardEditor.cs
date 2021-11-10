@@ -27,7 +27,6 @@ public class CardEditor : MonoBehaviour
     public void LoadCard(Card card)
     {
         currentCard = card;
-        print("loading card");
         ResetChildrenNum();
         editedCardRender.GetComponent<Card>().CopyCardSprites(card);
     }
@@ -46,16 +45,16 @@ public class CardEditor : MonoBehaviour
                     {
                         currentCard.modifiers[i].transform.GetChild(0).GetChild(0).gameObject.GetComponent<Image>().sprite = currentCard.transparentSprite;
                         currentCard.gameObject.GetComponent<CardEditHandler>().activeModifiers[currentCard.modifiers[i]].DeactivateModifier(currentCard);
+                        currentCard.gameObject.GetComponent<CardEditHandler>().activeModifiers[currentCard.modifiers[i]].DeactivateModifier(editedCardRender.GetComponent<Card>());
                         currentCard.gameObject.GetComponent<CardEditHandler>().activeModifiers[currentCard.modifiers[i]].setSpriteMod(null);
                     }
                     else if (previousChildrenNum[i] == 1)
                     {
                         GameObject newChild = modifierTransforms[i].transform.GetChild(0).gameObject;
-                        print(newChild);
-                        print(currentCard.modifiers[i]);
                         currentCard.modifiers[i].transform.GetChild(0).GetChild(0).gameObject.GetComponent<Image>().sprite = newChild.GetComponent<Image>().sprite;
                         currentCard.gameObject.GetComponent<CardEditHandler>().activeModifiers[currentCard.modifiers[i]].setSpriteMod(newChild.GetComponent<Image>().sprite);
                         currentCard.gameObject.GetComponent<CardEditHandler>().activeModifiers[currentCard.modifiers[i]].ActivateModifier(currentCard);
+                        currentCard.gameObject.GetComponent<CardEditHandler>().activeModifiers[currentCard.modifiers[i]].ActivateModifier(editedCardRender.GetComponent<Card>());
                     }
                 }
             }
@@ -64,7 +63,6 @@ public class CardEditor : MonoBehaviour
 
     public void SaveCard()
     {
-        print("Savign card");
         foreach (GameObject g in modifierTransforms)
         {
             if (g.transform.childCount == 1)

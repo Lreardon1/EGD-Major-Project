@@ -74,30 +74,66 @@ public class DeckCustomizer : MonoBehaviour
         currentDeckStorage.GetComponent<DeckViewer>().checkForUpdates = true;
 
         Dictionary<string, List<GameObject>> freeDraggables = Deck.instance.freeDraggables;
-        if (freeDraggables.ContainsKey("num"))
+        if (freeDraggables.ContainsKey("num") && freeDraggables["num"] != null)
         {
             List<GameObject> currList = freeDraggables["num"];
             foreach (GameObject mod in currList)
             {
                 mod.GetComponent<RectTransform>().SetParent(numStorage.transform);
+                mod.GetComponent<DragDrop>().dropType = Modifier.ModifierEnum.NumModifier;
+                List<GameObject> dropZones = mod.GetComponent<DragDrop>().allowedDropZones;
+                if (dropZones.Count == 0)
+                {
+                    dropZones.Add(numStorage);
+                    dropZones.Add(modsDropZone);
+                    dropZones.Add(editorDropZone);
+                    for (int j = 0; j < cardEditor.GetComponent<CardEditor>().modifierTransforms.Count; j++)
+                    {
+                        dropZones.Add(cardEditor.GetComponent<CardEditor>().modifierTransforms[j]);
+                    }
+                }
             }
         }
 
-        if (freeDraggables.ContainsKey("element"))
+        if (freeDraggables.ContainsKey("element") && freeDraggables["element"] != null)
         {
             List<GameObject> currList = freeDraggables["element"];
             foreach (GameObject mod in currList)
             {
                 mod.GetComponent<RectTransform>().SetParent(elementStorage.transform);
+                mod.GetComponent<DragDrop>().dropType = Modifier.ModifierEnum.SecondaryElement;
+                List<GameObject> dropZones = mod.GetComponent<DragDrop>().allowedDropZones;
+                if (dropZones.Count == 0)
+                {
+                    dropZones.Add(elementStorage);
+                    dropZones.Add(modsDropZone);
+                    dropZones.Add(editorDropZone);
+                    for (int j = 0; j < cardEditor.GetComponent<CardEditor>().modifierTransforms.Count; j++)
+                    {
+                        dropZones.Add(cardEditor.GetComponent<CardEditor>().modifierTransforms[j]);
+                    }
+                }
             }
         }
 
-        if (freeDraggables.ContainsKey("utility"))
+        if (freeDraggables.ContainsKey("utility") && freeDraggables["utility"] != null)
         {
             List<GameObject> currList = freeDraggables["utility"];
             foreach (GameObject mod in currList)
             {
                 mod.GetComponent<RectTransform>().SetParent(utilityStorage.transform);
+                mod.GetComponent<DragDrop>().dropType = Modifier.ModifierEnum.Utility;
+                List<GameObject> dropZones = mod.GetComponent<DragDrop>().allowedDropZones;
+                if (dropZones.Count == 0)
+                {
+                    dropZones.Add(utilityStorage);
+                    dropZones.Add(modsDropZone);
+                    dropZones.Add(editorDropZone);
+                    for (int j = 0; j < cardEditor.GetComponent<CardEditor>().modifierTransforms.Count; j++)
+                    {
+                        dropZones.Add(cardEditor.GetComponent<CardEditor>().modifierTransforms[j]);
+                    }
+                }
             }
         }
     }
@@ -286,9 +322,7 @@ public class DeckCustomizer : MonoBehaviour
         }
         Deck.instance.HideCards();
 
-        print(transform.parent.gameObject);
-        transform.parent.gameObject.GetComponent<CanvasManager>().UnlockPlayer();
-        customizationWindow.SetActive(false);
+        transform.parent.gameObject.GetComponent<CanvasManager>().CloseCustomization();
     }
 
     public void ShowReferences()
