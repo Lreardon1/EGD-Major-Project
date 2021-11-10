@@ -1,4 +1,5 @@
 using OpenCvSharp;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -479,7 +480,7 @@ public class CardParserManager : MonoBehaviour
         if (planeImage.texture != null)
             Destroy(planeImage.texture);
 
-        if (card != null)
+        if (card != null && goodPlaneImage != null)
         {
             planeImage.texture = OpenCvSharp.Unity.MatToTexture(goodPlaneImage);
             cardText.text = "Card " + card.GetComponent<Card>().cardName + (inHand ? ", in HAND" : " not in HAND");
@@ -537,6 +538,12 @@ public class CardParserManager : MonoBehaviour
         stickerImage1.texture = OpenCvSharp.Unity.MatToTexture(sticker1);
         stickerImage2.texture = OpenCvSharp.Unity.MatToTexture(sticker2);
         stickerImage3.texture = OpenCvSharp.Unity.MatToTexture(sticker3);
+    }
+
+    public void UpdateSeenImage(Mat blackout)
+    {
+        goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(blackout);
+        // throw new NotImplementedException();
     }
 
     // TODO 

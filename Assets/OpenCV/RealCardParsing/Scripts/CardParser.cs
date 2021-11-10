@@ -73,7 +73,29 @@ public class CardParser : MonoBehaviour
     private Dictionary<CardElement, CardElementTemplateData> cardElementDict = new Dictionary<CardElement, CardElementTemplateData>();
     public ScriptableCardSticker[] stickerTemplates;
     private Dictionary<string, StickerTemplateData> cardStickerDict = new Dictionary<string, StickerTemplateData>();
+    private WebCamDevice? webCamDevice = null;
+    private WebCamTexture webCamTexture = null;
     
+    
+
+    /// <summary>
+    /// A kind of workaround for macOS issue: MacBook doesn't state it's webcam as frontal
+    /// </summary>
+    protected bool forceFrontalCamera = false;
+
+    /// <summary>
+    /// WebCam texture parameters to compensate rotations, flips etc.
+    /// </summary>
+    protected OpenCvSharp.Unity.TextureConversionParams TextureParameters { get; private set; }
+    
+
+    private void Awake()
+    {
+        //MakeBoundingBoxFromEditorStr(boundBoxText);
+        BakeCardTemplateData();
+        
+
+    }
 
 
     private int ConvertToIntMask(CardElement element)
@@ -187,6 +209,150 @@ public class CardParser : MonoBehaviour
         }
     }
     
+
+    /* HANDLE CAMERA THINGS */
+    /// <summary>
+    /// Camera device name, full list can be taken from WebCamTextures.devices enumerator
+    /// </summary>
+    public string DeviceName
+    {
+        get
+        {
+            return (webCamDevice != null) ? webCamDevice.Value.name : null;
+        }
+        set
+        {
+            // quick test
+            if (value == DeviceName)
+                return;
+
+            if (null != webCamTexture && webCamTexture.isPlaying)
+                webCamTexture.Stop();
+
+            // get device index
+            int cameraIndex = -1;
+            for (int i = 0; i < WebCamTexture.devices.Length && -1 == cameraIndex; i++)
+            {
+                if (WebCamTexture.devices[i].name == value)
+                    cameraIndex = i;
+            }
+
+            // set device up
+            if (-1 != cameraIndex)
+            {
+                webCamDevice = WebCamTexture.devices[cameraIndex];
+                webCamTexture = new WebCamTexture(webCamDevice.Value.name, 720, 480, 20);
+                DontDestroyOnLoad(webCamTexture);
+
+                // read device params and make conversion map
+                ReadTextureConversionParameters();
+
+                webCamTexture.Play();
+            }
+            else
+            {
+                throw new System.ArgumentException(string.Format("{0}: provided DeviceName is not correct device identifier", this.GetType().Name));
+            }
+        }
+
+        /*
+        get
+        {
+            return (webCamDevice != null) ? webCamDevice.Value.name : null;
+        }
+        set
+        {
+            print("MODIFYING DEVICE NAME");
+            // quick test
+            if (value == DeviceName)
+                return;
+
+            if (null != webCamTexture && webCamTexture.isPlaying)
+                webCamTexture.Stop();
+            webCamTexture = null;
+            webCamDevice = null;
+
+            if (value == null) return;
+
+            // get device index
+            int cameraIndex = -1;
+            for (int i = 0; i < WebCamTexture.devices.Length && -1 == cameraIndex; i++)
+            {
+                if (WebCamTexture.devices[i].name == value)
+                    cameraIndex = i;
+            }
+
+            // set device up
+            if (-1 != cameraIndex)
+            {
+                webCamDevice = WebCamTexture.devices[cameraIndex];
+                //webCamTexture = new WebCamTexture(webCamDevice.Value.name, 1920, 1080, 15);
+                webCamTexture = new WebCamTexture(webCamDevice.Value.name);
+
+                // read device params and make conversion map
+                ReadTextureConversionParameters();
+
+                webCamTexture.Play();
+                print(webCamTexture.deviceName);
+                print(webCamTexture.dimension);
+                print(webCamDevice.Value.availableResolutions);
+                print("Made new webcam texture: " + webCamTexture);
+            }
+            else
+            {
+                throw new System.ArgumentException(string.Format("{0}: provided DeviceName is not correct device identifier", this.GetType().Name));
+            }
+        }*/
+    }
+
+    /// <summary>
+    /// This method scans source device params (flip, rotation, front-camera status etc.) and
+    /// prepares TextureConversionParameters that will compensate all that stuff for OpenCV
+    /// </summary>
+    private void ReadTextureConversionParameters()
+    {
+        OpenCvSharp.Unity.TextureConversionParams parameters = new OpenCvSharp.Unity.TextureConversionParams();
+
+        // frontal camera - we must flip around Y axis to make it mirror-like
+        parameters.FlipHorizontally = forceFrontalCamera || webCamDevice.Value.isFrontFacing;
+
+        // TO-DO:
+        // actually, code below should work, however, on our devices tests every device except iPad
+        // returned "false", iPad said "true" but the texture wasn't actually flipped
+
+        // compensate vertical flip
+        //parameters.FlipVertically = webCamTexture.videoVerticallyMirrored;
+
+        // deal with rotation
+        if (0 != webCamTexture.videoRotationAngle)
+            parameters.RotationAngle = webCamTexture.videoRotationAngle; // cw -> ccw
+
+        // apply
+        TextureParameters = parameters;
+
+        //UnityEngine.Debug.Log (string.Format("front = {0}, vertMirrored = {1}, angle = {2}", webCamDevice.isFrontFacing, webCamTexture.videoVerticallyMirrored, webCamTexture.videoRotationAngle));
+    }
+    
+    void OnDestroy()
+    {
+        print("DESTROYING");
+        if (webCamTexture != null)
+        {
+            if (webCamTexture.isPlaying)
+            {
+                webCamTexture.Stop();
+            }
+            webCamTexture = null;
+        }
+
+        if (webCamDevice != null)
+        {
+            webCamDevice = null;
+        }
+    }
+
+
+
     private GameObject previousCard;
 
     public bool ProcessTexture(WebCamTexture input)
@@ -1161,7 +1327,7 @@ public class CardParser : MonoBehaviour
     private Mat lastGoodReplane = new Mat();
     public Mat GetLastGoodReplane()
     {
-        return null; // TODO : for debugginh
+        // return null; // TODO : for debugginh
         return lastGoodReplane;
     }
 
@@ -1242,30 +1408,11 @@ public class CardParser : MonoBehaviour
         return null;
     }
 
-
-    // TODO : serialize
-    private float homoVerifyDist = 7.0f;
-
-    private bool VerifyHomo(Mat homo, Point2f[] m_kp1, Point2f[] m_kp2, string name)
-    {
-        // go from kp2 to kp1
-        Point2f[] warped_kp2 = Cv2.PerspectiveTransform(m_kp2, homo);
-        float total = m_kp2.Length;
-        float good = 0;
-        for (int i = 0; i < m_kp2.Length; ++i)
-        {
-            if (warped_kp2[i].DistanceTo(m_kp1[i]) < homoVerifyDist)
-                good += 1.0f;
-        }
-        print("Got " + (good / total) + " forr " + name);
-        return (good / total) > 0.5f;
-    }
-
     /**
     *  Given expected card type and element, run thru the most likely cards and try to get the best keypoint matches
     *  
     */
-    private Mat KeypointMatchToTemplate(Mat replaned, CardCorner bestLowerRight, 
+   private Mat KeypointMatchToTemplate(Mat replaned, CardCorner bestLowerRight, 
        out CardType cardType, out CardElement cardElement, out int ID, out string cardName)
    {
         float t = Time.realtimeSinceStartup;
@@ -1299,7 +1446,7 @@ public class CardParser : MonoBehaviour
                 if (CheckIfEnoughMatch(goodMatches, initMatches) && bestGoodMatches < goodMatches.Length)
                 {
                     Mat homo = GetHomographyMatrix(m_kp2, m_kp1);
-                    if (homo != null && homo.Width == 3 && homo.Height == 3 /*&& VerifyHomo(homo, m_kp1, m_kp2, cardData.name)*/)
+                    if (homo != null && homo.Width == 3 && homo.Height == 3)
                     {
                         bestHomographyMat = homo;
                         bestGoodMatches = goodMatches.Length;
