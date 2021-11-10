@@ -35,10 +35,13 @@ MonoBehaviour:
   canCounterAttack: 0
   hasPriority: 0
   text: {fileID: 5022943810321618168}
+  healthBar: {fileID: 598981330254661960}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   isSlain: 0
   isEnemy: 0
+  isChanneling: 0
+  bonusAttack: 0
   uiCollider: {fileID: 0}
   previousAction: 0
   combatPopupPrefab: {fileID: 4730867921388399689, guid: d79b7f53d915fa84b81ad869b2e19850, type: 3}
@@ -177,5 +180,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &598981330254661960 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7024338769683762411, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+  m_PrefabInstance: {fileID: 7578279150225114531}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a7fd7cc5c7b964479c01d8a66564228, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
