@@ -793,6 +793,7 @@ public class CombatManager : MonoBehaviour
             StopAllCoroutines();
             chc.ResetCardParents();
             encounterScript.ReturnToOverWorld();
+            PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);
             return true;
         }
         else if (activePartyMembers.Count == 0)
@@ -801,9 +802,9 @@ public class CombatManager : MonoBehaviour
             StopAllCoroutines();
             chc.ResetCardParents();
             encounterScript.ReturnToOverWorld();
+            PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);
             return true;
         }
-        PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);
         return false;
     }
 }

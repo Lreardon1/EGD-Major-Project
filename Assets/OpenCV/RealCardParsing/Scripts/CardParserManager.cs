@@ -384,11 +384,14 @@ public class CardParserManager : MonoBehaviour
             case CombatManager.CombatPhase.ActionPhase:
                 currentInputHandler = StartCoroutine(RunActionPhase());
                 break;
+            case CombatManager.CombatPhase.EndPhase:
+
+                break;
             case CombatManager.CombatPhase.None:
                 break;
         }
     }
-    
+
 
     public void ActivateCVForCombat(CVControllerBackLoader backLoader)
     {
