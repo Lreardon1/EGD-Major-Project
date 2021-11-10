@@ -259,9 +259,10 @@ public class CombatManager : MonoBehaviour
     {
         PhaseStepEvent.Invoke(currentPhase, CombatPhase.PlayPhase);
         currentPhase = CombatPhase.PlayPhase;
+        chc.UpdateDropZones();
+
         if (!IsInCVMode)
         {
-            chc.UpdateDropZones();
 
             ToggleDrawButtons(false);
         }
@@ -600,6 +601,7 @@ public class CombatManager : MonoBehaviour
                 return false;
             }
         }
+
         print("APPLIED " + card.name + " TO " + combatant);
         cb.appliedCard = card;
         currentMana -= cardScript.manaCost;
@@ -610,6 +612,7 @@ public class CombatManager : MonoBehaviour
         }
         card.transform.SetParent(combatant.GetComponent<CombatantBasis>().uiCollider.transform);
         card.transform.localScale = new Vector3(1, 1, 1);
+        card.transform.position = Vector3.zero;
         card.GetComponent<DragDrop>().isDraggable = false;
 
         if(!cb.isEnemy)
