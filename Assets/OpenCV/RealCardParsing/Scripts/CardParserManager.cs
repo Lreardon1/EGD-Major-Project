@@ -442,6 +442,7 @@ public class CardParserManager : MonoBehaviour
             return;
         }
         instance = this;
+        DontDestroyOnLoad(gameObject);
 
         // card parser true init
         cardParser = GetComponent<CardParser>();

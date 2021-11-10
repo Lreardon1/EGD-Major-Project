@@ -31,6 +31,12 @@ public class Deck : MonoBehaviour
 
     public string sceneToLoad = "CustomizedCardTestScene";
 
+    IEnumerator LoadNextSceneAfterAllInits()
+    {
+        yield return new WaitForEndOfFrame();
+        SceneManager.LoadScene(sceneToLoad);
+    }
+
     //enforcing singleton of deck on game start
     void Awake()
     {
@@ -58,7 +64,7 @@ public class Deck : MonoBehaviour
         freeDraggables["element"] = elemMods;
         freeDraggables["utility"] = utilMods;
 
-        SceneManager.LoadScene(sceneToLoad);
+        StartCoroutine(LoadNextSceneAfterAllInits());
     }
 
     public GameObject Draw()

@@ -54,9 +54,12 @@ public class CardParser : MonoBehaviour
     private int defaultCardPlusBorderWidth = 0;
     private int defaultCardPlusBorderHeight = 0;
 
+    private ParseMode mode = ParseMode.AllMode;
+
     internal void UpdateMode(ParseMode handMode)
     {
-        throw new NotImplementedException();
+        mode = handMode;
+        Debug.Log("UNIMPLEMENTED FUNCTION UPDATEMODE, FIX JAY FIX!");
     }
 
     [Space(10)]
