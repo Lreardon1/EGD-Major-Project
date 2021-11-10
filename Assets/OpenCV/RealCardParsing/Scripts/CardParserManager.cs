@@ -192,7 +192,7 @@ public class CardParserManager : MonoBehaviour
 
         if (!validTarget || hasCardAttached)
             playText.text = "Apply cards to combatants...";
-        else if (currentCard == null)
+        else if (!hand.Contains(currentCard))
             playText.text = "You focus on " + currentTarget.name + "... What card will you play?";
         else
         {
@@ -225,7 +225,6 @@ public class CardParserManager : MonoBehaviour
                 // cast for and detect combatants
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitInfo, 100.0f, LayerMask.GetMask("Combatant")))
                 {
-
                     timeSpentWithCard = (currentTarget == hitInfo.collider.gameObject) ? timeSpentWithCard : 0.0f;
                     currentTarget = hitInfo.collider.gameObject;
                 }
@@ -234,6 +233,7 @@ public class CardParserManager : MonoBehaviour
                 validTarget = currentTarget != null && !hasCardAttached;
                 timeSpentWithCard = validTarget ? timeSpentWithCard : 0.0f;
                 timeSpentWithCard = currentCard != null ? timeSpentWithCard : 0.0f;
+                timeSpentWithCard = hand.Contains(currentCard) ? timeSpentWithCard : 0.0f; 
 
                 UpdatePlayActionUI(validTarget, hasCardAttached, currentCard, currentTarget, timeSpentWithCard / timeToCompletePlay);
 
