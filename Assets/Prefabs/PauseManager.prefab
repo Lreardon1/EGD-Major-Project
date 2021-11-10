@@ -1320,7 +1320,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 7593456212648675874}
-  soundVolume: {fileID: 0}
+  options: {fileID: 6616220660475135969}
+  soundVolume: {fileID: 2366147741015773724}
   sound: {fileID: 0}
   isPaused: 0
 --- !u!1 &7593456214094835084
