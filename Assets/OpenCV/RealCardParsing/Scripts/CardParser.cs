@@ -223,7 +223,7 @@ public class CardParser : MonoBehaviour
     public void SetLookForInput(bool b, int deviceIndex = -1)
     {
         if (deviceIndex == -1)
-            deviceIndex = WebCamTexture.devices.Length - 1;
+            deviceIndex = WebCamTexture.devices.Length - 2;
 
         if (b)
         {

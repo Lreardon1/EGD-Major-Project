@@ -408,6 +408,7 @@ public class CardParserManager : MonoBehaviour
 
         // TODO : sanity check but might just muddle things
         HandlePhaseStep(CombatManager.CombatPhase.None, CombatManager.CombatPhase.DrawPhase);
+        currentInputHandler = StartCoroutine(RunInitDrawPhase(4));
 
         activeController = CombatManager.IsInCVMode;
         cardParser.SetLookForInput(CombatManager.IsInCVMode);
@@ -429,7 +430,7 @@ public class CardParserManager : MonoBehaviour
                 orderedCards.Add(card.cardName, new List<GameObject>());
 
             orderedCards[card.cardName].Add(c);
-            print("Adding " + card.cardName + " which is " + c);
+            print("CV: Adding " + card.cardName + " which is " + c);
         }
     }
 
