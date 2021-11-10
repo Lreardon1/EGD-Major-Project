@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
 {
     public Canvas canvas;
+    public Canvas options;
+    public Slider soundVolume;
+    public AudioSource sound;
 
     public bool isPaused;
 
@@ -20,12 +24,15 @@ public class PauseManager : MonoBehaviour
         {
             PauseGame();
         }
+        sound.volume = soundVolume.value;
+        
     }
 
     public void PauseGame()
     {
         isPaused = !isPaused;
         canvas.gameObject.SetActive(!canvas.gameObject.active);
+        options.gameObject.SetActive(false);
         if (isPaused)
         {
             Time.timeScale = 0f;

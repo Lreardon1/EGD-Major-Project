@@ -31,11 +31,14 @@ MonoBehaviour:
   negativeHitPointShield: 0
   attackCardBonus: 0
   shieldReturnDmg: 0
+  shieldResistance: 0
   untargettable: 0
   canCounterAttack: 0
   hasPriority: 0
   text: {fileID: 5022943810321618168}
   healthBar: {fileID: 598981330254661960}
+  lr: {fileID: 1395006257990481377}
+  targetLineStart: {fileID: 2454351851050253363}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   isSlain: 0
@@ -193,3 +196,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a7fd7cc5c7b964479c01d8a66564228, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!120 &1395006257990481377 stripped
+LineRenderer:
+  m_CorrespondingSourceObject: {fileID: 8824656619113738306, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+  m_PrefabInstance: {fileID: 7578279150225114531}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2454351851050253363 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5414708552302786960, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+  m_PrefabInstance: {fileID: 7578279150225114531}
+  m_PrefabAsset: {fileID: 0}

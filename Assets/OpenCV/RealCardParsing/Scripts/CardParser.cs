@@ -56,9 +56,10 @@ public class CardParser : MonoBehaviour
 
     private ParseMode mode = ParseMode.AllMode;
 
-    internal void UpdateMode(ParseMode handMode)
+    public void UpdateMode(ParseMode handMode)
     {
-        mode = handMode;
+        // TODO : currently just do something simple for only elements
+        // mode = handMode;
         Debug.Log("UNIMPLEMENTED FUNCTION UPDATEMODE, FIX JAY FIX!");
     }
 
@@ -75,6 +76,7 @@ public class CardParser : MonoBehaviour
     private WebCamDevice? webCamDevice = null;
     private WebCamTexture webCamTexture = null;
     
+    
 
     /// <summary>
     /// A kind of workaround for macOS issue: MacBook doesn't state it's webcam as frontal
@@ -85,13 +87,14 @@ public class CardParser : MonoBehaviour
     /// WebCam texture parameters to compensate rotations, flips etc.
     /// </summary>
     protected OpenCvSharp.Unity.TextureConversionParams TextureParameters { get; private set; }
+    
 
-
-
-    private void Start()
+    private void Awake()
     {
         //MakeBoundingBoxFromEditorStr(boundBoxText);
         BakeCardTemplateData();
+        
+
     }
 
 
@@ -205,39 +208,7 @@ public class CardParser : MonoBehaviour
             }
         }
     }
-          
-    // Update is called once per frame
-    void Update()
-    {
-        if (webCamTexture != null && webCamTexture.didUpdateThisFrame)
-        {
-            // this must be called continuously
-            ReadTextureConversionParameters();
-            // process texture with whatever method sub-class might have in mind
-            cardParserManager.UpdateSeenImage(webCamTexture);
-            ProcessTexture(webCamTexture);
-        } else if (DeviceName != null)
-        {
-            ProcessTexture(null); // TODO : debugging
-        }
-    }
-
-
-    public void SetLookForInput(bool b, int deviceIndex = -1)
-    {
-        if (deviceIndex == -1)
-            deviceIndex = WebCamTexture.devices.Length - 2;
-
-        if (b)
-        {
-            if (WebCamTexture.devices.Length > 0)
-                DeviceName = WebCamTexture.devices[deviceIndex % WebCamTexture.devices.Length].name;
-            print("SET DEVICE NAME");
-        } else
-        {
-            DeviceName = null;
-        }
-    }
+    
 
     /* HANDLE CAMERA THINGS */
     /// <summary>
@@ -251,6 +222,47 @@ public class CardParser : MonoBehaviour
         }
         set
         {
+            // quick test
+            if (value == DeviceName)
+                return;
+
+            if (null != webCamTexture && webCamTexture.isPlaying)
+                webCamTexture.Stop();
+
+            // get device index
+            int cameraIndex = -1;
+            for (int i = 0; i < WebCamTexture.devices.Length && -1 == cameraIndex; i++)
+            {
+                if (WebCamTexture.devices[i].name == value)
+                    cameraIndex = i;
+            }
+
+            // set device up
+            if (-1 != cameraIndex)
+            {
+                webCamDevice = WebCamTexture.devices[cameraIndex];
+                webCamTexture = new WebCamTexture(webCamDevice.Value.name, 720, 480, 20);
+                DontDestroyOnLoad(webCamTexture);
+
+                // read device params and make conversion map
+                ReadTextureConversionParameters();
+
+                webCamTexture.Play();
+            }
+            else
+            {
+                throw new System.ArgumentException(string.Format("{0}: provided DeviceName is not correct device identifier", this.GetType().Name));
+            }
+        }
+
+        /*
+        get
+        {
+            return (webCamDevice != null) ? webCamDevice.Value.name : null;
+        }
+        set
+        {
+            print("MODIFYING DEVICE NAME");
             // quick test
             if (value == DeviceName)
                 return;
@@ -274,7 +286,8 @@ public class CardParser : MonoBehaviour
             if (-1 != cameraIndex)
             {
                 webCamDevice = WebCamTexture.devices[cameraIndex];
-                webCamTexture = new WebCamTexture(webCamDevice.Value.name, 1920, 1080, 15);
+                //webCamTexture = new WebCamTexture(webCamDevice.Value.name, 1920, 1080, 15);
+                webCamTexture = new WebCamTexture(webCamDevice.Value.name);
 
                 // read device params and make conversion map
                 ReadTextureConversionParameters();
@@ -283,12 +296,13 @@ public class CardParser : MonoBehaviour
                 print(webCamTexture.deviceName);
                 print(webCamTexture.dimension);
                 print(webCamDevice.Value.availableResolutions);
+                print("Made new webcam texture: " + webCamTexture);
             }
             else
             {
                 throw new System.ArgumentException(string.Format("{0}: provided DeviceName is not correct device identifier", this.GetType().Name));
             }
-        }
+        }*/
     }
 
     /// <summary>
@@ -321,6 +335,7 @@ public class CardParser : MonoBehaviour
     
     void OnDestroy()
     {
+        print("DESTROYING");
         if (webCamTexture != null)
         {
             if (webCamTexture.isPlaying)
@@ -336,54 +351,67 @@ public class CardParser : MonoBehaviour
         }
     }
 
+
+
     private GameObject previousCard;
 
-    protected bool ProcessTexture(WebCamTexture input)
+    public bool ProcessTexture(WebCamTexture input)
     {
-        /*
-         * using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
-        {
-            // TODO : here is where to configure modes, pass in eligible cards!
+        // if (!shouldUpdate) return false;
 
-            CustomCard card = ParseCard(cardScene, null);
-            if (card == null)
+        if (!Input.GetKey(KeyCode.D))
+        {
+            using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
             {
-                UpdateCardDetected(null, -1);
-                return true;
+                // TODO : here is where to configure modes, pass in eligible cards!
+
+                CustomCard card = ParseCard(cardScene, null);
+                if (card == null)
+                {
+                    UpdateCardDetected(null, -1);
+                    return true;
+                }
+                print("Got " + card.cardName);
+                List<GameObject> possibleCards = cardParserManager.GetCardsOfName(card.cardName);
+                print("COUNT: " + possibleCards.Count);
+                GameObject bestCard = AttemptToGetMods(card, lastGoodReplane, possibleCards);
+                UpdateCardDetected(bestCard, card.cardID);
+
             }
-            print("Got " + card.cardName);
-            List<GameObject> possibleCards = cardParserManager.GetCardsOfName(card.cardName);
-            print("COUNT: " + possibleCards.Count);
-            GameObject bestCard = AttemptToGetMods(card, lastGoodReplane, possibleCards);
-            UpdateCardDetected(bestCard, card.cardID);
-           
         }
-        */
+        else
+        {
+            int i = -1;
             if (Input.GetKey(KeyCode.Alpha0))
             {
-                UpdateCardDetected(Deck.instance.allCards[0], 0);
+                UpdateCardDetected(Deck.instance.deck[0], 0);
             }
-            if (Input.GetKey(KeyCode.Alpha1))
+            else if (Input.GetKey(KeyCode.Alpha1))
             {
-                UpdateCardDetected(Deck.instance.allCards[1], 1);
+                UpdateCardDetected(Deck.instance.deck[1], 1);
             }
-            if (Input.GetKey(KeyCode.Alpha2))
+            else if (Input.GetKey(KeyCode.Alpha2))
             {
-                UpdateCardDetected(Deck.instance.allCards[2], 2);
+                UpdateCardDetected(Deck.instance.deck[2], 2);
             }
-            if (Input.GetKey(KeyCode.Alpha3))
+            else if (Input.GetKey(KeyCode.Alpha3))
             {
-                UpdateCardDetected(Deck.instance.allCards[3], 3);
+                UpdateCardDetected(Deck.instance.deck[3], 3);
             }
-            if (Input.GetKey(KeyCode.Alpha4))
+            else if (Input.GetKey(KeyCode.Alpha4))
             {
-                UpdateCardDetected(Deck.instance.allCards[4], 4);
+                UpdateCardDetected(Deck.instance.deck[4], 4);
             }
-            if (Input.GetKey(KeyCode.Alpha5))
+            else if (Input.GetKey(KeyCode.Alpha5))
             {
-                UpdateCardDetected(Deck.instance.allCards[5], 5);
+                UpdateCardDetected(Deck.instance.deck[5], 5);
             }
-            return true;
+            else
+            {
+                UpdateCardDetected(null, -1);
+            }
+        }
+        return true;
     }
 
     private string GetBestSticker(Mat sticker, string[] possibleStickers, out float bestVal)
@@ -511,7 +539,8 @@ public class CardParser : MonoBehaviour
 
     private void UpdateCardDetected(GameObject card, int id)
     {
-        print("Updating for card: " + card.GetComponent<Card>().name + " with previous " + previousCard.GetComponent<Card>().cardName);
+        print("Updating for card: " + (card != null ? card.GetComponent<Card>().name : "NULL") + " with previous " + 
+            (previousCard != null ? previousCard.GetComponent<Card>().cardName : " NULL"));
 
         // if card is the same as last, don't update
         if (card == previousCard)
@@ -1298,6 +1327,7 @@ public class CardParser : MonoBehaviour
     private Mat lastGoodReplane = new Mat();
     public Mat GetLastGoodReplane()
     {
+        // return null; // TODO : for debugginh
         return lastGoodReplane;
     }
 
@@ -1313,6 +1343,7 @@ public class CardParser : MonoBehaviour
         mainSeeImage.texture = OpenCvSharp.Unity.MatToTexture(cardScene);
         */
 
+        print("ACTUALLY PARSING CARD");
         Point2f[][] contours;
         HierarchyIndex[] h;
         // DETECT CONTOURS AND SIMPLIFY THEM IF NEEDED
