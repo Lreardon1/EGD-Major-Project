@@ -74,9 +74,29 @@ public class Modifier
         {
             c.numMod = 2;
         }
+        else if (spriteParsing == "plus4")
+        {
+            c.numMod = 4;
+        }
+        else if (spriteParsing == "plus6")
+        {
+            c.numMod = 6;
+        }
+        else if (spriteParsing == "plus8")
+        {
+            c.numMod = 8;
+        }
         else if (spriteParsing == "mana2")
         {
             c.UpdateManaCost(c.manaCost - 2);
+        }
+        else if (spriteParsing == "mana3")
+        {
+            c.UpdateManaCost(c.manaCost - 3);
+        }
+        else if (spriteParsing == "mana4")
+        {
+            c.UpdateManaCost(c.manaCost - 4);
         }
         else if (spriteParsing == "prio")
         {
@@ -107,6 +127,14 @@ public class Modifier
             if (spriteParsing == "mana2")
             {
                 c.UpdateManaCost(c.manaCost + 2);
+            }
+            if (spriteParsing == "mana3")
+            {
+                c.UpdateManaCost(c.manaCost + 3);
+            }
+            if (spriteParsing == "mana4")
+            {
+                c.UpdateManaCost(c.manaCost + 4);
             }
             else if (spriteParsing == "prio")
             {

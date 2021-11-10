@@ -18,8 +18,17 @@ public class CanvasManager : MonoBehaviour
 
     public void OpenCustomization()
     {
+        editOptionPopup.SetActive(false);
         LockPlayer();
+        customizationCanvas.SetActive(true);
         customizationCanvas.GetComponent<DeckCustomizer>().SetUp();
+    }
+
+    public void CloseCustomization()
+    {
+        UnlockPlayer();
+        customizationCanvas.SetActive(false);
+        editOptionPopup.SetActive(true);
     }
 
     public void LockPlayer()

@@ -14,6 +14,7 @@ public class Card : MonoBehaviour
     public string cardName;
     [SerializeField]
     public int manaCost = 0;
+    private int baseManaCost = 0;
     [SerializeField]
     public CardType type;
     [SerializeField]
@@ -72,6 +73,11 @@ public class Card : MonoBehaviour
     public AoE targetting = AoE.Single;
     public bool givePrio = false;
     public bool isWild = false;
+
+    void Awake()
+    {
+        baseManaCost = manaCost;
+    }
 
     // Start is called before the first frame update
     public void InitializeCard()
@@ -154,7 +160,14 @@ public class Card : MonoBehaviour
 
     public void UpdateManaCost(int newCost)
     {
-        manaCost = newCost;
+        if (newCost > manaCost)
+        {
+            manaCost = baseManaCost;
+        }
+        else
+        {
+            manaCost = Mathf.Max(1, newCost);
+        }
         manaText.text = manaCost.ToString();
     }
 
@@ -168,7 +181,9 @@ public class Card : MonoBehaviour
         constantArt.color = c.constantArt.color;
         typeIcon.GetComponent<Image>().sprite = c.typeIcon.GetComponent<Image>().sprite;
         cardText.sprite = c.cardText.sprite;
-        UpdateManaCost(c.manaCost);
+        manaCost = c.manaCost;
+        baseManaCost = c.baseManaCost;
+        manaText.text = manaCost.ToString();
 
         element = c.element;
         //updating element icon to match
@@ -217,7 +232,9 @@ public class Card : MonoBehaviour
         constantArt.color = c.constantArt.color;
         typeIcon.GetComponent<Image>().sprite = c.typeIcon.GetComponent<Image>().sprite;
         cardText.sprite = c.cardText.sprite;
-        UpdateManaCost(c.manaCost);
+        manaCost = c.manaCost;
+        baseManaCost = c.baseManaCost;
+        manaText.text = manaCost.ToString();
 
         GameObject elemIcon = elementIcon;
         if (c.element != Element.None)

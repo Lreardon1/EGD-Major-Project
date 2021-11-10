@@ -14,10 +14,18 @@ public class Deck : MonoBehaviour
     public static Deck instance;
 
     public List<GameObject> deck = new List<GameObject>();
+    [SerializeField]
     public List<GameObject> starterDeck;
+    [SerializeField]
     public List<GameObject> allCards;
     List<GameObject> discard = new List<GameObject>();
     public Dictionary<string, List<GameObject>> freeDraggables = new Dictionary<string, List<GameObject>>();
+    [SerializeField]
+    public List<GameObject> numMods;
+    [SerializeField]
+    public List<GameObject> elemMods;
+    [SerializeField]
+    public List<GameObject> utilMods;
 
     public string sceneToLoad = "CustomizedCardTestScene";
 
@@ -42,7 +50,11 @@ public class Deck : MonoBehaviour
             card.GetComponent<Card>().InitializeCard();
         }
 
+        //initializing free draggables to start
         freeDraggables = new Dictionary<string, List<GameObject>>();
+        freeDraggables["num"] = numMods;
+        freeDraggables["element"] = elemMods;
+        freeDraggables["utility"] = utilMods;
 
         SceneManager.LoadScene(sceneToLoad);
     }

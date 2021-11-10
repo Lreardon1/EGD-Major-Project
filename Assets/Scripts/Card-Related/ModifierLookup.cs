@@ -20,17 +20,22 @@ public static class ModifierLookup
 
         spriteConversionTable = new Dictionary<Sprite, string>()
         {
-            //{ Resources.Load<Sprite>(path + "amogus"), "fire" },
-            /*{ Resources.Load<Sprite>(path + "amogus"), "water" },
-            { Resources.Load<Sprite>(path + "amogus"), "earth" },
-            { Resources.Load<Sprite>(path + "amogus"), "air" },
-            { Resources.Load<Sprite>(path + "amogus"), "light" },
-            { Resources.Load<Sprite>(path + "amogus"), "dark" },
-            { Resources.Load<Sprite>(path + "amogus"), "plus2" },
-            { Resources.Load<Sprite>(path + "amogus"), "mana2" },
-            { Resources.Load<Sprite>(path + "amogus"), "prio" },
-            { Resources.Load<Sprite>(path + "amogus"), "adj" },
-            { Resources.Load<Sprite>(path + "amogus"), "all" }*/
+            { Resources.Load<Sprite>(path + "fire"), "fire" },
+            { Resources.Load<Sprite>(path + "water"), "water" },
+            { Resources.Load<Sprite>(path + "earth"), "earth" },
+            { Resources.Load<Sprite>(path + "air"), "air" },
+            { Resources.Load<Sprite>(path + "light"), "light" },
+            { Resources.Load<Sprite>(path + "dark"), "dark" },
+            { Resources.Load<Sprite>(path + "plus2"), "plus2" },
+            { Resources.Load<Sprite>(path + "plus4"), "plus4" },
+            { Resources.Load<Sprite>(path + "plus6"), "plus6" },
+            { Resources.Load<Sprite>(path + "plus8"), "plus8" },
+            { Resources.Load<Sprite>(path + "mana2"), "mana2" },
+            { Resources.Load<Sprite>(path + "mana3"), "mana3" },
+            { Resources.Load<Sprite>(path + "mana4"), "mana4" },
+            { Resources.Load<Sprite>(path + "prio"), "prio" },
+            { Resources.Load<Sprite>(path + "adj"), "adj" },
+            { Resources.Load<Sprite>(path + "all"), "all" }
         };
     }
 }
