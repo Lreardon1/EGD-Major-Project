@@ -1,10 +1,9 @@
 using OpenCvSharp;
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 [RequireComponent(typeof(CardParser))]
 public class CardParserManager : MonoBehaviour
@@ -42,7 +41,7 @@ public class CardParserManager : MonoBehaviour
         this.currentPhase = newPhase;
     }
 
-    public float timeToCompleteDraw = 3.0f;
+    public float timeToCompleteDraw = 4.0f;
     float timeSpentWithCard = 0.0f;
     public int maxCardsInHand = 7;
 
@@ -53,7 +52,7 @@ public class CardParserManager : MonoBehaviour
     private float discardFinishWaitTime = 1.5f;
 
 
-
+    
 
     IEnumerator RunInitDrawPhase(int numberToDraw)
     {
@@ -112,8 +111,11 @@ public class CardParserManager : MonoBehaviour
         cm.NextPhase();
     }
 
-
-
+    public void HandleNewImage(WebCamTexture webCamTexture)
+    {
+        goodSeeImage.texture = webCamTexture;
+        cardParser.ProcessTexture(webCamTexture);
+    }
 
     IEnumerator RunDrawPhase()
     {
@@ -183,7 +185,7 @@ public class CardParserManager : MonoBehaviour
 
 
 
-    public float timeToCompletePlay = 2.5f;
+    public float timeToCompletePlay = 4.0f;
 
     private void UpdatePlayActionUI(bool validTarget, bool hasCardAttached, 
         GameObject currentCard, GameObject currentTarget, float fillMeter)
@@ -267,7 +269,13 @@ public class CardParserManager : MonoBehaviour
         // TODO : next phase
     }
 
-    private float timeToCompleteDiscard;
+    void OnDestroy()
+    {
+        instance = null;
+        print("DISABLE");
+    }
+
+    private float timeToCompleteDiscard = 4.0f;
 
     IEnumerator RunDiscardPhase()
     {
@@ -394,7 +402,8 @@ public class CardParserManager : MonoBehaviour
                 Deck.instance.discard.AddRange(hand); // reset deck on end
                 hand.Clear();
                 Deck.instance.Shuffle();
-                cardParser.SetLookForInput(false);
+                activeController = false;
+                // cardParser.SetLookForInput(false);
                 break;
             case CombatManager.CombatPhase.None:
                 break;
@@ -421,9 +430,7 @@ public class CardParserManager : MonoBehaviour
         currentInputHandler = StartCoroutine(RunInitDrawPhase(4));
 
         activeController = CombatManager.IsInCVMode;
-        cardParser.SetLookForInput(CombatManager.IsInCVMode);
-
-        DisplayCardData(null, null);
+        // DisplayCardData(null, null);
     }
 
     private int currentID = -1;
@@ -465,23 +472,16 @@ public class CardParserManager : MonoBehaviour
 
         SetUpOrderedCards(Deck.instance.allCards);
     }
-    
-    public void UpdateSeenImage(WebCamTexture webCamTexture)
-    {
-        goodSeeImage.texture = webCamTexture;
-    }
 
-    public void DisplayCardData(GameObject card, Mat goodImage)
+    public void DisplayCardData(GameObject card, Mat goodPlaneImage)
     {
         bool inHand = hand.Contains(card);
-        if (goodSeeImage.texture)
-            Destroy(goodSeeImage.texture);
+        if (planeImage.texture != null)
+            Destroy(planeImage.texture);
 
         if (card != null)
         {
-            if (goodImage != null && goodImage.CvPtr != null)
-                goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(goodImage);
-
+            planeImage.texture = OpenCvSharp.Unity.MatToTexture(goodPlaneImage);
             cardText.text = "Card " + card.GetComponent<Card>().cardName + (inHand ? ", in HAND" : " not in HAND");
         }
         else
@@ -516,6 +516,7 @@ public class CardParserManager : MonoBehaviour
 
     public List<GameObject> GetCardsOfName(string name)
     {
+        // TODO : dependnig
         if (orderedCards.TryGetValue(name, out List<GameObject> lis))
             return lis;
         else
