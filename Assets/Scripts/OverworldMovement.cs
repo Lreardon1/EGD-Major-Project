@@ -44,6 +44,7 @@ public class OverworldMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         directionY = "left";
         directionX = "forward";
         //Fetch the SpriteRenderer from the GameObject and other party gameobjects
@@ -80,9 +81,8 @@ public class OverworldMovement : MonoBehaviour
         {
             float rightTurn = Input.GetAxisRaw("Rotate");
             transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
-            for (int i = 0; i < party_members.Length; ++i){
-                party_members[i].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
-            }
+            party_members[1].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
+            party_members[0].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
            
             right = Input.GetAxisRaw("Horizontal") * transform.right;
             up = Input.GetAxisRaw("Vertical") * transform.forward;

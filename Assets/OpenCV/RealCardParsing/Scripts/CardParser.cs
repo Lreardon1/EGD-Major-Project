@@ -1414,6 +1414,7 @@ public class CardParser : MonoBehaviour
     /**
     *  Given expected card type and element, run thru the most likely cards and try to get the best keypoint matches
     *  
+    *  TODO: better homo filtering, better foreach filtering
     */
    private Mat KeypointMatchToTemplate(Mat replaned, CardCorner bestLowerRight, 
        out CardType cardType, out CardElement cardElement, out int ID, out string cardName)
