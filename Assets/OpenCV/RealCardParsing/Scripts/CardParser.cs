@@ -1450,7 +1450,7 @@ public class CardParser : MonoBehaviour
                 if (CheckIfEnoughMatch(goodMatches, initMatches) && bestGoodMatches < goodMatches.Length)
                 {
                     Mat homo = GetHomographyMatrix(m_kp2, m_kp1);
-                    if (homo != null && homo.Width == 3 && homo.Height == 3)
+                    if (homo != null && homo.Width == 3 && homo.Height == 3 && IsGoodHomography(homo, m_kp1, m_kp2))
                     {
                         bestHomographyMat = homo;
                         bestGoodMatches = goodMatches.Length;
@@ -1499,6 +1499,24 @@ public class CardParser : MonoBehaviour
 
         return bestHomographyMat;
    }
+
+
+    // TODO 
+    private float homoDist = 6.0f;
+    private float percentAccepted = 0.5f;
+    private bool IsGoodHomography(Mat homo, Point2f[] m_kp1, Point2f[] m_kp2)
+    {
+        float totalKP = m_kp1.Length;
+        float goodKP = 0.0f;
+        Point2f[] warped_kp2 = Cv2.PerspectiveTransform(m_kp2, homo);
+        for (int i = 0; i < m_kp2.Length; ++i)
+        {
+            if (warped_kp2[i].DistanceTo(m_kp1[i]) < homoDist)
+                goodKP += 1.0f;
+        }
+        return (goodKP / totalKP) > percentAccepted;
+
+    }
 
 
     /**
