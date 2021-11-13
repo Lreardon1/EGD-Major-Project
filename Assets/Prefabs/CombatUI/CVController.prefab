@@ -154,7 +154,23 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3809b0d816758f848817db642f568347, type: 2}
   - {fileID: 11400000, guid: f4016e3721142c74994a9e16eda09ed2, type: 2}
   - {fileID: 11400000, guid: d0007aa7754ff2c40ba414a1d81753a6, type: 2}
-  stickerTemplates: []
+  stickerTemplates:
+  - {fileID: 11400000, guid: 5cb6bb4a180f49447b4cc928aa9b57ee, type: 2}
+  - {fileID: 11400000, guid: c49413cefdaffec41a0368772b09dd7f, type: 2}
+  - {fileID: 11400000, guid: 8096811f48b0eae4883593877cf36073, type: 2}
+  - {fileID: 11400000, guid: 1d21ab982b3a40d4eaf2c7ff1254b8ab, type: 2}
+  - {fileID: 11400000, guid: 4dd1fe14017b86146a0d17c65b175fcc, type: 2}
+  - {fileID: 11400000, guid: 8b28d1101daf3ed45a5175c01f1e91fe, type: 2}
+  - {fileID: 11400000, guid: 552bb9c2138d2b640a495f8c9b42eed1, type: 2}
+  - {fileID: 11400000, guid: e0b86eb6767545b46849bfd441b19aef, type: 2}
+  - {fileID: 11400000, guid: cfa96f6c929ad994ab35dfa47d191177, type: 2}
+  - {fileID: 11400000, guid: aaa76aae5a0146e4c989f134f5aa290b, type: 2}
+  - {fileID: 11400000, guid: 03677c0f09517254b89db95f4667a1f7, type: 2}
+  - {fileID: 11400000, guid: 4bea33006cc224b48976336df1ca76b5, type: 2}
+  - {fileID: 11400000, guid: d6d585f3faf88fd4eb41f04799d60da3, type: 2}
+  - {fileID: 11400000, guid: 35ed07b4e8692c649b573fabc8aa247a, type: 2}
+  - {fileID: 11400000, guid: 48caa24983d10fd40a0babc358d06582, type: 2}
+  - {fileID: 11400000, guid: 3e89803cbc8393d4bbad3bcada44efec, type: 2}
   StableUpdateEvent:
     m_PersistentCalls:
       m_Calls: []

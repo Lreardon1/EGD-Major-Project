@@ -125,6 +125,7 @@ public class CardParser : MonoBehaviour
      */
     private void BakeCardTemplateData()
     {
+        // BAKE ON CARDS
         templateCardDict.Add(0, new List<TemplateCardData>());
         
         foreach (ScriptableCardImage card in cardTemplates)
@@ -187,23 +188,19 @@ public class CardParser : MonoBehaviour
         foreach (ScriptableCardSticker sticker in stickerTemplates)
         {
             Mat si = OpenCvSharp.Unity.TextureToMat(sticker.stickerTexture);
-            Mat hist = MakeHSHistrogram(si);
 
             defaultStickerWidth = si.Width;
             defaultStickerHeight = si.Height;
 
             using (Mat bin = new Mat()) {
-                Cv2.CopyMakeBorder(si, bin, 10, 10, 10, 10, BorderTypes.Constant, Scalar.Black);
                 Cv2.CvtColor(si, bin, ColorConversionCodes.BGR2GRAY);
                 Cv2.Threshold(bin, bin, 200, 255, ThresholdTypes.Otsu);
-                // TODO : we got the outward contour, we can also navigate the hierarchy index to get any inner contours.
-                Cv2.FindContours(bin, out Point[][] contours, out HierarchyIndex[] h, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
-                if (contours.Length == 0)
-                {
-                    Debug.LogError("ERROR: Failed to find exterior contour!!!");
-                    throw new Exception("STICKER FAILURE FOR " + sticker.stickerName);
-                }
-                StickerTemplateData stickerData = new StickerTemplateData(si, hist, contours[0]);
+                Scalar meanIconColor = Cv2.Mean(si, bin);
+                Cv2.BitwiseNot(bin, bin);
+                Scalar meanBackColor = Cv2.Mean(si, bin);
+                Cv2.BitwiseNot(bin, bin);
+                print("For " + sticker.stickerName + ", Icon color: " + meanIconColor + " back color: " + meanBackColor);
+                StickerTemplateData stickerData = new StickerTemplateData(bin, meanBackColor, meanIconColor);
                 cardStickerDict.Add(sticker.stickerName, stickerData);
             }
         }
@@ -371,10 +368,11 @@ public class CardParser : MonoBehaviour
                     UpdateCardDetected(null, -1);
                     return true;
                 }
-                print("Got " + card.cardName);
+                // TODO : stickers
+                //  TODO : need: cardScene, warp mat of card, cardImage, card description, possible cards/card mods
                 List<GameObject> possibleCards = cardParserManager.GetCardsOfName(card.cardName);
                 print("COUNT: " + possibleCards.Count);
-                GameObject bestCard = AttemptToGetMods(card, lastGoodReplane, possibleCards);
+                GameObject bestCard = possibleCards[0]; // AttemptToGetMods(card, lastGoodReplane, possibleCards);
                 UpdateCardDetected(bestCard, bestCard != null ? card.cardID : -1);
 
             }
@@ -413,47 +411,7 @@ public class CardParser : MonoBehaviour
         }
         return true;
     }
-
-    private string GetBestSticker(Mat sticker, string[] possibleStickers, out float bestVal)
-    {
-        // TODO : handle no sticker in special
-        // TODO : mask the stcikers by contour so as to not poison the histograms...
-
-        Mat hist = MakeHSHistrogram(sticker);
-        string bestSticker = "NONE";
-        bestVal = 0.6f;
-        int i = -1;
-        foreach (string stickerStr in possibleStickers)
-        {
-            ++i;
-            if (stickerStr == "NONE") continue;
-
-            float comp = (float)Cv2.CompareHist(hist, cardStickerDict[stickerStr].hsHist, HistCompMethods.Correl);
-            if (bestVal < comp)
-            {
-                bestVal = comp;
-                bestSticker = stickerStr;
-            }
-        }
-        return bestSticker;
-
-        /*
-        using (Mat bin = new Mat())
-        {
-            Cv2.CvtColor(sticker, bin, ColorConversionCodes.BGR2GRAY);
-            Cv2.Threshold(bin, bin, 200, 255, ThresholdTypes.Otsu);
-            // TODO : we got the outward contour, we can also navigate the hierarchy index to get any inner contours.
-            Cv2.FindContours(bin, out Point[][] contours, out HierarchyIndex[] h, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
-            if (contours.Length == 0)
-            {
-                Debug.LogError("ERROR: Failed to find exterior contour!!!");
-                continue;
-            }
-            StickerTemplateData stickerData = new StickerTemplateData(si, hist, contours[0]);
-            cardStickerDict.Add(sticker.modEnum, stickerData);
-        }*/
-    }
-
+    
     private void PopulateStickers(List<GameObject> possibleCards, List<string> possibleStickers, int i)
     {
         possibleStickers.Clear();
@@ -498,37 +456,7 @@ public class CardParser : MonoBehaviour
         return bestCard;
     }
 
-
-    private GameObject AttemptToGetMods(CustomCard card, Mat cardImage, List<GameObject> possibleCards)
-    {
-        defaultStickerWidth = defaultStickerHeight = 128;
-        Mat sticker1 = stickerBoundingBox1.CropByBox(cardImage, new Size(defaultStickerWidth, defaultStickerHeight));
-        Mat sticker2 = stickerBoundingBox2.CropByBox(cardImage, new Size(defaultStickerWidth, defaultStickerHeight));
-        Mat sticker3 = stickerBoundingBox3.CropByBox(cardImage, new Size(defaultStickerWidth, defaultStickerHeight));
-
-        cardParserManager.UpdateStickerDebugs(sticker1, sticker2, sticker3);
-
-        // TODO : used for debugging
-        if (possibleCards.Count > 0)
-            return possibleCards[0];
-        else
-            return null;
-
-        List<string> possibleStickers1 = new List<string>();
-        List<string> possibleStickers2 = new List<string>();
-        List<string> possibleStickers3 = new List<string>();
-
-        PopulateStickers(possibleCards, possibleStickers1, 0);
-        PopulateStickers(possibleCards, possibleStickers2, 1);
-        PopulateStickers(possibleCards, possibleStickers3, 2);
-
-        string s1 = GetBestSticker(sticker1, possibleStickers1.ToArray(), out float confidence1);
-        string s2 = GetBestSticker(sticker2, possibleStickers2.ToArray(), out float confidence2);
-        string s3 = GetBestSticker(sticker3, possibleStickers3.ToArray(), out float confidence3);
-
-        return GetMostLikelyCard(possibleCards, s1, s2, s3);
-    }
-
+   
     [HideInInspector]
     public UnityEvent<GameObject, int> StableUpdateEvent = new UnityEvent<GameObject, int>();
     [HideInInspector]
@@ -1380,6 +1308,10 @@ public class CardParser : MonoBehaviour
             Point2f[] possibleCard = TryToBoundCardFromCorners(cardScene, bestLowerRight.corners, bestUpperLeft.corners);
             if (possibleCard == null)
                 return null;
+            Mat blackout = new Mat();
+            cardScene.CopyTo(blackout);
+            CvAruco.DrawDetectedMarkers(blackout, new Point2f[][] { possibleCard, bestUpperLeft.corners, bestLowerRight.corners }, null);
+            cardParserManager.UpdateSeenImage(blackout);
             Mat replaned = PerformFirstReplaneFull(cardScene, possibleCard, cornerReplaneOffset, out Mat firstTMat);
 
             // predict most likely element from single replane, might not work but may improve performance.
@@ -1434,8 +1366,7 @@ public class CardParser : MonoBehaviour
         TemplateCardData bestCardData = null;
         Mat bestHomographyMat = null;
         print("Card List is " + cardDataList.Count);
-        float bestPercent = 0;
-        TemplateCardData bestPercentCardData = null;
+        float bestPercent = 0.0f;
         foreach (TemplateCardData cardData in cardDataList)
         {
             print("Getting card data for " + cardData.name + " from " + cardDataList.Count);
@@ -1445,42 +1376,27 @@ public class CardParser : MonoBehaviour
 
             GetMatchedKeypoints(kp1, kp2, goodMatches, out Point2f[] m_kp1, out Point2f[] m_kp2);
             int initMatches = goodMatches.Length;
-            if (FilterByFundy(ref m_kp1, ref m_kp2, ref goodMatches, 1.5f))
+            if (FilterByFundy(ref m_kp1, ref m_kp2, ref goodMatches, 3.0f))
             {
                 if (CheckIfEnoughMatch(goodMatches, initMatches) && bestGoodMatches < goodMatches.Length)
                 {
                     Mat homo = GetHomographyMatrix(m_kp2, m_kp1);
-                    if (homo != null && homo.Width == 3 && homo.Height == 3 && IsGoodHomography(homo, m_kp1, m_kp2))
+                    
+                    if (homo != null && homo.Width == 3 && homo.Height == 3 && IsGoodHomography(homo, m_kp1, m_kp2, out float percent))
                     {
                         bestHomographyMat = homo;
                         bestGoodMatches = goodMatches.Length;
                         bestCardData = cardData;
+                        bestPercent = percent;
                     }
-                    print("For hist " + cardData.name + ": " + Cv2.CompareHist(cardData.hist, MakeHSHistrogram(replaned), HistCompMethods.Correl));
-                    /* DEBUG
-                    if (debugSceneImage.texture)
-                        Destroy(debugSceneImage.texture);
-                    Mat output = new Mat();
-                    Cv2.DrawMatches(OpenCvSharp.Unity.TextureToMat(cardTemplates[0].cardTexture), kp1, replaned, kp2, goodMatches, output);
-                    debugSceneImage.texture = OpenCvSharp.Unity.MatToTexture(output);
-
-                    if (replaneImage.texture)
-                        Destroy(replaneImage.texture);
-                    replaneImage.texture = OpenCvSharp.Unity.MatToTexture(replaned);
-                    */
-                }
-                if (bestPercent < (float)goodMatches.Length / (float)initMatches)
-                {
-                    bestPercent = (float)goodMatches.Length / (float)initMatches;
-                    bestPercentCardData = cardData;
                 }
             }
         }
 
 
         print("The entire templating took " + (Time.realtimeSinceStartup - t) + " seconds");
-        if (bestCardData != null && bestPercentCardData != null)
-            print("Predicted by keys: " + bestGoodMatches + " for " + bestCardData.name + " but " + bestPercent + " for " + bestPercentCardData.name);
+        if (bestCardData != null)
+            print("Predicted by keys: " + bestGoodMatches + " for " + bestCardData.name + " with " + bestPercent);
 
         if (bestCardData != null)
         {
@@ -1502,9 +1418,9 @@ public class CardParser : MonoBehaviour
 
 
     // TODO 
-    private float homoDist = 6.0f;
-    private float percentAccepted = 0.5f;
-    private bool IsGoodHomography(Mat homo, Point2f[] m_kp1, Point2f[] m_kp2)
+    private float homoDist = 4.0f;
+    private float percentAccepted = 0.7f;
+    private bool IsGoodHomography(Mat homo, Point2f[] m_kp1, Point2f[] m_kp2, out float percent)
     {
         float totalKP = m_kp1.Length;
         float goodKP = 0.0f;
@@ -1514,6 +1430,7 @@ public class CardParser : MonoBehaviour
             if (warped_kp2[i].DistanceTo(m_kp1[i]) < homoDist)
                 goodKP += 1.0f;
         }
+        percent = (goodKP / totalKP);
         return (goodKP / totalKP) > percentAccepted;
 
     }
@@ -1662,7 +1579,7 @@ public class CardParser : MonoBehaviour
     }
 
     public int keypointMatchesRequired = 20;
-    public float keypointMatchPercentRequired = 0.5f;
+    public float keypointMatchPercentRequired = 0.6f;
     public bool CheckIfEnoughMatch(DMatch[] matches, int initialMatchCount)
     {
         return matches.Length >= keypointMatchesRequired
@@ -1830,16 +1747,16 @@ public class CardParser : MonoBehaviour
 
     public class StickerTemplateData
     {
-        public StickerTemplateData(Mat si, Mat hsHist, Point[] contours)
+        public StickerTemplateData(Mat binImg, Scalar backCol, Scalar iconCol)
         {
-            stickerMat = si;
-            this.hsHist = hsHist;
-            shape = contours;
+            binImage = binImg;
+            backColor = backCol;
+            iconColor = iconCol;
         }
 
-        public Mat stickerMat;
-        public Mat hsHist;
-        public Point[] shape;
+        public Mat binImage;
+        public Scalar backColor;
+        public Scalar iconColor; // TODO : should just be white?
     }
 
     /**
