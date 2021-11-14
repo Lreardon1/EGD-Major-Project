@@ -7,6 +7,7 @@ public static class ModifierLookup
     private static string path = "CardAssets/";
     public static Dictionary<Modifier.ModifierEnum, Modifier> modifierLookupTable;
     public static Dictionary<Sprite, string> spriteConversionTable;
+    public static Dictionary<string, Sprite> stringToSpriteConversionTable;
 
     public static void LoadModifierTable() {
         //DEFINE ALL SEARCHABLE MODIFIERS HERE
@@ -36,6 +37,26 @@ public static class ModifierLookup
             { Resources.Load<Sprite>(path + "prio"), "prio" },
             { Resources.Load<Sprite>(path + "adj"), "adj" },
             { Resources.Load<Sprite>(path + "all"), "all" }
+        };
+
+        stringToSpriteConversionTable = new Dictionary<string, Sprite>()
+        {
+            { "fire", Resources.Load<Sprite>(path + "fire") },
+            { "water", Resources.Load<Sprite>(path + "water") },
+            { "earth", Resources.Load<Sprite>(path + "earth") },
+            { "air", Resources.Load<Sprite>(path + "air") },
+            { "light", Resources.Load<Sprite>(path + "light") },
+            { "dark", Resources.Load<Sprite>(path + "dark") },
+            { "plus2", Resources.Load<Sprite>(path + "plus2") },
+            { "plus4", Resources.Load<Sprite>(path + "plus4") },
+            { "plus6", Resources.Load<Sprite>(path + "plus6") },
+            { "plus8", Resources.Load<Sprite>(path + "plus8") },
+            { "mana2", Resources.Load<Sprite>(path + "mana2") },
+            { "mana3", Resources.Load<Sprite>(path + "mana3") },
+            { "mana4", Resources.Load<Sprite>(path + "mana4") },
+            { "prio", Resources.Load<Sprite>(path + "prio") },
+            { "adj", Resources.Load<Sprite>(path + "adj") },
+            { "all", Resources.Load<Sprite>(path + "all") }
         };
     }
 }
