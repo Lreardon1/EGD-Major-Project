@@ -544,20 +544,26 @@ public class CardParserManager : MonoBehaviour
             */
     }
     
-    public void UpdateStickerDebugs(Mat sticker1, Mat sticker2, Mat sticker3)
+    public void UpdateStickerDebugs(int i, Mat sticker)
     {
         stickerImage1.enabled = stickerImage2.enabled = stickerImage3.enabled = true;
+        RawImage stickerImage = null;
+        switch(i)
+        {
+            case 0:
+                stickerImage = stickerImage1;
+                break;
+            case 1:
+                stickerImage = stickerImage2;
+                break;
+            case 2:
+                stickerImage = stickerImage3;
+                break;
+        }
+        if (stickerImage.texture != null)
+            Destroy(stickerImage.texture);
 
-        if (stickerImage1.texture != null)
-            Destroy(stickerImage1.texture);
-        if (stickerImage2.texture != null)
-            Destroy(stickerImage2.texture);
-        if (stickerImage3.texture != null)
-            Destroy(stickerImage3.texture);
-
-        stickerImage1.texture = OpenCvSharp.Unity.MatToTexture(sticker1);
-        stickerImage2.texture = OpenCvSharp.Unity.MatToTexture(sticker2);
-        stickerImage3.texture = OpenCvSharp.Unity.MatToTexture(sticker3);
+        stickerImage.texture = OpenCvSharp.Unity.MatToTexture(sticker);
     }
 
     public void UpdateSeenImage(Mat blackout)
