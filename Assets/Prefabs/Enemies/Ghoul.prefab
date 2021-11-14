@@ -33,7 +33,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextAction: 0
   statusCondition: 0
-  statusScript: {fileID: 0}
+  statusScript: {fileID: 349726475994658019}
   nextActionPrimaryElem: 0
   nextActionSecondaryElem: 0
   combatantName: Ghoul
@@ -151,6 +151,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3517837958156300150, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
   m_PrefabInstance: {fileID: 4382296509931200173}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &349726475994658019 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4038445828373211726, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+  m_PrefabInstance: {fileID: 4382296509931200173}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 864925912970867163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b82d872ddf111f0419f5e9993b179fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &143262092470255084 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4408447238898312001, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}

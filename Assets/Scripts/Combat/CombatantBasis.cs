@@ -38,6 +38,8 @@ public class CombatantBasis : MonoBehaviour
     public bool canCounterAttack = false;
     public bool hasPriority = false;
 
+    public bool silenced = false;
+
     public TMPro.TextMeshPro text;
     public HealthbarController healthBar;
     public LineRenderer lr;
@@ -276,6 +278,29 @@ public class CombatantBasis : MonoBehaviour
         {
             nextAction = Action.Attack;
             isChanneling = false;
+            return;
+        }
+
+        if(silenced)
+        {
+            int random = Random.Range(0, 2);
+            if(random == 0)
+            {
+                if(previousAction == Action.Attack)
+                {
+                    nextAction = Action.Block;
+                    return;
+                }
+                nextAction = Action.Attack;
+            } else if(random == 1)
+            {
+                if (previousAction == Action.Block)
+                {
+                    nextAction = Action.Attack;
+                    return;
+                }
+                nextAction = Action.Block;
+            }
             return;
         }
 

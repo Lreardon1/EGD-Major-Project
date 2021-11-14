@@ -33,7 +33,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextAction: 0
   statusCondition: 0
-  statusScript: {fileID: 0}
+  statusScript: {fileID: 7097020828666586104}
   nextActionPrimaryElem: 0
   nextActionSecondaryElem: 0
   combatantName: Cobra
@@ -174,6 +174,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3517837958156300150, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
   m_PrefabInstance: {fileID: 6518643535064828342}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7097020828666586104 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4038445828373211726, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+  m_PrefabInstance: {fileID: 6518643535064828342}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7685112655293785792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b82d872ddf111f0419f5e9993b179fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7447595518004980471 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4408447238898312001, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
