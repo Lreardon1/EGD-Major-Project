@@ -384,7 +384,8 @@ public class CombatManager : MonoBehaviour
             bool cardAlreadyPlayed = cb.appliedCard != null;
 
             // TODO : might be nice to overwite cards, which this does not allow
-            if (enoughMana && !cardAlreadyPlayed && chc.transform.childCount != 0)
+            // TODO : that or condition is like a bandaid on cancer
+            if (enoughMana && !cardAlreadyPlayed && (chc.transform.childCount != 0 || IsInCVMode))
             {
                 Debug.Log("Play card on " + actionOrder[0].name);
                 foreach (GameObject card in Deck.instance.allCards)
@@ -545,6 +546,13 @@ public class CombatManager : MonoBehaviour
 
     public void CheckEnoughMana()
     {
+        // TODO : yea I don't know what to do here, but I want my controller in charge of this, not the combatmanager.
+        if (IsInCVMode)
+        {
+            enoughMana = true;
+            return;
+        }
+
         // Check if player has enough mana to play any cards in their hand, if not the action order can procede without input
         bool tempEnoughMana = false;
         foreach(GameObject card in chc.cardsInHand)
@@ -605,6 +613,7 @@ public class CombatManager : MonoBehaviour
         print("APPLIED " + card.name + " TO " + combatant);
         cb.appliedCard = card;
         currentMana -= cardScript.manaCost;
+        manaText.text = "Mana: " + currentMana + "/" + maxMana;
         manaText.text = "Mana: " + currentMana + "/" + maxMana;
         if (!cardScript.isWild)
         {
