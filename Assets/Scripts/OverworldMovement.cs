@@ -43,9 +43,9 @@ public class OverworldMovement : MonoBehaviour
         //Fetch the SpriteRenderer from the GameObject and other party gameobjects
         playerRenderer = GetComponent<SpriteRenderer>();
         playerRenderer.flipX = false;
-        warriorRenderer = party_members[0].GetComponent<SpriteRenderer>();
+        warriorRenderer = party_members[1].GetComponent<SpriteRenderer>();
         warriorRenderer.flipX = false;
-        godfatherRenderer = party_members[1].GetComponent<SpriteRenderer>();
+        godfatherRenderer = party_members[0].GetComponent<SpriteRenderer>();
         godfatherRenderer.flipX = false;
         hunterRenderer = party_members[2].GetComponent<SpriteRenderer>();
         hunterRenderer.flipX = false;

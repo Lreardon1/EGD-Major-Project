@@ -12886,6 +12886,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
+      propertyPath: backoff
+      value: 0.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: hunter_animator
       value: 
       objectReference: {fileID: 1802339472}
@@ -12900,11 +12904,11 @@ PrefabInstance:
     - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: party_members.Array.data[0]
       value: 
-      objectReference: {fileID: 2100651353}
+      objectReference: {fileID: 265967647}
     - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: party_members.Array.data[1]
       value: 
-      objectReference: {fileID: 265967647}
+      objectReference: {fileID: 2100651353}
     - target: {fileID: 1426100620896122063, guid: 1a5087840b3e428418ea54f5b0b7b7e3, type: 3}
       propertyPath: party_members.Array.data[2]
       value: 

@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ground: {fileID: 1426100620003866594}
-  movementspeed: 8
+  movementspeed: 10
   player_animator: {fileID: 1426100620896122058}
   warrior_animator: {fileID: 0}
   godfather_animator: {fileID: 0}
@@ -256,7 +256,6 @@ MonoBehaviour:
   cc: {fileID: 1426100620896122057}
   canMove: 1
   party_members:
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -309,7 +308,7 @@ CharacterController:
   serializedVersion: 2
   m_Height: 0.3086868
   m_Radius: 0.1097123
-  m_SlopeLimit: 45
+  m_SlopeLimit: 60
   m_StepOffset: 0.3
   m_SkinWidth: 0.0001
   m_MinMoveDistance: 0
