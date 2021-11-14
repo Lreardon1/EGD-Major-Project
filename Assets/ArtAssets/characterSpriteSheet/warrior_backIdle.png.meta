@@ -13,7 +13,7 @@ TextureImporter:
     second: warrior_backIdle_2
   - first:
       213: -3211441387519761533
-    second: warrior_backIdle_3
+    second: warrior_backIdle_1
   - first:
       213: 5317128850587239779
     second: warrior_backIdle_4
@@ -148,12 +148,12 @@ TextureImporter:
       name: warrior_backIdle_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 1
+        y: 1
         width: 40
-        height: 40
+        height: 29
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -169,54 +169,12 @@ TextureImporter:
       name: warrior_backIdle_1
       rect:
         serializedVersion: 2
-        x: 40
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e64940a92a8ae6890800000000000000
-      internalID: -7462842116184173458
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: warrior_backIdle_2
-      rect:
-        serializedVersion: 2
-        x: 80
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 179922600f8e0ea30800000000000000
-      internalID: 4242646966575733105
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: warrior_backIdle_3
-      rect:
-        serializedVersion: 2
         x: 120
-        y: 0
-        width: 40
-        height: 40
+        y: 2
+        width: 41
+        height: 27
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -224,48 +182,6 @@ TextureImporter:
       bones: []
       spriteID: 383a5efa21bae63d0800000000000000
       internalID: -3211441387519761533
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: warrior_backIdle_4
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 365cb3ca48c3ac940800000000000000
-      internalID: 5317128850587239779
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: warrior_backIdle_5
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e20c176956dd56370800000000000000
-      internalID: 8315295715394961454
       vertices: []
       indices: 
       edges: []

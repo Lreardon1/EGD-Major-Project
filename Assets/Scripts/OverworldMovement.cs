@@ -5,24 +5,17 @@ using UnityEngine;
 public class OverworldMovement : MonoBehaviour
 {
     public GameObject ground;
-    //public GameObject warriorBack;
-    public GameObject playerBack;
-    public GameObject godfatherBack;
     public int movementspeed = 100;
     string directionY;
     string directionX;
     SpriteRenderer playerRenderer;
     SpriteRenderer godfatherRenderer;
     SpriteRenderer warriorRenderer;
-    SpriteRenderer playerBackRenderer;
-    SpriteRenderer godfatherBackRenderer;
-    //SpriteRenderer warriorBackRenderer;
+    SpriteRenderer hunterRenderer;
     public Animator player_animator;
     public Animator warrior_animator;
     public Animator godfather_animator;
-    public Animator player_back_animator;
-    //public Animator warrior_back_animator;
-    public Animator godfather_back_animator;
+    public Animator hunter_animator;
     public CharacterController cc;
     public bool canMove = true;
     private LinkedList<TimePairTransform> walkLine = new LinkedList<TimePairTransform>();
@@ -50,16 +43,12 @@ public class OverworldMovement : MonoBehaviour
         //Fetch the SpriteRenderer from the GameObject and other party gameobjects
         playerRenderer = GetComponent<SpriteRenderer>();
         playerRenderer.flipX = false;
-        godfatherRenderer = party_members[1].GetComponent<SpriteRenderer>();
-        godfatherRenderer.flipX = false;
         warriorRenderer = party_members[0].GetComponent<SpriteRenderer>();
         warriorRenderer.flipX = false;
-        playerBackRenderer = playerBack.GetComponent<SpriteRenderer>();
-        playerBackRenderer.flipX = false;
-        godfatherBackRenderer = godfatherBack.GetComponent<SpriteRenderer>();
-        godfatherBackRenderer.flipX = false;
-        //warriorBackRenderer = warriorBack.GetComponent<SpriteRenderer>();
-        //warriorBackRenderer.flipX = false;
+        godfatherRenderer = party_members[1].GetComponent<SpriteRenderer>();
+        godfatherRenderer.flipX = false;
+        hunterRenderer = party_members[2].GetComponent<SpriteRenderer>();
+        hunterRenderer.flipX = false;
         cc = GetComponent<CharacterController>();
 
         // init movement conga line
@@ -83,7 +72,8 @@ public class OverworldMovement : MonoBehaviour
             transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
             party_members[1].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
             party_members[0].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
-           
+            party_members[2].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
+
             right = Input.GetAxisRaw("Horizontal") * transform.right;
             up = Input.GetAxisRaw("Vertical") * transform.forward;
         }
@@ -129,131 +119,21 @@ public class OverworldMovement : MonoBehaviour
             player_animator.SetBool("Walking", isMoving);
             warrior_animator.SetBool("Walking", isMoving);
             godfather_animator.SetBool("Walking", isMoving);
-            player_back_animator.SetBool("Walking", isMoving);
-            // warrior_back_animator.SetBool("Walking", (right + up).sqrMagnitude > 0.001);
-            godfather_back_animator.SetBool("Walking", isMoving);
+            hunter_animator.SetBool("Walking", isMoving);
 
             // Left Right Flip
             bool movingRight = directionX == "right";
             playerRenderer.flipX = movingRight;
             godfatherRenderer.flipX = movingRight;
             warriorRenderer.flipX = movingRight;
-            playerBackRenderer.flipX = movingRight;
-            godfatherBackRenderer.flipX = movingRight;
-            warriorRenderer.flipX = movingRight; //needs edit
+            hunterRenderer.flipX = movingRight;
 
-            // TODO : why are you using a different spriteRenderer? 
-            //       Can't you just make a new animation for the animator?
+            // Changes to back facing animations
             bool backToCamera = directionY == "forward";
-            playerRenderer.enabled = !backToCamera;
-            godfatherRenderer.enabled = !backToCamera;
-            //warriorRenderer.enabled = !backToCamera;
-            playerBackRenderer.enabled = backToCamera;
-            godfatherBackRenderer.enabled = backToCamera;
-            //warriorRenderer.enabled = backToCamera;
-            // * End of code tampering
-
-            /*
-            if (Input.GetKey(KeyCode.D))
-            {
-                player_animator.SetBool("Walking", true);
-                warrior_animator.SetBool("Walking", true);
-                godfather_animator.SetBool("Walking", true);
-                player_back_animator.SetBool("Walking", true);
-                //warrior_back_animator.SetBool("Walking", true);
-                godfather_back_animator.SetBool("Walking", true);
-                //transform.Translate(Vector3.right * movementspeed * Time.fixedDeltaTime);
-                if (directionX != "right" && directionY == "forward")
-                {
-                    playerBackRenderer.flipX = true;
-                    godfatherBackRenderer.flipX = true;
-                    warriorRenderer.flipX = true; //needs edit
-                    directionX = "right";
-                }
-                else if (directionX != "right" && directionY == "backward")
-                {
-                    playerRenderer.flipX = true;
-                    godfatherRenderer.flipX = true;
-                    warriorRenderer.flipX = true;
-                    directionX = "right";
-                }
-            }
-            else if (Input.GetKey(KeyCode.A))
-            {
-                player_animator.SetBool("Walking", true);
-                warrior_animator.SetBool("Walking", true);
-                godfather_animator.SetBool("Walking", true);
-                player_back_animator.SetBool("Walking", true);
-                //warrior_back_animator.SetBool("Walking", true);
-                godfather_back_animator.SetBool("Walking", true);
-                if (directionX != "left" && directionY == "forward")
-                {
-                    playerBackRenderer.flipX = false;
-                    godfatherBackRenderer.flipX = false;
-                    warriorRenderer.flipX = false; //needs edit
-                    directionX = "left";
-                }
-                else if (directionX != "left" && directionY == "backward")
-                {
-                    playerRenderer.flipX = false;
-                    godfatherRenderer.flipX = false;
-                    warriorRenderer.flipX = false;
-                    directionX = "left";
-                }
-            }
-            else if (Input.GetKey(KeyCode.W))
-            {
-                player_animator.SetBool("Walking", true);
-                warrior_animator.SetBool("Walking", true);
-                godfather_animator.SetBool("Walking", true);
-                player_back_animator.SetBool("Walking", true);
-                //warrior_back_animator.SetBool("Walking", true);
-                godfather_back_animator.SetBool("Walking", true);
-                if (directionY != "forward")
-                {
-                    playerRenderer.enabled = false;
-                    godfatherRenderer.enabled = false;
-                    //warriorRenderer.enabled = false;
-                    playerBackRenderer.enabled = true;
-                    godfatherBackRenderer.enabled = true;
-                    //warriorRenderer.enabled = true;
-                    playerRenderer.flipX = false;
-                    godfatherRenderer.flipX = false;
-                    warriorRenderer.flipX = false;
-                    directionY = "forward";
-                }
-            }
-            else if (Input.GetKey(KeyCode.S))
-            {
-                player_animator.SetBool("Walking", true);
-                warrior_animator.SetBool("Walking", true);
-                godfather_animator.SetBool("Walking", true);
-                player_back_animator.SetBool("Walking", true);
-                //warrior_back_animator.SetBool("Walking", true);
-                godfather_back_animator.SetBool("Walking", true);
-                if (directionY != "backward")
-                {
-                    playerRenderer.enabled = true;
-                    godfatherRenderer.enabled = true;
-                    //warriorRenderer.enabled = true;
-                    playerBackRenderer.enabled = false;
-                    godfatherBackRenderer.enabled = false;
-                    //warriorRenderer.enabled = false;
-                    playerRenderer.flipX = true;
-                    godfatherRenderer.flipX = true;
-                    warriorRenderer.flipX = true;
-                    directionY = "backward";
-                }
-            }
-            else
-            {
-                player_animator.SetBool("Walking", false);
-                warrior_animator.SetBool("Walking", false);
-                godfather_animator.SetBool("Walking", false);
-                player_back_animator.SetBool("Walking", false);
-                //warrior_back_animator.SetBool("Walking", false);
-                godfather_back_animator.SetBool("Walking", false);
-            }*/
+            player_animator.SetBool("Back", backToCamera);
+            warrior_animator.SetBool("Back", backToCamera);
+            godfather_animator.SetBool("Back", backToCamera);
+            hunter_animator.SetBool("Back", backToCamera);
         }
     }
 
