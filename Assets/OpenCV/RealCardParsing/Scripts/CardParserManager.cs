@@ -114,7 +114,7 @@ public class CardParserManager : MonoBehaviour
 
     public void HandleNewImage(WebCamTexture webCamTexture)
     {
-        goodSeeImage.texture = webCamTexture;
+        // goodSeeImage.texture = webCamTexture;
         cardParser.ProcessTexture(webCamTexture);
     }
 
@@ -562,6 +562,8 @@ public class CardParserManager : MonoBehaviour
 
     public void UpdateSeenImage(Mat blackout)
     {
+        if (goodSeeImage.texture != null)
+            Destroy(goodSeeImage.texture);
         goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(blackout);
         // throw new NotImplementedException();
     }
