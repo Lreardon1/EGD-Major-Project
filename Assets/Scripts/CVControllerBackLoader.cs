@@ -20,6 +20,7 @@ public class CVControllerBackLoader : MonoBehaviour
     [Header("Controller Text")]
     public TMP_Text playText;
     public TMP_Text cardText;
+    public TMP_Text phaseInfoText;
 
     public GameObject cvManagerPrefab;
 
