@@ -360,103 +360,109 @@ public class CardParser : MonoBehaviour
         {
             using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
             {
-                // TODO : here is where to configure modes, pass in eligible cards!
-
                 CustomCard card = ParseCard(cardScene, null);
                 if (card == null)
                 {
                     UpdateCardDetected(null, -1);
                     return true;
                 }
-                // TODO : stickers
-                //  TODO : need: cardScene, warp mat of card, cardImage, card description, possible cards/card mods
                 List<GameObject> possibleCards = cardParserManager.GetCardsOfName(card.cardName);
                 print("COUNT: " + possibleCards.Count);
-                GameObject bestCard = possibleCards[0]; // AttemptToGetMods(card, lastGoodReplane, possibleCards);
+                GameObject bestCard = possibleCards[0];
+                AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards);
                 UpdateCardDetected(bestCard, bestCard != null ? card.cardID : -1);
 
             }
         }
-        else
-        {
-            int i = -1;
-            if (Input.GetKey(KeyCode.Alpha0))
-            {
-                UpdateCardDetected(Deck.instance.deck[0], 0);
-            }
-            else if (Input.GetKey(KeyCode.Alpha1))
-            {
-                UpdateCardDetected(Deck.instance.deck[1], 1);
-            }
-            else if (Input.GetKey(KeyCode.Alpha2))
-            {
-                UpdateCardDetected(Deck.instance.deck[2], 2);
-            }
-            else if (Input.GetKey(KeyCode.Alpha3))
-            {
-                UpdateCardDetected(Deck.instance.deck[3], 3);
-            }
-            else if (Input.GetKey(KeyCode.Alpha4))
-            {
-                UpdateCardDetected(Deck.instance.deck[4], 4);
-            }
-            else if (Input.GetKey(KeyCode.Alpha5))
-            {
-                UpdateCardDetected(Deck.instance.deck[5], 5);
-            }
-            else
-            {
-                UpdateCardDetected(null, -1);
-            }
-        }
         return true;
     }
-    
-    private void PopulateStickers(List<GameObject> possibleCards, List<string> possibleStickers, int i)
-    {
-        possibleStickers.Clear();
 
-        foreach (GameObject card in possibleCards)
-        {
-            if (card.GetComponent<CardEditHandler>().activeModifiers.TryGetValue(card.GetComponent<Card>().modifiers[i], out Modifier mod)) {
-                possibleStickers.Add(mod.spriteParsing);
-            } else
-            {
-                possibleStickers.Add("NONE");
-            }
-        }
+
+
+
+    /*************************************************************************************************
+    /*************************************************************************************************
+    /*************************************************************************************************
+    /*************************************************************************************************
+    /*************************************************************************************************
+    /*************************************************************************************************
+    /*************************************************************************************************
+    /*************************************************************************************************/
+
+    private object AttemptToGetStickerMods(Mat cardScene, CustomCard card, Mat cardMat, List<GameObject> possibleCards)
+    {
+        // get rhombus bounds
+        DetectContours(cardMat, out Point2f[][] contours, out HierarchyIndex[] h);
+
+        // get possible sticker bounds
+        Point2f[] possibleSticker1 = GetStickerBoundByContour(contours, stickerBoundingBox1.GetCenter(), stickerBoundingBox1.GetArea(cardMat));
+        Point2f[] possibleSticker2 = GetStickerBoundByContour(contours, stickerBoundingBox2.GetCenter(), stickerBoundingBox2.GetArea(cardMat));
+        Point2f[] possibleSticker3 = GetStickerBoundByContour(contours, stickerBoundingBox3.GetCenter(), stickerBoundingBox3.GetArea(cardMat));
+
+        object finalSticker1 = null;
+        object finalSticker2 = null;
+        object finalSticker3 = null;
+
+        if (possibleSticker1 != null)
+            finalSticker1 = ParseStickerByContour(possibleSticker1, cardScene, card, cardMat, 0);
+        else
+            finalSticker1 = ParseStickerByCrop(cardScene, card, cardMat, stickerBoundingBox1, 0);
+
+        if (possibleSticker2 != null)
+            finalSticker2 = ParseStickerByContour(possibleSticker2, cardScene, card, cardMat, 1);
+        else
+            finalSticker2 = ParseStickerByCrop(cardScene, card, cardMat, stickerBoundingBox2, 1);
+
+        if (possibleSticker3 != null)
+            finalSticker3 = ParseStickerByContour(possibleSticker3, cardScene, card, cardMat, 2);
+        else
+            finalSticker3 = ParseStickerByCrop(cardScene, card, cardMat, stickerBoundingBox1, 2);
+
+        // TODO
+        return new Tuple<object, object, object>(finalSticker1, finalSticker2, finalSticker3);
     }
 
-    private GameObject GetMostLikelyCard(List<GameObject> possibleCards, params string[] stickerStrs)
+    private Point2f[] GetStickerBoundByContour(Point2f[][] contours, Point2f containedPoint, float expectedArea)
     {
-        int best = 0;
-        GameObject bestCard = null;
-        foreach (GameObject card in possibleCards)
+        float bestRatio = 1.5f;
+        Point2f[] bestContour = null;
+        foreach (Point2f[] contour in contours)
         {
-            int matchCount = 0;
-            for (int i = 0; i < 3; ++i)
+            bool inside = Cv2.PointPolygonTest(contour, containedPoint, false) > 0.0;
+
+            float cArea = (float)Cv2.ContourArea(contour);
+            float areaRatio = CompareAreaRatio(expectedArea, cArea);
+            if (bestRatio > areaRatio)
             {
-                if (card.GetComponent<CardEditHandler>().activeModifiers.TryGetValue(card.GetComponent<Card>().modifiers[i], out Modifier mod))
-                {
-                    best += (mod.spriteParsing == stickerStrs[i]) ? 1 : 0;
-                }
-                else
-                {
-                    best += (stickerStrs[i] == "NONE") ? 1 : 0; // TODO : ask Tyler for this, cause he might not have a none
-                }
-            }
-            if (best < matchCount)
-            {
-                bestCard = card;
-                best = matchCount;
+                bestRatio = areaRatio;
+                bestContour = contour;
             }
         }
 
-        Debug.Log("Got the best for " + bestCard.name + " with match count: " + best);
-        return bestCard;
+        return bestContour;
     }
 
-   
+    private object ParseStickerByContour(Point2f[] stickerContour, Mat cardScene, CustomCard card, Mat cardMat, int ID)
+    {
+        Point2f[] corners = new Point2f[]
+        {
+            new Point2f(0,0),
+            new Point2f(defaultStickerWidth, 0),
+            new Point2f(defaultStickerWidth, defaultStickerHeight),
+            new Point2f(0, defaultStickerHeight)
+        };
+        Mat stickerTransMat = Cv2.GetPerspectiveTransform(stickerContour, corners);
+        Mat stickerMat = new Mat();
+        Cv2.WarpPerspective(cardMat, stickerMat, stickerTransMat, new Size(defaultStickerWidth, defaultStickerHeight));
+        cardParserManager.UpdateStickerDebugs(ID, stickerMat);
+        return null;
+    }
+
+    private object ParseStickerByCrop(Mat cardScene, CustomCard card, Mat cardMat, BoundingBox stickerBoundingBox1, int ID)
+    {
+        return null;
+    }
+
     [HideInInspector]
     public UnityEvent<GameObject, int> StableUpdateEvent = new UnityEvent<GameObject, int>();
     [HideInInspector]
@@ -510,8 +516,8 @@ public class CardParser : MonoBehaviour
         public CardType cardType;
         public CardElement cardElement;
         public string cardName;
-
-        public CustomCard(float certainty, BoundingBox inSceneBB, CardType type, CardElement element, int cardID, string cardName)
+        public Mat homoMat;
+        public CustomCard(float certainty, BoundingBox inSceneBB, CardType type, CardElement element, int cardID, string cardName, Mat replaneMat)
         {
             this.certainty = certainty;
             this.cardID = cardID;
@@ -519,6 +525,7 @@ public class CardParser : MonoBehaviour
             this.cardType = type;
             this.cardElement = element;
             this.cardName = cardName;
+            this.homoMat = replaneMat;
         }
 
         public static bool Equiv(CustomCard card1, CustomCard card2)
@@ -985,8 +992,8 @@ public class CardParser : MonoBehaviour
             arucoParams.CornerRefinementMinAccuracy = 0.000001;
             arucoParams.CornerRefinementMaxIterations = 500;
             arucoParams.DoCornerRefinement = true;
-            arucoParams.AdaptiveThreshWinSizeMin = 7; // TODO
-            arucoParams.AdaptiveThreshWinSizeMax = 25;
+            arucoParams.AdaptiveThreshWinSizeMin = 3; // TODO
+            arucoParams.AdaptiveThreshWinSizeMax = 21;
             arucoParams.AdaptiveThreshWinSizeStep = 6;
 
             Point2f[][] corners;
@@ -995,8 +1002,6 @@ public class CardParser : MonoBehaviour
             Cv2.BitwiseNot(scene, testMat);
             CvAruco.DetectMarkers(testMat, arucoDict, out corners, out ids, arucoParams, out contours);
             contours = contours.Concat(corners).ToArray();
-
-            CvAruco.DrawDetectedMarkers(testMat, contours, null);
         }
     }
 
@@ -1279,6 +1284,11 @@ public class CardParser : MonoBehaviour
         HierarchyIndex[] h;
         // DETECT CONTOURS AND SIMPLIFY THEM IF NEEDED
         DetectContours(cardScene, out contours, out h);
+        Mat blackout = new Mat();
+        cardScene.CopyTo(blackout);
+        CvAruco.DrawDetectedMarkers(blackout, contours, null);
+
+        cardParserManager.UpdateSeenImage(blackout);
 
         // POSSIBLE LOWER RIGHTS
         CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
@@ -1308,10 +1318,6 @@ public class CardParser : MonoBehaviour
             Point2f[] possibleCard = TryToBoundCardFromCorners(cardScene, bestLowerRight.corners, bestUpperLeft.corners);
             if (possibleCard == null)
                 return null;
-            Mat blackout = new Mat();
-            cardScene.CopyTo(blackout);
-            CvAruco.DrawDetectedMarkers(blackout, new Point2f[][] { possibleCard, bestUpperLeft.corners, bestLowerRight.corners }, null);
-            cardParserManager.UpdateSeenImage(blackout);
             Mat replaned = PerformFirstReplaneFull(cardScene, possibleCard, cornerReplaneOffset, out Mat firstTMat);
 
             // predict most likely element from single replane, might not work but may improve performance.
@@ -1328,6 +1334,15 @@ public class CardParser : MonoBehaviour
             // if we replaned the image perfectly, we will have a matchBorder sized border
             Mat croppedReplaned = replaned[borderAmount, replaned.Height - borderAmount, borderAmount, replaned.Width - borderAmount];
 
+            // Get an affine matrix representation of the crop, TODO : very much might not be good
+            Point2f oldTopLeft = new Point2f(borderAmount, borderAmount);
+            Point2f oldBottomRight = new Point2f(replaned.Width, replaned.Height);
+            Point2f newTopLeft = new Point2f(0, 0);
+            Point2f newBottomRight = new Point2f(replaned.Width - borderAmount, replaned.Height - borderAmount);
+            Point2f[] oldCorners = new Point2f[] { oldTopLeft, new Point2f(oldBottomRight.X, oldTopLeft.Y), oldBottomRight, new Point2f(oldTopLeft.X, oldBottomRight.Y) };
+            Point2f[] newCorners = new Point2f[] { newTopLeft, new Point2f(newBottomRight.X, newTopLeft.Y), newBottomRight, new Point2f(newTopLeft.X, newBottomRight.Y) };
+
+            Mat affineRepOfCrop = Cv2.GetAffineTransform(oldCorners, newCorners);
 
             croppedReplaned.CopyTo(lastGoodReplane);
             
@@ -1337,7 +1352,7 @@ public class CardParser : MonoBehaviour
             // TODO : bound the bounding box less strictly and perhaps axis aligned?
             // TODO : ID function, by array or similar? : add to card template data
             return new CustomCard(1.0f, new BoundingBox(possibleCard[0], possibleCard[1], possibleCard[2], possibleCard[3]),
-                cardType, cardElement, ID, cardName);
+                cardType, cardElement, ID, cardName, affineRepOfCrop * hMat * firstTMat);
             // TODO : function to reaquire from old BB, 
         }
         return null;
@@ -1890,6 +1905,13 @@ public class CardParser : MonoBehaviour
                 new Point2f(lr.X, lr.Y),
                 new Point2f(ul.X, lr.Y)
             };
+        }
+
+        public float GetArea(Mat mat)
+        {
+            float width = Mathf.Abs(mat.Height * ul.Y - mat.Height * lr.Y);
+            float height = Mathf.Abs(mat.Width * ul.X - mat.Width * lr.X);
+            return width * height;
         }
     }
 
