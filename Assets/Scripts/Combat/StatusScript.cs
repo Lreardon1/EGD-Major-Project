@@ -18,20 +18,10 @@ public class StatusScript : MonoBehaviour
     public static float earthBoundDefenseIncrease = 0.1f;
     public static float gustResistanceIncrease = 0.1f;
     public static float moltenDefenseReduction = -0.2f;
+    public static float corruptionAttackReduction = -0.2f;
 
     public static float lightiningDamagePercent = 0.2f;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 
     public void OnTakeDamageStatusHandler(CombatantBasis.Status status, GameObject attacker, int damageAmount)
     {
@@ -77,11 +67,20 @@ public class StatusScript : MonoBehaviour
                     }
                     break;
                 }
+            case CombatantBasis.Status.Blight:
+                cb.SelectAction();
+                break;
         }
     }
 
     public void ApplyNewStatus(CombatantBasis.Status status, GameObject attacker)
     {
+        float rand = Random.Range(0f, 1f);
+        if(rand < cb.resistance + cb.shieldResistance)
+        {
+            return;
+        }
+
         CombatManager cm = FindObjectOfType<CombatManager>();
         switch (status)
         {
@@ -153,10 +152,17 @@ public class StatusScript : MonoBehaviour
                 OnStatusApply(status, attacker);
                 break;
             case CombatantBasis.Status.Blight:
-                // need to figure out status
+                cb.statusCondition = status;
+                OnStatusApply(status, attacker);
                 break;
             case CombatantBasis.Status.Corruption:
-                // Need to figure out status
+                cb.Heal(holyWaterHealAmount);
+                ApplyBuff(status);
+                foreach (GameObject adjacent in cm.GetAdjacentCombatants(this.gameObject))
+                {
+                    adjacent.GetComponent<CombatantBasis>().statusCondition = status;
+                    adjacent.GetComponent<StatusScript>().ApplyBuff(status);
+                }
                 break;
         }
     }
@@ -211,6 +217,16 @@ public class StatusScript : MonoBehaviour
                     Buff b = combatant.AddComponent<Buff>();
                     b.affectedValues.Add(Buff.Stat.Defense);
                     b.value = moltenDefenseReduction;
+                    b.duration = 5;
+                    b.StartBuff();
+                    cb.attachedBuffs.Add(b);
+                    break;
+                }
+            case CombatantBasis.Status.Corruption:
+                {
+                    Buff b = combatant.AddComponent<Buff>();
+                    b.affectedValues.Add(Buff.Stat.Attack);
+                    b.value = corruptionAttackReduction;
                     b.duration = 5;
                     b.StartBuff();
                     cb.attachedBuffs.Add(b);

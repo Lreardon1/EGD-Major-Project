@@ -584,8 +584,8 @@ public class CombatManager : MonoBehaviour
             if (cb.appliedCard != null)
             {
                 card.transform.SetParent(chc.gameObject.transform);
+                card.transform.localScale = new Vector3(chc.cardLocalScale, chc.cardLocalScale, chc.cardLocalScale);
                 card.transform.localPosition = Vector3.zero;
-                card.transform.localScale = new Vector3(1, 1, 1);
                 Debug.Log("Card Already Played On This Combatant");
                 return false;
             }
@@ -593,8 +593,8 @@ public class CombatManager : MonoBehaviour
             {
                 Debug.Log("Not Enough Mana To Play This Card");
                 card.transform.SetParent(chc.gameObject.transform);
+                card.transform.localScale = new Vector3(chc.cardLocalScale, chc.cardLocalScale, chc.cardLocalScale);
                 card.transform.localPosition = Vector3.zero;
-                card.transform.localScale = new Vector3(1, 1, 1);
                 cb.appliedCard = null;
                 return false;
             }
@@ -623,8 +623,8 @@ public class CombatManager : MonoBehaviour
             lastPlayedCard = card;
         }
         card.transform.SetParent(combatant.GetComponent<CombatantBasis>().uiCollider.transform);
-        // card.transform.SetParent(combatant.transform);
         card.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+        // card.transform.SetParent(combatant.transform);
         // card.transform.position = Vector3.zero;
         card.transform.localPosition = Vector3.zero;
         card.GetComponent<DragDrop>().isDraggable = false;
@@ -810,6 +810,7 @@ public class CombatManager : MonoBehaviour
             Debug.Log("You Win!");
             StopAllCoroutines();
             chc.ResetCardParents();
+            chc.ReShuffle();
             encounterScript.ReturnToOverWorld();
             PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);
             return true;
@@ -819,6 +820,7 @@ public class CombatManager : MonoBehaviour
             Debug.Log("You Lose...");
             StopAllCoroutines();
             chc.ResetCardParents();
+            chc.ReShuffle();
             encounterScript.ReturnToOverWorld();
             PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);
             return true;

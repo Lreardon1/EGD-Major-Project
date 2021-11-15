@@ -25,6 +25,8 @@ public class CombatantBasis : MonoBehaviour
     public float speedMultiplier = 1f;
     public float resistance = 0.0f;
 
+    public bool specialHasTarget = false;
+
     public int temporaryHitPoints = 0;
     public int negativeHitPointShield = 0;
 
@@ -35,6 +37,8 @@ public class CombatantBasis : MonoBehaviour
     public bool untargettable = false;
     public bool canCounterAttack = false;
     public bool hasPriority = false;
+
+    public bool silenced = false;
 
     public TMPro.TextMeshPro text;
     public HealthbarController healthBar;
@@ -274,6 +278,29 @@ public class CombatantBasis : MonoBehaviour
         {
             nextAction = Action.Attack;
             isChanneling = false;
+            return;
+        }
+
+        if(silenced)
+        {
+            int random = Random.Range(0, 2);
+            if(random == 0)
+            {
+                if(previousAction == Action.Attack)
+                {
+                    nextAction = Action.Block;
+                    return;
+                }
+                nextAction = Action.Attack;
+            } else if(random == 1)
+            {
+                if (previousAction == Action.Block)
+                {
+                    nextAction = Action.Attack;
+                    return;
+                }
+                nextAction = Action.Block;
+            }
             return;
         }
 

@@ -19,7 +19,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &-6524219570265815721
+--- !u!114 &9014861708490606064
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -28,7 +28,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 864925912970867163}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 826eca48ee718114ebdcc2e4c43368ee, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d7858004bf8ce64a96e284acca214a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   nextAction: 0
@@ -46,6 +46,7 @@ MonoBehaviour:
   defenseMultiplier: 1
   speedMultiplier: 1
   resistance: 0
+  specialHasTarget: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
   attackCardBonus: 0
@@ -61,12 +62,13 @@ MonoBehaviour:
   heldItem: {fileID: 0}
   target: {fileID: 0}
   isSlain: 0
-  isEnemy: 1
+  isEnemy: 0
   isChanneling: 0
   bonusAttack: 0
   uiCollider: {fileID: 0}
   previousAction: 0
   combatPopupPrefab: {fileID: 4730867921388399689, guid: d79b7f53d915fa84b81ad869b2e19850, type: 3}
+  ghoulDefenseBuff: 0.3
 --- !u!1001 &4382296509931200173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -141,7 +143,7 @@ PrefabInstance:
     - target: {fileID: 4038445828373211726, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
       propertyPath: cb
       value: 
-      objectReference: {fileID: -6524219570265815721}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
 --- !u!1 &864925912970867163 stripped
