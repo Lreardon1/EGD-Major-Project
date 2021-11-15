@@ -7747,12 +7747,32 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
+      propertyPath: kpDist
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
+      propertyPath: loweRatio
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
       propertyPath: matchThresh
-      value: 0.65
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
+      propertyPath: timeRequiredForNew
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
       propertyPath: timeRequiredForNull
       value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
+      propertyPath: timeRequiredForNewFromNull
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
+      propertyPath: keypointMatchPercentRequired
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4642193870367902655, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
       propertyPath: m_RootOrder

@@ -31,6 +31,7 @@ RectTransform:
   - {fileID: 2735403716702578282}
   - {fileID: 2735403717647448733}
   - {fileID: 6661408838726365685}
+  - {fileID: 381045512846796213}
   - {fileID: 2735403717239211628}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -277,9 +278,8 @@ RectTransform:
   - {fileID: 2735403717965454107}
   - {fileID: 2735403718002656317}
   - {fileID: 2735403717041738439}
-  - {fileID: 381045512846796213}
   m_Father: {fileID: 2735403716679986197}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -854,7 +854,7 @@ GameObject:
   - component: {fileID: 4727963949127845389}
   - component: {fileID: 4244721815065707045}
   m_Layer: 5
-  m_Name: Image
+  m_Name: ProgressIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -867,11 +867,11 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6427642488073485427}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2735403717239211628}
+  m_Father: {fileID: 2735403716679986197}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}

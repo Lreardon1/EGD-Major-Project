@@ -473,6 +473,7 @@ public class CardParser : MonoBehaviour
     private float timeSinceLastUpdate = -1.0f;
     public float timeRequiredForNull;
     public float timeRequiredForNew;
+    public float timeRequiredForNewFromNull;
 
     private void UpdateCardDetected(GameObject card, int id)
     {
@@ -495,7 +496,7 @@ public class CardParser : MonoBehaviour
         }
 
         // update to different card
-        if (card != null && previousCard == null && timeSinceLastUpdate + (timeRequiredForNew / 2) <= Time.time)
+        if (card != null && previousCard == null && timeSinceLastUpdate + timeRequiredForNewFromNull <= Time.time)
         {
             previousCard = card;
             timeSinceLastUpdate = Time.time;
@@ -993,8 +994,8 @@ public class CardParser : MonoBehaviour
             arucoParams.CornerRefinementMaxIterations = 500;
             arucoParams.DoCornerRefinement = true;
             arucoParams.AdaptiveThreshWinSizeMin = 3; // TODO
-            arucoParams.AdaptiveThreshWinSizeMax = 21;
-            arucoParams.AdaptiveThreshWinSizeStep = 6;
+            arucoParams.AdaptiveThreshWinSizeMax = 23;
+            arucoParams.AdaptiveThreshWinSizeStep = 5;
 
             Point2f[][] corners;
             int[] ids;
@@ -1382,8 +1383,25 @@ public class CardParser : MonoBehaviour
         Mat bestHomographyMat = null;
         print("Card List is " + cardDataList.Count);
         float bestPercent = 0.0f;
+        float bestHistComp = 0.0f;
+        string bestHistWinner = "";
+
+        // TODO : possible sort paradigms
+            // by fundy number
+            // by homo percent
+            // by homo number
         foreach (TemplateCardData cardData in cardDataList)
         {
+            // TODO : debugging with histograms, fruitless due to sh*t lighting
+            // TODO : see about tagging 'common' keypoints (those effectively shared by all cards of a type, to reduce confusions)
+            Mat seenHist = MakeHSHistrogram(replaned);
+            float comp = (float)Cv2.CompareHist(seenHist, cardData.hist, HistCompMethods.Correl);
+            if (comp > bestHistComp)
+            {
+                bestHistComp = comp;
+                bestHistWinner = cardData.name;
+            }
+
             print("Getting card data for " + cardData.name + " from " + cardDataList.Count);
             KeyPoint[] kp1 = cardData.keypoints;
             Mat des1 = cardData.des;
@@ -1393,22 +1411,28 @@ public class CardParser : MonoBehaviour
             int initMatches = goodMatches.Length;
             if (FilterByFundy(ref m_kp1, ref m_kp2, ref goodMatches, 3.0f))
             {
-                if (CheckIfEnoughMatch(goodMatches, initMatches) && bestGoodMatches < goodMatches.Length)
+                if (CheckIfEnoughMatch(goodMatches, initMatches))
+                //if (CheckIfEnoughMatch(goodMatches, initMatches) && bestGoodMatches < goodMatches.Length) // discrete count version
                 {
                     Mat homo = GetHomographyMatrix(m_kp2, m_kp1);
                     
                     if (homo != null && homo.Width == 3 && homo.Height == 3 && IsGoodHomography(homo, m_kp1, m_kp2, out float percent))
                     {
-                        bestHomographyMat = homo;
-                        bestGoodMatches = goodMatches.Length;
-                        bestCardData = cardData;
-                        bestPercent = percent;
+                        int survivedKP = Mathf.RoundToInt(m_kp1.Length * percent);
+                        if (survivedKP > bestGoodMatches)
+                        {
+                            bestHomographyMat = homo;
+                            //bestGoodMatches = goodMatches.Length;
+                            bestGoodMatches = survivedKP;
+                            bestCardData = cardData;
+                            bestPercent = percent;
+                        }
                     }
                 }
             }
         }
 
-
+        print("Best hist comp was " + bestHistWinner + " with " + bestHistComp);
         print("The entire templating took " + (Time.realtimeSinceStartup - t) + " seconds");
         if (bestCardData != null)
             print("Predicted by keys: " + bestGoodMatches + " for " + bestCardData.name + " with " + bestPercent);
@@ -1514,12 +1538,11 @@ public class CardParser : MonoBehaviour
     }
 
     [Space(1)]
-    public float loweRatio = 0.7f;
+    public float loweRatio = 0.75f;
     public float kpDist;
 
     /**
     Match the keypoints of image 1 and 2 using BF batcher and the ratio test.
-    The current ratio is 0.7.
     Returns a list of matches which passed the ratio test.
     */
     public void MatchKeypoints(KeyPoint[] kp1, KeyPoint[] kp2, Mat des1, Mat des2, out DMatch[] goodMatches)
