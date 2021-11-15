@@ -24,6 +24,10 @@ public class DeckCustomizer : MonoBehaviour
     [SerializeField]
     public GameObject refWindow;
     [SerializeField]
+    public GameObject loadWindow;
+    [SerializeField]
+    public GameObject saveWindow;
+    [SerializeField]
     public GameObject customizationWindow;
     [SerializeField]
     public GameObject cardSelectionWindow;
@@ -223,9 +227,9 @@ public class DeckCustomizer : MonoBehaviour
     public void AttemptAccept()
     {   
         //checking for balanced banks
-        if (true)//Deck.instance.deck.Count == 30)
+        if (Deck.instance.deck.Count == 30)
         {
-            AcceptAndStore();
+            ShowSaver();
         }
         else
         {
@@ -243,7 +247,7 @@ public class DeckCustomizer : MonoBehaviour
         cantAcceptWindow.SetActive(false);
     }
 
-    private void AcceptAndStore()
+    public void AcceptAndStore()
     {
         //need to store any remaining modifiers and move cards out of scene, then close customization canvas
         List<GameObject> storedDrags;
@@ -315,6 +319,8 @@ public class DeckCustomizer : MonoBehaviour
             trans.anchoredPosition = new Vector2(0.5f, 0.5f);
             trans.localPosition = new Vector3(0, 0, 0);
         }
+
+        //setting up to return to game
         List<GameObject> allCards = Deck.instance.allCards;
         foreach (GameObject c in allCards)
         {
@@ -333,5 +339,18 @@ public class DeckCustomizer : MonoBehaviour
     public void HideReferences()
     {
         refWindow.SetActive(false);
+    }
+
+    public void ShowLoader()
+    {
+        loadWindow.SetActive(true);
+        loadWindow.GetComponent<DeckLoader>().GenerateLoadableDecks();
+    }
+
+    public void ShowSaver()
+    {
+        saveWindow.SetActive(true);
+        saveWindow.GetComponent<DeckSaver>().SetUp();
+        saveWindow.GetComponent<DeckSaver>().deckCustomizer = this;
     }
 }
