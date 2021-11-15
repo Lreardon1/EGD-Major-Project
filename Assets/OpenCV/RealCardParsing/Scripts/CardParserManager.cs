@@ -125,7 +125,7 @@ public class CardParserManager : MonoBehaviour
     {
         cardParser.UpdateMode(CardParser.ParseMode.HandMode);
         phaseInfoText.text = "Draw Cards up to 4 cards, max hand size of " + maxCardsInHand 
-            + ". press Space to stop drawing.\n1 Draw: 22 Mana, 2 Draw: 16 Mana, 3 Draw: 14 Mana, 4 Draw: 12 Mana.";
+            + ". press Space to stop drawing.\n1 Draw: 22 Mana, 2 Draw: 16 Mana, 3 Draw: 14 Mana, 4 Draw: 12 Mana. R to shuffle discards in.";
 
         int totalCardsDrawn = 0;
         while (maxCardsInHand > hand.Count && totalCardsDrawn < 4)
@@ -198,10 +198,10 @@ public class CardParserManager : MonoBehaviour
     private void UpdatePlayActionUI(bool validTarget, bool hasCardAttached, 
         GameObject currentCard, GameObject currentTarget, float fillMeter)
     {
-        progressIndicator.fillAmount = 0.0f;
-
-        if (!validTarget || hasCardAttached)
+        if (!validTarget)
             playText.text = "Apply cards to combatants...";
+        else if (hasCardAttached)
+            playText.text = "You focus on " + currentTarget.name + "... but they already have a card.";
         else if (!hand.Contains(currentCard))
             playText.text = "You focus on " + currentTarget.name + "... What card will you play?";
         else if (currentCard != null)
@@ -239,17 +239,20 @@ public class CardParserManager : MonoBehaviour
                 {
                     timeSpentWithCard = (currentTarget == hitInfo.collider.gameObject) ? timeSpentWithCard : 0.0f;
                     currentTarget = hitInfo.collider.gameObject;
+                    print("Raycasting to " + hitInfo.collider.gameObject);
                 }
-                else timeSpentWithCard = 0.0f;
+                else { timeSpentWithCard = 0.0f; currentTarget = null; }
+
                 bool hasCardAttached = currentTarget != null && currentTarget.GetComponent<CombatantBasis>().appliedCard != null;
-                validTarget = currentTarget != null && !hasCardAttached;
-                timeSpentWithCard = validTarget ? timeSpentWithCard : 0.0f;
+                validTarget = currentTarget != null;
+                timeSpentWithCard = validTarget && !hasCardAttached ? timeSpentWithCard : 0.0f;
                 timeSpentWithCard = currentCard != null ? timeSpentWithCard : 0.0f;
                 timeSpentWithCard = hand.Contains(currentCard) ? timeSpentWithCard : 0.0f; 
 
                 UpdatePlayActionUI(validTarget, hasCardAttached, currentCard, currentTarget, timeSpentWithCard / timeToCompletePlay);
 
                 if (Input.GetKey(KeyCode.Space)) goto FinishPlay;
+                
 
                 timeSpentWithCard += Time.deltaTime;
                 yield return null;
@@ -263,7 +266,7 @@ public class CardParserManager : MonoBehaviour
                 hand.Remove(currentCard);
                 timeSpentWithCard = 0.0f;
                 progressIndicator.fillAmount = 0.0f;
-                playText.text = "Played " + currentCard.GetComponent<Card>().cardName + " on " + currentTarget.name + ".";
+                playText.text = "Played " + currentCard.GetComponent<Card>().cardName + " on " + currentTarget.name + ". Put card in Discard pile.";
                 yield return new WaitForSeconds(0.5f);
             } else
             {
@@ -300,6 +303,7 @@ public class CardParserManager : MonoBehaviour
 
     IEnumerator RunDiscardPhase()
     {
+        // TODO : reshuffle
         phaseInfoText.text = "Discard Phase: Show cards in hand to discard them, press Space to continue.";
         cardParser.UpdateMode(CardParser.ParseMode.HandMode);
         timeSpentWithCard = 0.0f;
@@ -313,6 +317,7 @@ public class CardParserManager : MonoBehaviour
                 {
                     playText.text = "Discarding " + currentCard.GetComponent<Card>().cardName + "... (Mana Increase: " + 1 + ")"; // TODO :
                     progressIndicator.fillAmount = timeSpentWithCard / timeToCompleteDiscard;
+                    timeSpentWithCard += Time.deltaTime;
                 } else
                 {
                     playText.text = "Show cards from your hand to discard for mana " + ". (Total Mana Reup: " + manaUp + ")"; // TODO :
@@ -323,10 +328,13 @@ public class CardParserManager : MonoBehaviour
             }
 
             // APPLY THE CARD TO A VALID TARGET
+
             // TODO : this function discards the card but might not go well natively
             manaUp += 1;
             hand.Remove(currentCard);
             Deck.instance.Discard(currentCard);
+            progressIndicator.fillAmount = 0.0f;
+            playText.text = "Discarded " + currentCard.GetComponent<Card>().cardName + ".\nPut the card in the discard pile.";
             timeSpentWithCard = 0.0f;
             yield return null;
         }
@@ -353,31 +361,38 @@ public class CardParserManager : MonoBehaviour
     {
         // TODO : how do I know the guy? that's the only hard part here...
         CombatantBasis cb = cm.actionOrder[0].GetComponent<CombatantBasis>();
+        print("Running an action phase for " + cb.combatantName);
+
         phaseInfoText.text = "Action Phase for " + cb.name + ". You can play a card on them or skip with Space.";
         if (cb.appliedCard != null)
         {
             playText.text = "Currently, cannot play because " + cb.combatantName + " already has played card.";
-            yield return new WaitForSeconds(0.6f);
+            yield return new WaitForSeconds(0.4f);
             goto FinishAction;
         } else
         {
-
             // TRACK IN A LOOP TO NET A CARD
             timeSpentWithCard = 0.0f;
             while (timeSpentWithCard < timeToCompletePlay)
             {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    playText.text = "Skipping play on " + cb.combatantName + "...";
+                    yield return new WaitForSeconds(0.4f);
+                    goto FinishAction;
+                }
+
+
                 if (!hand.Contains(currentCard))
                 {
                     playText.text = "Play Card on " + cb.combatantName + "?";
                     timeSpentWithCard = 0.0f;
+                    progressIndicator.fillAmount = 0.0f;
                 }
                 else
                 {
                     playText.text = "Playing " + currentCard.GetComponent<Card>().cardName + " on " + cb.combatantName + "...";
                     progressIndicator.fillAmount = timeSpentWithCard / timeToCompletePlay;
-
-                    if (Input.GetKeyDown(KeyCode.Space)) break;
-                    if (Input.GetKeyDown(KeyCode.Q)) goto FinishAction;
 
                     timeSpentWithCard += Time.deltaTime;
                 }
@@ -388,11 +403,11 @@ public class CardParserManager : MonoBehaviour
             hand.Remove(currentCard);
         }
 
+
     FinishAction:
         progressIndicator.fillAmount = 0.0f;
         playText.text = "";
         currentInputHandler = null;
-        // TODO : next phase
         cm.CVReadyToContinueActions();
         yield return null;
     }
@@ -541,7 +556,6 @@ public class CardParserManager : MonoBehaviour
     public List<GameObject> GetCardsOfName(string name)
     {
         List<GameObject> cardList = new List<GameObject>();
-
         if (currentPhase == CombatManager.CombatPhase.DrawPhase)
         {
             foreach (GameObject c in Deck.instance.deck)
@@ -553,18 +567,26 @@ public class CardParserManager : MonoBehaviour
         {
             foreach (GameObject c in hand)
             {
+                if (c == null) print("WE HAVE A SERIOUS PROBLEM!");
+
                 if (c.GetComponent<Card>().cardName == name)
                     cardList.Add(c);
             }
         }
+        if (cardList.Count > 0)
+            return cardList;
+
+
+
+
+
+        // If we got no cards from phase specific, get from all
+        foreach (GameObject c in Deck.instance.allCards)
+        {
+            if (c.GetComponent<Card>().cardName == name)
+                cardList.Add(c);
+        }
         return cardList;
-        /*
-        // TODO : dependnig
-        if (orderedCards.TryGetValue(name, out List<GameObject> lis))
-            return lis;
-        else
-            return new List<GameObject>();
-            */
     }
     
     public void UpdateStickerDebugs(int i, Mat sticker)
