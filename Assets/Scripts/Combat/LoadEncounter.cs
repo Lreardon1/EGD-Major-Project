@@ -16,13 +16,16 @@ public class LoadEncounter : MonoBehaviour
 
     public GameObject overWorldDragger;
     public OverworldMovement player;
+    public Animator screenWipe;
 
     public float encounterRate = 0.2f;
     public bool canGetEncounter = false;
     public bool inEncounter = false;
 
     public float encounterCoolDown = 5f;
-    public float timer = 0f;
+    private float timer = 0f;
+
+    public AudioSource overWorldMusic;
 
     public List<GameObject> encounters;
 
@@ -51,7 +54,7 @@ public class LoadEncounter : MonoBehaviour
             if(random < encounterRate && timer <= 0f)
             {
                 inEncounter = true;
-                LoadCombatScene();
+                GenerateEncounter();
             }
 
             yield return new WaitForSeconds(1f);
@@ -60,18 +63,24 @@ public class LoadEncounter : MonoBehaviour
         yield return null;
     }
 
-    public void LoadCombatScene()
+    public void GenerateEncounter()
     {
         player.canMove = false;
         eventSystem.SetActive(false);
 
         int rand = Random.Range(0, encounters.Count);
         encounter = Instantiate(encounters[rand]);
+        screenWipe.Play("ScreenWipeAnimation");
+        Invoke("LoadCombatScene", 0.5f);
+    }
 
+    public void LoadCombatScene()
+    {
+        overWorldMusic.Stop();
         SceneManager.LoadScene("BattleScene", LoadSceneMode.Additive);
         originalCameraPos = mainCam.transform.position;
         originalCameraRot = mainCam.transform.rotation;
-        Invoke("SetUpCombatCamera", 0.1f);
+        Invoke("SetUpCombatCamera", Time.deltaTime);
     }
 
     public void SetUpCombatCamera()
@@ -93,6 +102,8 @@ public class LoadEncounter : MonoBehaviour
         eventSystem.SetActive(true);
         mainCam.transform.position = originalCameraPos;
         mainCam.transform.rotation = originalCameraRot;
+
+        overWorldMusic.Play();
 
         Deck.instance.SetDragger(overWorldDragger, true);
         inEncounter = false;
