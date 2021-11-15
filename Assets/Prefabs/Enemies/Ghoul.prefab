@@ -55,6 +55,7 @@ MonoBehaviour:
   untargettable: 0
   canCounterAttack: 0
   hasPriority: 0
+  silenced: 0
   text: {fileID: 143262092470255084}
   healthBar: {fileID: 5126118973518023928}
   lr: {fileID: 2374927727176778724}
@@ -143,7 +144,7 @@ PrefabInstance:
     - target: {fileID: 4038445828373211726, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
       propertyPath: cb
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 9014861708490606064}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
 --- !u!1 &864925912970867163 stripped

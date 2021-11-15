@@ -30,7 +30,8 @@ public class LoadEncounter : MonoBehaviour
     public List<GameObject> encounters;
 
     private GameObject encounter;
-    
+
+    private float tempTimer = 0f;
     
         // Start is called before the first frame update
     void Start()
@@ -42,6 +43,7 @@ public class LoadEncounter : MonoBehaviour
     void Update()
     {
         timer -= Time.deltaTime;
+        tempTimer += Time.deltaTime;
     }
 
     public IEnumerator CheckEncounter()
@@ -70,7 +72,7 @@ public class LoadEncounter : MonoBehaviour
 
         int rand = Random.Range(0, encounters.Count);
         encounter = Instantiate(encounters[rand]);
-        screenWipe.Play("ScreenWipeAnimation");
+        ScreenWipe();
         Invoke("LoadCombatScene", 0.5f);
     }
 
@@ -110,6 +112,11 @@ public class LoadEncounter : MonoBehaviour
         player.canMove = true;
         timer = encounterCoolDown;
         StartCoroutine("CheckEncounter");
+    }
+
+    public void ScreenWipe()
+    {
+        screenWipe.Play("ScreenWipeAnimation");
     }
 
     public void OnTriggerStay(Collider other)

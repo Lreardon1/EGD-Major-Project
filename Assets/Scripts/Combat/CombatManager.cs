@@ -809,9 +809,8 @@ public class CombatManager : MonoBehaviour
         {
             Debug.Log("You Win!");
             StopAllCoroutines();
-            chc.ResetCardParents();
-            chc.ReShuffle();
-            encounterScript.ReturnToOverWorld();
+            encounterScript.ScreenWipe();
+            Invoke("ReturnToOverWorld", 0.5f);
             PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);
             return true;
         }
@@ -819,12 +818,18 @@ public class CombatManager : MonoBehaviour
         {
             Debug.Log("You Lose...");
             StopAllCoroutines();
-            chc.ResetCardParents();
-            chc.ReShuffle();
-            encounterScript.ReturnToOverWorld();
+            encounterScript.ScreenWipe();
+            Invoke("ReturnToOverWorld", 0.5f);
             PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);
             return true;
         }
         return false;
+    }
+
+    public void ReturnToOverWorld()
+    {
+        chc.ResetCardParents();
+        chc.ReShuffle();
+        encounterScript.ReturnToOverWorld();
     }
 }

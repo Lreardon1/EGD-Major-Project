@@ -273,6 +273,8 @@ public class CombatantBasis : MonoBehaviour
 
     public virtual void SelectAction()
     {
+        nextAction = Action.Attack;
+        return;
         //special case if channeling for attack
         if (isChanneling)
         {

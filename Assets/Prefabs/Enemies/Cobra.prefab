@@ -55,6 +55,7 @@ MonoBehaviour:
   untargettable: 0
   canCounterAttack: 0
   hasPriority: 0
+  silenced: 0
   text: {fileID: 7447595518004980471}
   healthBar: {fileID: 2415185846226590691}
   lr: {fileID: 5067293504755242239}
@@ -150,7 +151,7 @@ PrefabInstance:
     - target: {fileID: 4038445828373211726, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
       propertyPath: cb
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8946559181527378315}
     - target: {fileID: 5271195981654850880, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
       propertyPath: m_Layer
       value: 9
