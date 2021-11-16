@@ -53,6 +53,10 @@ public class CVControllerBackLoader : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // TODO : debugging pains
+        CardParserManager.instance.HandleNewImage(webCamTexture);
+        return;
+
         if (webCamTexture == null) return;
 
         if (!webCamTexture.isPlaying)

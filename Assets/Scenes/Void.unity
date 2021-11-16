@@ -10604,9 +10604,25 @@ PrefabInstance:
       value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
+      propertyPath: boundBoxText
+      value: '0.024590,0.020528,0.211066,0.153959
+
+        0.776639,0.846041,0.963115,0.979472
+
+        0.655738,0.912023,0.715164,0.958944
+
+        0.768443,0.041056,0.907787,0.140762
+
+        0.770492,0.177419,0.905738,0.274194
+
+        0.770492,0.306452,0.905738,0.404692
+
+        0.116803,0.016129,0.866803,0.605572'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
       propertyPath: staticTestImage
       value: 
-      objectReference: {fileID: 2800000, guid: ddc80c3a9fb2f164c8e395e90bbaf4b8, type: 3}
+      objectReference: {fileID: 2800000, guid: e28fdaa77ea5b7e489977aeaed374b66, type: 3}
     - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
       propertyPath: timeRequiredForNew
       value: 0.6
