@@ -27,6 +27,7 @@ MonoBehaviour:
   defenseMultiplier: 1
   speedMultiplier: 1
   resistance: 0
+  specialHasTarget: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
   attackCardBonus: 0
@@ -35,6 +36,7 @@ MonoBehaviour:
   untargettable: 0
   canCounterAttack: 0
   hasPriority: 0
+  silenced: 0
   text: {fileID: 5022943810321618168}
   healthBar: {fileID: 598981330254661960}
   lr: {fileID: 1395006257990481377}
@@ -121,6 +123,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Size.x
       value: 0.48
       objectReference: {fileID: 0}
@@ -131,14 +137,14 @@ PrefabInstance:
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 2611541048023404966, guid: fd3fda5b6300188459213d3db6861d9c, type: 3}
+      objectReference: {fileID: 21300000, guid: 1e9e069dd82d9e94396cb01a741d5ac6, type: 3}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Color.g
-      value: 0.9524385
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Color.r

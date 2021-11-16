@@ -14,7 +14,7 @@ using UnityEngine.UI;
 // and maybe even requests from the combat manager to active control scheme
 public class CombatManager : MonoBehaviour
 {
-    public static bool IsInCVMode = false;
+    public static bool IsInCVMode = true;
 
 
     public enum CombatPhase {DrawPhase, PlayPhase, DiscardPhase, ActionPhase, EndPhase, None };
@@ -27,6 +27,7 @@ public class CombatManager : MonoBehaviour
     public CombatPhase currentPhase = CombatPhase.None;
     public CombatHandController chc;
     public List<Button> drawButtons = new List<Button>();
+    public Button reshuffleButton;
     public Text currentPhaseText;
     public Text manaText;
 
@@ -108,6 +109,7 @@ public class CombatManager : MonoBehaviour
 
 
         ToggleDrawButtons(false);
+        reshuffleButton.interactable = false;
 
         foreach (GameObject member in partyMembers)
         {
@@ -301,6 +303,7 @@ public class CombatManager : MonoBehaviour
             chc.UpdateDropZones();
         }
         // Player can drag cards to discard pile to discard them, ends when player clicks done or something, transition to Action Phase
+        reshuffleButton.interactable = true;
         StartCoroutine("DiscardPhaseCoroutine");
         RequestInputForPhaseEvent.Invoke(CombatPhase.DiscardPhase);
     }
@@ -332,7 +335,7 @@ public class CombatManager : MonoBehaviour
         currentPhase = CombatPhase.ActionPhase;
         if (!IsInCVMode)
             chc.UpdateDropZones();
-
+        reshuffleButton.interactable = false;
         currentPhaseText.text = "Action Phase";
         // Party members and enemies take turns attacking in action order, death prevents attacking, transition to Draw Phase
         StartCoroutine("StartActions");
@@ -637,7 +640,7 @@ public class CombatManager : MonoBehaviour
             cardScript.Play(combatant, enemies);
         }
 
-        Deck.instance.Discard(card);
+        chc.DiscardCard(card);
         print(card.transform.lossyScale);
         //card.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         return true;

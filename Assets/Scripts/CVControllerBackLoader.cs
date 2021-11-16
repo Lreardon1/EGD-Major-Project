@@ -38,7 +38,7 @@ public class CVControllerBackLoader : MonoBehaviour
         if (CombatManager.IsInCVMode && CardParserManager.instance != null)
         {
             if (WebCamTexture.devices.Length > 0)
-                DeviceName = WebCamTexture.devices[0].name;
+                DeviceName = WebCamTexture.devices[1].name;
             CardParserManager.instance.ActivateCVForCombat(this);
             cvPanel.SetActive(true);
             regularPanel.SetActive(false);
