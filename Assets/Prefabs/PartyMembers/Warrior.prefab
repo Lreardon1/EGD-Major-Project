@@ -46,6 +46,7 @@ MonoBehaviour:
   defenseMultiplier: 1
   speedMultiplier: 1
   resistance: 0
+  specialHasTarget: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
   attackCardBonus: 0
@@ -54,6 +55,7 @@ MonoBehaviour:
   untargettable: 0
   canCounterAttack: 0
   hasPriority: 0
+  silenced: 0
   text: {fileID: 3003093641233324152}
   healthBar: {fileID: 7226086426317571528}
   lr: {fileID: 9170520462403172705}
@@ -140,7 +142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_FlipX
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Size.x
