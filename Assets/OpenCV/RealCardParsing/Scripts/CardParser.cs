@@ -2057,7 +2057,7 @@ public class CardParser : MonoBehaviour
 
         public bool ContainsPoint(Point2f p)
         {
-
+            return p.X >= lr.X && p.X <= ul.X; // TODO TODO
         }
         
         public void GetIndicesOfKeypointsInBound(Size s, KeyPoint[] kp, Mat des, out int[] boundedIndices)
