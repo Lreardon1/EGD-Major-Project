@@ -24,7 +24,8 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (canEditCards)
             {
-                cm.OpenCustomization();
+                canEditCards = false;
+                cm.OpenCustomization(this);
             }
         }
     }
