@@ -16,11 +16,12 @@ public class CardParser : MonoBehaviour
 {
     public enum ParseMode
     {
-        DeckMode,
-        HandMode,
-        AllMode,
-        StickerlessMode
+        GetCardFromAll,
+        GetCardNoStickers,
+        ConfirmCardMode
     }
+
+    public bool bMemoryMode = true;
 
     public CardParserManager cardParserManager;
     [Space(10)]
@@ -58,7 +59,7 @@ public class CardParser : MonoBehaviour
     private int defaultCardPlusBorderWidth = 0;
     private int defaultCardPlusBorderHeight = 0;
 
-    private ParseMode mode = ParseMode.AllMode;
+    private ParseMode mode = ParseMode.GetCardFromAll;
 
     public void UpdateMode(ParseMode handMode)
     {
@@ -366,7 +367,7 @@ public class CardParser : MonoBehaviour
 
 
     private GameObject previousCard;
-
+    private CustomCard lastGoodCustomCard = null;
     public bool ProcessTexture(WebCamTexture input)
     {
         // if (!shouldUpdate) return false;
@@ -374,23 +375,55 @@ public class CardParser : MonoBehaviour
         using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(staticTestImage))
         // using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
         {
-            CustomCard card = ParseCard(cardScene, null);
-            if (card == null)
+            if (mode == ParseMode.GetCardFromAll || mode == ParseMode.GetCardNoStickers)
             {
+                CustomCard card = ParseCard(cardScene, lastGoodCustomCard);
+                lastGoodCustomCard = card;
+                
+                if (card == null)
+                {
+                    UpdateCardDetected(null, -1);
+                    return true;
+                }
+                print("ESCAPE!!!");
+                List<GameObject> possibleCards = GetCardsOfName(card.cardName);
+                print("COUNT: " + possibleCards.Count);
+                GameObject bestCard = possibleCards[0];
+                AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards);
+                // TODO : debugging
                 UpdateCardDetected(null, -1);
-                return true;
+                //UpdateCardDetected(bestCard, bestCard != null ? card.cardID : -1);
+            } else if (mode == ParseMode.ConfirmCardMode)
+            {
+                lastGoodCustomCard = null;
+                int numCardsSeen = ConfirmCardsFast(cardScene);
+                UpdateNumberCardsSeen(numCardsSeen);
             }
-            print("ESCAPE!!!");
-            List<GameObject> possibleCards = cardParserManager.GetCardsOfName(card.cardName);
-            print("COUNT: " + possibleCards.Count);
-            GameObject bestCard = possibleCards[0];
-            AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards);
-            // TODO : debugging
-            UpdateCardDetected(null, -1);
-            //UpdateCardDetected(bestCard, bestCard != null ? card.cardID : -1);
 
         }
         return true;
+    }
+
+    private List<GameObject> GetCardsOfName(string cardName)
+    {
+        
+        List<GameObject> cardList = new List<GameObject>();
+        foreach (GameObject c in Deck.instance.deck)
+        {
+            if (c.GetComponent<Card>().cardName == name)
+                cardList.Add(c);
+        }
+        if (cardList.Count > 0)
+            return cardList;
+
+
+        // If we got no cards from phase specific, get from all
+        foreach (GameObject c in Deck.instance.allCards)
+        {
+            if (c.GetComponent<Card>().cardName == name)
+                cardList.Add(c);
+        }
+        return cardList;
     }
 
 
@@ -575,11 +608,43 @@ public class CardParser : MonoBehaviour
     public UnityEvent<GameObject, int> ToNullUpdateEvent = new UnityEvent<GameObject, int>();
     [HideInInspector]
     public UnityEvent<GameObject, int> ToNewUpdateEvent = new UnityEvent<GameObject, int>();
+    [HideInInspector]
+    public UnityEvent<int> NumberCardsSeenEvent = new UnityEvent<int>();
 
     private float timeSinceLastUpdate = -1.0f;
     public float timeRequiredForNull;
     public float timeRequiredForNew;
     public float timeRequiredForNewFromNull;
+    public float timeRequiredForCountZero = 0.2f;
+    public float timeRequiredForCountUpdate = 0.1f;
+
+    private int lastNumCounted = 0;
+
+    private void UpdateNumberCardsSeen(int num)
+    {
+        // stable
+        if (num == lastNumCounted)
+        {
+            timeSinceLastUpdate = Time.time;
+            NumberCardsSeenEvent.Invoke(num);
+        }
+        
+        // update from any number to non-zero
+        if (timeSinceLastUpdate + timeRequiredForCountUpdate <= Time.time && num != 0 && num != lastNumCounted)
+        {
+            timeSinceLastUpdate = Time.time;
+            lastNumCounted = num;
+            NumberCardsSeenEvent.Invoke(num);
+        }
+
+        // update from any number to zero
+        if (timeSinceLastUpdate + timeRequiredForCountZero <= Time.time && num == 0 && num != lastNumCounted)
+        {
+            timeSinceLastUpdate = Time.time;
+            lastNumCounted = num;
+            NumberCardsSeenEvent.Invoke(num);
+        }
+    }
 
     private void UpdateCardDetected(GameObject card, int id)
     {
@@ -1376,6 +1441,18 @@ public class CardParser : MonoBehaviour
     }
 
 
+    public int ConfirmCardsFast(Mat cardScene)
+    {
+        Point2f[][] contours;
+        HierarchyIndex[] h;
+        // DETECT CONTOURS AND SIMPLIFY THEM IF NEEDED
+        DetectContours(cardScene, out contours, out h);
+        // POSSIBLE LOWER RIGHTS
+        CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
+        // TOOD : very fast and very simple, no real confirmations are done here
+        return bestLowerRights.Length;
+    }
+
     /***
      *  THE BIG FUNCTION, MANAGES STATE AND PARSING!!!!
      */
@@ -1400,6 +1477,10 @@ public class CardParser : MonoBehaviour
 
         // POSSIBLE LOWER RIGHTS
         CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
+
+        // TODO : memory mode which GREATLY improves the runtime at the possible cost of accuracy...
+        if (lastGoodCustomCard != null && bestLowerRights.Length > 0 && bMemoryMode)
+            return lastGoodCustomCard;
 
         Mat blackOut = new Mat();
         cardScene.CopyTo(blackOut);
