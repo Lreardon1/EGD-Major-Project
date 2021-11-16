@@ -41,6 +41,11 @@ public class CardParser : MonoBehaviour
     private BoundingBox stickerBoundingBox3;
     [SerializeField, HideInInspector]
     private BoundingBox elementColorBoundingBox;
+    [SerializeField, HideInInspector]
+    private BoundingBox tempStickOuterBoundBox;
+    [SerializeField, HideInInspector]
+    private BoundingBox tempStickInnerBoundBox;
+
 
     [Space(10)]
     [Header("Match and Planing Scalars")]
@@ -73,6 +78,7 @@ public class CardParser : MonoBehaviour
     private Dictionary<CardElement, CardElementTemplateData> cardElementDict = new Dictionary<CardElement, CardElementTemplateData>();
     public ScriptableCardSticker[] stickerTemplates;
     private Dictionary<string, StickerTemplateData> cardStickerDict = new Dictionary<string, StickerTemplateData>();
+    private Dictionary<Modifier.ModifierEnum, List<StickerTemplateData>> cardStickerSlotsDict = new Dictionary<Modifier.ModifierEnum, List<StickerTemplateData>>();
     private WebCamDevice? webCamDevice = null;
     private WebCamTexture webCamTexture = null;
     
@@ -91,10 +97,8 @@ public class CardParser : MonoBehaviour
 
     private void Awake()
     {
-        //MakeBoundingBoxFromEditorStr(boundBoxText);
+        FillBoundingBoxes(boundBoxText);
         BakeCardTemplateData();
-        
-
     }
 
 
@@ -184,7 +188,7 @@ public class CardParser : MonoBehaviour
             }
         }
 
-        // TODO : Get sticker data
+        // : Get sticker data
         foreach (ScriptableCardSticker sticker in stickerTemplates)
         {
             Mat si = OpenCvSharp.Unity.TextureToMat(sticker.stickerTexture);
@@ -193,15 +197,22 @@ public class CardParser : MonoBehaviour
             defaultStickerHeight = si.Height;
 
             using (Mat bin = new Mat()) {
-                Cv2.CvtColor(si, bin, ColorConversionCodes.BGR2GRAY);
+                Mat csi = tempStickOuterBoundBox.CropByBox(si);
+                Cv2.CvtColor(csi, bin, ColorConversionCodes.BGR2GRAY);
                 Cv2.Threshold(bin, bin, 200, 255, ThresholdTypes.Otsu);
-                Scalar meanIconColor = Cv2.Mean(si, bin);
+                Scalar meanIconColor = Cv2.Mean(csi, bin);
                 Cv2.BitwiseNot(bin, bin);
-                Scalar meanBackColor = Cv2.Mean(si, bin);
+                Scalar meanBackColor = Cv2.Mean(csi, bin);
                 Cv2.BitwiseNot(bin, bin);
+
+                // add data to dictionaries
                 print("For " + sticker.stickerName + ", Icon color: " + meanIconColor + " back color: " + meanBackColor);
                 StickerTemplateData stickerData = new StickerTemplateData(bin, meanBackColor, meanIconColor);
                 cardStickerDict.Add(sticker.stickerName, stickerData);
+
+                if (!cardStickerSlotsDict.ContainsKey(sticker.modEnum))
+                    cardStickerSlotsDict.Add(sticker.modEnum, new List<StickerTemplateData>());
+                cardStickerSlotsDict[sticker.modEnum].Add(stickerData);
             }
         }
     }
@@ -356,23 +367,21 @@ public class CardParser : MonoBehaviour
     {
         // if (!shouldUpdate) return false;
 
-        if (!Input.GetKey(KeyCode.D))
+        //using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
+        using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(staticTestImage))
         {
-            using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
+            CustomCard card = ParseCard(cardScene, null);
+            if (card == null)
             {
-                CustomCard card = ParseCard(cardScene, null);
-                if (card == null)
-                {
-                    UpdateCardDetected(null, -1);
-                    return true;
-                }
-                List<GameObject> possibleCards = cardParserManager.GetCardsOfName(card.cardName);
-                print("COUNT: " + possibleCards.Count);
-                GameObject bestCard = possibleCards[0];
-                AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards);
-                UpdateCardDetected(bestCard, bestCard != null ? card.cardID : -1);
-
+                UpdateCardDetected(null, -1);
+                return true;
             }
+            List<GameObject> possibleCards = cardParserManager.GetCardsOfName(card.cardName);
+            print("COUNT: " + possibleCards.Count);
+            GameObject bestCard = possibleCards[0];
+            AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards);
+            UpdateCardDetected(bestCard, bestCard != null ? card.cardID : -1);
+
         }
         return true;
     }
@@ -1064,16 +1073,21 @@ public class CardParser : MonoBehaviour
             foreach (CardType typeKey in cardTypeDict.Keys) {
 
                 cardTypeDict.TryGetValue(typeKey, out CardTypeTemplateData data);
-                int rotCount = 0;
-                float matchByShape = AttemptToMatchByShape(scene, data.typeImage, rect);
-                float matchToDiff = AttemptToMatchCardByTemplate(scene, data.typeImage, rect, out rotCount);
 
-                if ((matchByShape * 0.1f) + (matchToDiff * 0.9f) > bestCorner.matchVal) {
-                    // if we have no upper left partner, we aren't a lower right.
-                    Point2f[] rotRect = RotateWinding(rect, rotCount);
-                    if (FindBestUpperLeftCardCorner(scene, rotRect, ref contours) == null)
-                        continue;
+                // if we have no upper left partner, we aren't a lower right.
+                if (FindBestUpperLeftCardCorner(scene, rect, ref contours, out int rotCount) == null)
+                {
+                    print("Rejected by upper corner");
+                    continue;
+                }
 
+                // TODO : we may need to refactor both find best upper left and the bottom here to play nicer together!
+                Point2f[] rotRect = RotateWinding(rect, rotCount);
+                float matchByShape = AttemptToMatchByShape(scene, data.typeImage, rotRect);
+                float matchToDiff = AttemptToMatchCardByTemplate(scene, data.typeImage, rotRect, out rotCount);
+
+                if ((matchByShape * 0.1f) + (matchToDiff * 0.9f) > bestCorner.matchVal)
+                {
                     bestCorner = new CardCorner()
                     {
                         corners = rect,
@@ -1081,6 +1095,9 @@ public class CardParser : MonoBehaviour
                         neededRot = rotCount,
                         mostLikelyType = typeKey
                     };
+                } else
+                {
+                    print("Rejcted by mathcing");
                 }
             }
 
@@ -1160,62 +1177,70 @@ public class CardParser : MonoBehaviour
     }
 
     // Get the most likely upper left corner from lower right corner
-    private CardCorner FindBestUpperLeftCardCorner(Mat scene, Point2f[] lowerRight, ref Point2f[][] contours)
+    private CardCorner FindBestUpperLeftCardCorner(Mat scene, Point2f[] lowerRightStart, ref Point2f[][] contours, out int BR_rotCount)
     {
         Point2f[] dest = bottomRightBoundingBox.GetCWWindingOrder();
         Point2f upperLeftCenter = upperLeftBoundingBox.GetCenter();
 
-        using (Mat persp = Cv2.GetPerspectiveTransform(lowerRight, dest))
+        for (int r = 0; r < 4; ++r)
         {
-            Point2f[] warpedLR = Cv2.PerspectiveTransform(lowerRight, persp);
-            float expectedArea = (float)Cv2.ContourArea(warpedLR);
+            Point2f[] lowerRight = RotateWinding(lowerRightStart, r);
 
-            int bestRotCount = 0;
-            float bestRatio = 3.0f;
-            Point2f[] bestTopLeft = null;
-            float bestAreaRatio = 0;
-            float bestLocalAreaRatio = 3;
-            foreach (Point2f[] canid in contours)
+            using (Mat persp = Cv2.GetPerspectiveTransform(lowerRight, dest))
             {
-                // filter nepotism
-                if (canid == lowerRight) // shouldn't happen, mathematically impossible
-                    continue;
+                Point2f[] warpedLR = Cv2.PerspectiveTransform(lowerRight, persp);
+                float expectedArea = (float)Cv2.ContourArea(warpedLR);
 
-                // filter for not rectangle in replane space (parallel opposite sides), also get the rot count to reorient the square
-                int rotCount = TryToReorientUpperLeft(canid, warpedLR, persp);
-                if (rotCount == -1)
-                    continue;
-
-                // filter not inside expected point
-                Point2f[] warpedUL = Cv2.PerspectiveTransform(canid, persp);
-                double inExpected = Cv2.PointPolygonTest(warpedUL, upperLeftCenter, false);
-                if (inExpected < 0.9f)
-                    continue;
-
-                // filter for ratio and area
-                float aspectRatio = ComputeApparentRatio(warpedUL);
-                float area = (float)Cv2.ContourArea(warpedUL);
-                float areaRatio = CompareAreaRatio(expectedArea, area);
-                bestLocalAreaRatio = Mathf.Min(bestLocalAreaRatio, areaRatio);
-                float aspectWeight = 0.5f;
-                // one is a perfect score, anything greater than 1 is worse
-                if (((aspectRatio * aspectWeight) + (areaRatio * (1.0f - aspectWeight))) > bestRatio)
+                int bestRotCount = 0;
+                float bestRatio = 3.0f;
+                Point2f[] bestTopLeft = null;
+                float bestAreaRatio = 0;
+                float bestLocalAreaRatio = 3;
+                foreach (Point2f[] canid in contours)
                 {
-                    continue;
+                    // filter nepotism
+                    if (canid == lowerRight) // shouldn't happen, mathematically impossible
+                        continue;
+
+                    // filter for not rectangle in replane space (parallel opposite sides), also get the rot count to reorient the square
+                    int rotCount = TryToReorientUpperLeft(canid, warpedLR, persp);
+                    if (rotCount == -1)
+                        continue;
+
+                    // filter not inside expected point
+                    Point2f[] warpedUL = Cv2.PerspectiveTransform(canid, persp);
+                    double inExpected = Cv2.PointPolygonTest(warpedUL, upperLeftCenter, false);
+                    if (inExpected < 0.9f)
+                        continue;
+
+                    // filter for ratio and area
+                    float aspectRatio = ComputeApparentRatio(warpedUL);
+                    float area = (float)Cv2.ContourArea(warpedUL);
+                    float areaRatio = CompareAreaRatio(expectedArea, area);
+                    bestLocalAreaRatio = Mathf.Min(bestLocalAreaRatio, areaRatio);
+                    float aspectWeight = 0.5f;
+                    // one is a perfect score, anything greater than 1 is worse
+                    if (((aspectRatio * aspectWeight) + (areaRatio * (1.0f - aspectWeight))) > bestRatio)
+                    {
+                        continue;
+                    }
+
+                    bestAreaRatio = areaRatio;
+
+                    bestRatio = (aspectRatio * aspectWeight) + (areaRatio * (1.0f - aspectWeight));
+                    bestRotCount = rotCount;
+                    bestTopLeft = canid;
                 }
 
-                bestAreaRatio = areaRatio;
-                
-                bestRatio = (aspectRatio * aspectWeight) + (areaRatio * (1.0f - aspectWeight));
-                bestRotCount = rotCount;
-                bestTopLeft = canid;
-            }
+                if (bestTopLeft == null)
+                    continue;
 
-            if (bestTopLeft == null)
-                return null;
-            
-            return new CardCorner { corners = bestTopLeft, matchVal = bestRatio, neededRot = bestRotCount };
+                BR_rotCount = r;
+                return new CardCorner { corners = bestTopLeft, matchVal = bestRatio, neededRot = bestRotCount };
+            }
         }
+        BR_rotCount = 0;
+        return null;
     }
 
     // return CW wound card corners using the upper left and lower right corner squares
@@ -1296,7 +1321,7 @@ public class CardParser : MonoBehaviour
 
         Mat blackOut = new Mat();
         cardScene.CopyTo(blackOut);
-
+        print("Best corners: " + bestLowerRights.Length);
         foreach (CardCorner bestLowerRight in bestLowerRights)
         {
             // CLEAN UP THE CURRENT LOWER RIGHT
@@ -1305,12 +1330,14 @@ public class CardParser : MonoBehaviour
             bestLowerRight.neededRot = 0;
             
             // UPPER LEFT
-            CardCorner bestUpperLeft = FindBestUpperLeftCardCorner(cardScene, bestLowerRight.corners, ref contours);
+            CardCorner bestUpperLeft = FindBestUpperLeftCardCorner(cardScene, bestLowerRight.corners, ref contours, out int unused);
             if (bestUpperLeft == null)
             {
                 print("Failed on upper left, which might be needed");
                 return null;
             }
+            if (unused != 0)
+                print("Something bad with the rotation may have happened");
             
             bestUpperLeft.corners = RotateWinding(bestUpperLeft.corners, bestUpperLeft.neededRot);
             bestUpperLeft.neededRot = 0;
@@ -1346,7 +1373,9 @@ public class CardParser : MonoBehaviour
             Mat affineRepOfCrop = Cv2.GetAffineTransform(oldCorners, newCorners);
 
             croppedReplaned.CopyTo(lastGoodReplane);
-            
+            DetectContours(lastGoodReplane, out Point2f[][] possibleStickers, out HierarchyIndex[] h2);
+            CvAruco.DrawDetectedMarkers(lastGoodReplane, possibleStickers, null);
+
             replaned.Release();
             replaned.Dispose();
 
@@ -1897,11 +1926,10 @@ public class CardParser : MonoBehaviour
 
         public Mat CropByBox(Mat im)
         {
-            float offsetX = (im.Width * ul.X) + 2;
-            float offsetY = (im.Height * ul.Y) + 2;
-            int sizeX = Mathf.RoundToInt(im.Width * (lr.X - ul.X)) - 4;
-            int sizeY = Mathf.RoundToInt(im.Height * (lr.Y - ul.Y)) - 4;
-
+            float offsetX = (im.Width * ul.X);
+            float offsetY = (im.Height * ul.Y);
+            int sizeX = Mathf.RoundToInt(im.Width * (lr.X - ul.X));
+            int sizeY = Mathf.RoundToInt(im.Height * (lr.Y - ul.Y)); // TODO : removed magic number offsets, may have broke something?
             using (Mat trans_mat = new Mat(2, 3, MatType.CV_32F))
             {
                 Mat newIm = new Mat();
@@ -1911,6 +1939,12 @@ public class CardParser : MonoBehaviour
 
                 return newIm;
             }
+        }
+
+        public void PrintStuff()
+        {
+            print(ul.X + " , " + ul.Y);
+            print(lr.X + " , " + lr.Y);
         }
 
         public Point2f GetCenter()
@@ -1941,7 +1975,7 @@ public class CardParser : MonoBehaviour
     public void FillBoundingBoxes(string text)
     {
         string[] s = text.Split('\n');
-        if (s.Length != 6) return;
+        if (s.Length != 8) return;
 
         upperLeftBoundingBox = MakeBoundingBoxFromEditorStr(s[0]);
         print(upperLeftBoundingBox);
@@ -1952,6 +1986,11 @@ public class CardParser : MonoBehaviour
         stickerBoundingBox1 = MakeBoundingBoxFromEditorStr(s[3]);
         stickerBoundingBox2 = MakeBoundingBoxFromEditorStr(s[4]);
         stickerBoundingBox3 = MakeBoundingBoxFromEditorStr(s[5]);
+
+        tempStickOuterBoundBox = MakeBoundingBoxFromEditorStr(s[6]);
+        tempStickInnerBoundBox = MakeBoundingBoxFromEditorStr(s[7]);
+
+        tempStickInnerBoundBox.PrintStuff();
         print("Success");
     }
 
