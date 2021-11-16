@@ -325,10 +325,6 @@ public class Deck : MonoBehaviour
                     freeModStringData.Add(entry);
                 }
             }
-            //foreach (string mod in freeModStringData)
-            //{
-            //    print(mod);
-            //}
         }
     }
 }

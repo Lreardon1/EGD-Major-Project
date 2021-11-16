@@ -63,7 +63,7 @@ MonoBehaviour:
   heldItem: {fileID: 0}
   target: {fileID: 0}
   isSlain: 0
-  isEnemy: 0
+  isEnemy: 1
   isChanneling: 0
   bonusAttack: 0
   uiCollider: {fileID: 0}

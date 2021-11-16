@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // Jay note : this class should have been the one to control ALL movement of cards, 
 public class CombatHandController : MonoBehaviour
@@ -9,6 +10,7 @@ public class CombatHandController : MonoBehaviour
     public List<GameObject> cardsInHand = new List<GameObject>();
     public GameObject drawPile;
     public GameObject discardPile;
+    public Text reshuffleText;
     public int startingHandSize = 4;
     public int maxHandSize = 7;
     public int cardsInDiscard = 0;
@@ -21,6 +23,8 @@ public class CombatHandController : MonoBehaviour
     public GameObject dragger;
 
     public Transform originalCardTransform;
+
+    private int reShuffleCost = 15;
 
     Camera mainCam;
 
@@ -56,6 +60,7 @@ public class CombatHandController : MonoBehaviour
             
             cardsInHand.Add(card);
         }
+        UpdateReshuffleCost();
     }
 
     public void DisableDrag()
@@ -170,12 +175,26 @@ public class CombatHandController : MonoBehaviour
     {
         cardsInDiscard++;
         Deck.instance.Discard(card);
+        UpdateReshuffleCost();
     }
 
     public void ReShuffle()
     {
-        cardsInDiscard = 0;
+        if(cm.currentMana < reShuffleCost)
+        {
+            Debug.Log("Not Enough Mana To Reshuffle Discard Pile!");
+            return;
+        }
         Deck.instance.Shuffle();
+        UpdateReshuffleCost();
+        cm.reshuffleButton.interactable = false;
+    }
+
+    public void UpdateReshuffleCost()
+    {
+        int manaCost =  Mathf.Clamp(15 - Deck.instance.discard.Count, 0, 15);
+        reshuffleText.text = "Reshuffle: " + manaCost + " Mana";
+        reShuffleCost = manaCost;
     }
 
     public void ResetCardParents()
