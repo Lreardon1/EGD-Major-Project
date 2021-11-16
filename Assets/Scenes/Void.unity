@@ -10604,6 +10604,10 @@ PrefabInstance:
       value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
+      propertyPath: staticTestImage
+      value: 
+      objectReference: {fileID: 2800000, guid: ddc80c3a9fb2f164c8e395e90bbaf4b8, type: 3}
+    - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
       propertyPath: timeRequiredForNew
       value: 0.6
       objectReference: {fileID: 0}
