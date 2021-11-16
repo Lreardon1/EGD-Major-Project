@@ -9,6 +9,8 @@ public class CanvasManager : MonoBehaviour
     [SerializeField]
     public GameObject editOptionPopup;
 
+    private PlayerInteraction playerInteraction;
+
     public GameObject player;
 
     public void ToggleEditOption(bool state)
@@ -16,7 +18,7 @@ public class CanvasManager : MonoBehaviour
         editOptionPopup.SetActive(state);
     }
 
-    public void OpenCustomization()
+    public void OpenCustomization(PlayerInteraction pi)
     {
         editOptionPopup.SetActive(false);
         LockPlayer();
@@ -29,6 +31,7 @@ public class CanvasManager : MonoBehaviour
         UnlockPlayer();
         customizationCanvas.SetActive(false);
         editOptionPopup.SetActive(true);
+        playerInteraction.canEditCards = true;
     }
 
     public void LockPlayer()
