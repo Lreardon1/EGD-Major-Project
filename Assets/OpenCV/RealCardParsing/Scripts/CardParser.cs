@@ -168,10 +168,10 @@ public class CardParser : MonoBehaviour
                 // get and store keypoints
                 GetKeypoints(cardMat, out KeyPoint[] kp, out Mat des);
                 // get bounds
-                backgroundImageBoundingBox.GetIndicesOfKeypointsInBound(cardMat, kp, des, out int[] boundedIndices);
+                // backgroundImageBoundingBox.GetIndicesOfKeypointsInBound(cardMat, kp, des, out int[] boundedIndices);
 
                 // make data to store
-                TemplateCardData cardKeypointData = new TemplateCardData(MakeHSHistrogram(cardMat), kp, des, boundedIndices card.cardID, card.cardName, card.cardType, card.cardElement);
+                TemplateCardData cardKeypointData = new TemplateCardData(MakeHSHistrogram(cardMat), kp, des, boundedIndices, card.cardID, card.cardName, card.cardType, card.cardElement);
 
                 // if the current card element and/or card type doesn't have a list, make one
                 if (!templateCardDict.ContainsKey(cardType | cardElement))
