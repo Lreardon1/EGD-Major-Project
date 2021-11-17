@@ -14,7 +14,7 @@ using UnityEngine.UI;
 // and maybe even requests from the combat manager to active control scheme
 public class CombatManager : MonoBehaviour
 {
-    public static bool IsInCVMode = true;
+    public static bool IsInCVMode = false;
 
 
     public enum CombatPhase {DrawPhase, PlayPhase, DiscardPhase, ActionPhase, EndPhase, None };
