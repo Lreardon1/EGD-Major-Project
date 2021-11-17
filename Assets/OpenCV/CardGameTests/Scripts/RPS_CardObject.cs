@@ -10,7 +10,13 @@ public class RPS_CardObject : MonoBehaviour
     public bool revealed = false;
     public Sprite[] cardSprites;
     public SpriteRenderer sr;
-    
+    private Quaternion initRot;
+    public float revealFoldUpPivot;
+
+    private void Start()
+    {
+        initRot = transform.rotation;
+    }
 
     public Sprite GetCardSprite(RPS_Card.CardType ct)
     {
@@ -25,6 +31,7 @@ public class RPS_CardObject : MonoBehaviour
     public void SetEnabled(bool v)
     {
         gameObject.SetActive(v);
+        transform.rotation = initRot;
     }
 
     public void SetCard(RPS_Card card)
@@ -45,10 +52,34 @@ public class RPS_CardObject : MonoBehaviour
         }
     }
 
+    IEnumerator RevealPlayCard(float time)
+    {
+        float t = 0;
+        while (t < time)
+        {
+            transform.RotateAround(transform.position - (transform.up * revealFoldUpPivot), new Vector3(1, 0, 0), Time.deltaTime * 90.0f / time);
+            t += Time.deltaTime;
+            yield return null;
+        }
+    }
+
     public float AnimateBidReveal(bool r)
     {
         if (!r) return 0.0f;
         StartCoroutine(RevealBidCard(0.4f));
         return 0.4f;
+    }
+
+    public float AnimatePlayReveal(bool flipUp)
+    {
+        if (flipUp)
+        {
+            StartCoroutine(RevealPlayCard(0.4f));
+            return 0.4f;
+        } else
+        {
+            StartCoroutine(RevealBidCard(0.4f));
+            return 0.4f;
+        }
     }
 }
