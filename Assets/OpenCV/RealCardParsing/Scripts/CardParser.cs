@@ -520,13 +520,25 @@ public class CardParser : MonoBehaviour
     public UnityEvent<GameObject, int> ToNewUpdateEvent = new UnityEvent<GameObject, int>();
     [HideInInspector]
     public UnityEvent<int> NumberCardsSeenEvent = new UnityEvent<int>();
+    [HideInInspector]
+    public UnityEvent<RPS_Card.CardType> RPS_StableUpdateEvent = new UnityEvent<RPS_Card.CardType>();
+    [HideInInspector]
+    public UnityEvent<RPS_Card.CardType> RPS_ToNewUpdateEvent = new UnityEvent<RPS_Card.CardType>();
+    [HideInInspector]
+    public UnityEvent<RPS_Card.CardType> RPS_ToNullUpdateEvent = new UnityEvent<RPS_Card.CardType>();
+
 
     private float timeSinceLastUpdate = -1.0f;
     public float timeRequiredForNull;
     public float timeRequiredForNew;
     public float timeRequiredForNewFromNull;
+
     public float timeRequiredForCountZero = 0.5f;
     public float timeRequiredForCountUpdate = 0.1f;
+
+    public float rps_timeRequiredForNull;
+    public float rps_timeRequiredForNew;
+    public float rps_timeRequiredForNewFromNull;
 
     private int lastNumCounted = 0;
 
@@ -587,6 +599,40 @@ public class CardParser : MonoBehaviour
             previousCard = card;
             timeSinceLastUpdate = Time.time;
             ToNewUpdateEvent.Invoke(card, id);
+        }
+    }
+
+    private RPS_Card.CardType rps_previousCardType;
+    private void Update_RPS_Card(RPS_Card.CardType cardType)
+    {
+        // if card is the same as last, don't update
+        if (cardType == rps_previousCardType)
+        {
+            timeSinceLastUpdate = Time.time;
+            RPS_StableUpdateEvent.Invoke(cardType);
+        }
+
+        // update to null
+        if (cardType == RPS_Card.CardType.Unknown && timeSinceLastUpdate + rps_timeRequiredForNull <= Time.time)
+        {
+            rps_previousCardType = cardType;
+            timeSinceLastUpdate = Time.time;
+            RPS_ToNullUpdateEvent.Invoke(cardType);
+        }
+
+        // update to different card
+        if (cardType != RPS_Card.CardType.Unknown && rps_previousCardType == RPS_Card.CardType.Unknown
+            && timeSinceLastUpdate + timeRequiredForNewFromNull <= Time.time)
+        {
+            rps_previousCardType = cardType;
+            timeSinceLastUpdate = Time.time;
+            RPS_ToNewUpdateEvent.Invoke(cardType);
+        }
+        else if (cardType != RPS_Card.CardType.Unknown && timeSinceLastUpdate + timeRequiredForNew <= Time.time)
+        {
+            rps_previousCardType = cardType;
+            timeSinceLastUpdate = Time.time;
+            RPS_ToNewUpdateEvent.Invoke(cardType);
         }
     }
 

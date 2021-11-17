@@ -12,6 +12,7 @@ public class RPS_PlayerController : MonoBehaviour
     private CardParser cardParser;
 
     public TMP_Text playText;
+    public TMP_Text cardTrackText;
     public Image progressIndicator;
 
     private bool debugMode;
@@ -23,9 +24,38 @@ public class RPS_PlayerController : MonoBehaviour
         cardParser = FindObjectOfType<CardParser>(); // find the dontdestroyonload card parser...
         debugMode = cardParser == null;
         if (!debugMode)
+        {
             cardParser.UpdateMode(CardParser.ParseMode.RPS_Mode);
+            cardParser.RPS_StableUpdateEvent.AddListener(HandleStableUpdate);
+            cardParser.RPS_ToNewUpdateEvent.AddListener(HandleNewUpdate);
+            cardParser.RPS_ToNullUpdateEvent.AddListener(HandleUnknownUpdate);
+            // TODO : start up a DeviceCamera
+        }
+        UpdateCardTrackText();
     }
-    
+
+    private void UpdateCardTrackText()
+    {
+        cardTrackText.text = "<color=#0000FF>" + myCards[RPS_Card.CardType.Water]
+            + "   <color=#FF0000>" + myCards[RPS_Card.CardType.Fire] 
+            + "   <color=#00FF00>" + myCards[RPS_Card.CardType.Wind];
+    }
+
+    private void HandleUnknownUpdate(RPS_Card.CardType cardType)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void HandleNewUpdate(RPS_Card.CardType cardType)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void HandleStableUpdate(RPS_Card.CardType cardType)
+    {
+        throw new NotImplementedException();
+    }
+
 
     private bool ContinueButtonPressed()
     {
@@ -48,7 +78,7 @@ public class RPS_PlayerController : MonoBehaviour
 
             return myCards[bestVisibleCard] > 0;
         }
-        else return false; // TODO
+        else return false; // TODO TODO
     }
 
     private RPS_Card.CardType GetBestVisibleCard()
@@ -59,7 +89,7 @@ public class RPS_PlayerController : MonoBehaviour
     private IEnumerator IHandleBid()
     {
         progressIndicator.fillAmount = 0.0f;
-        playText.text = "Place your bid face down and press space to continue";
+        playText.text = "Place your bid face down on the spacebar enough to press it.";
         // TODO : get input
 
         yield return new WaitUntil(ContinueButtonPressed);
@@ -84,7 +114,7 @@ public class RPS_PlayerController : MonoBehaviour
             {
                 t += Time.deltaTime;
                 playText.text = "You are most likely showing " + GetBestVisibleCard() + " to play.";
-
+                manager.playerPlayObj.SetCard(new RPS_Card(GetBestVisibleCard()));
             }
             else
             {
@@ -97,7 +127,8 @@ public class RPS_PlayerController : MonoBehaviour
         RPS_Card card = new RPS_Card(GetBestVisibleCard());
         print("Played " + card.type);
         progressIndicator.fillAmount = 0.0f;
-
+        LoseCard(new RPS_Card(GetBestVisibleCard()));
+        playText.text = "";
         // TODO : polish anims and make a card
         manager.SendCardInContext(card);
     }
@@ -115,11 +146,14 @@ public class RPS_PlayerController : MonoBehaviour
             if (IsShowingValidCard())
             {
                 t += Time.deltaTime;
-                playText.text = "You are mostly showing " + GetBestVisibleCard() + " as you bid to trade.";
+                playText.text = "You are mostly showing " + GetBestVisibleCard() + " as your bid to trade.";
+                progressIndicator.fillAmount = (t / timeToShowTrade);
+                manager.playerBidObj.SetCard(new RPS_Card(GetBestVisibleCard()));
             }
             else
             {
                 t = Mathf.Max(t - Time.deltaTime * 3.0f, 0);
+                progressIndicator.fillAmount = (t / timeToShowTrade);
                 playText.text = "Show your bid card to trade it, or keep it by pressing space";
             }
 
@@ -134,8 +168,7 @@ public class RPS_PlayerController : MonoBehaviour
         yield break;
     NoTrade:
         print("NO TRADE");
-        playText.text = "No trade";
-
+        playText.text = "No trade performed, take back your bid.";
         manager.SendTradeCardsDecision(false);
     }
 
@@ -153,6 +186,7 @@ public class RPS_PlayerController : MonoBehaviour
             {
                 t += Time.deltaTime;
                 playText.text = "You are mostly showing " + GetBestVisibleCard() + " as you bid to trade.";
+                manager.playerBidObj.SetCard(new RPS_Card(GetBestVisibleCard()));
             }
             else
             {
@@ -162,6 +196,7 @@ public class RPS_PlayerController : MonoBehaviour
             yield return null;
         }
 
+        playText.text = "";
         progressIndicator.fillAmount = 0.0f;
         manager.SendBidCardAfterDecision(GetBestVisibleCard());
     }
@@ -175,11 +210,13 @@ public class RPS_PlayerController : MonoBehaviour
     public void GainCard(RPS_Card gained)
     {
         myCards[gained.type] += 1;
+        UpdateCardTrackText();
     }
 
-    internal void LossCard(RPS_Card lost)
+    internal void LoseCard(RPS_Card lost)
     {
         myCards[lost.type] -= 1;
+        UpdateCardTrackText();
     }
 
     internal void RequestBid()
