@@ -20,6 +20,7 @@ public class CanvasManager : MonoBehaviour
 
     public void OpenCustomization(PlayerInteraction pi)
     {
+        playerInteraction = pi;
         editOptionPopup.SetActive(false);
         LockPlayer();
         customizationCanvas.SetActive(true);

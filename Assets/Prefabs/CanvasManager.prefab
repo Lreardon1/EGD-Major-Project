@@ -2653,7 +2653,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 861.7919, y: -57.25}
+  m_AnchoredPosition: {x: 861.79193, y: -57.25}
   m_SizeDelta: {x: 1403.5839, y: 103.7059}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1514136330740232451
@@ -9743,7 +9743,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4914949035092248031}
         m_TargetAssemblyTypeName: DeckCustomizer, Assembly-CSharp
         m_MethodName: HideUnableToAccept
         m_Mode: 1
@@ -11009,7 +11009,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 867.4866, y: -98.05}
+  m_AnchoredPosition: {x: 867.4865, y: -98.05}
   m_SizeDelta: {x: 1414.973, y: 200.8811}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5211790232448856533
@@ -11774,7 +11774,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: Element modifiers add a secondary element damage type to       cards or
-    give 20% resistance when played on shielding cards
+    give 20% resistance when placed on shielding cards
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 50d5fb9b261de414f977d283c813f850, type: 2}
   m_sharedMaterial: {fileID: 4904329926887269903, guid: 50d5fb9b261de414f977d283c813f850, type: 2}
@@ -12908,7 +12908,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 224, y: -98}
+  m_AnchoredPosition: {x: 224, y: -104}
   m_SizeDelta: {x: 100, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8575053083492202047
@@ -12939,7 +12939,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ed4d09ae521cfd14b81ce3e5b4121ec7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 010709222f2316f44bba8df1837a50d6, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
