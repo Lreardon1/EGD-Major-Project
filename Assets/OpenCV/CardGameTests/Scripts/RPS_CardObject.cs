@@ -5,30 +5,50 @@ using UnityEngine;
 
 public class RPS_CardObject : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private RPS_Card.CardType cardType;
+
+    public bool revealed = false;
+    public Sprite[] cardSprites;
+    public SpriteRenderer sr;
+    
+
+    public Sprite GetCardSprite(RPS_Card.CardType ct)
     {
-        
+        if (ct == RPS_Card.CardType.Unknown)
+            return cardSprites[cardSprites.Length - 1];
+
+        int c = (int)ct;
+        return cardSprites[c];
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void SetEnabled(bool v)
     {
-        
+        gameObject.SetActive(v);
     }
 
-    internal void SetEnabled(bool v)
+    public void SetCard(RPS_Card card)
     {
-        throw new NotImplementedException();
+        cardType = card.type;
+        print("Play card set to " + card.type);
+        sr.sprite = GetCardSprite(cardType);
     }
 
-    internal void SetCard(RPS_Card card)
+    IEnumerator RevealBidCard(float time)
     {
-        throw new NotImplementedException();
+        float t = 0; 
+        while (t < time)
+        {
+            transform.Rotate(new Vector3(0, Time.deltaTime * 180.0f / time, 0), Space.Self);
+            t += Time.deltaTime;
+            yield return null;
+        }
     }
 
-    internal void SetRevealed(bool v)
+    public float AnimateBidReveal(bool r)
     {
-        throw new NotImplementedException();
+        if (!r) return 0.0f;
+        StartCoroutine(RevealBidCard(0.4f));
+        return 0.4f;
     }
 }

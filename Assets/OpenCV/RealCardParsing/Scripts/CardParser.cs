@@ -18,7 +18,8 @@ public class CardParser : MonoBehaviour
     {
         GetCardFromAll,
         GetCardNoStickers,
-        ConfirmCardMode
+        ConfirmCardMode,
+        RPS_Mode
     }
 
     public bool bMemoryMode = true;
@@ -63,9 +64,7 @@ public class CardParser : MonoBehaviour
 
     public void UpdateMode(ParseMode handMode)
     {
-        // TODO : currently just do something simple for only elements
-        // mode = handMode;
-        Debug.Log("UNIMPLEMENTED FUNCTION UPDATEMODE, FIX JAY FIX!");
+        mode = handMode;
     }
 
     [Space(10)]
@@ -398,6 +397,9 @@ public class CardParser : MonoBehaviour
                 lastGoodCustomCard = null;
                 int numCardsSeen = ConfirmCardsFast(cardScene);
                 UpdateNumberCardsSeen(numCardsSeen);
+            } else if (mode == ParseMode.RPS_Mode)
+            {
+                Debug.LogError("RPS Parse mode is not implemented");
             }
 
         }
@@ -1605,7 +1607,7 @@ public class CardParser : MonoBehaviour
                 //if (CheckIfEnoughMatch(goodMatches, initMatches) && bestGoodMatches < goodMatches.Length) // discrete count version
                 {
                     Mat homo = GetHomographyMatrix(m_kp2, m_kp1);
-                    
+                    // TODO : combine the filter by fundy with the other go?
                     if (homo != null && homo.Width == 3 && homo.Height == 3 && IsGoodHomography(homo, m_kp1, m_kp2, out float percent))
                     {
                         int survivedKP = Mathf.RoundToInt(m_kp1.Length * percent);
