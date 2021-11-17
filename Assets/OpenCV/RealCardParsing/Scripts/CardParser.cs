@@ -60,7 +60,8 @@ public class CardParser : MonoBehaviour
     private int defaultCardPlusBorderWidth = 0;
     private int defaultCardPlusBorderHeight = 0;
 
-    private ParseMode mode = ParseMode.GetCardFromAll;
+    [HideInInspector]
+    public ParseMode mode = ParseMode.GetCardFromAll;
 
     public void UpdateMode(ParseMode handMode)
     {
@@ -220,102 +221,7 @@ public class CardParser : MonoBehaviour
             cardStickerSlotsDict[sticker.modEnum].Add(stickerData);
         }
     }
-    
-
-    /* HANDLE CAMERA THINGS */
-    /// <summary>
-    /// Camera device name, full list can be taken from WebCamTextures.devices enumerator
-    /// </summary>
-    public string DeviceName
-    {
-        get
-        {
-            return (webCamDevice != null) ? webCamDevice.Value.name : null;
-        }
-        set
-        {
-            // quick test
-            if (value == DeviceName)
-                return;
-
-            if (null != webCamTexture && webCamTexture.isPlaying)
-                webCamTexture.Stop();
-
-            // get device index
-            int cameraIndex = -1;
-            for (int i = 0; i < WebCamTexture.devices.Length && -1 == cameraIndex; i++)
-            {
-                if (WebCamTexture.devices[i].name == value)
-                    cameraIndex = i;
-            }
-
-            // set device up
-            if (-1 != cameraIndex)
-            {
-                webCamDevice = WebCamTexture.devices[cameraIndex];
-                webCamTexture = new WebCamTexture(webCamDevice.Value.name, 720, 480, 20);
-                DontDestroyOnLoad(webCamTexture);
-
-                // read device params and make conversion map
-                ReadTextureConversionParameters();
-
-                webCamTexture.Play();
-            }
-            else
-            {
-                throw new System.ArgumentException(string.Format("{0}: provided DeviceName is not correct device identifier", this.GetType().Name));
-            }
-        }
-
-        /*
-        get
-        {
-            return (webCamDevice != null) ? webCamDevice.Value.name : null;
-        }
-        set
-        {
-            print("MODIFYING DEVICE NAME");
-            // quick test
-            if (value == DeviceName)
-                return;
-
-            if (null != webCamTexture && webCamTexture.isPlaying)
-                webCamTexture.Stop();
-            webCamTexture = null;
-            webCamDevice = null;
-
-            if (value == null) return;
-
-            // get device index
-            int cameraIndex = -1;
-            for (int i = 0; i < WebCamTexture.devices.Length && -1 == cameraIndex; i++)
-            {
-                if (WebCamTexture.devices[i].name == value)
-                    cameraIndex = i;
-            }
-
-            // set device up
-            if (-1 != cameraIndex)
-            {
-                webCamDevice = WebCamTexture.devices[cameraIndex];
-                //webCamTexture = new WebCamTexture(webCamDevice.Value.name, 1920, 1080, 15);
-                webCamTexture = new WebCamTexture(webCamDevice.Value.name);
-
-                // read device params and make conversion map
-                ReadTextureConversionParameters();
-
-                webCamTexture.Play();
-                print(webCamTexture.deviceName);
-                print(webCamTexture.dimension);
-                print(webCamDevice.Value.availableResolutions);
-                print("Made new webcam texture: " + webCamTexture);
-            }
-            else
-            {
-                throw new System.ArgumentException(string.Format("{0}: provided DeviceName is not correct device identifier", this.GetType().Name));
-            }
-        }*/
-    }
+   
 
     /// <summary>
     /// This method scans source device params (flip, rotation, front-camera status etc.) and
@@ -371,7 +277,7 @@ public class CardParser : MonoBehaviour
     {
         // if (!shouldUpdate) return false;
 
-        using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(staticTestImage))
+        using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
         // using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
         {
             if (mode == ParseMode.GetCardFromAll || mode == ParseMode.GetCardNoStickers)
@@ -387,7 +293,7 @@ public class CardParser : MonoBehaviour
                 print("ESCAPE!!!");
                 List<GameObject> possibleCards = GetCardsOfName(card.cardName);
                 print("COUNT: " + possibleCards.Count);
-                GameObject bestCard = possibleCards[0];
+
                 AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards);
                 // TODO : debugging
                 UpdateCardDetected(null, -1);
@@ -396,6 +302,7 @@ public class CardParser : MonoBehaviour
             {
                 lastGoodCustomCard = null;
                 int numCardsSeen = ConfirmCardsFast(cardScene);
+                print("Confirm cards == " + numCardsSeen);
                 UpdateNumberCardsSeen(numCardsSeen);
             } else if (mode == ParseMode.RPS_Mode)
             {
@@ -618,7 +525,7 @@ public class CardParser : MonoBehaviour
     public float timeRequiredForNull;
     public float timeRequiredForNew;
     public float timeRequiredForNewFromNull;
-    public float timeRequiredForCountZero = 0.2f;
+    public float timeRequiredForCountZero = 0.5f;
     public float timeRequiredForCountUpdate = 0.1f;
 
     private int lastNumCounted = 0;
@@ -871,10 +778,7 @@ public class CardParser : MonoBehaviour
             double sum = channelSums.Val0 + channelSums.Val1 + channelSums.Val2 + channelSums.Val3;
 
             float diffOp = 1.0f - ((float)sum / (template.Size().Height * template.Size().Width * 255));
-            if (diffOp > 0.9) {
-                //diffImages[0].texture = OpenCvSharp.Unity.MatToTexture(diff);
-                print(diffOp);
-            }
+            
             float histOp = GetHistogramMatch(im1, template);
 
             return (histWeight * histOp) + ((1f - histWeight) * diffOp);
@@ -1450,8 +1354,19 @@ public class CardParser : MonoBehaviour
         HierarchyIndex[] h;
         // DETECT CONTOURS AND SIMPLIFY THEM IF NEEDED
         DetectContours(cardScene, out contours, out h);
+        Mat blackout = new Mat();
+        cardScene.CopyTo(blackout);
+        CvAruco.DrawDetectedMarkers(blackout, contours, null);
+
+        if (cardParserManager != null)
+            cardParserManager.UpdateSeenImage(blackout);
+
         // POSSIBLE LOWER RIGHTS
         CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
+        for (int i = 0; i < bestLowerRights.Length; ++i)
+        {
+            print("For possible card " + (i+1) + ": " + bestLowerRights[i].matchVal);
+        }
         // TOOD : very fast and very simple, no real confirmations are done here
         return bestLowerRights.Length;
     }

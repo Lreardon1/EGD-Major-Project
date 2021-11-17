@@ -38,7 +38,8 @@ public class CVControllerBackLoader : MonoBehaviour
         if (CombatManager.IsInCVMode && CardParserManager.instance != null)
         {
             if (WebCamTexture.devices.Length > 0)
-                DeviceName = WebCamTexture.devices[1].name;
+                DeviceName = WebCamTexture.devices[0].name;
+                // DeviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 1].name;
             CardParserManager.instance.ActivateCVForCombat(this);
             cvPanel.SetActive(true);
             regularPanel.SetActive(false);
@@ -53,10 +54,6 @@ public class CVControllerBackLoader : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // TODO : debugging pains
-        CardParserManager.instance.HandleNewImage(webCamTexture);
-        return;
-
         if (webCamTexture == null) return;
 
         if (!webCamTexture.isPlaying)
