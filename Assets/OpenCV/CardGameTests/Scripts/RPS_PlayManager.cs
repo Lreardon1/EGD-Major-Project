@@ -269,13 +269,22 @@ public class RPS_PlayManager : MonoBehaviour
 
     public void SendTradeCardsDecision(bool tradeCards, RPS_Card.CardType playerCard = RPS_Card.CardType.Unknown)
     {
+        // TODO : swing this
         bLastBidsTraded = tradeCards;
-        if (playerCard != RPS_Card.CardType.Unknown || !tradeCards)
-            StartCoroutine(ITradeCards(tradeCards, playerCard));
-        else
-            RequestBidCardAfterDecision();
-    }
+        print("The player card for trading is: " + playerCard);
 
+        if (playerCard == RPS_Card.CardType.Unknown && tradeCards)
+        {
+            print("Branching to get bid");
+            RequestBidCardAfterDecision();
+        }
+        else
+        {
+            print("Branching to trade");
+            StartCoroutine(ITradeCards(tradeCards, playerCard));
+        }
+    }
+    // boomerang X???? Boring??
     private void RequestBidCardAfterDecision()
     {
         player.RequestBidReveal();

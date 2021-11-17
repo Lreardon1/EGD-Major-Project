@@ -221,7 +221,13 @@ public class CardParser : MonoBehaviour
             cardStickerSlotsDict[sticker.modEnum].Add(stickerData);
         }
     }
-   
+
+    public void ResetRPS()
+    {
+        rps_previousCardType = RPS_Card.CardType.Unknown;
+        RPS_ToNullUpdateEvent.Invoke(RPS_Card.CardType.Unknown);
+    }
+
 
     /// <summary>
     /// This method scans source device params (flip, rotation, front-camera status etc.) and
@@ -306,12 +312,14 @@ public class CardParser : MonoBehaviour
                 UpdateNumberCardsSeen(numCardsSeen);
             } else if (mode == ParseMode.RPS_Mode)
             {
-                Debug.LogError("RPS Parse mode is not implemented");
+                RPS_Card.CardType cardType = RPS_ParseCard(cardScene);
+                Update_RPS_Card(cardType);
             }
 
         }
         return true;
     }
+
 
     private List<GameObject> GetCardsOfName(string cardName)
     {
@@ -605,6 +613,8 @@ public class CardParser : MonoBehaviour
     private RPS_Card.CardType rps_previousCardType;
     private void Update_RPS_Card(RPS_Card.CardType cardType)
     {
+        print("UPDATING TO: " + cardType);
+
         // if card is the same as last, don't update
         if (cardType == rps_previousCardType)
         {
@@ -1417,6 +1427,71 @@ public class CardParser : MonoBehaviour
         return bestLowerRights.Length;
     }
 
+
+    private RPS_Card.CardType RPS_ParseCard(Mat cardScene)
+    {
+        Point2f[][] contours;
+        HierarchyIndex[] h;
+        // DETECT CONTOURS AND SIMPLIFY THEM IF NEEDED
+        DetectContours(cardScene, out contours, out h);
+        Mat blackout = new Mat();
+        cardScene.CopyTo(blackout);
+        CvAruco.DrawDetectedMarkers(blackout, contours, null);
+
+        if (cardParserManager)
+            cardParserManager.UpdateSeenImage(blackout);
+
+        // POSSIBLE LOWER RIGHTS
+        CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
+        
+
+        foreach (CardCorner bestLowerRight in bestLowerRights)
+        {
+            print("RPS: FOUND A BLOODY CARD!");
+
+            // CLEAN UP THE CURRENT LOWER RIGHT
+            if (bestLowerRight == null || bestLowerRight.mostLikelyType != CardType.Attack) break;
+            bestLowerRight.corners = RotateWinding(bestLowerRight.corners, bestLowerRight.neededRot);
+            bestLowerRight.neededRot = 0;
+
+            // UPPER LEFT
+            CardCorner bestUpperLeft = FindBestUpperLeftCardCorner(cardScene, bestLowerRight.corners, ref contours);
+            if (bestUpperLeft == null)
+            {
+                return RPS_Card.CardType.Unknown;
+            }
+
+            bestUpperLeft.corners = RotateWinding(bestUpperLeft.corners, bestUpperLeft.neededRot);
+            bestUpperLeft.neededRot = 0;
+
+            // REMAP BY CORNERS
+            Point2f[] possibleCard = TryToBoundCardFromCorners(cardScene, bestLowerRight.corners, bestUpperLeft.corners);
+            if (possibleCard == null)
+                return RPS_Card.CardType.Unknown;
+            Mat replaned = PerformFirstReplaneFull(cardScene, possibleCard, cornerReplaneOffset, out Mat firstTMat);
+
+            // get the homography matrix from the replaned image to the template image space
+            Mat hMat = KeypointMatchToTemplate(replaned, bestLowerRight, out CardType cardType, out CardElement cardElement, out int ID, out string cardName);
+            if (hMat == null) return RPS_Card.CardType.Unknown;
+            print(cardElement);
+            switch (cardElement)
+            {
+                case CardElement.Dark:
+                case CardElement.Fire:
+                    return RPS_Card.CardType.Unknown;
+                case CardElement.Water:
+                    return RPS_Card.CardType.Water;
+                case CardElement.Wind:
+                    return RPS_Card.CardType.Wind;
+                case CardElement.Earth:
+                case CardElement.Light:
+                case CardElement.None:
+                    return RPS_Card.CardType.Unknown;
+            }
+        }
+        return RPS_Card.CardType.Unknown;
+    }
+
     /***
      *  THE BIG FUNCTION, MANAGES STATE AND PARSING!!!!
      */
@@ -1538,7 +1613,6 @@ public class CardParser : MonoBehaviour
         float bestPercent = 0.0f;
         float bestHistComp = 0.0f;
         string bestHistWinner = "";
-
         // TODO : possible sort paradigms
             // by fundy number
             // by homo percent
