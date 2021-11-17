@@ -1605,7 +1605,7 @@ public class CardParser : MonoBehaviour
                 //if (CheckIfEnoughMatch(goodMatches, initMatches) && bestGoodMatches < goodMatches.Length) // discrete count version
                 {
                     Mat homo = GetHomographyMatrix(m_kp2, m_kp1);
-                    
+                    // TODO : combine the filter by fundy with the other go?
                     if (homo != null && homo.Width == 3 && homo.Height == 3 && IsGoodHomography(homo, m_kp1, m_kp2, out float percent))
                     {
                         int survivedKP = Mathf.RoundToInt(m_kp1.Length * percent);
