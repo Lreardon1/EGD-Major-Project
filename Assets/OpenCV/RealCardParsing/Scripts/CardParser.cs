@@ -536,7 +536,8 @@ public class CardParser : MonoBehaviour
 
         GetBestStickerBackgroundDiff(stickerMat, binStickerMat, cardStickerSlotsDict[modType], out string bestStickerByColor, out float dist);
 
-        cardParserManager.UpdateStickerDebugs(ID, diff);
+        if (cardParserManager)
+            cardParserManager.UpdateStickerDebugs(ID, diff);
         
         return bestStickerByDiff;
     }
@@ -1473,7 +1474,8 @@ public class CardParser : MonoBehaviour
         cardScene.CopyTo(blackout);
         CvAruco.DrawDetectedMarkers(blackout, contours, null);
 
-        cardParserManager.UpdateSeenImage(blackout);
+        if (cardParserManager)
+            cardParserManager.UpdateSeenImage(blackout);
 
         // POSSIBLE LOWER RIGHTS
         CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
