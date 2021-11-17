@@ -172,9 +172,14 @@ public class RPS_PlayerController : MonoBehaviour
     }
 
 
-    internal void GainCard(RPS_Card gained)
+    public void GainCard(RPS_Card gained)
     {
         myCards[gained.type] += 1;
+    }
+
+    internal void LossCard(RPS_Card lost)
+    {
+        myCards[lost.type] -= 1;
     }
 
     internal void RequestBid()
@@ -189,6 +194,8 @@ public class RPS_PlayerController : MonoBehaviour
 
     internal void RequestTradeDecision()
     {
+        print("HANDLE TRADE DEAL!!!");
         StartCoroutine(IHandleTradeDecision());
     }
+
 }

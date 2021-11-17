@@ -28,10 +28,50 @@ public class RPS_Opponent : MonoBehaviour
         talkText.text = text;
     }
 
-    private IEnumerator IHandleStateChangeComment(RPS_PlayManager.PlayState nextState)
+    private IEnumerator IHandleStateChangeComment(RPS_PlayManager.PlayState state, RPS_PlayManager.PlayState nextState)
     {
-        WriteOutTalk("Onto the next stage");
-        yield return new WaitForSeconds(0.2f);
+        if (nextState == RPS_PlayManager.PlayState.End)
+        {
+            WriteOutTalk("GG, kid. GG.");
+            yield return new WaitForSeconds(0.7f);
+            yield break;
+        }
+        // TODO : we could do a dynamic system on this...
+        switch (state)
+        {
+            case RPS_PlayManager.PlayState.Start:
+                WriteOutTalk("Onto the next stage");
+                yield return new WaitForSeconds(0.2f);
+                break;
+            case RPS_PlayManager.PlayState.OpponentBid:
+                WriteOutTalk("Now your turn to bid...");
+                yield return new WaitForSeconds(0.6f);
+                break;
+            case RPS_PlayManager.PlayState.PlayerBid:
+                WriteOutTalk("What DID you put down kid?");
+                yield return new WaitForSeconds(0.5f);
+                break;
+            case RPS_PlayManager.PlayState.OpponentPlay:
+                WriteOutTalk("Onto you!");
+                yield return new WaitForSeconds(0.3f);
+                break;
+            case RPS_PlayManager.PlayState.PlayerPlay:
+                WriteOutTalk("Alright, here we go!");
+                yield return new WaitForSeconds(0.3f);
+                break;
+            case RPS_PlayManager.PlayState.Reveal:
+                WriteOutTalk("TODO : let the fella comment appropriately on the reveal");
+                yield return new WaitForSeconds(0.5f);
+                break;
+            case RPS_PlayManager.PlayState.Trade:
+                WriteOutTalk("Trading's my favorite part!");
+                yield return new WaitForSeconds(0.2f);
+                break;
+            case RPS_PlayManager.PlayState.End:
+                WriteOutTalk("GG, kid. GG.");
+                yield return new WaitForSeconds(0.7f);
+                break;
+        }
         manager.ProgressFromComment(nextState);
     }
 
@@ -80,7 +120,7 @@ public class RPS_Opponent : MonoBehaviour
 
     public void RequestCommentOnStateChange(RPS_PlayManager.PlayState state, RPS_PlayManager.PlayState nextState)
     {
-        StartCoroutine(IHandleStateChangeComment(nextState));
+        StartCoroutine(IHandleStateChangeComment(state, nextState));
     }
 
 

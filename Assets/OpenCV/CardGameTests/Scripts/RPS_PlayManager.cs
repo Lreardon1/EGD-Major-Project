@@ -40,6 +40,55 @@ public class RPS_PlayManager : MonoBehaviour
     public float sphereRadius;
     public Vector3 rotRanges;
 
+    [Header("Card Anim Points")]
+    public Transform playerBidAnimPoint;
+    public Transform opponentBidAnimPoint;
+
+
+    IEnumerator StartFromAndLerpInDirection(GameObject go, Vector3 start, Vector3 dir, float time, float dist)
+    {
+        float t = 0;
+        while (t < time)
+        {
+            go.transform.position = start + (dir * (t / time) * dist);
+            t += Time.deltaTime;
+            yield return null;
+        }
+        go.transform.position = start + (dir * dist);
+    }
+
+    IEnumerator LerpRot(GameObject go, Quaternion start, Quaternion end, float time)
+    {
+        float t = 0;
+        while (t < time)
+        {
+            go.transform.rotation = Quaternion.Slerp(start, end, t / time);
+            t += Time.deltaTime;
+            yield return null;
+        }
+        go.transform.rotation = end;
+    }
+
+
+    IEnumerator ReturnBidsAnim()
+    {
+        StartCoroutine(StartFromAndLerpInDirection(playerBidObj.gameObject, playerBidObj.transform.position, -playerBidAnimPoint.forward, 0.7f, 4));
+        StartCoroutine(StartFromAndLerpInDirection(opponentBidObj.gameObject, opponentBidObj.transform.position, -opponentBidAnimPoint.forward, 0.7f, 4));
+        yield return new WaitForSeconds(0.5f);
+        playerBidObj.SetEnabled(false);
+        opponentBidObj.SetEnabled(false);
+    }
+
+    IEnumerator TradeBidsAnim()
+    {
+        StartCoroutine(StartFromAndLerpInDirection(playerBidObj.gameObject, playerBidObj.transform.position, playerBidAnimPoint.forward, 1.0f, 15));
+        StartCoroutine(StartFromAndLerpInDirection(opponentBidObj.gameObject, opponentBidObj.transform.position, opponentBidAnimPoint.forward, 1.0f, 15));
+        yield return new WaitForSeconds(0.9f);
+        playerBidObj.SetEnabled(false);
+        opponentBidObj.SetEnabled(false);
+
+    }
+
     public enum PlayState
     {
         Start,
@@ -67,6 +116,7 @@ public class RPS_PlayManager : MonoBehaviour
     public void ProgressFromComment(PlayState nextState)
     {
         state = nextState;
+        winText.text = "";
         switch (state)
         {
             case PlayState.OpponentBid:
@@ -109,27 +159,29 @@ public class RPS_PlayManager : MonoBehaviour
             case PlayState.OpponentBid:
                 opponentBid = card;
                 opponentBidObj.SetEnabled(true);
-                opponentBidObj.SetRevealed(false);
                 opponentBidObj.SetCard(card);
+                opponentBidObj.transform.rotation = Quaternion.Euler(-90, 0, 0);
+                StartCoroutine(StartFromAndLerpInDirection(
+                    opponentBidObj.gameObject, opponentBidAnimPoint.position, opponentBidAnimPoint.forward, 0.7f, 4));
                 SendStateChangeForComment(PlayState.PlayerBid);
                 break;
             case PlayState.PlayerBid:
                 playerBidObj.SetEnabled(true);
-                playerBidObj.SetRevealed(true);
                 playerBidObj.SetCard(card);
+                playerBidObj.transform.rotation = Quaternion.Euler(-90, 0, 0);
+                StartCoroutine(StartFromAndLerpInDirection(
+                    playerBidObj.gameObject, playerBidAnimPoint.position, playerBidAnimPoint.forward, 0.7f, 4));
                 SendStateChangeForComment(PlayState.OpponentPlay);
                 break;
             case PlayState.OpponentPlay:
                 opponentPlay = card;
                 opponentPlayObj.SetEnabled(true);
-                opponentPlayObj.SetRevealed(false);
                 opponentPlayObj.SetCard(card);
                 SendStateChangeForComment(PlayState.PlayerPlay);
                 break;
             case PlayState.PlayerPlay:
                 playerPlay = card;
                 playerPlayObj.SetEnabled(true);
-                playerPlayObj.SetRevealed(true);
                 playerPlayObj.SetCard(card);
                 SendStateChangeForComment(PlayState.Reveal);
                 break;
@@ -149,8 +201,6 @@ public class RPS_PlayManager : MonoBehaviour
 
     IEnumerator IRevealCards()
     {
-        opponentBidObj.SetRevealed(true);
-
         yield return new WaitForSeconds(0.4f);
 
         roundResult = RPS_Card.GetPlayResult(playerPlay, opponentPlay);
@@ -158,8 +208,11 @@ public class RPS_PlayManager : MonoBehaviour
         resStr = roundResult == RPS_Card.Result.Loss ? "Loss" : resStr;
         resStr = roundResult == RPS_Card.Result.Win ? "Win" : resStr;
         winText.text = resStr;
-
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.3f);
+        if (roundResult == RPS_Card.Result.Tie) {
+            StartCoroutine(ReturnBidsAnim());
+        }
+        yield return new WaitForSeconds(0.5f);
         playerPoints += roundResult == RPS_Card.Result.Win ? 1 : 0;
         opponentPoints += roundResult == RPS_Card.Result.Loss ? 1 : 0;
 
@@ -203,7 +256,7 @@ public class RPS_PlayManager : MonoBehaviour
     public void SendTradeCardsDecision(bool tradeCards, RPS_Card.CardType playerCard = RPS_Card.CardType.Unknown)
     {
         bLastBidsTraded = tradeCards;
-        if (playerCard != RPS_Card.CardType.Unknown)
+        if (playerCard != RPS_Card.CardType.Unknown || !tradeCards)
             StartCoroutine(ITradeCards(tradeCards, playerCard));
         else
             RequestBidCardAfterDecision();
@@ -224,15 +277,26 @@ public class RPS_PlayManager : MonoBehaviour
         if (tradeCards)
         {
             tradeText.text = "Cards Traded : Place your bid aside and take a " + opponentBid.type;
-            opponentBidObj.SetRevealed(true); // TODO : better reveal, maybe wait for anim on that
+            opponentBidObj.AnimateBidReveal(true);
+            playerBidObj.SetCard(new RPS_Card(playerCard));
+            float t = playerBidObj.AnimateBidReveal(true);
+
+            yield return new WaitForSeconds(t);
+            yield return new WaitForSeconds(0.6f); // TODO : additional wait???
+
+
             opponent.GainCard(new RPS_Card(playerCard));
             player.GainCard(opponentBid);
+            player.LossCard(new RPS_Card(playerCard));
+            StartCoroutine(TradeBidsAnim());
 
-        } else
+        }
+        else
         {
             tradeText.text = "Cards NOT Traded. You retain your card, pick it up.";
+            StartCoroutine(ReturnBidsAnim());
             opponent.GainCard(opponentBid);
-            player.GainCard(new RPS_Card(playerCard));
+            // player.GainCard(new RPS_Card(playerCard));
         }
 
         yield return new WaitForSeconds(2.2f);

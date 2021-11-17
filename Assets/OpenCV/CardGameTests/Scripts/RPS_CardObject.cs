@@ -34,8 +34,21 @@ public class RPS_CardObject : MonoBehaviour
         sr.sprite = GetCardSprite(cardType);
     }
 
-    public void SetRevealed(bool r)
+    IEnumerator RevealBidCard(float time)
     {
-        revealed = r;
+        float t = 0; 
+        while (t < time)
+        {
+            transform.Rotate(new Vector3(0, Time.deltaTime * 180.0f / time, 0), Space.Self);
+            t += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    public float AnimateBidReveal(bool r)
+    {
+        if (!r) return 0.0f;
+        StartCoroutine(RevealBidCard(0.4f));
+        return 0.4f;
     }
 }
