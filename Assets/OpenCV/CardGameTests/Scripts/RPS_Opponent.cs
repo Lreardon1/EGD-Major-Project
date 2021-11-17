@@ -1,51 +1,112 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class RPS_Opponent : MonoBehaviour
 {
+
     private RPS_PlayManager manager;
     private Dictionary<RPS_Card.CardType, int> myCards;
+    private List<RPS_Card.CardType> myCardsArr = new List<RPS_Card.CardType>();
+
+    public TMP_Text talkText;
 
     public void Init(RPS_PlayManager manager, Dictionary<RPS_Card.CardType, int> initCards)
     {
         this.manager = manager;
         myCards = new Dictionary<RPS_Card.CardType, int>(initCards);
+        foreach (RPS_Card.CardType ct in myCards.Keys)
+        {
+            for (int i = 0; i < myCards[ct]; ++i)
+                myCardsArr.Add(ct);
+        }
+    }
+
+    private void WriteOutTalk(string text)
+    {
+        talkText.text = text;
+    }
+
+    private IEnumerator IHandleStateChangeComment(RPS_PlayManager.PlayState nextState)
+    {
+        WriteOutTalk("Onto the next stage");
+        yield return new WaitForSeconds(0.2f);
+        manager.ProgressFromComment(nextState);
+    }
+
+
+    private IEnumerator IHandleBid()
+    {
+        WriteOutTalk("Hmmm, let's see...");
+        yield return new WaitForSeconds(1.0f);
+        WriteOutTalk("I'll bid this one...");
+        yield return new WaitForSeconds(0.6f);
+        int r = Random.Range(0, myCardsArr.Count);
+        RPS_Card.CardType ct = myCardsArr[r];
+        myCardsArr.RemoveAt(r);
+        myCards[ct] -= 1;
+
+        RPS_Card card = new RPS_Card(ct);
+        // TODO : polish anims and make a card
+        manager.SendCardInContext(card);
+    }
+
+    private IEnumerator IHandlePlay()
+    {
+        WriteOutTalk("Hmmm, let's see...");
+        yield return new WaitForSeconds(1.0f);
+        WriteOutTalk("I'll play this one...");
+        yield return new WaitForSeconds(0.6f);
+        int r = Random.Range(0, myCardsArr.Count);
+        RPS_Card.CardType ct = myCardsArr[r];
+        myCardsArr.RemoveAt(r);
+        myCards[ct] -= 1;
+
+
+        RPS_Card card = new RPS_Card(ct);
+        // TODO : polish anims and make a card
+        manager.SendCardInContext(card);
+    }
+
+    private IEnumerator IHandleTradeDecision()
+    {
+        bool trade = Random.value > 0.5f;
+        WriteOutTalk(trade ? "Hmm... I think I'll trade..." : "Hmm, no, I think I'll keep this fella...");
+        yield return new WaitForSeconds(0.7f);
+        manager.SendTradeCardsDecision(Random.value > 0.5f);
+        WriteOutTalk("");
     }
 
     public void RequestCommentOnStateChange(RPS_PlayManager.PlayState state, RPS_PlayManager.PlayState nextState)
     {
-        throw new NotImplementedException();
+        StartCoroutine(IHandleStateChangeComment(nextState));
     }
 
-    internal void AskForBid()
+
+    public void AskForPlay()
     {
-        throw new NotImplementedException();
+        StartCoroutine(IHandlePlay());
     }
 
-    internal void AskForPlay()
+    public void GainCard(RPS_Card gained)
     {
-        throw new NotImplementedException();
+        myCards[gained.type] += 1;
+        myCardsArr.Add(gained.type);
     }
 
-    internal void GainCard(RPS_Card playerBid)
+    public void RequestBid()
     {
-        throw new NotImplementedException();
+        StartCoroutine(IHandleBid());
     }
 
-    internal void RequestBid()
+    public void RequestPlay()
     {
-        throw new NotImplementedException();
+        StartCoroutine(IHandlePlay());
     }
 
-    internal void RequestPlay()
+    public void RequestTradeDecision()
     {
-        throw new NotImplementedException();
-    }
-
-    internal void RequestTradeDecision()
-    {
-        throw new NotImplementedException();
+        StartCoroutine(IHandleTradeDecision());
     }
 }

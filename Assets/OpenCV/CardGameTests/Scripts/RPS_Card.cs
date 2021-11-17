@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RPS_Card : MonoBehaviour
+public class RPS_Card
 {
     public enum CardType
     {
-        Water,
-        Fire,
-        Nature
+        Water = 0,
+        Fire = 1,
+        Wind = 2,
+        Unknown = 10
     }
 
     public enum Result
@@ -26,7 +27,7 @@ public class RPS_Card : MonoBehaviour
                 return Color.blue;
             case CardType.Fire:
                 return Color.red;
-            case CardType.Nature:
+            case CardType.Wind:
                 return Color.green;
         }
         return Color.black;
@@ -39,16 +40,16 @@ public class RPS_Card : MonoBehaviour
             case CardType.Water:
                 if (card2.type == CardType.Fire)
                     return Result.Win;
-                else if (card2.type == CardType.Nature)
+                else if (card2.type == CardType.Wind)
                     return Result.Loss;
                 break;
             case CardType.Fire:
-                if (card2.type == CardType.Nature)
+                if (card2.type == CardType.Wind)
                     return Result.Win;
                 else if (card2.type == CardType.Water)
                     return Result.Loss;
                 break;
-            case CardType.Nature:
+            case CardType.Wind:
                 if (card2.type == CardType.Water)
                     return Result.Win;
                 else if (card2.type == CardType.Fire)
@@ -64,7 +65,7 @@ public class RPS_Card : MonoBehaviour
         Dictionary<CardType, int> cards = new Dictionary<CardType, int>();
         cards.Add(CardType.Fire, fireCount);
         cards.Add(CardType.Water, waterCount);
-        cards.Add(CardType.Nature, natureCount);
+        cards.Add(CardType.Wind, natureCount);
         return cards;
     }
     

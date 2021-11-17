@@ -78,6 +78,9 @@ public class AnimationController : MonoBehaviour
     {
         foreach (GameObject d in disabledObjects)
             d.SetActive(true);
+        for (int i = 0; i < transform.childCount; ++i)
+            transform.GetChild(i).gameObject.SetActive(false);
+
         StartCoroutine(FadeToScene(fadeOutTime, DestroySelf));
 
     }

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System;
 
 // controls all management actions BUT DOES NOT CONTROL ANY PLAYER ACTIONS, OF EITHER
 public class RPS_PlayManager : MonoBehaviour
@@ -13,7 +12,6 @@ public class RPS_PlayManager : MonoBehaviour
     public int playerPoints;
 
     public RPS_Card opponentBid;
-    public RPS_Card playerBid;
     public RPS_Card opponentPlay;
     public RPS_Card playerPlay;
 
@@ -35,6 +33,12 @@ public class RPS_PlayManager : MonoBehaviour
     public int waterCount;
     public int fireCount;
     public int natureCount;
+
+    [Header("Physics Cards")]
+    public GameObject physicsCard;
+    public Transform physicsSpawnPoint;
+    public float sphereRadius;
+    public Vector3 rotRanges;
 
     public enum PlayState
     {
@@ -110,7 +114,6 @@ public class RPS_PlayManager : MonoBehaviour
                 SendStateChangeForComment(PlayState.PlayerBid);
                 break;
             case PlayState.PlayerBid:
-                playerBid = card;
                 playerBidObj.SetEnabled(true);
                 playerBidObj.SetRevealed(true);
                 playerBidObj.SetCard(card);
@@ -139,28 +142,6 @@ public class RPS_PlayManager : MonoBehaviour
         }
     }
 
-    public void AskForOpponentBid()
-    {
-        opponent.AskForBid();
-    }
-
-    public void AskForPlayerBid()
-    {
-        player.AskForBid();
-    }
-
-
-    public void AskForOpponentPlay()
-    {
-        opponent.AskForPlay();
-    }
-
-
-    public void AskForPlayerPlay()
-    {
-        player.AskForPlay();
-    }
-
     public void RevealCards()
     {
         StartCoroutine(IRevealCards());
@@ -182,6 +163,20 @@ public class RPS_PlayManager : MonoBehaviour
         playerPoints += roundResult == RPS_Card.Result.Win ? 1 : 0;
         opponentPoints += roundResult == RPS_Card.Result.Loss ? 1 : 0;
 
+        // TODO : spawn cards
+        playerPlayObj.SetEnabled(false);
+        opponentPlayObj.SetEnabled(false); // TODO : fade out, or move?????
+
+        GameObject card1 = Instantiate(physicsCard, physicsSpawnPoint.position + Random.insideUnitSphere * sphereRadius, Quaternion.Euler(90, 0, 0));
+        card1.transform.Rotate((new Vector3(rotRanges.x * Random.value, rotRanges.y * Random.value, rotRanges.z * Random.value) * 2.0f) - rotRanges);
+        card1.GetComponent<RPS_CardObject>().SetCard(playerPlay);
+        yield return new WaitForSeconds(0.2f);
+        GameObject card2 = Instantiate(physicsCard, physicsSpawnPoint.position + Random.insideUnitSphere * sphereRadius, Quaternion.Euler(90, 0, 0));
+        card2.transform.Rotate((new Vector3(rotRanges.x * Random.value, rotRanges.y * Random.value, rotRanges.z * Random.value) * 2.0f) - rotRanges);
+        card2.GetComponent<RPS_CardObject>().SetCard(opponentPlay);
+
+        yield return new WaitForSeconds(0.3f);
+
         // SPECIAL LOGIC TO ESCAPE AFTER LAST ROUND AND TO SKIP BIDS ON LAST ROUND
         if (currentRound == totalRounds)
         {
@@ -200,28 +195,48 @@ public class RPS_PlayManager : MonoBehaviour
         }
     }
 
-    public void SendTradeCardsDecision(bool tradeCards)
+
+
+
+
+
+    public void SendTradeCardsDecision(bool tradeCards, RPS_Card.CardType playerCard = RPS_Card.CardType.Unknown)
     {
         bLastBidsTraded = tradeCards;
-        StartCoroutine(ITradeCards(tradeCards));
+        if (playerCard != RPS_Card.CardType.Unknown)
+            StartCoroutine(ITradeCards(tradeCards, playerCard));
+        else
+            RequestBidCardAfterDecision();
     }
 
-    IEnumerator ITradeCards(bool tradeCards)
+    private void RequestBidCardAfterDecision()
+    {
+        player.RequestBidReveal();
+    }
+
+    public void SendBidCardAfterDecision(RPS_Card.CardType card)
+    {
+        StartCoroutine(ITradeCards(true, card));
+    }
+
+    IEnumerator ITradeCards(bool tradeCards, RPS_Card.CardType playerCard)
     {
         if (tradeCards)
         {
             tradeText.text = "Cards Traded : Place your bid aside and take a " + opponentBid.type;
-            opponentBidObj.SetRevealed(true);
-            opponent.GainCard(playerBid);
+            opponentBidObj.SetRevealed(true); // TODO : better reveal, maybe wait for anim on that
+            opponent.GainCard(new RPS_Card(playerCard));
             player.GainCard(opponentBid);
 
         } else
         {
-            tradeText.text = "Cards NOT Traded. You retain a " + playerBid.type;
+            tradeText.text = "Cards NOT Traded. You retain your card, pick it up.";
             opponent.GainCard(opponentBid);
-            player.GainCard(playerBid);
+            player.GainCard(new RPS_Card(playerCard));
         }
-        yield return new WaitForSeconds(1.2f);
+
+        yield return new WaitForSeconds(2.2f);
+        tradeText.text = "";
         SendStateChangeForComment(PlayState.OpponentBid);
     }
 }
