@@ -174,6 +174,7 @@ public class CombatHandController : MonoBehaviour
     public void DiscardCard(GameObject card)
     {
         cardsInDiscard++;
+        cardsInHand.Remove(card);
         Deck.instance.Discard(card);
         UpdateReshuffleCost();
     }
@@ -188,6 +189,15 @@ public class CombatHandController : MonoBehaviour
         Deck.instance.Shuffle();
         UpdateReshuffleCost();
         cm.reshuffleButton.interactable = false;
+    }
+
+    public void ReturnCardsInHand()
+    {
+        foreach(GameObject card in cardsInHand)
+        {
+            Deck.instance.Discard(card);
+        }
+        Deck.instance.Shuffle();
     }
 
     public void UpdateReshuffleCost()

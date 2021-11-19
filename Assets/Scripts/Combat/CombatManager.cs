@@ -832,6 +832,7 @@ public class CombatManager : MonoBehaviour
     public void ReturnToOverWorld()
     {
         chc.ResetCardParents();
+        chc.ReturnCardsInHand();
         chc.ReShuffle();
         encounterScript.ReturnToOverWorld();
     }
