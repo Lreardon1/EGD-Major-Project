@@ -52,8 +52,8 @@ public class GrassPainterEditor : Editor
         LayerMask tempMask2 = EditorGUILayout.MaskField("Painting Mask", InternalEditorUtility.LayerMaskToConcatenatedLayersMask(grassPainter.paintMask), InternalEditorUtility.layers);
         grassPainter.paintMask = InternalEditorUtility.ConcatenatedLayersMaskToLayerMask(tempMask2);
 
-        grassPainter.brushSize = EditorGUILayout.Slider("Brush Size", grassPainter.brushSize, 0.1f, 100f);
-        grassPainter.density = EditorGUILayout.Slider("Density", grassPainter.density, 0.1f, 100f);
+        grassPainter.brushSize = EditorGUILayout.Slider("Brush Size", grassPainter.brushSize, 0.1f, 10f);
+        grassPainter.density = EditorGUILayout.Slider("Density", grassPainter.density, 0.1f, 10f);
         grassPainter.normalLimit = EditorGUILayout.Slider("Normal Limit", grassPainter.normalLimit, 0f, 1f);
 
 
