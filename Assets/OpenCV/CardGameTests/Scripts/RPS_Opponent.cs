@@ -45,31 +45,31 @@ public class RPS_Opponent : MonoBehaviour
                 break;
             case RPS_PlayManager.PlayState.OpponentBid:
                 WriteOutTalk("Now your turn to bid...");
-                yield return new WaitForSeconds(0.6f);
+                yield return new WaitForSeconds(1.9f);
                 break;
             case RPS_PlayManager.PlayState.PlayerBid:
                 WriteOutTalk("What DID you put down kid?");
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(2.0f);
                 break;
             case RPS_PlayManager.PlayState.OpponentPlay:
                 WriteOutTalk("Onto you!");
-                yield return new WaitForSeconds(0.3f);
+                yield return new WaitForSeconds(1.9f);
                 break;
             case RPS_PlayManager.PlayState.PlayerPlay:
                 WriteOutTalk("Alright, here we go!");
-                yield return new WaitForSeconds(0.3f);
+                yield return new WaitForSeconds(1.9f);
                 break;
             case RPS_PlayManager.PlayState.Reveal:
                 WriteOutTalk("TODO : let the fella comment appropriately on the reveal");
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(2.2f);
                 break;
             case RPS_PlayManager.PlayState.Trade:
                 WriteOutTalk("Trading's my favorite part!");
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(1.9f);
                 break;
             case RPS_PlayManager.PlayState.End:
                 WriteOutTalk("GG, kid. GG.");
-                yield return new WaitForSeconds(0.7f);
+                yield return new WaitForSeconds(1.9f);
                 break;
         }
         manager.ProgressFromComment(nextState);
@@ -79,9 +79,9 @@ public class RPS_Opponent : MonoBehaviour
     private IEnumerator IHandleBid()
     {
         WriteOutTalk("Hmmm, let's see...");
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.1f);
         WriteOutTalk("I'll bid this one...");
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.9f);
         int r = Random.Range(0, myCardsArr.Count);
         RPS_Card.CardType ct = myCardsArr[r];
         myCardsArr.RemoveAt(r);
@@ -97,7 +97,7 @@ public class RPS_Opponent : MonoBehaviour
         WriteOutTalk("Hmmm, let's see...");
         yield return new WaitForSeconds(1.0f);
         WriteOutTalk("I'll play this one...");
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.9f);
         int r = Random.Range(0, myCardsArr.Count);
         RPS_Card.CardType ct = myCardsArr[r];
         myCardsArr.RemoveAt(r);
@@ -113,8 +113,8 @@ public class RPS_Opponent : MonoBehaviour
     {
         bool trade = Random.value > 0.5f;
         WriteOutTalk(trade ? "Hmm... I think I'll trade..." : "Hmm, no, I think I'll keep this fella...");
-        yield return new WaitForSeconds(0.7f);
-        manager.SendTradeCardsDecision(Random.value > 0.5f);
+        yield return new WaitForSeconds(1.8f);
+        manager.SendTradeCardsDecision(trade);
         WriteOutTalk("");
     }
 
@@ -148,5 +148,22 @@ public class RPS_Opponent : MonoBehaviour
     public void RequestTradeDecision()
     {
         StartCoroutine(IHandleTradeDecision());
+    }
+
+    public float GetResponseToReveal(RPS_Card.Result result)
+    {
+        switch (result)
+        {
+            case RPS_Card.Result.Win:
+                WriteOutTalk("NO!!!");
+                return 1.0f;
+            case RPS_Card.Result.Loss:
+                WriteOutTalk("Victory!");
+                return 1.0f;
+            case RPS_Card.Result.Tie:
+                WriteOutTalk("Well, that's boring");
+                return 1.0f;
+        }
+        return 0;
     }
 }

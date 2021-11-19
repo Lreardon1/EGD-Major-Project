@@ -60,7 +60,8 @@ public class CardParser : MonoBehaviour
     private int defaultCardPlusBorderWidth = 0;
     private int defaultCardPlusBorderHeight = 0;
 
-    private ParseMode mode = ParseMode.GetCardFromAll;
+    [HideInInspector]
+    public ParseMode mode = ParseMode.GetCardFromAll;
 
     public void UpdateMode(ParseMode handMode)
     {
@@ -220,102 +221,13 @@ public class CardParser : MonoBehaviour
             cardStickerSlotsDict[sticker.modEnum].Add(stickerData);
         }
     }
-    
 
-    /* HANDLE CAMERA THINGS */
-    /// <summary>
-    /// Camera device name, full list can be taken from WebCamTextures.devices enumerator
-    /// </summary>
-    public string DeviceName
+    public void ResetRPS()
     {
-        get
-        {
-            return (webCamDevice != null) ? webCamDevice.Value.name : null;
-        }
-        set
-        {
-            // quick test
-            if (value == DeviceName)
-                return;
-
-            if (null != webCamTexture && webCamTexture.isPlaying)
-                webCamTexture.Stop();
-
-            // get device index
-            int cameraIndex = -1;
-            for (int i = 0; i < WebCamTexture.devices.Length && -1 == cameraIndex; i++)
-            {
-                if (WebCamTexture.devices[i].name == value)
-                    cameraIndex = i;
-            }
-
-            // set device up
-            if (-1 != cameraIndex)
-            {
-                webCamDevice = WebCamTexture.devices[cameraIndex];
-                webCamTexture = new WebCamTexture(webCamDevice.Value.name, 720, 480, 20);
-                DontDestroyOnLoad(webCamTexture);
-
-                // read device params and make conversion map
-                ReadTextureConversionParameters();
-
-                webCamTexture.Play();
-            }
-            else
-            {
-                throw new System.ArgumentException(string.Format("{0}: provided DeviceName is not correct device identifier", this.GetType().Name));
-            }
-        }
-
-        /*
-        get
-        {
-            return (webCamDevice != null) ? webCamDevice.Value.name : null;
-        }
-        set
-        {
-            print("MODIFYING DEVICE NAME");
-            // quick test
-            if (value == DeviceName)
-                return;
-
-            if (null != webCamTexture && webCamTexture.isPlaying)
-                webCamTexture.Stop();
-            webCamTexture = null;
-            webCamDevice = null;
-
-            if (value == null) return;
-
-            // get device index
-            int cameraIndex = -1;
-            for (int i = 0; i < WebCamTexture.devices.Length && -1 == cameraIndex; i++)
-            {
-                if (WebCamTexture.devices[i].name == value)
-                    cameraIndex = i;
-            }
-
-            // set device up
-            if (-1 != cameraIndex)
-            {
-                webCamDevice = WebCamTexture.devices[cameraIndex];
-                //webCamTexture = new WebCamTexture(webCamDevice.Value.name, 1920, 1080, 15);
-                webCamTexture = new WebCamTexture(webCamDevice.Value.name);
-
-                // read device params and make conversion map
-                ReadTextureConversionParameters();
-
-                webCamTexture.Play();
-                print(webCamTexture.deviceName);
-                print(webCamTexture.dimension);
-                print(webCamDevice.Value.availableResolutions);
-                print("Made new webcam texture: " + webCamTexture);
-            }
-            else
-            {
-                throw new System.ArgumentException(string.Format("{0}: provided DeviceName is not correct device identifier", this.GetType().Name));
-            }
-        }*/
+        rps_previousCardType = RPS_Card.CardType.Unknown;
+        RPS_ToNullUpdateEvent.Invoke(RPS_Card.CardType.Unknown);
     }
+
 
     /// <summary>
     /// This method scans source device params (flip, rotation, front-camera status etc.) and
@@ -371,7 +283,7 @@ public class CardParser : MonoBehaviour
     {
         // if (!shouldUpdate) return false;
 
-        using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(staticTestImage))
+        using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
         // using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
         {
             if (mode == ParseMode.GetCardFromAll || mode == ParseMode.GetCardNoStickers)
@@ -387,7 +299,7 @@ public class CardParser : MonoBehaviour
                 print("ESCAPE!!!");
                 List<GameObject> possibleCards = GetCardsOfName(card.cardName);
                 print("COUNT: " + possibleCards.Count);
-                GameObject bestCard = possibleCards[0];
+
                 AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards);
                 // TODO : debugging
                 UpdateCardDetected(null, -1);
@@ -396,15 +308,18 @@ public class CardParser : MonoBehaviour
             {
                 lastGoodCustomCard = null;
                 int numCardsSeen = ConfirmCardsFast(cardScene);
+                print("Confirm cards == " + numCardsSeen);
                 UpdateNumberCardsSeen(numCardsSeen);
             } else if (mode == ParseMode.RPS_Mode)
             {
-                Debug.LogError("RPS Parse mode is not implemented");
+                RPS_Card.CardType cardType = RPS_ParseCard(cardScene);
+                Update_RPS_Card(cardType);
             }
 
         }
         return true;
     }
+
 
     private List<GameObject> GetCardsOfName(string cardName)
     {
@@ -613,13 +528,25 @@ public class CardParser : MonoBehaviour
     public UnityEvent<GameObject, int> ToNewUpdateEvent = new UnityEvent<GameObject, int>();
     [HideInInspector]
     public UnityEvent<int> NumberCardsSeenEvent = new UnityEvent<int>();
+    [HideInInspector]
+    public UnityEvent<RPS_Card.CardType> RPS_StableUpdateEvent = new UnityEvent<RPS_Card.CardType>();
+    [HideInInspector]
+    public UnityEvent<RPS_Card.CardType> RPS_ToNewUpdateEvent = new UnityEvent<RPS_Card.CardType>();
+    [HideInInspector]
+    public UnityEvent<RPS_Card.CardType> RPS_ToNullUpdateEvent = new UnityEvent<RPS_Card.CardType>();
+
 
     private float timeSinceLastUpdate = -1.0f;
     public float timeRequiredForNull;
     public float timeRequiredForNew;
     public float timeRequiredForNewFromNull;
-    public float timeRequiredForCountZero = 0.2f;
+
+    public float timeRequiredForCountZero = 0.5f;
     public float timeRequiredForCountUpdate = 0.1f;
+
+    public float rps_timeRequiredForNull;
+    public float rps_timeRequiredForNew;
+    public float rps_timeRequiredForNewFromNull;
 
     private int lastNumCounted = 0;
 
@@ -680,6 +607,42 @@ public class CardParser : MonoBehaviour
             previousCard = card;
             timeSinceLastUpdate = Time.time;
             ToNewUpdateEvent.Invoke(card, id);
+        }
+    }
+
+    private RPS_Card.CardType rps_previousCardType;
+    private void Update_RPS_Card(RPS_Card.CardType cardType)
+    {
+        print("UPDATING TO: " + cardType);
+
+        // if card is the same as last, don't update
+        if (cardType == rps_previousCardType)
+        {
+            timeSinceLastUpdate = Time.time;
+            RPS_StableUpdateEvent.Invoke(cardType);
+        }
+
+        // update to null
+        if (cardType == RPS_Card.CardType.Unknown && timeSinceLastUpdate + rps_timeRequiredForNull <= Time.time)
+        {
+            rps_previousCardType = cardType;
+            timeSinceLastUpdate = Time.time;
+            RPS_ToNullUpdateEvent.Invoke(cardType);
+        }
+
+        // update to different card
+        if (cardType != RPS_Card.CardType.Unknown && rps_previousCardType == RPS_Card.CardType.Unknown
+            && timeSinceLastUpdate + timeRequiredForNewFromNull <= Time.time)
+        {
+            rps_previousCardType = cardType;
+            timeSinceLastUpdate = Time.time;
+            RPS_ToNewUpdateEvent.Invoke(cardType);
+        }
+        else if (cardType != RPS_Card.CardType.Unknown && timeSinceLastUpdate + timeRequiredForNew <= Time.time)
+        {
+            rps_previousCardType = cardType;
+            timeSinceLastUpdate = Time.time;
+            RPS_ToNewUpdateEvent.Invoke(cardType);
         }
     }
 
@@ -871,10 +834,7 @@ public class CardParser : MonoBehaviour
             double sum = channelSums.Val0 + channelSums.Val1 + channelSums.Val2 + channelSums.Val3;
 
             float diffOp = 1.0f - ((float)sum / (template.Size().Height * template.Size().Width * 255));
-            if (diffOp > 0.9) {
-                //diffImages[0].texture = OpenCvSharp.Unity.MatToTexture(diff);
-                print(diffOp);
-            }
+            
             float histOp = GetHistogramMatch(im1, template);
 
             return (histWeight * histOp) + ((1f - histWeight) * diffOp);
@@ -1450,10 +1410,86 @@ public class CardParser : MonoBehaviour
         HierarchyIndex[] h;
         // DETECT CONTOURS AND SIMPLIFY THEM IF NEEDED
         DetectContours(cardScene, out contours, out h);
+        Mat blackout = new Mat();
+        cardScene.CopyTo(blackout);
+        CvAruco.DrawDetectedMarkers(blackout, contours, null);
+
+        if (cardParserManager != null)
+            cardParserManager.UpdateSeenImage(blackout);
+
         // POSSIBLE LOWER RIGHTS
         CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
+        for (int i = 0; i < bestLowerRights.Length; ++i)
+        {
+            print("For possible card " + (i+1) + ": " + bestLowerRights[i].matchVal);
+        }
         // TOOD : very fast and very simple, no real confirmations are done here
         return bestLowerRights.Length;
+    }
+
+
+    private RPS_Card.CardType RPS_ParseCard(Mat cardScene)
+    {
+        Point2f[][] contours;
+        HierarchyIndex[] h;
+        // DETECT CONTOURS AND SIMPLIFY THEM IF NEEDED
+        DetectContours(cardScene, out contours, out h);
+        Mat blackout = new Mat();
+        cardScene.CopyTo(blackout);
+        CvAruco.DrawDetectedMarkers(blackout, contours, null);
+
+        if (cardParserManager)
+            cardParserManager.UpdateSeenImage(blackout);
+
+        // POSSIBLE LOWER RIGHTS
+        CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
+        
+
+        foreach (CardCorner bestLowerRight in bestLowerRights)
+        {
+            print("RPS: FOUND A BLOODY CARD!");
+
+            // CLEAN UP THE CURRENT LOWER RIGHT
+            if (bestLowerRight == null || bestLowerRight.mostLikelyType != CardType.Attack) break;
+            bestLowerRight.corners = RotateWinding(bestLowerRight.corners, bestLowerRight.neededRot);
+            bestLowerRight.neededRot = 0;
+
+            // UPPER LEFT
+            CardCorner bestUpperLeft = FindBestUpperLeftCardCorner(cardScene, bestLowerRight.corners, ref contours);
+            if (bestUpperLeft == null)
+            {
+                return RPS_Card.CardType.Unknown;
+            }
+
+            bestUpperLeft.corners = RotateWinding(bestUpperLeft.corners, bestUpperLeft.neededRot);
+            bestUpperLeft.neededRot = 0;
+
+            // REMAP BY CORNERS
+            Point2f[] possibleCard = TryToBoundCardFromCorners(cardScene, bestLowerRight.corners, bestUpperLeft.corners);
+            if (possibleCard == null)
+                return RPS_Card.CardType.Unknown;
+            Mat replaned = PerformFirstReplaneFull(cardScene, possibleCard, cornerReplaneOffset, out Mat firstTMat);
+
+            // get the homography matrix from the replaned image to the template image space
+            Mat hMat = KeypointMatchToTemplate(replaned, bestLowerRight, out CardType cardType, out CardElement cardElement, out int ID, out string cardName);
+            if (hMat == null) return RPS_Card.CardType.Unknown;
+            print(cardElement);
+            switch (cardElement)
+            {
+                case CardElement.Dark:
+                case CardElement.Fire:
+                    return RPS_Card.CardType.Unknown;
+                case CardElement.Water:
+                    return RPS_Card.CardType.Water;
+                case CardElement.Wind:
+                    return RPS_Card.CardType.Wind;
+                case CardElement.Earth:
+                case CardElement.Light:
+                case CardElement.None:
+                    return RPS_Card.CardType.Unknown;
+            }
+        }
+        return RPS_Card.CardType.Unknown;
     }
 
     /***
@@ -1577,7 +1613,6 @@ public class CardParser : MonoBehaviour
         float bestPercent = 0.0f;
         float bestHistComp = 0.0f;
         string bestHistWinner = "";
-
         // TODO : possible sort paradigms
             // by fundy number
             // by homo percent

@@ -66,6 +66,7 @@ public class RPS_Card
         cards.Add(CardType.Fire, fireCount);
         cards.Add(CardType.Water, waterCount);
         cards.Add(CardType.Wind, natureCount);
+        cards.Add(CardType.Unknown, -1);
         return cards;
     }
     
