@@ -61559,7 +61559,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1658023399, guid: 3cd4cdc379607b349883b8162ee9f5c5, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1895394092, guid: 3cd4cdc379607b349883b8162ee9f5c5, type: 3}
       propertyPath: m_Intensity
