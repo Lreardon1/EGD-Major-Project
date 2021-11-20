@@ -59,7 +59,7 @@ Shader "Custom/PixelGrass"
 	//#pragma vertex vert
 			// This line defines the name of the fragment shader. 
 	//#pragma fragment frag
-//#pragma require geometry
+#pragma require geometry
 #pragma geometry geom
 
 #define GrassSegments 5 // segments per blade
@@ -90,10 +90,14 @@ Shader "Custom/PixelGrass"
 			struct GeomData {
 			float4 positionCS : SV_POSITION;
 			float3 positionWS : TEXCOORD0;
-			float4 uv : TEXCOORD3;
 			float3 normalWS : TEXCOORD1;
-			// float4 tangentWS : TEXCOORD2;
+			float4 tangentWS : TEXCOORD2;
+			float4 uv : TEXCOORD3;
+			float3 viewDirectionWS : TEXCOORD4;
+			float2 lightmapUV : TEXCOORD5;
+			float3 sh : TEXCOORD6;
 			float4 fogFactorAndVertexLight : TEXCOORD7;
+			float4 shadowCoord : TEXCOORD8;
 
 			/*
 			output.positionCS = input.positionCS;
@@ -173,28 +177,64 @@ Shader "Custom/PixelGrass"
 		}
 
 		// per new grass vertex
-		GeomData GrassVertex(float3 vertexPos, float width, float height, float offset, float curve, float2 uv, float3x3 rotation, float3 faceNormal) {
+		GeomData GrassVertex(float3 vertexPos, float width, float height, float offset, float curve, float4 uv, float3x3 rotation, float3 faceNormal,
+			 GeomData IN) {
 			GeomData OUT;
 			float3 offsetvertices = vertexPos + mul(rotation, float3(width, height, curve) + float3(0, 0, offset));
 
 
 			OUT.positionCS = GetShadowPositionHClip(offsetvertices, faceNormal);
 			OUT.normalWS = faceNormal;
-			// OUT.diffuseColor = color;
-			// OUT.uv = uv;
+			OUT.uv = uv;
 			VertexPositionInputs vertexInput = GetVertexPositionInputs(vertexPos + mul(rotation, float3(width, height, curve)));
 			OUT.positionWS = vertexInput.positionWS;
 			float fogFactor = ComputeFogFactor(OUT.positionCS.z);
 			OUT.fogFactorAndVertexLight = fogFactor;
-			OUT.uv = uv.xyxy;
+			OUT.uv = IN.uv;
+			OUT.tangentWS = IN.tangentWS;
+			OUT.viewDirectionWS = IN.viewDirectionWS;
+			OUT.lightmapUV = IN.lightmapUV;
+			OUT.shadowCoord = IN.shadowCoord;
+			OUT.sh = IN.sh;
 
 			return OUT;
 		}
 
+		// taken from https://answers.unity.com/questions/218333/shader-inversefloat4x4-function.html
+		float4x4 inverse(float4x4 input)
+		{
+			#define minor(a,b,c) determinant(float3x3(input.a, input.b, input.c))
+			//determinant(float3x3(input._22_23_23, input._32_33_34, input._42_43_44))
+
+			float4x4 cofactors = float4x4(
+				minor(_22_23_24, _32_33_34, _42_43_44),
+				-minor(_21_23_24, _31_33_34, _41_43_44),
+				minor(_21_22_24, _31_32_34, _41_42_44),
+				-minor(_21_22_23, _31_32_33, _41_42_43),
+
+				-minor(_12_13_14, _32_33_34, _42_43_44),
+				minor(_11_13_14, _31_33_34, _41_43_44),
+				-minor(_11_12_14, _31_32_34, _41_42_44),
+				minor(_11_12_13, _31_32_33, _41_42_43),
+
+				minor(_12_13_14, _22_23_24, _42_43_44),
+				-minor(_11_13_14, _21_23_24, _41_43_44),
+				minor(_11_12_14, _21_22_24, _41_42_44),
+				-minor(_11_12_13, _21_22_23, _41_42_43),
+
+				-minor(_12_13_14, _22_23_24, _32_33_34),
+				minor(_11_13_14, _21_23_24, _31_33_34),
+				-minor(_11_12_14, _21_22_24, _31_32_34),
+				minor(_11_12_13, _21_22_23, _31_32_33)
+				);
+			#undef minor
+			return transpose(cofactors) / determinant(input);
+		}
+
 		// wind and basic grassblade setup from https://roystan.net/articles/grass-shader.html
 		// limit for vertices
-		[maxvertexcount(48)]
-		void geom(triangle GeomData IN[3], inout TriangleStream<GeomData> triStream)
+		[maxvertexcount(30)]
+		void geom(point GeomData IN[1], inout TriangleStream<GeomData> triStream)
 		{
 			/*GeomData vert0 = IN[0];
 			GeomData vert1 = IN[1];
@@ -208,15 +248,18 @@ Shader "Custom/PixelGrass"
 			triStream.Append(vert2);
 			triStream.RestartStrip();*/
 
-			float forward = rand(IN[0].positionCS.yyz) *_BladeForward;
+			// float4x4 clipToWorldMat = inverse(GetWorldToHClipMatrix());
+			float4 posOS = float4(TransformWorldToObject(IN[0].positionWS), 1);
+
+			float forward = rand(posOS.yyz) *_BladeForward;
 			// just use an up facing normal, works nicest
 			float3 faceNormal = float3(0, 1, 0);
-			float3 worldPos = TransformObjectToWorld(IN[0].positionCS.xyz);
+			float3 worldPos = IN[0].positionWS;
 			// camera distance for culling 
 			float distanceFromCamera = distance(worldPos, _WorldSpaceCameraPos);
 			float distanceFade = 1 - saturate((distanceFromCamera - _MinDist) / _MaxDist);
 			// wind
-			float3 v0 = IN[0].positionCS.xyz;
+			float3 v0 = posOS.xyz;
 			float3 wind1 = float3(sin(_Time.x * _WindSpeed + v0.x) + sin(_Time.x * _WindSpeed + v0.z * 2) + sin(_Time.x * _WindSpeed * 0.1 + v0.x), 0,
 				cos(_Time.x * _WindSpeed + v0.x * 2) + cos(_Time.x * _WindSpeed + v0.z));
 			wind1 *= _WindStrength;
@@ -232,15 +275,15 @@ Shader "Custom/PixelGrass"
 
 
 			// set grass height from tool, uncomment if youre not using the tool!
-			_GrassHeight *= IN[0].uv.y;
-			_GrassWidth *= IN[0].uv.x;
-			_GrassHeight *= clamp(rand(IN[0].positionCS.xyz), 1 - _RandomHeight, 1 + _RandomHeight);
+			//_GrassHeight *= IN[0].uv.y;
+			//_GrassWidth *= IN[0].uv.x;
+			//_GrassHeight *= clamp(rand(IN[0].positionCS.xyz), 1 - _RandomHeight, 1 + _RandomHeight);
 
 			// grassblades geometry
 			for (int j = 0; j < (GrassBlades * distanceFade); j++)
 			{
 				// set rotation and radius of the blades
-				float3x3 facingRotationMatrix = AngleAxis3x3(rand(IN[0].positionCS.xyz) * TWO_PI + j, float3(0, 1, -0.1));
+				float3x3 facingRotationMatrix = AngleAxis3x3(rand(posOS.xyz) * TWO_PI + j, float3(0, 1, -0.1));
 
 				float3x3 transformationMatrix = facingRotationMatrix;
 
@@ -266,12 +309,12 @@ Shader "Custom/PixelGrass"
 					float3 newPos = i == 0 ? v0 : v0 + ((float3(sphereDisp.x, sphereDisp.y, sphereDisp.z) + wind1) * t);
 
 					// every segment adds 2 new triangles
-					triStream.Append(GrassVertex(newPos, segmentWidth, segmentHeight, offset, segmentForward, float2(0, t), transformMatrix, faceNormal));
-					triStream.Append(GrassVertex(newPos, -segmentWidth, segmentHeight, offset, segmentForward, float2(1, t), transformMatrix, faceNormal));
+					triStream.Append(GrassVertex(newPos, segmentWidth, segmentHeight, offset, segmentForward, IN[0].uv, transformMatrix, faceNormal, IN[0]));
+					triStream.Append(GrassVertex(newPos, -segmentWidth, segmentHeight, offset, segmentForward, IN[0].uv, transformMatrix, faceNormal, IN[0]));
 
 				}
 				// Add just below the loop to insert the vertex at the tip of the blade.
-				triStream.Append(GrassVertex(v0 + float3(sphereDisp.x * 1.5, sphereDisp.y, sphereDisp.z * 1.5) + wind1, 0, _GrassHeight, offset, forward, float2(0.5, 1), transformationMatrix, faceNormal));
+				triStream.Append(GrassVertex(v0 + float3(sphereDisp.x * 1.5, sphereDisp.y, sphereDisp.z * 1.5) + wind1, 0, _GrassHeight, offset, forward, IN[0].uv, transformationMatrix, faceNormal, IN[0]));
 				// restart the strip to start another grass blade
 				triStream.RestartStrip();
 			}
@@ -11170,6 +11213,6 @@ output.uv0 = input.texCoord0;
 	ENDHLSL
 }
 	}
-		CustomEditor "PixelizedGUI"
+		//CustomEditor "PixelizedGUI"
 		FallBack "Hidden/Shader Graph/FallbackError"
 }

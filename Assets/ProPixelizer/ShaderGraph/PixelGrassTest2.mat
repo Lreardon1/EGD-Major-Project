@@ -60,7 +60,7 @@ Material:
     - USE_OBJECT_POSITION: 0
     - Vector1_85c7bf4de829424e821bea36369fbe62: 0.2
     - _AlphaClipThreshold: 0.5
-    - _PixelSize: 2
+    - _PixelSize: 2.88
     m_Colors:
     - Vector2_48694d2b509b4f4e894ec8c7165e5374: {r: 0, g: 1, b: 0, a: 0}
     - Vector3_C98FB62A: {r: 0.2, g: 0.2, b: 0.2, a: 0}
