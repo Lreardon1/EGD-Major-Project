@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -135,6 +136,11 @@ public class OverworldMovement : MonoBehaviour
             godfather_animator.SetBool("Back", backToCamera);
             hunter_animator.SetBool("Back", backToCamera);
         }
+    }
+
+    public void SetCanMove(bool c)
+    {
+        canMove = c;
     }
 
     public float backoff = 0.1f;

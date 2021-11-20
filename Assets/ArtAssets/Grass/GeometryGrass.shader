@@ -284,19 +284,19 @@ Shader "Custom/GeometryGrass"
 	float shadow = mainLight.shadowAttenuation;
 
 	// extra point lights support
-	float3 extraLights;
+	/*float3 extraLights;
 	int pixelLightCount = GetAdditionalLightsCount();
 	for (int j = 0; j < pixelLightCount; ++j) {
 		Light light = GetAdditionalLight(j, i.worldPos, half4(1, 1, 1, 1));
 		float3 attenuatedLightColor = light.color * (light.distanceAttenuation * light.shadowAttenuation);
 		extraLights += attenuatedLightColor;
-	}
+	}*/
 	float4 baseColor = lerp(_BottomColor, _TopColor, saturate(i.uv.y)) * float4(i.diffuseColor, 1);
 
 	// multiply with lighting color
 	float4 litColor = (baseColor * float4(mainLight.color,1));
 
-	litColor += float4(extraLights,1);
+	// litColor += float4(extraLights,1);
 	// multiply with vertex color, and shadows
 	float4 final = litColor * shadow;
 	// add in basecolor when lights turned down
