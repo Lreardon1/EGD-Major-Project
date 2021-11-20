@@ -9,6 +9,12 @@ public class AnimationController : MonoBehaviour
 {
     private List<GameObject> disabledObjects = new List<GameObject>();
 
+    [Header("Objects To Disable")]
+    public GameObject[] ObjectsToDisable;
+    [Header("Objects To Enable")]
+    public GameObject[] ObjectsToEnable;
+
+    [Header("Other items")]
     public Camera cam;
     public Image fadeImage;
     public GameObject dialoguePanel;
@@ -47,20 +53,36 @@ public class AnimationController : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    public void PlayCutscene()
     {
+        FindObjectOfType<OverworldMovement>().SetCanMove(false);
         StartCoroutine(FadeToBlack(fadeInTime, StartUp));
     }
     
 
+    public void TriggerCutscene()
+    {
+        StartCoroutine(FadeToBlack(fadeInTime, StartUp));
+    }
+
     private void StartUp()
     {
+        
+
         disabledObjects.AddRange(GameObject.FindGameObjectsWithTag("Player"));
         disabledObjects.AddRange(GameObject.FindGameObjectsWithTag("Party"));
+        disabledObjects.AddRange(ObjectsToDisable);
+        disabledObjects.Add(Camera.main.gameObject);
+
         foreach (GameObject d in disabledObjects)
             d.SetActive(false);
+        foreach (GameObject e in ObjectsToEnable)
+            e.SetActive(true);
+
+        cam.gameObject.SetActive(true);
 
         StartCoroutine(FadeToScene(fadeOutTime, Sink));
+        print("SENDING NEXT");
         GetComponent<Animator>().SetTrigger("Next");
     }
 
@@ -76,13 +98,21 @@ public class AnimationController : MonoBehaviour
 
     private void FinishUp()
     {
+        GetComponent<Animator>().SetTrigger("Exit");
+
         foreach (GameObject d in disabledObjects)
             d.SetActive(true);
+        foreach (GameObject e in ObjectsToEnable)
+            e.SetActive(false);
         for (int i = 0; i < transform.childCount; ++i)
             transform.GetChild(i).gameObject.SetActive(false);
+        cam.gameObject.SetActive(false);
 
+        FindObjectOfType<OverworldMovement>().SetCanMove(true);
         StartCoroutine(FadeToScene(fadeOutTime, DestroySelf));
 
+
+        GetComponent<AfterCutsceneActions>()?.TakeActionsAfterCutscene();
     }
 
 
@@ -100,11 +130,15 @@ public class AnimationController : MonoBehaviour
         diaText.text = dia;
         diaImage.texture = image;
         if (progressAnim)
+        {
             GetComponent<Animator>().SetTrigger("Next");
+        }
     }
 
     private void Update()
     {
+        dialoguePanel.SetActive(currentDialogue != null);
+
         if (currentDialogue != null)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -125,7 +159,9 @@ public class AnimationController : MonoBehaviour
                 diaText.text = dia;
                 diaImage.texture = image;
                 if (progressAnim)
+                {
                     GetComponent<Animator>().SetTrigger("Next");
+                }
             }
         }
     }
