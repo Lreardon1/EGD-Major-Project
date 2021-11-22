@@ -16,4 +16,4 @@ MonoBehaviour:
   cardID: 1
   cardElement: 8
   cardType: 256
-  cardTexture: {fileID: 2800000, guid: e1acff4c47630984da84aa01dab3e534, type: 3}
+  cardTexture: {fileID: 2800000, guid: 7a7896ccb211b634fbf09e7f1f560486, type: 3}
