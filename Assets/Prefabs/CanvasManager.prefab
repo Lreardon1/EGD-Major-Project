@@ -4002,7 +4002,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 4914949035053842620}
   m_HorizontalScrollbar: {fileID: 4914949035598111921}
   m_VerticalScrollbar: {fileID: 4914949034539890935}
@@ -4983,7 +4983,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 4914949034813756731}
   m_HorizontalScrollbar: {fileID: 4914949034937156098}
   m_VerticalScrollbar: {fileID: 4914949035131333155}
@@ -5118,7 +5118,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 4914949035536852372}
   m_HorizontalScrollbar: {fileID: 4914949034385832960}
   m_VerticalScrollbar: {fileID: 4914949034283874488}
@@ -7287,7 +7287,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 4914949035528388614}
   m_HorizontalScrollbar: {fileID: 4914949034729184202}
   m_VerticalScrollbar: {fileID: 4914949035604959886}
@@ -7558,7 +7558,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 4914949034464574154}
   m_HorizontalScrollbar: {fileID: 4914949034408069229}
   m_VerticalScrollbar: {fileID: 4914949034745961860}
@@ -9585,7 +9585,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 4914949034845409971}
   m_HorizontalScrollbar: {fileID: 4914949035632719702}
   m_VerticalScrollbar: {fileID: 4914949033946775741}
@@ -11040,7 +11040,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Gives priority to the action of the targetted combatant, placing them at
+  m_text: Gives priority to the action of the targeted combatant, placing them at
     the top of the action order for that turn
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 50d5fb9b261de414f977d283c813f850, type: 2}
@@ -12310,7 +12310,7 @@ MonoBehaviour:
     m_Top: 10
     m_Bottom: 10
   m_ChildAlignment: 1
-  m_Spacing: 10
+  m_Spacing: 5
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -15092,7 +15092,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 5258483740086122273}
   m_HorizontalScrollbar: {fileID: 3032004335006481228}
   m_VerticalScrollbar: {fileID: 1415249661232986117}

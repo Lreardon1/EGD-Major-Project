@@ -150,7 +150,14 @@ public class Card : MonoBehaviour
         }
 
         //setting mana text to the right cost
-        manaText.text = manaCost.ToString();
+        if (isWild)
+        {
+            manaText.text = "?";
+        }
+        else
+        {
+            manaText.text = manaCost.ToString();
+        }
     }
 
     public void Play(GameObject combatant, List<GameObject> otherCombatants)
@@ -183,7 +190,14 @@ public class Card : MonoBehaviour
         cardText.sprite = c.cardText.sprite;
         manaCost = c.manaCost;
         baseManaCost = c.baseManaCost;
-        manaText.text = manaCost.ToString();
+        if (c.isWild)
+        {
+            manaText.text = "?";
+        }
+        else
+        {
+            manaText.text = manaCost.ToString();
+        }
 
         element = c.element;
         //updating element icon to match
@@ -234,7 +248,14 @@ public class Card : MonoBehaviour
         cardText.sprite = c.cardText.sprite;
         manaCost = c.manaCost;
         baseManaCost = c.baseManaCost;
-        manaText.text = manaCost.ToString();
+        if (c.isWild)
+        {
+            manaText.text = "?";
+        }
+        else
+        {
+            manaText.text = manaCost.ToString();
+        }
 
         GameObject elemIcon = elementIcon;
         if (c.element != Element.None)
