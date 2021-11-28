@@ -12,6 +12,7 @@ public class DragDrop : MonoBehaviour
     public GameObject dragger;
     public bool isOverDropZone = false;
     private GameObject previousParent;
+    private int prevChildIndex;
     [SerializeField]
     public List<GameObject> allowedDropZones = new List<GameObject>();
     public List<GameObject> dropZones = new List<GameObject>();
@@ -52,6 +53,7 @@ public class DragDrop : MonoBehaviour
         {
             startPosition = trans.localPosition;
             previousParent = trans.parent.gameObject;
+            prevChildIndex = trans.GetSiblingIndex();
             dragger.GetComponent<Dragger>().isDragging = true;
             trans.localPosition = new Vector3(0, 0, 0);
             trans.SetParent(dragger.transform, false);
@@ -142,6 +144,10 @@ public class DragDrop : MonoBehaviour
                 if (scrollRectZone != null && scrollRectZone.content != previousParent)
                 {
                     trans.SetParent(scrollRectZone.content.transform, false);
+                    if (scrollRectZone.content.gameObject == previousParent) 
+                    {
+                        trans.SetSiblingIndex(prevChildIndex);
+                    }
                 }
                 else
                 {
@@ -159,6 +165,7 @@ public class DragDrop : MonoBehaviour
             else
             {
                 trans.SetParent(previousParent.transform, false);
+                trans.SetSiblingIndex(prevChildIndex);
                 trans.localPosition = startPosition;
             }
         }

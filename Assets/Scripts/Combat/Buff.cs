@@ -40,7 +40,7 @@ public class Buff : MonoBehaviour
     {
         duration--;
         //if duration over, remove buffs
-        if (duration == 0)
+        if (duration <= 0)
         {
             CombatantBasis cb = gameObject.GetComponent<CombatantBasis>();
             foreach (Stat stat in affectedValues)

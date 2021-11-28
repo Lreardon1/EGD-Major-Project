@@ -55,7 +55,7 @@ public class HunterCombat : CombatantBasis
             damageTotal = (attack + attackCardBonus) * attackMultiplier; // Get modifier from card here
         }
 
-        cb.TakeDamage(damageTotal, nextActionPrimaryElem, nextActionSecondaryElem, gameObject);
+        cb.TakeDamage(damageTotal, nextActionPrimaryElems[0], nextActionSecondaryElems[0], gameObject);
 
         Debug.Log("Hunter Attack");
     }

@@ -6,9 +6,9 @@ public class CobraCombat : CombatantBasis
 {
     public override void Special()
     {
-        if(nextActionPrimaryElem != Card.Element.None)
+        if(nextActionPrimaryElems[0] != Card.Element.None)
         {
-            nextActionPrimaryElem = Card.Element.Dark;
+            nextActionPrimaryElems.Add(Card.Element.Dark);
         }
         Attack();
 

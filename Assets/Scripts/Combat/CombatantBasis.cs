@@ -11,8 +11,8 @@ public class CombatantBasis : MonoBehaviour
     public Action nextAction;
     public Status statusCondition;
     public StatusScript statusScript;
-    public Card.Element nextActionPrimaryElem;
-    public Card.Element nextActionSecondaryElem;
+    public List<Card.Element> nextActionPrimaryElems = new List<Card.Element>();
+    public List<Card.Element> nextActionSecondaryElems = new List<Card.Element>();
     public string combatantName;
     public int totalHitPoints;
     public int currentHitPoints;
@@ -37,6 +37,11 @@ public class CombatantBasis : MonoBehaviour
     public bool untargettable = false;
     public bool canCounterAttack = false;
     public bool hasPriority = false;
+
+    //storage for temp removed effects to allow for undoing cards
+    public Status unappliedStatus;
+    public List<Card.Element> unappliedPrimElem;
+    public List<Card.Element> unappliedSecElem;
 
     public bool silenced = false;
 
@@ -74,6 +79,7 @@ public class CombatantBasis : MonoBehaviour
     public GameObject heldItem = null;
 
     public GameObject target = null;
+    public GameObject oldTarget = null;
     public bool isSlain = false;
     public bool isEnemy = false;
     public bool isChanneling = false;
@@ -135,8 +141,10 @@ public class CombatantBasis : MonoBehaviour
             defenseMultiplier -= 1f;
             attackCardBonus = 0;
             canCounterAttack = false;
-            nextActionPrimaryElem = Card.Element.None;
-            nextActionSecondaryElem = Card.Element.None;
+            nextActionPrimaryElems.Clear();
+            nextActionPrimaryElems.Add(Card.Element.None);
+            nextActionSecondaryElems.Clear();
+            nextActionSecondaryElems.Add(Card.Element.None);
         }
         // visuals
         if (!isChanneling) { //skips action if channeling
@@ -172,6 +180,7 @@ public class CombatantBasis : MonoBehaviour
 
         hasPriority = false;
         untargettable = false;
+        oldTarget = null;
 
         //buffs tick down after an action
         for(int i = 0; i < attachedBuffs.Count; i++)
@@ -186,8 +195,10 @@ public class CombatantBasis : MonoBehaviour
         if (previousAction == Action.Attack)
         {
             attackCardBonus = 0;
-            nextActionPrimaryElem = Card.Element.None;
-            nextActionSecondaryElem = Card.Element.None;
+            nextActionPrimaryElems.Clear();
+            nextActionPrimaryElems.Add(Card.Element.None);
+            nextActionSecondaryElems.Clear();
+            nextActionSecondaryElems.Add(Card.Element.None);
         }
         lr.enabled = false;
     }
@@ -374,7 +385,7 @@ public class CombatantBasis : MonoBehaviour
 
         float damageTotal = (attack + attackCardBonus) * attackMultiplier; // Get modifier from card here
 
-        cb.TakeDamage(damageTotal, nextActionPrimaryElem, nextActionSecondaryElem, gameObject);
+        cb.TakeDamage(damageTotal, nextActionPrimaryElems[nextActionPrimaryElems.Count-1], nextActionSecondaryElems[nextActionSecondaryElems.Count-1], gameObject);
 
         Debug.Log("Attack");
     }
@@ -396,5 +407,63 @@ public class CombatantBasis : MonoBehaviour
     public virtual void Special()
     {
         Debug.Log("Special");
+    }
+
+    //not entirely ideal solution and still has some extreme edge cases where it could behave unsavorably, if enough time will touch up later
+    public void RemoveElements(Card.Element primary, Card.Element secondary)
+    {
+        if (primary != Card.Element.None)
+        {
+            for (int i = 0; i < nextActionPrimaryElems.Count; i++)
+            {
+                if (nextActionPrimaryElems[i] == primary)
+                {
+                    nextActionPrimaryElems.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
+        if (secondary != Card.Element.None)
+        {
+            for (int i = 0; i < nextActionSecondaryElems.Count; i++)
+            {
+                if (nextActionSecondaryElems[i] == secondary)
+                {
+                    nextActionSecondaryElems.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void RemoveElementsForTurn()
+    {
+        unappliedPrimElem = nextActionPrimaryElems;
+        unappliedSecElem = nextActionSecondaryElems;
+        nextActionPrimaryElems = new List<Card.Element>();
+        nextActionPrimaryElems.Add(Card.Element.None);
+        nextActionSecondaryElems = new List<Card.Element>();
+        nextActionSecondaryElems.Add(Card.Element.None);
+    }
+
+    public void ReturnElementsForTurn()
+    {
+        nextActionPrimaryElems = unappliedPrimElem;
+        nextActionSecondaryElems = unappliedSecElem;
+        unappliedPrimElem = null;
+        unappliedSecElem = null;
+    }
+
+    public void RemoveStatus()
+    {
+        unappliedStatus = statusCondition;
+        statusCondition = Status.None;
+    }
+
+    public void ReapplyStatus()
+    {
+        statusCondition = unappliedStatus;
+        unappliedStatus = Status.None;
     }
 }

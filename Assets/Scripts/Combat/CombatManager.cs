@@ -760,6 +760,39 @@ public class CombatManager : MonoBehaviour
         actionOrderUI.UpdateOrder(actionOrder);
     }
 
+    public void RemovePriority(GameObject combatant)
+    {
+        combatant.GetComponent<CombatantBasis>().hasPriority = false;
+        //if combatant is still in queue, move them to top of the order
+        if (actionOrder.Contains(combatant))
+        {
+            actionOrder.Remove(combatant);
+            InsertCombatantToActionOrder(combatant);
+        }
+        actionOrderUI.UpdateOrder(actionOrder);
+    }
+
+    private void InsertCombatantToActionOrder(GameObject combatant)
+    {
+        CombatantBasis insertCB = combatant.GetComponent<CombatantBasis>();
+        float freeCombatSpeed = insertCB.speed * insertCB.speedMultiplier;
+        for (int i = 0; i < actionOrder.Count; i++)
+        {
+            CombatantBasis cb = actionOrder[i].GetComponent<CombatantBasis>();
+            if (cb.hasPriority)
+                continue;
+            else
+            {
+                //insert position has been found
+                if (cb.speed * cb.speedMultiplier < freeCombatSpeed)
+                {
+                    actionOrder.Insert(i, combatant);
+                    return;
+                }
+            }
+        }
+    }
+
     public void FocusOnEnemy(GameObject combatant)
     {
         //focuses any remaining ally actions onto this enemy
@@ -768,6 +801,7 @@ public class CombatManager : MonoBehaviour
             CombatantBasis cb = action.GetComponent<CombatantBasis>();
             if (!cb.isEnemy && cb.target != null)
             {
+                cb.oldTarget = cb.target;
                 cb.target = combatant;
             }
         }
@@ -781,7 +815,20 @@ public class CombatManager : MonoBehaviour
             CombatantBasis cb = action.GetComponent<CombatantBasis>();
             if (cb.isEnemy && cb.target != null)
             {
+                cb.oldTarget = cb.target;
                 cb.target = combatant;
+            }
+        }
+    }
+
+    public void DropFocus(GameObject combatant)
+    {
+        foreach (GameObject action in actionOrder)
+        {
+            CombatantBasis cb = action.GetComponent<CombatantBasis>();
+            if (cb.target == combatant)
+            {
+                cb.target = cb.oldTarget;
             }
         }
     }
@@ -794,6 +841,7 @@ public class CombatManager : MonoBehaviour
             CombatantBasis cb = action.GetComponent<CombatantBasis>();
             if (cb.target == combatant)
             {
+                cb.oldTarget = combatant;
                 if (cb.isEnemy)
                 {
                     cb.SelectTarget(activePartyMembers);
@@ -802,6 +850,19 @@ public class CombatManager : MonoBehaviour
                 {
                     cb.SelectTarget(activeEnemies);
                 }
+            }
+        }
+    }
+    
+    public void ReinstateTarget(GameObject combatant)
+    {
+        //focuses any remaining ally actions onto untarget this combatant
+        foreach (GameObject action in actionOrder)
+        {
+            CombatantBasis cb = action.GetComponent<CombatantBasis>();
+            if (cb.oldTarget == combatant)
+            {
+                cb.target = combatant;
             }
         }
     }
