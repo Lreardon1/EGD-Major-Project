@@ -22,10 +22,10 @@ MonoBehaviour:
   - ...
   - HaHaHAA, well then, which way to that cave again?
   images:
-  - {fileID: 2800000, guid: ba49db292b6b0f14a84dec0b60c31c38, type: 3}
-  - {fileID: 2800000, guid: ba49db292b6b0f14a84dec0b60c31c38, type: 3}
-  - {fileID: 2800000, guid: ba49db292b6b0f14a84dec0b60c31c38, type: 3}
-  - {fileID: 2800000, guid: ba49db292b6b0f14a84dec0b60c31c38, type: 3}
-  - {fileID: 2800000, guid: b07c7c1c6fdac2a48aa86d569a2c8ff2, type: 3}
-  - {fileID: 2800000, guid: ba49db292b6b0f14a84dec0b60c31c38, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   shouldProgresses: 000000000001
