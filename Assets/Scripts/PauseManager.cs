@@ -9,7 +9,14 @@ public class PauseManager : MonoBehaviour
     public Canvas canvas;
     public Canvas options;
     public Slider soundVolume;
+    public GameObject refWindow;
     public AudioSource sound;
+
+    private Dictionary<string, GameObject> currPartyMembers = new Dictionary<string, GameObject>();
+    [SerializeField]
+    public GameObject partyMemberStatPrefab;
+    [SerializeField]
+    public GameObject partyView;
 
     public bool isPaused;
 
@@ -28,14 +35,31 @@ public class PauseManager : MonoBehaviour
         
     }
 
+    public void AddPartyMember(string type)
+    {
+        GameObject newMember = Instantiate(partyMemberStatPrefab, partyView.transform);
+        newMember.GetComponent<PartyMemberStats>().UpdatePartyMember(type);
+        currPartyMembers.Add(type, newMember);
+    }
+
+    private void RefreshPartyView()
+    {
+        foreach (KeyValuePair<string, GameObject> partyMember in currPartyMembers)
+        {
+            partyMember.Value.GetComponent<PartyMemberStats>().UpdatePartyMember(partyMember.Key);
+        }
+    }
+
     public void PauseGame()
     {
         isPaused = !isPaused;
         canvas.gameObject.SetActive(!canvas.gameObject.active);
         options.gameObject.SetActive(false);
+        refWindow.SetActive(false);
         if (isPaused)
         {
             Time.timeScale = 0f;
+            RefreshPartyView();
         }
         else
         {
