@@ -72,7 +72,16 @@ public class DialogueGraphView : GraphView
         node.titleContainer.Add(button);
 
         var diaField = new TextField(string.Empty);
-        diaField.RegisterValueChangedCallback(evt => 
+        diaField.RegisterValueChangedCallback(evt =>
+        {
+            node.dialogueText = evt.newValue;
+            node.title = evt.newValue;
+        });
+        diaField.SetValueWithoutNotify(node.title);
+        node.mainContainer.Add(diaField);
+
+        diaField = new TextField(string.Empty);
+        diaField.RegisterValueChangedCallback(evt =>
         {
             node.dialogueText = evt.newValue;
             node.title = evt.newValue;
@@ -122,11 +131,12 @@ public class DialogueGraphView : GraphView
             .Where(x => x.output.portName == genPort.portName
             && x.output.node == genPort.node);
 
-        if (!targetEdge.Any()) return;
-
-        var edge = targetEdge.First();
-        edge.input.Disconnect(edge);
-        RemoveElement(targetEdge.First());
+        if (targetEdge.Any())
+        {
+            var edge = targetEdge.First();
+            edge.input.Disconnect(edge);
+            RemoveElement(targetEdge.First());
+        }
         node.outputContainer.Remove(genPort);
         node.RefreshExpandedState();
         node.RefreshPorts();
@@ -141,6 +151,6 @@ public class DialogueGraphView : GraphView
             if (startPort != port && startPort.node != port.node)
                 compatiblePorts.Add(port);
         });
-        return base.GetCompatiblePorts(startPort, nodeAdapter);
+        return compatiblePorts;
     }
 }

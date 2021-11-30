@@ -37,6 +37,7 @@ public class DialogueGraph : EditorWindow
         graphView.StretchToParentSize();
         rootVisualElement.Add(graphView);
 
+        GenToolBar();
     }
 
     private void GenToolBar()
