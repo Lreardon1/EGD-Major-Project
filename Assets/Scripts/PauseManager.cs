@@ -23,6 +23,55 @@ public class PauseManager : MonoBehaviour
     private void Start()
     {
         isPaused = false;
+
+        //loading in all current party members
+        if (PlayerPrefs.HasKey("priest"))
+        {
+            if (PlayerPrefs.GetInt("priest") == 1)
+            {
+                AddPartyMember("priest", false);
+            }
+        }
+        else
+        {
+            PlayerPrefs.SetInt("priest", 0);
+        }
+
+        if (PlayerPrefs.HasKey("hunter"))
+        {
+            if (PlayerPrefs.GetInt("hunter") == 1)
+            {
+                AddPartyMember("hunter", false);
+            }
+        }
+        else
+        {
+            PlayerPrefs.SetInt("hunter", 0);
+        }
+
+        if (PlayerPrefs.HasKey("mechanist"))
+        {
+            if (PlayerPrefs.GetInt("mechanist") == 1)
+            {
+                AddPartyMember("mechanist", false);
+            }
+        }
+        else
+        {
+            PlayerPrefs.SetInt("mechanist", 0);
+        }
+
+        if (PlayerPrefs.HasKey("warrior"))
+        {
+            if (PlayerPrefs.GetInt("warrior") == 1)
+            {
+                AddPartyMember("warrior", false);
+            }
+        }
+        else
+        {
+            PlayerPrefs.SetInt("warrior", 0);
+        }
     }
 
     void Update()
@@ -35,18 +84,19 @@ public class PauseManager : MonoBehaviour
         
     }
 
-    public void AddPartyMember(string type)
+    public void AddPartyMember(string type, bool firstTime)
     {
+        PlayerPrefs.SetInt(type, 1);
         GameObject newMember = Instantiate(partyMemberStatPrefab, partyView.transform);
-        newMember.GetComponent<PartyMemberStats>().UpdatePartyMember(type);
+        newMember.GetComponent<PartyMemberStats>().UpdatePartyMember(type, firstTime);
         currPartyMembers.Add(type, newMember);
     }
 
-    private void RefreshPartyView()
+    public void RefreshPartyView()
     {
         foreach (KeyValuePair<string, GameObject> partyMember in currPartyMembers)
         {
-            partyMember.Value.GetComponent<PartyMemberStats>().UpdatePartyMember(partyMember.Key);
+            partyMember.Value.GetComponent<PartyMemberStats>().UpdatePartyMember(partyMember.Key, false);
         }
     }
 
@@ -61,7 +111,7 @@ public class PauseManager : MonoBehaviour
     public void LinkCombatant(string type, GameObject combatant)
     {
         PartyMemberStats.combatPartyMembers[type] = combatant;
-        currPartyMembers[type].GetComponent<PartyMemberStats>().UpdatePartyMember(type);
+        currPartyMembers[type].GetComponent<PartyMemberStats>().UpdatePartyMember(type, false);
     }
 
     public void RemoveCombatant(string type)

@@ -50,6 +50,8 @@ public class CombatantBasis : MonoBehaviour
     public LineRenderer lr;
     public Transform targetLineStart;
 
+    public PauseManager pauseManager;
+
     // TODO : solution because no function is called to inform combatbasis of changed applied card
     public GameObject appliedCard
     {
@@ -94,6 +96,9 @@ public class CombatantBasis : MonoBehaviour
     public void Start()
     {
         healthBar.SetMaxHealth(totalHitPoints, currentHitPoints);
+
+        nextActionPrimaryElems.Add(Card.Element.None);
+        nextActionSecondaryElems.Add(Card.Element.None);
     }
 
     private void MakePopup(string text, Texture2D image, Color col)
@@ -200,6 +205,8 @@ public class CombatantBasis : MonoBehaviour
             nextActionSecondaryElems.Add(Card.Element.None);
         }
         lr.enabled = false;
+
+        pauseManager.RefreshPartyView();
     }
 
     public void Heal(int healingAmount)
