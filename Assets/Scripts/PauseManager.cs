@@ -50,6 +50,25 @@ public class PauseManager : MonoBehaviour
         }
     }
 
+    public void SavePartyView()
+    {
+        foreach (KeyValuePair<string, GameObject> partyMember in currPartyMembers)
+        {
+            partyMember.Value.GetComponent<PartyMemberStats>().SaveToPlayerPrefs(partyMember.Key);
+        }
+    }
+
+    public void LinkCombatant(string type, GameObject combatant)
+    {
+        PartyMemberStats.combatPartyMembers[type] = combatant;
+        currPartyMembers[type].GetComponent<PartyMemberStats>().UpdatePartyMember(type);
+    }
+
+    public void RemoveCombatant(string type)
+    {
+        PartyMemberStats.combatPartyMembers.Remove(type);
+    }
+
     public void PauseGame()
     {
         isPaused = !isPaused;

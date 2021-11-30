@@ -11,9 +11,14 @@ public class HealthbarController : MonoBehaviour
 
     public Transform cam;
 
+    public bool isPartyView = false;
+
     public void Start()
     {
-        cam = FindObjectOfType<Camera>().transform;
+        if (!isPartyView)
+        {
+            cam = FindObjectOfType<Camera>().transform;
+        }
     }
 
     public void SetMaxHealth(int maxHealth, int currentHealth)
@@ -36,6 +41,9 @@ public class HealthbarController : MonoBehaviour
 
     public void LateUpdate()
     {
-        transform.LookAt(transform.position + cam.forward);
+        if (!isPartyView)
+        {
+            transform.LookAt(transform.position + cam.forward);
+        }
     }
 }
