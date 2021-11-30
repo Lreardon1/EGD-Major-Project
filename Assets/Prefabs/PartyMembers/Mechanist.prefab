@@ -15,8 +15,8 @@ MonoBehaviour:
   nextAction: 0
   statusCondition: 0
   statusScript: {fileID: 6038079559533083924}
-  nextActionPrimaryElem: 0
-  nextActionSecondaryElem: 0
+  nextActionPrimaryElems: 
+  nextActionSecondaryElems: 
   combatantName: Mechanist
   totalHitPoints: 20
   currentHitPoints: 20
@@ -36,13 +36,18 @@ MonoBehaviour:
   untargettable: 0
   canCounterAttack: 0
   hasPriority: 0
+  unappliedStatus: 0
+  unappliedPrimElem: 
+  unappliedSecElem: 
   silenced: 0
   text: {fileID: 5022943810321618168}
-  healthBar: {fileID: 598981330254661960}
+  healthBar: {fileID: 6132075760398854827}
   lr: {fileID: 1395006257990481377}
   targetLineStart: {fileID: 2454351851050253363}
+  pauseManager: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
+  oldTarget: {fileID: 0}
   isSlain: 0
   isEnemy: 0
   isChanneling: 0
@@ -191,9 +196,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &598981330254661960 stripped
+--- !u!114 &6132075760398854827 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7024338769683762411, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4337800791968558856, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
   m_PrefabInstance: {fileID: 7578279150225114531}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

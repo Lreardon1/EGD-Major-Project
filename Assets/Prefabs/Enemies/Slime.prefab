@@ -60,7 +60,7 @@ MonoBehaviour:
   unappliedSecElem: 
   silenced: 0
   text: {fileID: 2147232144169677366}
-  healthBar: {fileID: 674865908369657115}
+  healthBar: {fileID: 8716138130229095593}
   lr: {fileID: 4378915491316911166}
   targetLineStart: {fileID: 1544006762984880793}
   pauseManager: {fileID: 0}
@@ -179,9 +179,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &674865908369657115 stripped
+--- !u!114 &8716138130229095593 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3007535789886692460, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+  m_CorrespondingSourceObject: {fileID: 6346841094165609950, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
   m_PrefabInstance: {fileID: 2369301503570432375}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
