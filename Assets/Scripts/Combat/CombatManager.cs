@@ -83,6 +83,27 @@ public class CombatManager : MonoBehaviour
             allCombatants.Add(member);
         }
 
+        if (PlayerPrefs.HasKey("priestCurrHealth"))
+        {
+            partyMembers[0].GetComponent<CombatantBasis>().currentHitPoints = PlayerPrefs.GetInt("priestCurrHealth");
+            partyMembers[0].GetComponent<CombatantBasis>().healthBar.SetHealth(PlayerPrefs.GetInt("priestCurrHealth"));
+        }
+        if (PlayerPrefs.HasKey("hunterCurrHealth"))
+        {
+            partyMembers[1].GetComponent<CombatantBasis>().currentHitPoints = PlayerPrefs.GetInt("hunterCurrHealth");
+            partyMembers[1].GetComponent<CombatantBasis>().healthBar.SetHealth(PlayerPrefs.GetInt("hunterCurrHealth"));
+        }
+        if (PlayerPrefs.HasKey("warriorCurrHealth"))
+        {
+            partyMembers[2].GetComponent<CombatantBasis>().currentHitPoints = PlayerPrefs.GetInt("warriorCurrHealth");
+            partyMembers[2].GetComponent<CombatantBasis>().healthBar.SetHealth(PlayerPrefs.GetInt("warriorCurrHealth"));
+        }
+        if (PlayerPrefs.HasKey("mechanistCurrHealth"))
+        {
+            partyMembers[3].GetComponent<CombatantBasis>().currentHitPoints = PlayerPrefs.GetInt("mechanistCurrHealth");
+            partyMembers[3].GetComponent<CombatantBasis>().healthBar.SetHealth(PlayerPrefs.GetInt("mechanistCurrHealth"));
+        }
+
         GameObject encounter = GameObject.FindGameObjectWithTag("Encounter");
         Transform[] encounterCombatants = encounter.GetComponentsInChildren<Transform>();
         enemies.Clear();
@@ -319,6 +340,7 @@ public class CombatManager : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     done = true;
+                    chc.DrawCards(0);
                 }
 
                 // Need code to detect if card has been applied
@@ -649,7 +671,10 @@ public class CombatManager : MonoBehaviour
     public void DrawCards(int cardsToDraw)
     {
         if (!IsInCVMode)
+        {
             chc.DrawCards(cardsToDraw);
+            NextPhase();
+        }
     }
 
     public void DiscardCard(GameObject card)
@@ -873,6 +898,11 @@ public class CombatManager : MonoBehaviour
         {
             Debug.Log("You Win!");
             StopAllCoroutines();
+            PlayerPrefs.SetInt("priestCurrHealth", partyMembers[0].GetComponent<CombatantBasis>().currentHitPoints);
+            PlayerPrefs.SetInt("hunterCurrHealth", partyMembers[1].GetComponent<CombatantBasis>().currentHitPoints);
+            PlayerPrefs.SetInt("warriorCurrHealth", partyMembers[2].GetComponent<CombatantBasis>().currentHitPoints);
+            PlayerPrefs.SetInt("mechanistCurrHealth", partyMembers[3].GetComponent<CombatantBasis>().currentHitPoints);
+            PlayerPrefs.Save();
             encounterScript.ScreenWipe();
             Invoke("ReturnToOverWorld", 0.5f);
             PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);
@@ -882,6 +912,11 @@ public class CombatManager : MonoBehaviour
         {
             Debug.Log("You Lose...");
             StopAllCoroutines();
+            PlayerPrefs.SetInt("priestCurrHealth", partyMembers[0].GetComponent<CombatantBasis>().totalHitPoints);
+            PlayerPrefs.SetInt("hunterCurrHealth", partyMembers[1].GetComponent<CombatantBasis>().totalHitPoints);
+            PlayerPrefs.SetInt("warriorCurrHealth", partyMembers[2].GetComponent<CombatantBasis>().totalHitPoints);
+            PlayerPrefs.SetInt("mechanistCurrHealth", partyMembers[3].GetComponent<CombatantBasis>().totalHitPoints);
+            PlayerPrefs.Save();
             encounterScript.ScreenWipe();
             Invoke("ReturnToOverWorld", 0.5f);
             PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);

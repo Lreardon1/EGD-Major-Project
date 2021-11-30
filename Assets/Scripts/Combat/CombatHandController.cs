@@ -155,20 +155,22 @@ public class CombatHandController : MonoBehaviour
         }
         switch (cardAmount)
         {
-            case 1:
-                cm.AddMana(20);
-                break;
-            case 2:
+            case 0:
                 cm.AddMana(18);
                 break;
-            case 3:
+            case 1:
                 cm.AddMana(16);
                 break;
-            case 4:
+            case 2:
                 cm.AddMana(14);
                 break;
+            case 3:
+                cm.AddMana(12);
+                break;
+            case 4:
+                cm.AddMana(10);
+                break;
         }
-        cm.NextPhase();
     }
 
     public void DiscardCard(GameObject card)

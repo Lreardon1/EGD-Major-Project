@@ -422,7 +422,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '1: 20 Mana'
+  m_Text: '1: 16 Mana'
 --- !u!222 &208538961
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -898,7 +898,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '3: 16 Mana'
+  m_Text: '3: 12 Mana'
 --- !u!222 &439883156
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3340,7 +3340,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '2: 18 Mana'
+  m_Text: '2: 14 Mana'
 --- !u!222 &1556671632
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4015,7 +4015,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '4: 14 Mana'
+  m_Text: '4: 10 Mana'
 --- !u!222 &1774717285
 CanvasRenderer:
   m_ObjectHideFlags: 0
