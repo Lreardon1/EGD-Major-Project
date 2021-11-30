@@ -2093,7 +2093,7 @@ MonoBehaviour:
   - {fileID: 6272639951522897273, guid: a02df2b30c237634da61a932e01618f4, type: 3}
   - {fileID: 4257258188698014201, guid: d08908fcee48617479c737820e8ea31c, type: 3}
   charImage: {fileID: 2936414046003555462}
-  hpBar: {fileID: 0}
+  hpBar: {fileID: 6500737892315184641}
   statusListObj: {fileID: 8918435073924473016}
   statNumDisplays:
   - {fileID: 7780866773690013127}

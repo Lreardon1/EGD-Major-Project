@@ -19,6 +19,7 @@ public class PauseManager : MonoBehaviour
     public GameObject partyView;
 
     public bool isPaused;
+    public bool debug = false;
 
     private void Start()
     {
@@ -82,6 +83,22 @@ public class PauseManager : MonoBehaviour
         }
         sound.volume = soundVolume.value;
         
+        //DEBUG
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            if (debug)
+            {
+                AddPartyMember("priest", true);
+                AddPartyMember("hunter", true);
+                AddPartyMember("mechanist", true);
+                AddPartyMember("warrior", true);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            PlayerPrefs.DeleteAll();
+        }
     }
 
     public void AddPartyMember(string type, bool firstTime)
