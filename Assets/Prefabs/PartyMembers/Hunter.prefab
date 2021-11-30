@@ -34,8 +34,8 @@ MonoBehaviour:
   nextAction: 0
   statusCondition: 0
   statusScript: {fileID: 4692265076211639827}
-  nextActionPrimaryElem: 0
-  nextActionSecondaryElem: 0
+  nextActionPrimaryElems: 
+  nextActionSecondaryElems: 
   combatantName: Hunter
   totalHitPoints: 25
   currentHitPoints: 25
@@ -46,7 +46,7 @@ MonoBehaviour:
   defenseMultiplier: 1
   speedMultiplier: 1
   resistance: 0
-  specialHasTarget: 1
+  specialHasTarget: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
   attackCardBonus: 0
@@ -55,6 +55,9 @@ MonoBehaviour:
   untargettable: 0
   canCounterAttack: 0
   hasPriority: 0
+  unappliedStatus: 0
+  unappliedPrimElem: 
+  unappliedSecElem: 
   silenced: 0
   text: {fileID: 6296247438686769151}
   healthBar: {fileID: 1911168083666358863}
@@ -62,6 +65,7 @@ MonoBehaviour:
   targetLineStart: {fileID: 3520208962881906484}
   heldItem: {fileID: 0}
   target: {fileID: 0}
+  oldTarget: {fileID: 0}
   isSlain: 0
   isEnemy: 0
   isChanneling: 0

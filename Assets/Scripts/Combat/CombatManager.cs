@@ -136,7 +136,6 @@ public class CombatManager : MonoBehaviour
         {
             CombatantBasis memberScript = member.GetComponent<CombatantBasis>();
             memberScript.SelectAction();
-            memberScript.SelectTarget(activeEnemies);
             if (memberScript.nextAction == CombatantBasis.Action.Block)
             {
                 memberScript.text.text = "Block";
@@ -147,7 +146,6 @@ public class CombatManager : MonoBehaviour
         {
             CombatantBasis enemyScript = enemy.GetComponent<CombatantBasis>();
             enemyScript.SelectAction();
-            enemyScript.SelectTarget(activePartyMembers);
             if (enemyScript.nextAction == CombatantBasis.Action.Block)
             {
                 enemyScript.text.text = "Block";
@@ -223,7 +221,6 @@ public class CombatManager : MonoBehaviour
         {
             CombatantBasis memberScript = member.GetComponent<CombatantBasis>();
             memberScript.SelectAction();
-            memberScript.SelectTarget(activeEnemies);
             if (memberScript.nextAction == CombatantBasis.Action.Block)
             {
                 memberScript.text.text = "Block";
@@ -234,7 +231,6 @@ public class CombatManager : MonoBehaviour
         {
             CombatantBasis enemyScript = enemy.GetComponent<CombatantBasis>();
             enemyScript.SelectAction();
-            enemyScript.SelectTarget(activePartyMembers);
             if (enemyScript.nextAction == CombatantBasis.Action.Block)
             {
                 enemyScript.text.text = "Block";
@@ -481,7 +477,7 @@ public class CombatManager : MonoBehaviour
             {
                 if(cb.target != null && cb.target.GetComponent<CombatantBasis>().isSlain)
                 {
-                    cb.SelectTarget(activeEnemies);
+                    cb.SelectTarget();
                 }
             }
         }
@@ -492,7 +488,7 @@ public class CombatManager : MonoBehaviour
             {
                 if (cb.target != null && cb.target.GetComponent<CombatantBasis>().isSlain)
                 {
-                    cb.SelectTarget(activePartyMembers);
+                    cb.SelectTarget();
                 }
             }
         }
@@ -867,14 +863,7 @@ public class CombatManager : MonoBehaviour
             if (cb.target == combatant)
             {
                 cb.oldTarget = combatant;
-                if (cb.isEnemy)
-                {
-                    cb.SelectTarget(activePartyMembers);
-                }
-                else
-                {
-                    cb.SelectTarget(activeEnemies);
-                }
+                cb.SelectTarget();
             }
         }
     }

@@ -20,7 +20,7 @@ public class MechanistCombat : CombatantBasis
                 }
                 break;
             case 1: // Attack
-                SelectTarget(cm.activeEnemies);
+                SelectTarget();
                 Attack();
                 break;
             case 2: // Block

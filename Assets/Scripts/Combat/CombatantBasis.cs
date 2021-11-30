@@ -168,11 +168,10 @@ public class CombatantBasis : MonoBehaviour
         //special case for handling bonus attack card
         if (bonusAttack)
         {
-            CombatManager cm = FindObjectOfType<CombatManager>();
             nextAction = Action.Attack;
             if (target == null) //TODO:: ALSO NEEDS TO RETARGET IF PREVIOUS ATTACK KILLED TARGET
             {
-                SelectTarget(cm.activeEnemies);
+                SelectTarget();
             }
             Attack();
             bonusAttack = false;
@@ -288,11 +287,12 @@ public class CombatantBasis : MonoBehaviour
         if (isChanneling)
         {
             nextAction = Action.Attack;
+            SelectTarget();
             isChanneling = false;
             return;
         }
 
-        if(silenced)
+        if (silenced)
         {
             int random = Random.Range(0, 2);
             if(random == 0)
@@ -300,17 +300,21 @@ public class CombatantBasis : MonoBehaviour
                 if(previousAction == Action.Attack)
                 {
                     nextAction = Action.Block;
+                    text.text = "Block";
                     return;
                 }
                 nextAction = Action.Attack;
+                SelectTarget();
             } else if(random == 1)
             {
                 if (previousAction == Action.Block)
                 {
                     nextAction = Action.Attack;
+                    SelectTarget();
                     return;
                 }
                 nextAction = Action.Block;
+                text.text = "Block";
             }
             return;
         }
@@ -322,43 +326,76 @@ public class CombatantBasis : MonoBehaviour
             {
                 rand = Random.Range(0, 2);
                 if(rand == 0)
+                {
                     nextAction = Action.Block;
+                    text.text = "Block";
+                }
                 else
+                {
                     nextAction = Action.Special;
+                    text.text = "Special";
+                    if (specialHasTarget)
+                        SelectTarget();
+                } 
                 return;
             }
             nextAction = Action.Attack;
+            SelectTarget();
         } else if(rand == 1)
         {
             if (previousAction == Action.Block)
             {
                 rand = Random.Range(0, 2);
                 if (rand == 0)
+                {
                     nextAction = Action.Attack;
+                    SelectTarget();
+                }
                 else
+                {
                     nextAction = Action.Special;
+                    text.text = "Special";
+                    if (specialHasTarget)
+                        SelectTarget();
+                }
                 return;
             }
             nextAction = Action.Block;
+            text.text = "Block";
         } else if(rand == 2)
         {
             if (previousAction == Action.Special)
             {
                 rand = Random.Range(0, 2);
                 if (rand == 0)
+                {
                     nextAction = Action.Attack;
+                    SelectTarget();
+                }
                 else
+                {
                     nextAction = Action.Block;
+                    text.text = "Block";
+                }
                 return;
             }
             nextAction = Action.Special;
+            text.text = "Special";
+            if (specialHasTarget)
+                SelectTarget();
         }
 
     }
 
-    public virtual void SelectTarget(List<GameObject> targets) //TODO:: STILL NEEDS TO HANDLE RETARGETTING IF RANDOMLY CHOOSING UNTARGETTABLE COMBATANT
+    public virtual void SelectTarget() //TODO:: STILL NEEDS TO HANDLE RETARGETTING IF RANDOMLY CHOOSING UNTARGETTABLE COMBATANT
     {
-        if(nextAction == Action.Block)
+        CombatManager cm = FindObjectOfType<CombatManager>();
+        List<GameObject> targets = new List<GameObject>();
+        if (isEnemy)
+            targets = cm.activePartyMembers;
+        else
+            targets = cm.activeEnemies;
+        if (nextAction == Action.Block)
         {
             target = null;
             return;

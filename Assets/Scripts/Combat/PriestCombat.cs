@@ -6,8 +6,15 @@ public class PriestCombat : CombatantBasis
 {
     public int specialHealAmount = 10;
 
-    public override void SelectTarget(List<GameObject> targets) //TODO:: STILL NEEDS TO HANDLE RETARGETTING IF RANDOMLY CHOOSING UNTARGETTABLE COMBATANT
+    public override void SelectTarget() //TODO:: STILL NEEDS TO HANDLE RETARGETTING IF RANDOMLY CHOOSING UNTARGETTABLE COMBATANT
     {
+        CombatManager cm = FindObjectOfType<CombatManager>();
+        List<GameObject> targets = new List<GameObject>();
+        if (isEnemy)
+            targets = cm.activePartyMembers;
+        else
+            targets = cm.activeEnemies;
+
         if (nextAction == Action.Block)
         {
             target = null;

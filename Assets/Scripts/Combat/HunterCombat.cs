@@ -6,8 +6,15 @@ public class HunterCombat : CombatantBasis
 {
     public bool specialAttack = false;
 
-    public override void SelectTarget(List<GameObject> targets) //TODO:: STILL NEEDS TO HANDLE RETARGETTING IF RANDOMLY CHOOSING UNTARGETTABLE COMBATANT
+    public override void SelectTarget() //TODO:: STILL NEEDS TO HANDLE RETARGETTING IF RANDOMLY CHOOSING UNTARGETTABLE COMBATANT
     {
+        CombatManager cm = FindObjectOfType<CombatManager>();
+        List<GameObject> targets = new List<GameObject>();
+        if (isEnemy)
+            targets = cm.activePartyMembers;
+        else
+            targets = cm.activeEnemies;
+
         if (nextAction == Action.Block)
         {
             target = null;
@@ -55,7 +62,7 @@ public class HunterCombat : CombatantBasis
             damageTotal = (attack + attackCardBonus) * attackMultiplier; // Get modifier from card here
         }
 
-        cb.TakeDamage(damageTotal, nextActionPrimaryElems[0], nextActionSecondaryElems[0], gameObject);
+        cb.TakeDamage(damageTotal, nextActionPrimaryElems[nextActionPrimaryElems.Count - 1], nextActionSecondaryElems[nextActionSecondaryElems.Count - 1], gameObject);
 
         Debug.Log("Hunter Attack");
     }
