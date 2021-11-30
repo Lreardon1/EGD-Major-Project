@@ -7,6 +7,8 @@ public class PartyMemberStats : MonoBehaviour
 {
     [SerializeField]
     public List<Sprite> partySprites;
+    [SerializeField]
+    public List<GameObject> partyPrefabs;
 
     [SerializeField]
     public Image charImage;
@@ -19,23 +21,32 @@ public class PartyMemberStats : MonoBehaviour
 
     public static Dictionary<string, GameObject> combatPartyMembers = new Dictionary<string, GameObject>();
 
-    public void UpdatePartyMember(string type)
+    public void UpdatePartyMember(string type, bool firstTime)
     {
-        if (type == "priest")
+        if (firstTime)
         {
-            charImage.sprite = partySprites[0];
-        }
-        else if (type == "hunter")
-        {
-            charImage.sprite = partySprites[1];
-        }
-        else if (type == "mechanist")
-        {
-            charImage.sprite = partySprites[2];
-        }
-        else if (type == "warrior")
-        {
-            charImage.sprite = partySprites[3];
+            if (type == "priest")
+            {
+                charImage.sprite = partySprites[0];
+                LoadFromScript(type, partyPrefabs[0]);
+            }
+            else if (type == "hunter")
+            {
+                charImage.sprite = partySprites[1];
+                LoadFromScript(type, partyPrefabs[1]);
+            }
+            else if (type == "mechanist")
+            {
+                charImage.sprite = partySprites[2];
+                LoadFromScript(type, partyPrefabs[2]);
+            }
+            else if (type == "warrior")
+            {
+                charImage.sprite = partySprites[3];
+                LoadFromScript(type, partyPrefabs[3]);
+            }
+
+            SaveToPlayerPrefs(type);
         }
 
         if (combatPartyMembers.ContainsKey(type))

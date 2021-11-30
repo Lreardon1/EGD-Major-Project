@@ -65,10 +65,17 @@ public class CombatManager : MonoBehaviour
     public bool canPlay = true;
     private bool enoughMana = true;
 
+    PauseManager pauseManager = null;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        if (pauseManager == null)
+        {
+            pauseManager = FindObjectOfType<PauseManager>();
+        }
+
         List<GameObject> allCombatants = new List<GameObject>();
         foreach (GameObject member in partyMembers)
         {
@@ -81,6 +88,9 @@ public class CombatManager : MonoBehaviour
             wtuic.canvas = canvas;
             member.GetComponent<CombatantBasis>().uiCollider = uiCollider;
             allCombatants.Add(member);
+
+            pauseManager.LinkCombatant(member.GetComponent<CombatantBasis>().combatantName.ToLower(), member);
+            member.GetComponent<CombatantBasis>().pauseManager = pauseManager;
         }
 
         if (PlayerPrefs.HasKey("priestCurrHealth"))
@@ -125,9 +135,10 @@ public class CombatManager : MonoBehaviour
             wtuic.canvas = canvas;
             enemy.GetComponent<CombatantBasis>().uiCollider = uiCollider;
             allCombatants.Add(enemy);
+
+            enemy.GetComponent<CombatantBasis>().pauseManager = pauseManager;
         }
         // Populate Partymembers and enemies
-
 
         ToggleDrawButtons(false);
         reshuffleButton.interactable = false;
@@ -662,6 +673,8 @@ public class CombatManager : MonoBehaviour
             cardScript.Play(combatant, enemies);
         }
 
+        pauseManager.RefreshPartyView();
+
         chc.DiscardCard(card);
         print(card.transform.lossyScale);
         //card.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
@@ -927,6 +940,11 @@ public class CombatManager : MonoBehaviour
 
     public void ReturnToOverWorld()
     {
+        pauseManager.SavePartyView();
+        foreach (GameObject member in partyMembers)
+        {
+            pauseManager.RemoveCombatant(member.GetComponent<CombatantBasis>().combatantName.ToLower());
+        }
         chc.ResetCardParents();
         chc.ReturnCardsInHand();
         chc.ReShuffle();

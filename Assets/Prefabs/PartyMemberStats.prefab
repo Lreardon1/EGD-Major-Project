@@ -2087,7 +2087,13 @@ MonoBehaviour:
   - {fileID: -7657704359171749092, guid: 87f5dc05c77d49747b3258d70062e0a3, type: 3}
   - {fileID: 6208509659249877279, guid: 9f1496560864ad841ab7414cbc89f9f0, type: 3}
   - {fileID: 5628341579453269715, guid: e532689917ee602499f04829470dbf9b, type: 3}
+  partyPrefabs:
+  - {fileID: 5631541174819381394, guid: 40f5d3057f5d6a04db2ebfa11b6bdc79, type: 3}
+  - {fileID: 5033110867934627454, guid: 260ba61df3638904997d8253487d3066, type: 3}
+  - {fileID: 6272639951522897273, guid: a02df2b30c237634da61a932e01618f4, type: 3}
+  - {fileID: 4257258188698014201, guid: d08908fcee48617479c737820e8ea31c, type: 3}
   charImage: {fileID: 2936414046003555462}
+  hpBar: {fileID: 0}
   statusListObj: {fileID: 8918435073924473016}
   statNumDisplays:
   - {fileID: 7780866773690013127}
