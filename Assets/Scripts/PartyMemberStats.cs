@@ -23,26 +23,39 @@ public class PartyMemberStats : MonoBehaviour
 
     public void UpdatePartyMember(string type, bool firstTime)
     {
+        if (type == "priest")
+        {
+            charImage.sprite = partySprites[0];
+        }
+        else if (type == "hunter")
+        {
+            charImage.sprite = partySprites[1];
+        }
+        else if (type == "mechanist")
+        {
+            charImage.sprite = partySprites[2];
+        }
+        else if (type == "warrior")
+        {
+            charImage.sprite = partySprites[3];
+        }
+
         if (firstTime)
         {
             if (type == "priest")
             {
-                charImage.sprite = partySprites[0];
                 LoadFromScript(type, partyPrefabs[0]);
             }
             else if (type == "hunter")
             {
-                charImage.sprite = partySprites[1];
                 LoadFromScript(type, partyPrefabs[1]);
             }
             else if (type == "mechanist")
             {
-                charImage.sprite = partySprites[2];
                 LoadFromScript(type, partyPrefabs[2]);
             }
             else if (type == "warrior")
             {
-                charImage.sprite = partySprites[3];
                 LoadFromScript(type, partyPrefabs[3]);
             }
 
@@ -106,7 +119,7 @@ public class PartyMemberStats : MonoBehaviour
         baseNum = statNumDisplays[0].transform.GetChild(1).gameObject;
         bonusNum = statNumDisplays[0].transform.GetChild(2).gameObject;
         baseNum.GetComponent<TMPro.TextMeshProUGUI>().text = memberBasis.attack.ToString();
-        bonusNum.GetComponent<TMPro.TextMeshProUGUI>().text = "+(" + (((memberBasis.attack + memberBasis.attackCardBonus) * memberBasis.attackMultiplier) - memberBasis.attack).ToString() + ")";
+        bonusNum.GetComponent<TMPro.TextMeshProUGUI>().text = "+(" + (((memberBasis.attack + memberBasis.attackCardBonus) * memberBasis.attackMultiplier) - memberBasis.attack).ToString("0.00") + ")";
 
         baseNum = statNumDisplays[1].transform.GetChild(1).gameObject;
         bonusNum = statNumDisplays[1].transform.GetChild(2).gameObject;
@@ -121,7 +134,7 @@ public class PartyMemberStats : MonoBehaviour
         baseNum = statNumDisplays[3].transform.GetChild(1).gameObject;
         bonusNum = statNumDisplays[3].transform.GetChild(2).gameObject;
         baseNum.GetComponent<TMPro.TextMeshProUGUI>().text = memberBasis.speed.ToString();
-        bonusNum.GetComponent<TMPro.TextMeshProUGUI>().text = "+(" + ((memberBasis.speed*memberBasis.speedMultiplier) - memberBasis.speed).ToString() + ")";
+        bonusNum.GetComponent<TMPro.TextMeshProUGUI>().text = "+(" + ((memberBasis.speed*memberBasis.speedMultiplier) - memberBasis.speed).ToString("0.00") + ")";
 
         hpBar.SetMaxHealth(memberBasis.totalHitPoints, memberBasis.currentHitPoints);
         hpBar.SetHealth(memberBasis.currentHitPoints);

@@ -144,12 +144,7 @@ public class CombatantBasis : MonoBehaviour
         if (previousAction == Action.Block)
         {
             defenseMultiplier -= 1f;
-            attackCardBonus = 0;
             canCounterAttack = false;
-            nextActionPrimaryElems.Clear();
-            nextActionPrimaryElems.Add(Card.Element.None);
-            nextActionSecondaryElems.Clear();
-            nextActionSecondaryElems.Add(Card.Element.None);
         }
         // visuals
         if (!isChanneling) { //skips action if channeling
@@ -270,6 +265,12 @@ public class CombatantBasis : MonoBehaviour
             {
                 attacker.GetComponent<CombatantBasis>().TakeDamage(attackCardBonus * attackMultiplier, damageType1, damageType2, gameObject);
                 print("Counter attack");
+                attackCardBonus = 0;
+            canCounterAttack = false;
+            nextActionPrimaryElems.Clear();
+            nextActionPrimaryElems.Add(Card.Element.None);
+            nextActionSecondaryElems.Clear();
+            nextActionSecondaryElems.Add(Card.Element.None);
             }
         }
     }
