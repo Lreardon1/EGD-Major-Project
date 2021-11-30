@@ -34,8 +34,8 @@ MonoBehaviour:
   nextAction: 0
   statusCondition: 0
   statusScript: {fileID: 1795249873261083449}
-  nextActionPrimaryElem: 0
-  nextActionSecondaryElem: 0
+  nextActionPrimaryElems: 
+  nextActionSecondaryElems: 
   combatantName: Slime
   totalHitPoints: 10
   currentHitPoints: 10
@@ -46,6 +46,7 @@ MonoBehaviour:
   defenseMultiplier: 1
   speedMultiplier: 1
   resistance: 0
+  specialHasTarget: 0
   temporaryHitPoints: 0
   negativeHitPointShield: 0
   attackCardBonus: 0
@@ -54,12 +55,18 @@ MonoBehaviour:
   untargettable: 0
   canCounterAttack: 0
   hasPriority: 0
+  unappliedStatus: 0
+  unappliedPrimElem: 
+  unappliedSecElem: 
+  silenced: 0
   text: {fileID: 2147232144169677366}
-  healthBar: {fileID: 6562829132228576034}
+  healthBar: {fileID: 674865908369657115}
   lr: {fileID: 4378915491316911166}
   targetLineStart: {fileID: 1544006762984880793}
+  pauseManager: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
+  oldTarget: {fileID: 0}
   isSlain: 0
   isEnemy: 1
   isChanneling: 0
@@ -67,6 +74,7 @@ MonoBehaviour:
   uiCollider: {fileID: 0}
   previousAction: 0
   combatPopupPrefab: {fileID: 4730867921388399689, guid: d79b7f53d915fa84b81ad869b2e19850, type: 3}
+  slimeHealAmount: 4
 --- !u!1001 &2369301503570432375
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -171,9 +179,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6562829132228576034 stripped
+--- !u!114 &674865908369657115 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8931387348622283349, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3007535789886692460, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
   m_PrefabInstance: {fileID: 2369301503570432375}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

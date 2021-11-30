@@ -34,8 +34,8 @@ MonoBehaviour:
   nextAction: 0
   statusCondition: 0
   statusScript: {fileID: 7097020828666586104}
-  nextActionPrimaryElem: 0
-  nextActionSecondaryElem: 0
+  nextActionPrimaryElems: 
+  nextActionSecondaryElems: 
   combatantName: Cobra
   totalHitPoints: 15
   currentHitPoints: 15
@@ -55,13 +55,18 @@ MonoBehaviour:
   untargettable: 0
   canCounterAttack: 0
   hasPriority: 0
+  unappliedStatus: 0
+  unappliedPrimElem: 
+  unappliedSecElem: 
   silenced: 0
   text: {fileID: 7447595518004980471}
-  healthBar: {fileID: 2415185846226590691}
+  healthBar: {fileID: 8343540769677104602}
   lr: {fileID: 5067293504755242239}
   targetLineStart: {fileID: 8068978356985619032}
+  pauseManager: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
+  oldTarget: {fileID: 0}
   isSlain: 0
   isEnemy: 1
   isChanneling: 0
@@ -197,9 +202,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2415185846226590691 stripped
+--- !u!114 &8343540769677104602 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8931387348622283349, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3007535789886692460, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
   m_PrefabInstance: {fileID: 6518643535064828342}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

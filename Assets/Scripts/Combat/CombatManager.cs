@@ -79,6 +79,7 @@ public class CombatManager : MonoBehaviour
         List<GameObject> allCombatants = new List<GameObject>();
         foreach (GameObject member in partyMembers)
         {
+            member.SetActive(true);
             activePartyMembers.Add(member);
             // This gameobject is used to detect collisions for dragging UI cards but also as a UI layer transform for cards to be placed to show a character has been played on
             GameObject uiCollider = Instantiate(uiColliderPrefab, Vector3.zero, Quaternion.identity ,uiColliderParent);

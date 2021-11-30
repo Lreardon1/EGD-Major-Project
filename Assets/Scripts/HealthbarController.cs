@@ -8,6 +8,7 @@ public class HealthbarController : MonoBehaviour
     public Slider slider;
     public Gradient gradient;
     public Image fill;
+    public TMPro.TextMeshProUGUI text;
 
     public Transform cam;
 
@@ -26,7 +27,7 @@ public class HealthbarController : MonoBehaviour
         slider.maxValue = maxHealth;
         slider.value = currentHealth;
 
-        fill.color = gradient.Evaluate(1f);
+        SetHealth(currentHealth);
     }
 
     public void SetHealth(int health)
@@ -35,6 +36,8 @@ public class HealthbarController : MonoBehaviour
             slider.value = 1.5f;
         else
             slider.value = health;
+
+        text.text = health + "/" + (int)slider.maxValue;
 
         fill.color = gradient.Evaluate(slider.normalizedValue);
     }

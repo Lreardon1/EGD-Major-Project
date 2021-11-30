@@ -6,25 +6,28 @@ public class WarriorCombat : CombatantBasis
 {
     public override void TakeDamage(float damageAmount, Card.Element damageType1, Card.Element damageType2, GameObject attacker)
     {
-        // Check for elemental combo
-        float elementalComboMultiplier = 1f;
-
         statusScript.OnTakeDamageStatusHandler(statusCondition, attacker, (int)damageAmount);
 
         int shieldValue = temporaryHitPoints;
 
-        currentHitPoints -= (int)((damageAmount * elementalComboMultiplier) / defenseMultiplier);
-        Debug.Log(combatantName + " took " + damageAmount + " of " + damageType1 + " type and " + damageType2);
+        int totalDamageAmount = (int)((damageAmount) / defenseMultiplier);
+
+        currentHitPoints -= (int)((damageAmount) / defenseMultiplier);
+        Debug.Log(combatantName + " took " + totalDamageAmount + " of " + damageType1 + " type and " + damageType2);
+
+        // visuals, TODO : make a string construction system to color elements differently?
+        MakePopup("<color=\"red\"> Took " + totalDamageAmount + "</color>", null, Color.white);
 
         //if damage shielded during attack
         if (shieldValue > 0 && shieldReturnDmg > 0)
         {
             //return damage
             attacker.GetComponent<CombatantBasis>().TakeDamage(shieldReturnDmg, Card.Element.None, Card.Element.None, gameObject);
-            //lose return damage on shield loss
+            //lose return damage and resistance on shield loss
             if (temporaryHitPoints <= 0)
             {
                 shieldReturnDmg = 0;
+                shieldResistance = 0;
             }
         }
 
@@ -34,7 +37,7 @@ public class WarriorCombat : CombatantBasis
             statusScript.ApplyNewStatus(newStatus, attacker);
         }
 
-
+        healthBar.SetHealth(currentHitPoints);
         if (!CheckIsSlain()) //check counterattack if survived hit
         {
             if (canCounterAttack)

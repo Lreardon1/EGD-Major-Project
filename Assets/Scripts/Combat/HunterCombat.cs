@@ -6,6 +6,20 @@ public class HunterCombat : CombatantBasis
 {
     public bool specialAttack = false;
 
+    public override void ExecuteAction()
+    {
+        base.ExecuteAction();
+
+        if (previousAction == Action.Special)
+        {
+            attackCardBonus = 0;
+            nextActionPrimaryElems.Clear();
+            nextActionPrimaryElems.Add(Card.Element.None);
+            nextActionSecondaryElems.Clear();
+            nextActionSecondaryElems.Add(Card.Element.None);
+        }
+    }
+
     public override void SelectTarget() //TODO:: STILL NEEDS TO HANDLE RETARGETTING IF RANDOMLY CHOOSING UNTARGETTABLE COMBATANT
     {
         CombatManager cm = FindObjectOfType<CombatManager>();

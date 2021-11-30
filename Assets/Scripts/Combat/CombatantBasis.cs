@@ -101,7 +101,7 @@ public class CombatantBasis : MonoBehaviour
         nextActionSecondaryElems.Add(Card.Element.None);
     }
 
-    private void MakePopup(string text, Texture2D image, Color col)
+    public void MakePopup(string text, Texture2D image, Color col)
     {
         GameObject popup = Instantiate(combatPopupPrefab, transform.position + transform.up * 0.4f, transform.rotation);
         popup.GetComponent<CombatPopup>().Init(text, image, col);
@@ -130,7 +130,7 @@ public class CombatantBasis : MonoBehaviour
         }
     }
 
-    public void ExecuteAction()
+    public virtual void ExecuteAction()
     {
         if(statusCondition == Status.Burn)
         {
