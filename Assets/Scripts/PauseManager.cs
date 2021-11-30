@@ -136,6 +136,15 @@ public class PauseManager : MonoBehaviour
         PartyMemberStats.combatPartyMembers.Remove(type);
     }
 
+    public void PartyHeal()
+    {
+        foreach (KeyValuePair<string, GameObject> partyMember in currPartyMembers)
+        {
+            partyMember.Value.GetComponent<PartyMemberStats>().FullHeal(partyMember.Key);
+            partyMember.Value.GetComponent<PartyMemberStats>().UpdatePartyMember(partyMember.Key, false);
+        }
+    }
+
     public void PauseGame()
     {
         isPaused = !isPaused;

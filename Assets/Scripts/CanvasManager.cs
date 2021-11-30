@@ -8,6 +8,7 @@ public class CanvasManager : MonoBehaviour
     public GameObject customizationCanvas;
     [SerializeField]
     public GameObject editOptionPopup;
+    public PauseManager pauseManager;
 
     private PlayerInteraction playerInteraction;
 
@@ -20,6 +21,8 @@ public class CanvasManager : MonoBehaviour
 
     public void OpenCustomization(PlayerInteraction pi)
     {
+        pauseManager.PartyHeal();
+
         playerInteraction = pi;
         editOptionPopup.SetActive(false);
         LockPlayer();

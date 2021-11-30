@@ -140,6 +140,11 @@ public class PartyMemberStats : MonoBehaviour
         hpBar.SetHealth(memberBasis.currentHitPoints);
     }
 
+    public void FullHeal(string type)
+    {
+        PlayerPrefs.SetInt(type + "CurrHealth", (int)hpBar.slider.maxValue);
+    }
+
     public void SaveToPlayerPrefs(string type)
     {
         GameObject baseNum;
