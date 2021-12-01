@@ -79,7 +79,7 @@ SpriteRenderer:
   m_Size: {x: 7.5, y: 10.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &1994489891608063984
@@ -131,11 +131,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   revealed: 0
   cardSprites:
-  - {fileID: 21300000, guid: 13c42ea618f80244bb2515c232d7c205, type: 3}
-  - {fileID: 21300000, guid: ddc80c3a9fb2f164c8e395e90bbaf4b8, type: 3}
-  - {fileID: 21300000, guid: e1acff4c47630984da84aa01dab3e534, type: 3}
+  - {fileID: 21300000, guid: a7136afee951be345a2e7e503284caab, type: 3}
+  - {fileID: 21300000, guid: ebd2a505b77a8eb43a6b4260d03aca6c, type: 3}
+  - {fileID: 21300000, guid: 7a7896ccb211b634fbf09e7f1f560486, type: 3}
   - {fileID: 21300000, guid: 92d12a4458dbf03479911e1400b7a664, type: 3}
   sr: {fileID: 1994489891338657423}
+  revealFoldUpPivot: 0
 --- !u!54 &8672343800032396476
 Rigidbody:
   m_ObjectHideFlags: 0
