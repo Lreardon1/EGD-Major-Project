@@ -51,10 +51,20 @@ public class InfoPopUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         popup = Instantiate(popupPrefab, spawnLocation.transform);
         popup.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = title;
         popup.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = description;
+        Animator anim = popup.GetComponent<Animator>();
+        anim.SetBool("Show", true);
     }
 
     public void DespawnPopUp()
     {
+        Animator anim = popup.GetComponent<Animator>();
+        anim.SetBool("Show", false);
+        DestroyOnVanish();
+    }
+
+    IEnumerator DestroyOnVanish()
+    {
+        yield return new WaitForSeconds(.4f);
         Destroy(popup);
     }
 

@@ -19,7 +19,7 @@ public class PartyMemberStats : MonoBehaviour
     [SerializeField]
     public List<GameObject> statNumDisplays;
     [SerializeField]
-    public TMPro.TextMeshProUGUI specialPopUp;
+    public InfoPopUp specialPopUp;
 
     public static Dictionary<string, GameObject> combatPartyMembers = new Dictionary<string, GameObject>();
 
@@ -28,18 +28,22 @@ public class PartyMemberStats : MonoBehaviour
         if (type == "priest")
         {
             charImage.sprite = partySprites[0];
+            specialPopUp.description = "This Special Action heals the entire party by 6 HP.";
         }
         else if (type == "hunter")
         {
             charImage.sprite = partySprites[1];
+            specialPopUp.description = "This Special Action deals damage to all enemies in combat based on a reduced percentage of her Attack stat.";
         }
         else if (type == "mechanist")
         {
             charImage.sprite = partySprites[2];
+            specialPopUp.description = "This Special Action caused a random effect to occur, either Attacking, Blocking, Healing the party a small amount, or inflicting a random status effect.";
         }
         else if (type == "warrior")
         {
             charImage.sprite = partySprites[3];
+            specialPopUp.description = "This Special Action acts the same as the Block action, but allows for a counterattack without requiring an attack card to be played.";
         }
 
         if (firstTime)
