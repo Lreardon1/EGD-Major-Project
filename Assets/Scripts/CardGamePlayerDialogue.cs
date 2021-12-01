@@ -17,8 +17,14 @@ public class CardGamePlayerDialogue : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        uitext.text = "";
-        text_back.gameObject.SetActive(false);
+        if (uitext != null)
+        {
+            uitext.text = "";
+        }
+        if (text_back != null)
+        {
+            text_back.gameObject.SetActive(false);
+        }
     }
 
     // Update is called once per frame
