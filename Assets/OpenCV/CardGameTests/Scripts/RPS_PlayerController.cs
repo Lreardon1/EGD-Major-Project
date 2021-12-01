@@ -71,7 +71,7 @@ public class RPS_PlayerController : MonoBehaviour
 
     private bool IsShowingValidCard()
     {
-        if (debugMode)
+        if (debugMode || Input.GetKey(KeyCode.Alpha1) || Input.GetKey(KeyCode.Alpha2) || Input.GetKey(KeyCode.Alpha3))
         {
             bestVisibleCard = RPS_Card.CardType.Unknown;
             if (Input.GetKey(KeyCode.Alpha1))
