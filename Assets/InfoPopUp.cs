@@ -11,7 +11,7 @@ public class InfoPopUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public string title;
     [TextArea(15,20)]
     public string description;
-    bool isHovered = false;
+    public bool isHovered = false;
     bool isShown = false;
 
     [SerializeField]
@@ -21,10 +21,11 @@ public class InfoPopUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private GameObject popup;
 
+    public bool isHoverable = true;
+
     // Update is called once per frame
     void Update()
     {
-        //print("hovered is " + isHovered);
         if (isHovered)
         {
             timeHovered += Time.deltaTime;
@@ -48,6 +49,10 @@ public class InfoPopUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void SpawnPopUp()
     {
+        if (popup != null)
+        {
+            Destroy(popup);
+        }
         popup = Instantiate(popupPrefab, spawnLocation.transform);
         popup.transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = title;
         popup.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = description;
@@ -59,22 +64,30 @@ public class InfoPopUp : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         Animator anim = popup.GetComponent<Animator>();
         anim.SetBool("Show", false);
-        DestroyOnVanish();
+        print("destroy");
+        StartCoroutine(DestroyOnVanish());
     }
 
     IEnumerator DestroyOnVanish()
     {
         yield return new WaitForSeconds(.4f);
         Destroy(popup);
+        popup = null;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        isHovered = true;
+        if (isHoverable)
+        {
+            isHovered = true;
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        isHovered = false;
+        if (isHoverable)
+        {
+            isHovered = false;
+        }
     }
 }
