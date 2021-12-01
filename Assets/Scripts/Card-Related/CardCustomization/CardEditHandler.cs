@@ -93,6 +93,9 @@ public class CardEditHandler : MonoBehaviour
                 GameObject spriteEdit = Instantiate(spriteEditor, cardEditor.modifierTransforms[i].transform);
                 spriteEdit.GetComponent<Image>().sprite = mod.Value.spriteVal;
                 spriteEdit.GetComponent<DragDrop>().dropType = mod.Value.name;
+                //setting popup text
+                spriteEdit.GetComponent<ModifierPopUp>().LookUpText();
+
                 if (mod.Value.name == Modifier.ModifierEnum.NumModifier)
                 {
                     spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(deckCustomizer.numStorage);
@@ -150,16 +153,19 @@ public class CardEditHandler : MonoBehaviour
                 {
                     spriteEdit = Instantiate(spriteEditor, deckCustomizer.numStorage.transform);
                     spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(deckCustomizer.numStorage);
+                    spriteEdit.GetComponent<ModifierPopUp>().popup.spawnLocation = deckCustomizer.popUpLocations[0];
                 }
                 else if (mod.Value.name == Modifier.ModifierEnum.SecondaryElement)
                 {
                     spriteEdit = Instantiate(spriteEditor, deckCustomizer.elementStorage.transform);
                     spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(deckCustomizer.elementStorage);
+                    spriteEdit.GetComponent<ModifierPopUp>().popup.spawnLocation = deckCustomizer.popUpLocations[1];
                 }
                 else if (mod.Value.name == Modifier.ModifierEnum.Utility)
                 {
                     spriteEdit = Instantiate(spriteEditor, deckCustomizer.utilityStorage.transform);
                     spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(deckCustomizer.utilityStorage);
+                    spriteEdit.GetComponent<ModifierPopUp>().popup.spawnLocation = deckCustomizer.popUpLocations[2];
                 }
 
                 if (spriteEdit != null)

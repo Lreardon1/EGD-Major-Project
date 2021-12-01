@@ -12,6 +12,8 @@ public class MinimapManager : MonoBehaviour
     public float dampenSpeed;
     public GameObject destinationPoint;
     public GameObject playerPoint;
+    [SerializeField]
+    public GameObject minimapAll;
     public RawImage visualMap;
     private Camera mapCam;
 
@@ -54,7 +56,8 @@ public class MinimapManager : MonoBehaviour
 
     public void SetVisualActive(bool active)
     {
-        visualMap.enabled = active;
+        minimapAll.SetActive(active);
+        //visualMap.enabled = active;
     }
 
     public void SetTargetDestination(Vector3 t)

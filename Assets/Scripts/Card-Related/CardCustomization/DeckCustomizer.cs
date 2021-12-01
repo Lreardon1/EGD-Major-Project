@@ -10,6 +10,8 @@ public class DeckCustomizer : MonoBehaviour
     [SerializeField]
     public GameObject draggableSprite;
     [SerializeField]
+    public List<GameObject> popUpLocations;
+    [SerializeField]
     public GameObject numStorage;
     [SerializeField]
     public GameObject elementStorage;
@@ -96,6 +98,7 @@ public class DeckCustomizer : MonoBehaviour
                         dropZones.Add(cardEditor.GetComponent<CardEditor>().modifierTransforms[j]);
                     }
                 }
+                mod.GetComponent<ModifierPopUp>().popup.spawnLocation = popUpLocations[0];
             }
         }
 
@@ -117,6 +120,7 @@ public class DeckCustomizer : MonoBehaviour
                         dropZones.Add(cardEditor.GetComponent<CardEditor>().modifierTransforms[j]);
                     }
                 }
+                mod.GetComponent<ModifierPopUp>().popup.spawnLocation = popUpLocations[1];
             }
         }
 
@@ -138,6 +142,7 @@ public class DeckCustomizer : MonoBehaviour
                         dropZones.Add(cardEditor.GetComponent<CardEditor>().modifierTransforms[j]);
                     }
                 }
+                mod.GetComponent<ModifierPopUp>().popup.spawnLocation = popUpLocations[2];
             }
         }
     }
