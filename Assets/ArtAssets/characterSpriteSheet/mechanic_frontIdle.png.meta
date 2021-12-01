@@ -13,7 +13,7 @@ TextureImporter:
     second: mechanic_frontIdle_2
   - first:
       213: -2979713929536624597
-    second: mechanic_frontIdle_3
+    second: mechanic_frontIdle_1
   - first:
       213: -4848208551234828280
     second: mechanic_frontIdle_4
@@ -153,7 +153,7 @@ TextureImporter:
         width: 29
         height: 28
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -166,7 +166,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: mechanic_frontIdle_3
+      name: mechanic_frontIdle_1
       rect:
         serializedVersion: 2
         x: 128
@@ -174,7 +174,7 @@ TextureImporter:
         width: 27
         height: 25
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
