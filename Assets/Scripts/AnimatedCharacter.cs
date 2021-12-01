@@ -11,7 +11,8 @@ public class AnimatedCharacter : MonoBehaviour
     private Animator anim;
     private void Start()
     {
-        anim = GetComponent<Animator>(); 
+        anim = GetComponent<Animator>();
+        enabled = false;
     }
 
     // Update is called once per frame
@@ -19,5 +20,6 @@ public class AnimatedCharacter : MonoBehaviour
     {
         anim.SetBool("Walking", isWalking);
         anim.SetBool("Back", Vector3.Dot(cam.transform.forward, transform.forward) < 0.0f);
+        if (name == "godfather") print(Vector3.Dot(cam.transform.forward, transform.forward) < 0.0f ? "back" : "front");
     }
 }
