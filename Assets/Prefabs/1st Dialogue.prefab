@@ -26,9 +26,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1307309445366651253}
-  m_LocalRotation: {x: -0, y: -0.24858335, z: -0, w: 0.9686105}
+  m_LocalRotation: {x: 0, y: -0.24857995, z: 0, w: 0.9686114}
   m_LocalPosition: {x: -253.49, y: 0.918, z: 394.15}
-  m_LocalScale: {x: 1, y: 1.1491, z: 5.3050804}
+  m_LocalScale: {x: 1, y: 1.1491, z: 10.178025}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -79,7 +79,8 @@ MonoBehaviour:
   uitext: {fileID: 0}
   text_back: {fileID: 0}
   speaker_image: {fileID: 0}
+  speaker_name: {fileID: 0}
   speakers:
   - {fileID: 21300000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
   - {fileID: 21300000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
-  rawlines: {fileID: 4900000, guid: 72a0009f46cf79843922c247049ce24d, type: 3}
+  rawlines: {fileID: 4900000, guid: 2ab47a4a012d1e24683589ae785b4730, type: 3}
