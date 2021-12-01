@@ -20,12 +20,6 @@ TextureImporter:
   - first:
       213: -7408595414724916350
     second: mechanic_backIdle_5
-  - first:
-      213: -8590271014226071902
-    second: mechanic_backIdle_6
-  - first:
-      213: -18254431802681398
-    second: mechanic_backIdle_7
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -276,52 +270,10 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: mechanic_backIdle_6
-      rect:
-        serializedVersion: 2
-        x: 240
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2ae68b8960a39c880800000000000000
-      internalID: -8590271014226071902
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: mechanic_backIdle_7
-      rect:
-        serializedVersion: 2
-        x: 280
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ac713d4e0b52fbff0800000000000000
-      internalID: -18254431802681398
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 93715b9308dfe6c4a99ba6f3869c1eca
+    spriteID: cd775164b210b2543ad4fd278448a9f1
     internalID: 0
     vertices: []
     indices: 
