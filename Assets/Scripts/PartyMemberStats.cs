@@ -18,6 +18,8 @@ public class PartyMemberStats : MonoBehaviour
     public GameObject statusListObj;
     [SerializeField]
     public List<GameObject> statNumDisplays;
+    [SerializeField]
+    public TMPro.TextMeshProUGUI specialPopUp;
 
     public static Dictionary<string, GameObject> combatPartyMembers = new Dictionary<string, GameObject>();
 
@@ -100,8 +102,8 @@ public class PartyMemberStats : MonoBehaviour
 
         baseNum = statNumDisplays[2].transform.GetChild(1).gameObject;
         bonusNum = statNumDisplays[2].transform.GetChild(2).gameObject;
-        baseNum.GetComponent<TMPro.TextMeshProUGUI>().text = PlayerPrefs.GetFloat(type + "BaseRes").ToString("0.0");
-        bonusNum.GetComponent<TMPro.TextMeshProUGUI>().text = "+(" + PlayerPrefs.GetFloat(type + "BonusRes").ToString("0.00") + ")";
+        baseNum.GetComponent<TMPro.TextMeshProUGUI>().text = (PlayerPrefs.GetFloat(type + "BaseRes") * 100).ToString("0.0");
+        bonusNum.GetComponent<TMPro.TextMeshProUGUI>().text = "+(" + (PlayerPrefs.GetFloat(type + "BonusRes") * 100).ToString("0.00") + ")%";
 
         baseNum = statNumDisplays[3].transform.GetChild(1).gameObject;
         bonusNum = statNumDisplays[3].transform.GetChild(2).gameObject;
@@ -157,7 +159,7 @@ public class PartyMemberStats : MonoBehaviour
         PlayerPrefs.SetFloat(type + "BonusDef", 0.0f);
 
         baseNum = statNumDisplays[2].transform.GetChild(1).gameObject;
-        PlayerPrefs.SetFloat(type + "BaseRes", float.Parse(baseNum.GetComponent<TMPro.TextMeshProUGUI>().text));
+        PlayerPrefs.SetFloat(type + "BaseRes", float.Parse(baseNum.GetComponent<TMPro.TextMeshProUGUI>().text) / 100);
         PlayerPrefs.SetFloat(type + "BonusRes", 0.0f);
 
         baseNum = statNumDisplays[3].transform.GetChild(1).gameObject;

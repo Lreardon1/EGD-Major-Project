@@ -12,6 +12,7 @@ public class PartyDialogue : MonoBehaviour
     public TMPro.TextMeshProUGUI uitext;
     public Image text_back;
     public Image speaker_image;
+    public TMPro.TextMeshProUGUI speaker_name;
     public List<Sprite> speakers;
     public TextAsset rawlines;
     int i;
@@ -35,22 +36,27 @@ public class PartyDialogue : MonoBehaviour
         {
             case "MC":
                 speaker_image.sprite = speakers[0];
+                speaker_name.text = "MC";
                 i++;
                 break;
             case "Godfather":
                 speaker_image.sprite = speakers[1];
+                speaker_name.text = "Godfather";
                 i++;
                 break;
             case "Hunter":
                 speaker_image.sprite = speakers[2];
+                speaker_name.text = "Hunter";
                 i++;
                 break;
             case "Warrior":
                 speaker_image.sprite = speakers[3];
+                speaker_name.text = "Warrior";
                 i++;
                 break;
             case "Mechanist":
                 speaker_image.sprite = speakers[4];
+                speaker_name.text = "Mechanist";
                 i++;
                 break;
             default:
@@ -103,6 +109,7 @@ public class PartyDialogue : MonoBehaviour
         if (dialogue_done && Input.GetKeyDown(KeyCode.Space))
         {
             uitext.text = "";
+            speaker_name.text = "";
             text_back.gameObject.SetActive(false);
             player.GetComponent<OverworldMovement>().SetCanMove(true);
             Destroy(this.gameObject);
