@@ -8,7 +8,12 @@ public class CanvasManager : MonoBehaviour
     public GameObject customizationCanvas;
     [SerializeField]
     public GameObject editOptionPopup;
+    [SerializeField]
+    public MinimapManager minimap;
+    [SerializeField]
     public PauseManager pauseManager;
+    [SerializeField]
+    public GameObject cutsceneUI;
 
     private PlayerInteraction playerInteraction;
 
@@ -22,6 +27,8 @@ public class CanvasManager : MonoBehaviour
     public void OpenCustomization(PlayerInteraction pi)
     {
         pauseManager.PartyHeal();
+        minimap.SetVisualActive(false);
+        cutsceneUI.SetActive(false);
 
         playerInteraction = pi;
         editOptionPopup.SetActive(false);
@@ -36,6 +43,9 @@ public class CanvasManager : MonoBehaviour
         customizationCanvas.SetActive(false);
         editOptionPopup.SetActive(true);
         playerInteraction.canEditCards = true;
+
+        minimap.SetVisualActive(true);
+        cutsceneUI.SetActive(true);
     }
 
     public void LockPlayer()

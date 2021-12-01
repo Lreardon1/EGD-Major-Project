@@ -48,6 +48,12 @@ public class DragDrop : MonoBehaviour
 
     public void StartDrag()
     {
+        ModifierPopUp pop = GetComponent<ModifierPopUp>();
+        if (pop != null)
+        {
+            pop.popup.isHoverable = false;
+            pop.popup.isHovered = false;
+        }
         dropZones.Clear();
         if (isDraggable)
         {
@@ -167,6 +173,12 @@ public class DragDrop : MonoBehaviour
                 trans.SetParent(previousParent.transform, false);
                 trans.SetSiblingIndex(prevChildIndex);
                 trans.localPosition = startPosition;
+            }
+
+            ModifierPopUp pop = GetComponent<ModifierPopUp>();
+            if (pop != null)
+            {
+                pop.popup.isHoverable = true;
             }
         }
     }
