@@ -13,6 +13,8 @@ public class AnimationController : MonoBehaviour
     public GameObject[] ObjectsToDisable;
     [Header("Objects To Enable")]
     public GameObject[] ObjectsToEnable;
+    [Header("Actors To Activate")]
+    public AnimatedCharacter[] animatedCharacters;
 
     [Header("Other items")]
     public Camera cam;
@@ -78,7 +80,8 @@ public class AnimationController : MonoBehaviour
             d.SetActive(false);
         foreach (GameObject e in ObjectsToEnable)
             e.SetActive(true);
-
+        foreach (AnimatedCharacter c in animatedCharacters)
+            c.enabled = true;
         cam.gameObject.SetActive(true);
 
         StartCoroutine(FadeToScene(fadeOutTime, Sink));
@@ -104,6 +107,9 @@ public class AnimationController : MonoBehaviour
             d.SetActive(true);
         foreach (GameObject e in ObjectsToEnable)
             e.SetActive(false);
+        foreach (AnimatedCharacter c in animatedCharacters)
+            c.enabled = false;
+
         for (int i = 0; i < transform.childCount; ++i)
             transform.GetChild(i).gameObject.SetActive(false);
         cam.gameObject.SetActive(false);
