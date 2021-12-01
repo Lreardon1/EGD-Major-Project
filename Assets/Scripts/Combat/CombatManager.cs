@@ -689,7 +689,7 @@ public class CombatManager : MonoBehaviour
 
     public void DiscardCard(GameObject card)
     {
-        currentMana -= discardCost;
+        currentMana += discardCost;
         manaText.text = "Mana: " + currentMana + "/" + maxMana;
         if (!IsInCVMode)
             chc.DiscardCard(card);

@@ -26,7 +26,7 @@ public class ActionOrderUI : MonoBehaviour
             GameObject i = Instantiate(indicatorPrefab, transform.parent, false);
             i.GetComponent<Image>().color = actor.GetComponent<SpriteRenderer>().color;
             i.GetComponent<Image>().sprite = actor.GetComponent<SpriteRenderer>().sprite;
-            i.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+            i.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
             indicators.Add(actor, i);
         }
@@ -60,9 +60,11 @@ public class ActionOrderUI : MonoBehaviour
             GameObject indic = indicPair.Value;
 
             Vector3 pos = transform.localPosition;
-            pos.y = (rect.localPosition.y - rect.rect.height / 2f) + turnStatus * (rect.rect.height / 7f);
+            Debug.Log(pos);
+            pos.y = (rect.localPosition.y - rect.rect.height / 2.5f) + turnStatus * (rect.rect.height / 9f);
             //pos.y = Mathf.Lerp(rect.localPosition.y - rect.rect.height / 2, rect.localPosition.y + rect.rect.height / 2, turnStatus);
-            pos.x += indicPair.Key.GetComponent<CombatantBasis>().isEnemy ? (-rect.rect.width / 3) : (rect.rect.width / 3);
+            pos.x += indicPair.Key.GetComponent<CombatantBasis>().isEnemy ? (-rect.rect.width / 4) : (rect.rect.width / 4);
+            Debug.Log(pos);
             indic.GetComponent<RectTransform>().localPosition = pos;
             indic.GetComponent<RectTransform>().sizeDelta = new Vector2(rect.rect.width * 1.4f, rect.rect.width * 1.4f);
             indic.GetComponent<Image>().SetNativeSize();
