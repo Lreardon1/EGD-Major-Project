@@ -39,7 +39,7 @@ MonoBehaviour:
   combatantName: Hunter
   totalHitPoints: 25
   currentHitPoints: 25
-  attack: 10
+  attack: 8
   speed: 20
   attachedBuffs: []
   attackMultiplier: 1
