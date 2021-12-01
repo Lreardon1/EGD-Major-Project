@@ -14,11 +14,11 @@ public class PartyDialogue : MonoBehaviour
     public Image speaker_image;
     public List<Sprite> speakers;
     public TextAsset rawlines;
-    int i = 0;
+    int i;
 
     IEnumerator waiter()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(.5f);
         dialogue_done = true;
     }
 
@@ -64,6 +64,8 @@ public class PartyDialogue : MonoBehaviour
         if (other.gameObject.name == "Player" && !dialogue)
         {
             dialogue = true;
+            i = 0;
+            dialogue_done = false;
             nextLine();
             text_back.gameObject.SetActive(true);
             player.GetComponent<OverworldMovement>().SetCanMove(false);
@@ -103,6 +105,7 @@ public class PartyDialogue : MonoBehaviour
             uitext.text = "";
             text_back.gameObject.SetActive(false);
             player.GetComponent<OverworldMovement>().SetCanMove(true);
+            Destroy(this.gameObject);
         }
     }
 }
