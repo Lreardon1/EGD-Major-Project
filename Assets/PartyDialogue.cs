@@ -23,8 +23,8 @@ public class PartyDialogue : MonoBehaviour
             //start first dialogue line
             //set who is speaking
             uitext.text = "yo";
-            text_back.SetActive(true);
-            speaker_image.SetActive(true);
+            text_back.gameObject.SetActive(true);
+            speaker_image.gameObject.SetActive(true);
             player.GetComponent<OverworldMovement>().SetCanMove(false);
         }
     }
@@ -36,8 +36,8 @@ public class PartyDialogue : MonoBehaviour
         //if no more lines enable movement and turn off ui
         dialogue = false;
         uitext.text = "";
-        text_back.SetActive(false);
-        speaker_image.SetActive(false);
+        text_back.gameObject.SetActive(false);
+        speaker_image.gameObject.SetActive(false);
         player.GetComponent<OverworldMovement>().SetCanMove(true);
     }
 
