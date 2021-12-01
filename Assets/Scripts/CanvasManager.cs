@@ -28,7 +28,7 @@ public class CanvasManager : MonoBehaviour
     {
         pauseManager.PartyHeal();
         minimap.SetVisualActive(false);
-        cutsceneUI.SetActive(false);
+        //cutsceneUI.SetActive(false);
 
         playerInteraction = pi;
         editOptionPopup.SetActive(false);
@@ -45,7 +45,7 @@ public class CanvasManager : MonoBehaviour
         playerInteraction.canEditCards = true;
 
         minimap.SetVisualActive(true);
-        cutsceneUI.SetActive(true);
+        //cutsceneUI.SetActive(true);
     }
 
     public void LockPlayer()
