@@ -9,6 +9,11 @@ public class PauseManager : MonoBehaviour
     public Canvas canvas;
     public Canvas options;
     public Slider soundVolume;
+    [SerializeField]
+    public GameObject pauseMenu;
+    [SerializeField]
+    public GameObject partyViewWindow;
+    [SerializeField]
     public GameObject refWindow;
     public AudioSource sound;
 
@@ -82,6 +87,12 @@ public class PauseManager : MonoBehaviour
             PauseGame();
         }
         sound.volume = soundVolume.value;
+
+        if (Input.GetKeyDown(KeyCode.Tab) && !isPaused)
+        {
+            print("Test");
+            TogglePartyView();
+        }
         
         //DEBUG
         if (Input.GetKeyDown(KeyCode.N))
@@ -99,6 +110,16 @@ public class PauseManager : MonoBehaviour
         {
             PlayerPrefs.DeleteAll();
         }
+    }
+
+    public void TogglePartyView()
+    {
+        Animator anim = partyViewWindow.GetComponent<Animator>();
+        bool appear = anim.GetBool("Appear");
+        print(appear);
+        anim.SetBool("Appear", !appear);
+        refWindow.SetActive(false);
+        RefreshPartyView();
     }
 
     public void AddPartyMember(string type, bool firstTime)
@@ -148,13 +169,12 @@ public class PauseManager : MonoBehaviour
     public void PauseGame()
     {
         isPaused = !isPaused;
-        canvas.gameObject.SetActive(!canvas.gameObject.active);
+        pauseMenu.SetActive(isPaused);
         options.gameObject.SetActive(false);
         refWindow.SetActive(false);
         if (isPaused)
         {
             Time.timeScale = 0f;
-            RefreshPartyView();
         }
         else
         {
