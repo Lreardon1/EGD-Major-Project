@@ -9,9 +9,6 @@ public class TutorialManager : MonoBehaviour
     public Image fade;
     float time = 0.0f;
     float interpolationPeriod = .15f;
-    public TMPro.TextMeshProUGUI uitext;
-    public RawImage text_back;
-    public RawImage speaker;
     public TMPro.TextMeshProUGUI objective;
 
     IEnumerator waiter2()
