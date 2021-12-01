@@ -10,6 +10,7 @@ public class TutorialManager : MonoBehaviour
     float time = 0.0f;
     float interpolationPeriod = .15f;
     public TMPro.TextMeshProUGUI objective;
+    bool set_back = false;
 
     IEnumerator waiter2()
     {
@@ -48,8 +49,9 @@ public class TutorialManager : MonoBehaviour
                 fade.color = c;
             }
         }
-        else
+        else if(!set_back)
         {
+            set_back = true;
             player.GetComponent<OverworldMovement>().SetCanMove(true);
         }
     }

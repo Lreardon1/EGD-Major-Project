@@ -17,8 +17,9 @@ public class CutsceneTrigger : MonoBehaviour
 
     private void TriggerCutscene()
     {
+        print("TRIGGER");
         animController.PlayCutscene();
-        Destroy(gameObject);
+        Destroy(this);
     }
 
     private void OnTriggerEnter(Collider other)

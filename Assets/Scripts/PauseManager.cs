@@ -90,7 +90,6 @@ public class PauseManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Tab) && !isPaused)
         {
-            print("Test");
             TogglePartyView();
         }
         
