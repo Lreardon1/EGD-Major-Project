@@ -18,7 +18,7 @@ public class PartyDialogue : MonoBehaviour
 
     IEnumerator waiter()
     {
-        yield return new WaitForSeconds(1.5);
+        yield return new WaitForSeconds(1.5f);
         dialogue_done = true;
     }
 
