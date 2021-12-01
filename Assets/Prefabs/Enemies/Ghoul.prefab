@@ -64,6 +64,7 @@ MonoBehaviour:
   lr: {fileID: 2374927727176778724}
   targetLineStart: {fileID: 674714929986336067}
   pauseManager: {fileID: 0}
+  animator: {fileID: 8186629635633741720}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   oldTarget: {fileID: 0}

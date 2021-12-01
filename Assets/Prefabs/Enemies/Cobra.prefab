@@ -64,6 +64,7 @@ MonoBehaviour:
   lr: {fileID: 5067293504755242239}
   targetLineStart: {fileID: 8068978356985619032}
   pauseManager: {fileID: 0}
+  animator: {fileID: 4474604078822810968}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   oldTarget: {fileID: 0}
@@ -157,6 +158,14 @@ PrefabInstance:
       propertyPath: cb
       value: 
       objectReference: {fileID: 8946559181527378315}
+    - target: {fileID: 4596532486029455818, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596532486029455818, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5271195981654850880, guid: 4f0f9cb8ce67ebb4a96284b29650355f, type: 3}
       propertyPath: m_Layer
       value: 9
