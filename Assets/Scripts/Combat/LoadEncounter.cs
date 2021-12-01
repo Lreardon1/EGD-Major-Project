@@ -8,6 +8,7 @@ public class LoadEncounter : MonoBehaviour
 {
     public Camera mainCam;
     public GameObject eventSystem;
+    public GameObject overWorldMap;
 
     public Transform cameraParent;
 
@@ -79,6 +80,7 @@ public class LoadEncounter : MonoBehaviour
     public void LoadCombatScene()
     {
         overWorldMusic.Stop();
+        overWorldMap.SetActive(false);
         SceneManager.LoadScene("BattleScene", LoadSceneMode.Additive);
         originalCameraPos = mainCam.transform.position;
         originalCameraRot = mainCam.transform.rotation;
@@ -106,6 +108,7 @@ public class LoadEncounter : MonoBehaviour
         mainCam.transform.rotation = originalCameraRot;
 
         overWorldMusic.Play();
+        overWorldMap.SetActive(true);
 
         Deck.instance.SetDragger(overWorldDragger, true);
         inEncounter = false;

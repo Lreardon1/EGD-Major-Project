@@ -51,6 +51,7 @@ public class CombatantBasis : MonoBehaviour
     public Transform targetLineStart;
 
     public PauseManager pauseManager;
+    public Animator animator;
 
     // TODO : solution because no function is called to inform combatbasis of changed applied card
     public GameObject appliedCard
@@ -280,10 +281,11 @@ public class CombatantBasis : MonoBehaviour
         {
             Debug.Log(combatantName + " Slain");
             isSlain = true;
-            this.GetComponent<SpriteRenderer>().enabled = false;
+            statusScript.TurnOffStatusSymbols();
             healthBar.gameObject.SetActive(false);
             lr.gameObject.SetActive(false);
             text.enabled = false;
+            animator.SetBool("IsSlain", true);
             return true;
         }
         return false;
@@ -504,6 +506,7 @@ public class CombatantBasis : MonoBehaviour
     {
         unappliedStatus = statusCondition;
         statusCondition = Status.None;
+        statusScript.TurnOffStatusSymbols();
     }
 
     public void ReapplyStatus()

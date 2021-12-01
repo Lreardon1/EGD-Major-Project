@@ -21,6 +21,8 @@ public class StatusScript : MonoBehaviour
     public static float corruptionAttackReduction = -0.2f;
 
     public static float lightiningDamagePercent = 0.2f;
+
+    public List<GameObject> statusSymbols = new List<GameObject>();
     
 
     public void OnTakeDamageStatusHandler(CombatantBasis.Status status, GameObject attacker, int damageAmount)
@@ -80,6 +82,9 @@ public class StatusScript : MonoBehaviour
         {
             return;
         }
+
+        TurnOffStatusSymbols();
+        TurnOnSymbol(status, attacker);
 
         CombatManager cm = FindObjectOfType<CombatManager>();
         switch (status)
@@ -170,6 +175,95 @@ public class StatusScript : MonoBehaviour
     public void OnAttackStatusHandler(CombatantBasis.Status status)
     {
 
+    }
+
+    public void TurnOffStatusSymbols()
+    {
+        foreach(GameObject symbol in statusSymbols)
+        {
+            symbol.SetActive(false);
+        }
+    }
+
+    public void TurnOnSymbol(CombatantBasis.Status status, GameObject attacker)
+    {
+        CombatManager cm = FindObjectOfType<CombatManager>();
+        switch (status)
+        {
+            case CombatantBasis.Status.Burn:
+                statusSymbols[0].SetActive(true);
+                break;
+            case CombatantBasis.Status.Wet:
+                statusSymbols[1].SetActive(true);
+                break;
+            case CombatantBasis.Status.Earthbound:
+                if (attacker.GetComponent<CombatantBasis>().isEnemy)
+                {
+                    foreach (GameObject enemy in cm.activeEnemies)
+                    {
+                        enemy.GetComponent<StatusScript>().TurnOffStatusSymbols();
+                        enemy.GetComponent<StatusScript>().statusSymbols[2].SetActive(true);
+                    }
+                }
+                else
+                {
+                    foreach (GameObject partyMember in cm.activePartyMembers)
+                    {
+                        partyMember.GetComponent<StatusScript>().TurnOffStatusSymbols();
+                        partyMember.GetComponent<StatusScript>().statusSymbols[2].SetActive(true);
+                    }
+                }
+                break;
+            case CombatantBasis.Status.Gust:
+                if (attacker.GetComponent<CombatantBasis>().isEnemy)
+                {
+                    foreach (GameObject enemy in cm.activeEnemies)
+                    {
+                        enemy.GetComponent<StatusScript>().TurnOffStatusSymbols();
+                        enemy.GetComponent<StatusScript>().statusSymbols[3].SetActive(true);
+                    }
+                }
+                else
+                {
+                    foreach (GameObject partyMember in cm.activePartyMembers)
+                    {
+                        partyMember.GetComponent<StatusScript>().TurnOffStatusSymbols();
+                        partyMember.GetComponent<StatusScript>().statusSymbols[3].SetActive(true);
+                    }
+                }
+                break;
+            case CombatantBasis.Status.Holy:
+                statusSymbols[4].SetActive(true);
+                break;
+            case CombatantBasis.Status.Fallen:
+                statusSymbols[5].SetActive(true);
+                break;
+            case CombatantBasis.Status.Molten:
+                statusSymbols[6].SetActive(true);
+                break;
+            case CombatantBasis.Status.Vaporise:
+                statusSymbols[7].SetActive(true);
+                break;
+            case CombatantBasis.Status.Lightning:
+                statusSymbols[8].SetActive(true);
+                break;
+            case CombatantBasis.Status.Ice:
+                statusSymbols[9].SetActive(true);
+                break;
+            case CombatantBasis.Status.Blight:
+                statusSymbols[10].SetActive(true);
+                break;
+            case CombatantBasis.Status.Corruption:
+                cb.Heal(holyWaterHealAmount);
+                ApplyBuff(status);
+                foreach (GameObject adjacent in cm.GetAdjacentCombatants(this.gameObject))
+                {
+                    adjacent.GetComponent<StatusScript>().TurnOffStatusSymbols();
+                    adjacent.GetComponent<CombatantBasis>().statusCondition = status;
+                    adjacent.GetComponent<StatusScript>().ApplyBuff(status);
+                }
+                break;
+        }
     }
 
     public void ApplyBuff(CombatantBasis.Status status)
