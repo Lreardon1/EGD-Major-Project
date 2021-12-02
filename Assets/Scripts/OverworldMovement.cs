@@ -13,10 +13,12 @@ public class OverworldMovement : MonoBehaviour
     SpriteRenderer godfatherRenderer;
     SpriteRenderer warriorRenderer;
     SpriteRenderer hunterRenderer;
+    SpriteRenderer mechanistRenderer;
     public Animator player_animator;
     public Animator warrior_animator;
     public Animator godfather_animator;
     public Animator hunter_animator;
+    public Animator mechanist_animator;
     public CharacterController cc;
     public bool canMove = true;
     private LinkedList<TimePairTransform> walkLine = new LinkedList<TimePairTransform>();
@@ -44,12 +46,14 @@ public class OverworldMovement : MonoBehaviour
         //Fetch the SpriteRenderer from the GameObject and other party gameobjects
         playerRenderer = GetComponent<SpriteRenderer>();
         playerRenderer.flipX = false;
-        warriorRenderer = party_members[1].GetComponent<SpriteRenderer>();
-        warriorRenderer.flipX = false;
         godfatherRenderer = party_members[0].GetComponent<SpriteRenderer>();
         godfatherRenderer.flipX = false;
-        hunterRenderer = party_members[2].GetComponent<SpriteRenderer>();
+        hunterRenderer = party_members[1].GetComponent<SpriteRenderer>();
         hunterRenderer.flipX = false;
+        warriorRenderer = party_members[2].GetComponent<SpriteRenderer>();
+        warriorRenderer.flipX = false;
+        mechanistRenderer = party_members[3].GetComponent<SpriteRenderer>();
+        mechanistRenderer.flipX = false;
         cc = GetComponent<CharacterController>();
 
         // init movement conga line
@@ -71,9 +75,10 @@ public class OverworldMovement : MonoBehaviour
         {
             float rightTurn = Input.GetAxisRaw("Rotate");
             transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
-            party_members[1].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
             party_members[0].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
+            party_members[1].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
             party_members[2].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
+            party_members[3].transform.Rotate(Vector3.up, rightTurn * turnSpeed * Time.deltaTime);
 
             right = Input.GetAxisRaw("Horizontal") * transform.right;
             up = Input.GetAxisRaw("Vertical") * transform.forward;
@@ -118,23 +123,26 @@ public class OverworldMovement : MonoBehaviour
             // Moving Animation
             bool isMoving = (right + up).sqrMagnitude > 0.0001;
             player_animator.SetBool("Walking", isMoving);
-            warrior_animator.SetBool("Walking", isMoving);
             godfather_animator.SetBool("Walking", isMoving);
             hunter_animator.SetBool("Walking", isMoving);
+            warrior_animator.SetBool("Walking", isMoving);
+            mechanist_animator.SetBool("Walking", isMoving);
 
             // Left Right Flip
             bool movingRight = directionX == "right";
             playerRenderer.flipX = movingRight;
             godfatherRenderer.flipX = movingRight;
-            warriorRenderer.flipX = movingRight;
             hunterRenderer.flipX = movingRight;
+            warriorRenderer.flipX = movingRight;
+            mechanistRenderer.flipX = movingRight;
 
             // Changes to back facing animations
             bool backToCamera = directionY == "forward";
             player_animator.SetBool("Back", backToCamera);
-            warrior_animator.SetBool("Back", backToCamera);
             godfather_animator.SetBool("Back", backToCamera);
             hunter_animator.SetBool("Back", backToCamera);
+            warrior_animator.SetBool("Back", backToCamera);
+            mechanist_animator.SetBool("Back", backToCamera);
         }
     }
 
