@@ -83,22 +83,22 @@ public static class ModifierLookup
 
         descLookup = new Dictionary<Sprite, string>()
         {
-            { Resources.Load<Sprite>(path + "fire"), "fire" },
-            { Resources.Load<Sprite>(path + "water"), "water" },
-            { Resources.Load<Sprite>(path + "earth"), "earth" },
-            { Resources.Load<Sprite>(path + "air"), "air" },
-            { Resources.Load<Sprite>(path + "light"), "light" },
-            { Resources.Load<Sprite>(path + "dark"), "dark" },
-            { Resources.Load<Sprite>(path + "plus2"), "plus2" },
-            { Resources.Load<Sprite>(path + "plus4"), "plus4" },
-            { Resources.Load<Sprite>(path + "plus6"), "plus6" },
-            { Resources.Load<Sprite>(path + "plus8"), "plus8" },
-            { Resources.Load<Sprite>(path + "mana2"), "mana2" },
-            { Resources.Load<Sprite>(path + "mana3"), "mana3" },
-            { Resources.Load<Sprite>(path + "mana4"), "mana4" },
-            { Resources.Load<Sprite>(path + "prio"), "prio" },
-            { Resources.Load<Sprite>(path + "adj"), "adj" },
-            { Resources.Load<Sprite>(path + "all"), "all" }
+            { Resources.Load<Sprite>(path + "fire"), "Adds a secondary fire element damage type to Attack cards or gives 20% resistance when placed on shielding cards." },
+            { Resources.Load<Sprite>(path + "water"), "Adds a secondary water element damage type to Attack cards or gives 20% resistance when placed on shielding cards." },
+            { Resources.Load<Sprite>(path + "earth"), "Adds a secondary earth element damage type to Attack cards or gives 20% resistance when placed on shielding cards." },
+            { Resources.Load<Sprite>(path + "air"), "Adds a secondary air element damage type to Attack cards or gives 20% resistance when placed on shielding cards." },
+            { Resources.Load<Sprite>(path + "light"), "Adds a secondary light element damage type to Attack cards or gives 20% resistance when placed on shielding cards." },
+            { Resources.Load<Sprite>(path + "dark"), "Adds a secondary dark element damage type to Attack cards or gives 20% resistance when placed on shielding cards." },
+            { Resources.Load<Sprite>(path + "plus2"), "Adds 2 to the base number of a card with a the matching scroll symbol." },
+            { Resources.Load<Sprite>(path + "plus4"), "Adds 4 to the base number of a card with a the matching scroll symbol." },
+            { Resources.Load<Sprite>(path + "plus6"), "Adds 6 to the base number of a card with a the matching scroll symbol." },
+            { Resources.Load<Sprite>(path + "plus8"), "Adds 8 to the base number of a card with a the matching scroll symbol." },
+            { Resources.Load<Sprite>(path + "mana2"), "Reduces the mana cost of a card by 2." },
+            { Resources.Load<Sprite>(path + "mana3"), "Reduces the mana cost of a card by 3." },
+            { Resources.Load<Sprite>(path + "mana4"), "Reduces the mana cost of a card by 4." },
+            { Resources.Load<Sprite>(path + "prio"), "Gives priority to the action of the combatant a card with this modifier is played on, placing them at the bottom of the action order for a turn." },
+            { Resources.Load<Sprite>(path + "adj"), "Duplicates the effect of a card with this modifier onto active combatants immediately adjacent to the target." },
+            { Resources.Load<Sprite>(path + "all"), "Duplicates the effect of a card with this modifier onto all active combatants allied with the target." }
         };
     }
 }
