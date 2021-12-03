@@ -9,6 +9,8 @@ public class CanvasManager : MonoBehaviour
     [SerializeField]
     public GameObject editOptionPopup;
     [SerializeField]
+    public GameObject newModPopup;
+    [SerializeField]
     public MinimapManager minimap;
     [SerializeField]
     public PauseManager pauseManager;
@@ -17,9 +19,28 @@ public class CanvasManager : MonoBehaviour
 
     public GameObject player;
 
+    void Start()
+    {
+        //PopUpNewModifiers();
+    }
+
     public void ToggleEditOption(bool state)
     {
-        editOptionPopup.SetActive(state);
+        print("in anim before: " + editOptionPopup.GetComponent<Animator>().GetBool("open"));
+        print("set state: " + state);
+        editOptionPopup.GetComponent<Animator>().SetBool("open", state);
+    }
+
+    public void PopUpNewModifiers()
+    {
+        newModPopup.GetComponent<Animator>().SetBool("open", true);
+        StartCoroutine(CloseNewModPopUp());
+    }
+
+    IEnumerator CloseNewModPopUp()
+    {
+        yield return new WaitForSeconds(5);
+        newModPopup.GetComponent<Animator>().SetBool("open", false);
     }
 
     public void OpenCustomization(PlayerInteraction pi)
@@ -28,7 +49,7 @@ public class CanvasManager : MonoBehaviour
         minimap.SetVisualActive(false);
 
         playerInteraction = pi;
-        editOptionPopup.SetActive(false);
+        editOptionPopup.GetComponent<OptionPopUp>().SetVisibility(false);
         LockPlayer();
         customizationCanvas.SetActive(true);
         customizationCanvas.GetComponent<DeckCustomizer>().SetUp();
@@ -38,7 +59,7 @@ public class CanvasManager : MonoBehaviour
     {
         UnlockPlayer();
         customizationCanvas.SetActive(false);
-        editOptionPopup.SetActive(true);
+        editOptionPopup.GetComponent<OptionPopUp>().SetVisibility(true);
         playerInteraction.canEditCards = true;
 
         minimap.SetVisualActive(true);
