@@ -4634,6 +4634,7 @@ MonoBehaviour:
   - {fileID: 1560805611}
   - {fileID: 237699260}
   sceneToLoad: ForestAndVillage
+  modifierPrefab: {fileID: 2774128207351011884, guid: 36b3bec1b6f488442acc26f3dd2a4c00, type: 3}
 --- !u!114 &816220764
 MonoBehaviour:
   m_ObjectHideFlags: 0
