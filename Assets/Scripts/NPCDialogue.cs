@@ -6,8 +6,10 @@ using UnityEngine.UI;
 public class NPCDialogue : MonoBehaviour
 {
     public TMPro.TextMeshProUGUI uitext;
-    public RawImage text_back;
+    public TMPro.TextMeshProUGUI speaker;
+    public Image text_back;
     public string opening;
+    public string name;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +21,7 @@ public class NPCDialogue : MonoBehaviour
         if (text_back != null)
         {
             text_back.gameObject.SetActive(false);
+            speaker.gameObject.SetActive(false);
         }
     }
 
@@ -34,6 +37,8 @@ public class NPCDialogue : MonoBehaviour
         if (other.name == "Player")
         {
             uitext.text = opening;
+            speaker.gameObject.SetActive(true);
+            speaker.text = name;
             text_back.gameObject.SetActive(true);
         }
     }
@@ -45,6 +50,7 @@ public class NPCDialogue : MonoBehaviour
         {
             uitext.text = "";
             text_back.gameObject.SetActive(false);
+            speaker.gameObject.SetActive(false);
         }
     }
 }
