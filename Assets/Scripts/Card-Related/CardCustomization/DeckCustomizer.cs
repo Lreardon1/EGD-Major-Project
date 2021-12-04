@@ -232,7 +232,7 @@ public class DeckCustomizer : MonoBehaviour
     public void AttemptAccept()
     {   
         //checking for balanced banks
-        if (Deck.instance.deck.Count == 30)
+        if (true)//Deck.instance.deck.Count == 30)
         {
             ShowSaver();
         }
