@@ -27,8 +27,10 @@ public class AnimationController : MonoBehaviour
     private int currentIndex = 0;
     private DialogueObject currentDialogue;
 
-    public float fadeInTime = 0.6f;
-    public float fadeOutTime = 0.6f;
+    public float startFadeInTime = 0.6f;
+    public float startFadeOutTime = 0.6f;
+    public float endFadeInTime = 0.6f;
+    public float endFadeOutTime = 0.6f;
 
     IEnumerator FadeToBlack(float time, Action A)
     {
@@ -60,13 +62,13 @@ public class AnimationController : MonoBehaviour
     {
         FindObjectOfType<OverworldMovement>().SetCanMove(false);
         UI.SetActive(true);
-        StartCoroutine(FadeToBlack(fadeInTime, StartUp));
+        StartCoroutine(FadeToBlack(startFadeInTime, StartUp));
     }
     
 
     public void TriggerCutscene()
     {
-        StartCoroutine(FadeToBlack(fadeInTime, StartUp));
+        StartCoroutine(FadeToBlack(startFadeInTime, StartUp));
     }
 
     private void StartUp()
@@ -85,9 +87,10 @@ public class AnimationController : MonoBehaviour
             c.enabled = true;
         cam.gameObject.SetActive(true);
 
-        StartCoroutine(FadeToScene(fadeOutTime, () => { }));
-        print("SENDING NEXT");
-        GetComponent<Animator>().SetTrigger("Next");
+        StartCoroutine(FadeToScene(startFadeOutTime, () => {
+            print("SENDING NEXT");
+            GetComponent<Animator>().SetTrigger("Next");
+        }));
     }
 
     private void DestroySelf() { Destroy(gameObject); }
@@ -95,7 +98,7 @@ public class AnimationController : MonoBehaviour
     public void EndAnimation()
     {
         StopAllCoroutines();
-        StartCoroutine(FadeToBlack(fadeInTime, FinishUp));
+        StartCoroutine(FadeToBlack(endFadeInTime, FinishUp));
     }
 
     private void FinishUp()
@@ -113,11 +116,13 @@ public class AnimationController : MonoBehaviour
             transform.GetChild(i).gameObject.SetActive(false);
         cam.gameObject.SetActive(false);
 
-        FindObjectOfType<OverworldMovement>().SetCanMove(true);
-        StartCoroutine(FadeToScene(fadeOutTime, DestroySelf));
-
-
         GetComponent<AfterCutsceneActions>()?.TakeActionsAfterCutscene();
+
+        StartCoroutine(FadeToScene(endFadeOutTime, () => 
+        {
+            FindObjectOfType<OverworldMovement>().SetCanMove(true);
+            DestroySelf();
+        }));
     }
 
 
