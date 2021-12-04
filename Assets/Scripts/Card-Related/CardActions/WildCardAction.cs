@@ -10,7 +10,7 @@ public class WildCardAction : CardActionTemplate
 
         //implement Wild Card mirroring
         CombatManager cm = FindObjectOfType<CombatManager>();
-        cm.ApplyCard(cm.lastPlayedCard, combatant);
+        cm.ApplyCardEffect(cm.lastPlayedCard, combatant, gameObject);
     }
 
     public override void OnRemove(Card c, GameObject combatant, List<GameObject> otherCombatants)
@@ -19,12 +19,6 @@ public class WildCardAction : CardActionTemplate
 
         //implement Wild Card mirroring
         CombatManager cm = FindObjectOfType<CombatManager>();
-        //FILL IN ONCE REMOVAL CARD DETECTION IS IMPLEMENTED
         //cm.ApplyCard(cm.lastPlayedCard, combatant);
-    }
-
-    public override void ApplyCard(Card c, GameObject combatant)
-    {
-        
     }
 }

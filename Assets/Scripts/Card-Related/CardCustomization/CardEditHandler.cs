@@ -96,7 +96,7 @@ public class CardEditHandler : MonoBehaviour
                 //setting popup text
                 spriteEdit.GetComponent<ModifierPopUp>().LookUpText();
 
-                if (mod.Value.name == Modifier.ModifierEnum.NumModifier)
+                /*if (mod.Value.name == Modifier.ModifierEnum.NumModifier)
                 {
                     spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(deckCustomizer.numStorage);
                 }
@@ -115,7 +115,8 @@ public class CardEditHandler : MonoBehaviour
                 for (int j = 0; j < cardEditor.modifierTransforms.Count; j++)
                 {
                     spriteEdit.GetComponent<DragDrop>().allowedDropZones.Add(cardEditor.modifierTransforms[j]);
-                }
+                }*/
+                deckCustomizer.LinkNewMod(spriteEdit, mod.Value.name);
             }
             
             i++;

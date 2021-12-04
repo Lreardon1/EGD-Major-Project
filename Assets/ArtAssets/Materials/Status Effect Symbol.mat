@@ -41,6 +41,6 @@ Material:
     - Boolean_828587cb59f340d7a30b222030eda391: 0
     m_Colors:
     - Color_d6415a010445468e96866ff0adc493e6: {r: 0.6105707, g: 1, b: 0.36320746, a: 0}
-    - _EffectColor: {r: 0.9245283, g: 0.43173718, b: 0.43173718, a: 0}
+    - _EffectColor: {r: 0.7924528, g: 0.10765392, b: 0.10765392, a: 0}
     - _StatusEffectColor: {r: 0.9245283, g: 0.43173718, b: 0.43173718, a: 0}
   m_BuildTextureStacks: []

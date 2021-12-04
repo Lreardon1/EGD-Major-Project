@@ -598,7 +598,7 @@ public class CombatManager : MonoBehaviour
         }
         enoughMana = tempEnoughMana;
     }
-
+    
     public bool ApplyCard(GameObject card, GameObject combatant)
     {
         CombatantBasis cb = combatant.GetComponent<CombatantBasis>();
@@ -675,6 +675,51 @@ public class CombatManager : MonoBehaviour
         chc.DiscardCard(card);
         print(card.transform.lossyScale);
         //card.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        return true;
+    }
+
+    //specifically used to call a card play effect without handling certain checks and movement for the Echo card
+    public bool ApplyCardEffect(GameObject card, GameObject combatant, GameObject wildCard)
+    {
+        CombatantBasis cb = combatant.GetComponent<CombatantBasis>();
+        Card cardScript = card.GetComponent<Card>();
+        
+        if (!IsInCVMode)
+        {
+            if (currentMana - cardScript.manaCost < 0)
+            {
+                Debug.Log("Not Enough Mana To Play This Card");
+                wildCard.transform.SetParent(chc.gameObject.transform);
+                wildCard.transform.localScale = new Vector3(chc.cardLocalScale, chc.cardLocalScale, chc.cardLocalScale);
+                wildCard.transform.localPosition = Vector3.zero;
+                cb.appliedCard = null;
+                return false;
+            }
+        }
+        else
+        {
+            if (currentMana - cardScript.manaCost < 0)
+            {
+                Debug.Log("Not Enough Mana To Play This Card");
+                return false;
+            }
+        }
+
+        print("APPLIED " + card.name + " TO " + combatant);
+        currentMana -= cardScript.manaCost;
+        manaText.text = "Mana: " + currentMana + "/" + maxMana;
+        manaText.text = "Mana: " + currentMana + "/" + maxMana;
+
+        if (!cb.isEnemy)
+        {
+            cardScript.Play(combatant, partyMembers);
+        }
+        else
+        {
+            cardScript.Play(combatant, enemies);
+        }
+
+        pauseManager.RefreshPartyView();
         return true;
     }
 

@@ -10,6 +10,7 @@ public static class ModifierLookup
     public static Dictionary<Sprite, string> titleLookup;
     public static Dictionary<Sprite, string> descLookup;
     public static Dictionary<string, Sprite> stringToSpriteConversionTable;
+    public static Dictionary<string, Modifier.ModifierEnum> stringToType;
 
     public static void LoadModifierTable() {
         //DEFINE ALL SEARCHABLE MODIFIERS HERE
@@ -59,6 +60,26 @@ public static class ModifierLookup
             { "prio", Resources.Load<Sprite>(path + "prio") },
             { "adj", Resources.Load<Sprite>(path + "adj") },
             { "all", Resources.Load<Sprite>(path + "all") }
+        };
+
+        stringToType = new Dictionary<string, Modifier.ModifierEnum>()
+        {
+            { "fire", Modifier.ModifierEnum.SecondaryElement },
+            { "water", Modifier.ModifierEnum.SecondaryElement },
+            { "earth", Modifier.ModifierEnum.SecondaryElement },
+            { "air", Modifier.ModifierEnum.SecondaryElement },
+            { "light", Modifier.ModifierEnum.SecondaryElement },
+            { "dark", Modifier.ModifierEnum.SecondaryElement },
+            { "plus2", Modifier.ModifierEnum.NumModifier },
+            { "plus4", Modifier.ModifierEnum.NumModifier },
+            { "plus6", Modifier.ModifierEnum.NumModifier },
+            { "plus8", Modifier.ModifierEnum.NumModifier },
+            { "mana2", Modifier.ModifierEnum.Utility },
+            { "mana3", Modifier.ModifierEnum.Utility },
+            { "mana4", Modifier.ModifierEnum.Utility },
+            { "prio", Modifier.ModifierEnum.Utility },
+            { "adj", Modifier.ModifierEnum.Utility },
+            { "all", Modifier.ModifierEnum.Utility }
         };
 
         titleLookup = new Dictionary<Sprite, string>()

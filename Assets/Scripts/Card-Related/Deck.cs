@@ -32,6 +32,8 @@ public class Deck : MonoBehaviour
     public List<GameObject> utilMods;
 
     public string sceneToLoad = "CustomizedCardTestScene";
+    [SerializeField]
+    public GameObject modifierPrefab;
 
     private DeckCustomizer deckCustomizer;
 
@@ -70,21 +72,6 @@ public class Deck : MonoBehaviour
 
         StartCoroutine(LoadNextSceneAfterAllInits());
     }
-
-    //void Update()
-    //{
-    //    if (Input.GetKeyDown("m"))
-    //    {
-    //        print("attempting to save");
-    //        SaveDeckAndModifiers("test");
-    //    }
-
-    //    if (Input.GetKeyDown("n"))
-    //    {
-    //        print("attempting to load");
-    //        LoadDeckAndModifiers("test");
-    //    }
-    //}
 
     public GameObject Draw()
     {
@@ -168,6 +155,44 @@ public class Deck : MonoBehaviour
                     drag.GetComponent<DragDrop>().dragger = dragger;
                 }
             }
+        }
+    }
+
+    public void AddNewModifier(string type)
+    {
+        if (ModifierLookup.stringToSpriteConversionTable.ContainsKey(type))
+        {
+            Sprite newModS = ModifierLookup.stringToSpriteConversionTable[type];
+            GameObject newMod = Instantiate(modifierPrefab, draggablePos.transform);
+            newMod.GetComponent<Image>().sprite = newModS;
+            Modifier.ModifierEnum modEnum = ModifierLookup.stringToType[type];
+            newMod.GetComponent<DragDrop>().dropType = modEnum;
+            //setting popup text
+            newMod.GetComponent<ModifierPopUp>().LookUpText();
+
+            if (modEnum == Modifier.ModifierEnum.NumModifier)
+            {
+                freeDraggables["num"].Add(newMod);
+            }
+            else if (modEnum == Modifier.ModifierEnum.SecondaryElement)
+            {
+                freeDraggables["element"].Add(newMod);
+            }
+            else if (modEnum == Modifier.ModifierEnum.Utility)
+            {
+                freeDraggables["utility"].Add(newMod);
+            }
+
+            if (deckCustomizer == null)
+            {
+                deckCustomizer = FindObjectOfType<DeckCustomizer>();
+            }
+
+            deckCustomizer.LinkNewMod(newMod, ModifierLookup.stringToType[type]);
+        }
+        else
+        {
+            print("ERROR: INVALID MODIFIER NAME: " + type);
         }
     }
 
@@ -285,7 +310,7 @@ public class Deck : MonoBehaviour
             deckCustomizer = FindObjectOfType<DeckCustomizer>();
         }
 
-        deckCustomizer.SetUp();
+        //deckCustomizer.SetUp();
     }
 
     [System.Serializable]
