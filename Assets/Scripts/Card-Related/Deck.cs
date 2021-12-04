@@ -73,21 +73,6 @@ public class Deck : MonoBehaviour
         StartCoroutine(LoadNextSceneAfterAllInits());
     }
 
-    //void Update()
-    //{
-    //    if (Input.GetKeyDown("m"))
-    //    {
-    //        print("attempting to save");
-    //        SaveDeckAndModifiers("test");
-    //    }
-
-    //    if (Input.GetKeyDown("n"))
-    //    {
-    //        print("attempting to load");
-    //        LoadDeckAndModifiers("test");
-    //    }
-    //}
-
     public GameObject Draw()
     {
         if (deck.Count == 0)
@@ -325,7 +310,7 @@ public class Deck : MonoBehaviour
             deckCustomizer = FindObjectOfType<DeckCustomizer>();
         }
 
-        deckCustomizer.SetUp();
+        //deckCustomizer.SetUp();
     }
 
     [System.Serializable]

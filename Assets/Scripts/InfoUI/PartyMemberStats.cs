@@ -28,21 +28,25 @@ public class PartyMemberStats : MonoBehaviour
         if (type == "priest")
         {
             charImage.sprite = partySprites[0];
+            specialPopUp.title = "Blessing";
             specialPopUp.description = "This Special Action heals the entire party by 6 HP.";
         }
         else if (type == "hunter")
         {
             charImage.sprite = partySprites[1];
+            specialPopUp.title = "Rain of Arrows";
             specialPopUp.description = "This Special Action deals damage to all enemies in combat based on a reduced percentage of her Attack stat.";
         }
         else if (type == "mechanist")
         {
             charImage.sprite = partySprites[2];
-            specialPopUp.description = "This Special Action caused a random effect to occur, either Attacking, Blocking, Healing the party a small amount, or inflicting a random status effect.";
+            specialPopUp.title = "Elemental Flurry";
+            specialPopUp.description = "This Special Action inflicting a random negative status effect to all opponents or a positive status effect to all party members.";
         }
         else if (type == "warrior")
         {
             charImage.sprite = partySprites[3];
+            specialPopUp.title = "Counterstance";
             specialPopUp.description = "This Special Action acts the same as the Block action, but allows for a counterattack without requiring an attack card to be played.";
         }
 
