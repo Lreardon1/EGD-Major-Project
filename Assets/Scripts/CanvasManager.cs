@@ -9,26 +9,51 @@ public class CanvasManager : MonoBehaviour
     [SerializeField]
     public GameObject editOptionPopup;
     [SerializeField]
+    public GameObject newModPopup;
+    [SerializeField]
     public MinimapManager minimap;
     [SerializeField]
     public PauseManager pauseManager;
-    [SerializeField]
-    public GameObject cutsceneUI;
 
     private PlayerInteraction playerInteraction;
 
     public GameObject player;
 
+    void Start()
+    {
+        //PopUpNewModifiers();
+    }
+
     public void ToggleEditOption(bool state)
     {
-        editOptionPopup.SetActive(state);
+        if (state)
+        {
+            editOptionPopup.GetComponent<Animator>().SetBool("close", false);
+            editOptionPopup.GetComponent<Animator>().SetBool("open", true);
+        }
+        else
+        {
+            editOptionPopup.GetComponent<Animator>().SetBool("close", true);
+            editOptionPopup.GetComponent<Animator>().SetBool("open", false);
+        }
+    }
+
+    public void PopUpNewModifiers()
+    {
+        newModPopup.GetComponent<Animator>().SetBool("open", true);
+        StartCoroutine(CloseNewModPopUp());
+    }
+
+    IEnumerator CloseNewModPopUp()
+    {
+        yield return new WaitForSeconds(5);
+        newModPopup.GetComponent<Animator>().SetBool("open", false);
     }
 
     public void OpenCustomization(PlayerInteraction pi)
     {
         pauseManager.PartyHeal();
         minimap.SetVisualActive(false);
-        //cutsceneUI.SetActive(false);
 
         playerInteraction = pi;
         editOptionPopup.SetActive(false);
@@ -45,7 +70,6 @@ public class CanvasManager : MonoBehaviour
         playerInteraction.canEditCards = true;
 
         minimap.SetVisualActive(true);
-        //cutsceneUI.SetActive(true);
     }
 
     public void LockPlayer()

@@ -232,7 +232,7 @@ public class DeckCustomizer : MonoBehaviour
     public void AttemptAccept()
     {   
         //checking for balanced banks
-        if (Deck.instance.deck.Count == 30)
+        if (true)//Deck.instance.deck.Count == 30)
         {
             ShowSaver();
         }
@@ -357,5 +357,29 @@ public class DeckCustomizer : MonoBehaviour
         saveWindow.SetActive(true);
         saveWindow.GetComponent<DeckSaver>().SetUp();
         saveWindow.GetComponent<DeckSaver>().deckCustomizer = this;
+    }
+
+    public void LinkNewMod(GameObject modifier, Modifier.ModifierEnum modType)
+    {
+        if (modType == Modifier.ModifierEnum.NumModifier)
+        {
+            modifier.GetComponent<DragDrop>().allowedDropZones.Add(numStorage);
+        }
+        else if (modType == Modifier.ModifierEnum.SecondaryElement)
+        {
+            modifier.GetComponent<DragDrop>().allowedDropZones.Add(elementStorage);
+        }
+        else if (modType == Modifier.ModifierEnum.Utility)
+        {
+            modifier.GetComponent<DragDrop>().allowedDropZones.Add(utilityStorage);
+        }
+
+        //all constantly available drop zones
+        modifier.GetComponent<DragDrop>().allowedDropZones.Add(modsDropZone);
+        modifier.GetComponent<DragDrop>().allowedDropZones.Add(editorDropZone);
+        for (int j = 0; j < cardEditor.GetComponent<CardEditor>().modifierTransforms.Count; j++)
+        {
+            modifier.GetComponent<DragDrop>().allowedDropZones.Add(cardEditor.GetComponent<CardEditor>().modifierTransforms[j]);
+        }
     }
 }

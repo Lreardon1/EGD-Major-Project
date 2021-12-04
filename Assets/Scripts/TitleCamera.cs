@@ -26,7 +26,6 @@ public class TitleCamera : MonoBehaviour
             mainCamera.SetActive(false);
             topCamera.SetActive(true);
             player.GetComponent<OverworldMovement>().SetCanMove(false);
-            Debug.Log(player.GetComponent<OverworldMovement>().canMove);
             StartCoroutine(waiter());
         }
     }

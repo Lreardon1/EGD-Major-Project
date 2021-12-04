@@ -161,6 +161,7 @@ GameObject:
   - component: {fileID: 1426100620896122058}
   - component: {fileID: 1426100620896122057}
   - component: {fileID: 1426100620896122059}
+  - component: {fileID: 1089538824}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -177,7 +178,7 @@ Transform:
   m_GameObject: {fileID: 1426100620896122064}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.2288, z: 0}
-  m_LocalScale: {x: 4.9, y: 4.9, z: 4.9}
+  m_LocalScale: {x: 4.900001, y: 4.9, z: 4.900001}
   m_Children:
   - {fileID: 3966650592459066374}
   - {fileID: 1426100620003866593}
@@ -253,15 +254,17 @@ MonoBehaviour:
   warrior_animator: {fileID: 0}
   godfather_animator: {fileID: 0}
   hunter_animator: {fileID: 0}
+  mechanist_animator: {fileID: 0}
   cc: {fileID: 1426100620896122057}
   canMove: 1
   party_members:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
   velocity: {x: 0, y: 0, z: 0}
   turnSpeed: 60
-  backoff: 0.16
+  backoff: 0.14
 --- !u!114 &1426100620896122056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,7 +312,7 @@ CharacterController:
   m_Height: 0.3086868
   m_Radius: 0.1097123
   m_SlopeLimit: 50
-  m_StepOffset: 0.35
+  m_StepOffset: 0.6
   m_SkinWidth: 0.0001
   m_MinMoveDistance: 0
   m_Center: {x: -0.002629222, y: -0.001343403, z: 0}
@@ -327,6 +330,18 @@ CapsuleCollider:
   m_Height: 0.3165706
   m_Direction: 1
   m_Center: {x: -0.0026292216, y: -0.005285375, z: 0}
+--- !u!114 &1089538824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1426100620896122064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50a0700a05195154c94ed6cea4afd1d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1570146046978099256
 GameObject:
   m_ObjectHideFlags: 0
