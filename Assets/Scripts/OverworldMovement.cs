@@ -88,7 +88,7 @@ public class OverworldMovement : MonoBehaviour
         bool isGround = Physics.Raycast(transform.position,
             (ground.transform.position - transform.position).normalized,
             (ground.transform.position - transform.position).magnitude, LayerMask.GetMask("Ground"));
-        velocity += Vector3.down * 9.8f * Time.deltaTime;
+        velocity = Vector3.down * 9.8f;
         velocity = isGround ? Vector3.zero : velocity;
 
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
@@ -98,7 +98,7 @@ public class OverworldMovement : MonoBehaviour
             Vector3 pos = transform.position;
             walkLine.AddFirst(new TimePairTransform(walkTime, pos));
         }
-        if (party_members.Length > 0)
+        if (party_members.Length > 0 && canMove)
         {
             MovePartyMembers();
         }
@@ -121,7 +121,7 @@ public class OverworldMovement : MonoBehaviour
                 directionY = "backward";
 
             // Moving Animation
-            bool isMoving = (right + up).sqrMagnitude > 0.0001;
+            bool isMoving = ((right + up).sqrMagnitude > 0.0001);
             player_animator.SetBool("Walking", isMoving);
             godfather_animator.SetBool("Walking", isMoving);
             hunter_animator.SetBool("Walking", isMoving);
@@ -149,6 +149,14 @@ public class OverworldMovement : MonoBehaviour
     public void SetCanMove(bool c)
     {
         canMove = c;
+        if(!c)
+        {
+            player_animator.SetBool("Walking", c);
+            godfather_animator.SetBool("Walking", c);
+            hunter_animator.SetBool("Walking", c);
+            warrior_animator.SetBool("Walking", c);
+            mechanist_animator.SetBool("Walking", c);
+        }
     }
 
     public float backoff = 0.1f;
