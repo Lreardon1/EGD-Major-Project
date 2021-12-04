@@ -64,6 +64,7 @@ MonoBehaviour:
   lr: {fileID: 110858995768291046}
   targetLineStart: {fileID: 3520208962881906484}
   pauseManager: {fileID: 0}
+  animator: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   oldTarget: {fileID: 0}
@@ -178,6 +179,10 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4478707169576409303, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9686d8c7462aea841b82a0e673c9efba, type: 2}
     - target: {fileID: 4478707169576409306, guid: 88d985a2b72ffad47a7cca6d795a26fb, type: 3}
       propertyPath: m_Name
       value: Hunter

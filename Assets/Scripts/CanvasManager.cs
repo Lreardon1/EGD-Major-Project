@@ -26,9 +26,16 @@ public class CanvasManager : MonoBehaviour
 
     public void ToggleEditOption(bool state)
     {
-        print("in anim before: " + editOptionPopup.GetComponent<Animator>().GetBool("open"));
-        print("set state: " + state);
-        editOptionPopup.GetComponent<Animator>().SetBool("open", state);
+        if (state)
+        {
+            editOptionPopup.GetComponent<Animator>().SetBool("close", false);
+            editOptionPopup.GetComponent<Animator>().SetBool("open", true);
+        }
+        else
+        {
+            editOptionPopup.GetComponent<Animator>().SetBool("close", true);
+            editOptionPopup.GetComponent<Animator>().SetBool("open", false);
+        }
     }
 
     public void PopUpNewModifiers()
@@ -49,7 +56,7 @@ public class CanvasManager : MonoBehaviour
         minimap.SetVisualActive(false);
 
         playerInteraction = pi;
-        editOptionPopup.GetComponent<OptionPopUp>().SetVisibility(false);
+        editOptionPopup.SetActive(false);
         LockPlayer();
         customizationCanvas.SetActive(true);
         customizationCanvas.GetComponent<DeckCustomizer>().SetUp();
@@ -59,7 +66,7 @@ public class CanvasManager : MonoBehaviour
     {
         UnlockPlayer();
         customizationCanvas.SetActive(false);
-        editOptionPopup.GetComponent<OptionPopUp>().SetVisibility(true);
+        editOptionPopup.SetActive(true);
         playerInteraction.canEditCards = true;
 
         minimap.SetVisualActive(true);

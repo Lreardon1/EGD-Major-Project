@@ -9,6 +9,11 @@ public class OptionPopUp : MonoBehaviour
     public Image p2;
     public TMPro.TextMeshProUGUI txt;
 
+    void Start()
+    {
+        GetComponent<Animator>().keepAnimatorControllerStateOnDisable = true;
+    }
+
     public void SetVisibility(bool state)
     {
         if (!state)
