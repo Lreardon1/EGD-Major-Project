@@ -13,6 +13,7 @@ public class AnimationController : MonoBehaviour
     public GameObject[] ObjectsToDisable;
     [Header("Objects To Enable")]
     public GameObject[] ObjectsToEnable;
+    public GameObject UI;
     [Header("Actors To Activate")]
     public AnimatedCharacter[] animatedCharacters;
 
@@ -58,6 +59,7 @@ public class AnimationController : MonoBehaviour
     public void PlayCutscene()
     {
         FindObjectOfType<OverworldMovement>().SetCanMove(false);
+        UI.SetActive(true);
         StartCoroutine(FadeToBlack(fadeInTime, StartUp));
     }
     
@@ -69,12 +71,11 @@ public class AnimationController : MonoBehaviour
 
     private void StartUp()
     {
-        
-
+       
         disabledObjects.AddRange(GameObject.FindGameObjectsWithTag("Player"));
         disabledObjects.AddRange(GameObject.FindGameObjectsWithTag("Party"));
         disabledObjects.AddRange(ObjectsToDisable);
-        disabledObjects.Add(Camera.main.gameObject);
+        //disabledObjects.Add(Camera.main.gameObject);
 
         foreach (GameObject d in disabledObjects)
             d.SetActive(false);
@@ -84,12 +85,10 @@ public class AnimationController : MonoBehaviour
             c.enabled = true;
         cam.gameObject.SetActive(true);
 
-        StartCoroutine(FadeToScene(fadeOutTime, Sink));
+        StartCoroutine(FadeToScene(fadeOutTime, () => { }));
         print("SENDING NEXT");
         GetComponent<Animator>().SetTrigger("Next");
     }
-
-    public void Sink() { }
 
     private void DestroySelf() { Destroy(gameObject); }
 
