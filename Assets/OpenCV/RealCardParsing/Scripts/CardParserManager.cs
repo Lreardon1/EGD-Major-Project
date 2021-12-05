@@ -55,23 +55,33 @@ public class CardParserManager : MonoBehaviour
     private float discardFinishWaitTime = 1.5f;
 
 
-    
+    private bool StartAdviseEnd()
+    {
+        return Input.GetKey(KeyCode.Space);
+    }
 
     IEnumerator RunInitDrawPhase(int numberToDraw)
     {
-        // hand.Clear();
+        phaseInfoText.text = "Shuffle Deck";
+        playText.text = "Shuffling all your deck together then press SPACE.";
+        yield return new WaitUntil(StartAdviseEnd);
+        phaseInfoText.text = "You may cheat";
+        playText.text = "Cheating is expressly allowed.";
+        yield return new WaitForSeconds(0.07f);
+
         handCount = 0;
         phaseInfoText.text = "Initial Draw Phase";
-        cardParser.UpdateMode(CardParser.ParseMode.ConfirmCardMode);
+        cardParser.UpdateMode(CardParser.ParseMode.Disabled);
+
 
         while (numberToDraw > 0)
         {
             // ATTEMPT TO WAIT FOR CONSISTENT ENOUGH INPUT TO GET A CARD READ, MAY BE TOO MUCH FOR CURRENT ITERATION
             timeSpentWithCard = 0;
             
-            while (timeSpentWithCard < timeToCompleteDraw)
+            while (!Input.GetKeyDown(KeyCode.Space))
             {
-                if (numCardsSeen > 0)
+                /*if (numCardsSeen > 0)
                 {
                     // update and progress
                     playText.text = "Drawing 1 Card...";
@@ -81,11 +91,11 @@ public class CardParserManager : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.Space))
                         break;
                 } else
-                {
-                    playText.text = "You must draw " + numberToDraw + " more cards, show them to the portal.";
-                    timeSpentWithCard = Mathf.Max(0, timeSpentWithCard - (3 * Time.deltaTime));
-                    progressIndicator.fillAmount = Mathf.Min(1.0f, timeSpentWithCard / timeToCompleteDraw);
-                }
+                {*/
+                playText.text = "You must draw " + numberToDraw + " more cards, draw a card and press SPACE with it.";
+                // timeSpentWithCard = Mathf.Max(0, timeSpentWithCard - (3 * Time.deltaTime));
+                progressIndicator.fillAmount = 0; // Mathf.Min(1.0f, timeSpentWithCard / timeToCompleteDraw);
+                // }
 
                 yield return null;
             }
@@ -121,49 +131,48 @@ public class CardParserManager : MonoBehaviour
         cardParser.ProcessTexture(webCamTexture);
     }
 
+    int[] manaToDrawCounts = new int[] { 18, 16, 14, 12, 10 }; 
+    private int ShuffleCost()
+    {
+        return Math.Max(15 - Deck.instance.discard.Count, 0);
+    }
+
     IEnumerator RunDrawPhase()
     {
-        cardParser.UpdateMode(CardParser.ParseMode.ConfirmCardMode);
-        phaseInfoText.text = "Draw Cards up to 4 cards, max hand size of " + maxCardsInHand 
-            + ". press Space to stop drawing.\n1 Draw: 22 Mana, 2 Draw: 16 Mana, 3 Draw: 14 Mana, 4 Draw: 12 Mana. R to shuffle discards in.";
-
         int totalCardsDrawn = 0;
+        cardParser.UpdateMode(CardParser.ParseMode.Disabled);
+        phaseInfoText.text = "Draw Cards up to 4 cards, max hand size of " + maxCardsInHand 
+            + ". press Enter to stop drawing.\n"
+            + "You will gain " + manaToDrawCounts[totalCardsDrawn] + " mana if you stop drawing now.\n"
+            + ((cm.currentMana >= ShuffleCost() && Deck.instance.discard.Count > 0) ? $"Press R to spend {ShuffleCost()} mana to shuffle discards into your deck." : "");
+
         while (maxCardsInHand > handCount && totalCardsDrawn < 4)
         {
             // ATTEMPT TO WAIT FOR CONSISTENT ENOUGH INPUT TO GET A CARD READ, MAY BE TOO MUCH FOR CURRENT ITERATION
             timeSpentWithCard = 0;
-            while (timeSpentWithCard < timeToCompleteDraw)
+            while (Input.GetKeyDown(KeyCode.Space))
             {
-                if (numCardsSeen > 0)
+                playText.text = "Drawing cards, max hand size of " + maxCardsInHand + ".";
+                timeSpentWithCard = 0;
+                progressIndicator.fillAmount = 0.0f;
+                // FINISH
+                if (Input.GetKeyDown(KeyCode.KeypadEnter)) goto FinishDraw;
+                // SHUFFLE
+                if (Input.GetKey(KeyCode.R) && cm.currentMana >= ShuffleCost())
                 {
-                    // update and progress
-                    playText.text = "Drawing Card " + currentCard.GetComponent<Card>().cardName;
-                    progressIndicator.fillAmount = Mathf.Min(1.0f, timeSpentWithCard / timeToCompleteDraw);
-                    timeSpentWithCard += Time.deltaTime;
+                    cm.AddMana(-ShuffleCost());
+                    Deck.instance.Shuffle();
                 }
-                else
-                {
-                    playText.text = "Drawing cards, max hand size of " + maxCardsInHand + ".";
-                    timeSpentWithCard = Mathf.Max(0, timeSpentWithCard - (Time.deltaTime * 3));
-                    progressIndicator.fillAmount = Mathf.Min(1.0f, timeSpentWithCard / timeToCompleteDraw);
-
-                    if (Input.GetKeyDown(KeyCode.Space))
-                    {
-                        goto FinishDraw;
-                    }
-                }
-
                 yield return null;
             }
-
-            // We gotten a card that passed, so add it to your hand
-            if (currentCard == null)
-                Debug.LogError("ERROR: Bad current card");
+            
             totalCardsDrawn++;
             // DRAW CARD FOR REAL
-            playText.text = "Drew " + currentCard.GetComponent<Card>().cardName + "."
-                + "\nYou MAY draw " + Math.Min(maxCardsInHand - handCount, 4 - totalCardsDrawn) + " more cards.";
+            bool canDrawMore = Math.Min(maxCardsInHand - handCount, 4 - totalCardsDrawn) > 0;
+            playText.text = "Drew a card." + (canDrawMore ? ("\nYou MAY draw " + Math.Min(maxCardsInHand - handCount, 4 - totalCardsDrawn) + " more cards.") : "");
             yield return new WaitForSeconds(0.8f);
+            if (!canDrawMore) goto FinishDraw; // end
+
             handCount += 1;
 
             yield return null;

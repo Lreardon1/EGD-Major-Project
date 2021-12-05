@@ -19,7 +19,8 @@ public class CardParser : MonoBehaviour
         GetCardFromAll,
         GetCardNoStickers,
         ConfirmCardMode,
-        RPS_Mode
+        RPS_Mode,
+        Disabled
     }
 
     public bool bMemoryMode = true;
