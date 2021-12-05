@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: AirSticker
   m_EditorClassIdentifier: 
   stickerName: Air Sticker
+  stickerSubType: Air Sticker
   stickerID: 1
   modEnum: 2
   stickerTexture: {fileID: 2800000, guid: 0603a99d0a9c1bb49871ea6c45dd11da, type: 3}

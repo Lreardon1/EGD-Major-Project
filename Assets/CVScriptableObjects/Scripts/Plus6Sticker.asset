@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Plus6Sticker
   m_EditorClassIdentifier: 
   stickerName: Plus 6 Sticker
+  stickerSubType: Plus
   stickerID: 12
   modEnum: 1
   stickerTexture: {fileID: 2800000, guid: c91c5e5af357b6346a5d80b7f416014c, type: 3}

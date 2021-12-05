@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Mana3Sticker
   m_EditorClassIdentifier: 
   stickerName: Mana 3 Sticker
+  stickerSubType: Mana
   stickerID: 8
   modEnum: 3
   stickerTexture: {fileID: 2800000, guid: 22e51d78dc5e188489c3dd06105cfb0e, type: 3}

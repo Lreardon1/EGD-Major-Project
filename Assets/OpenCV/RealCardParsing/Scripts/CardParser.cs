@@ -301,6 +301,8 @@ public class CardParser : MonoBehaviour
                 print("COUNT: " + possibleCards.Count);
 
                 AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards, lastGoodContours);
+                
+                // TODO TODO TODO
 
                 UpdateCardDetected(possibleCards.FirstOrDefault(), possibleCards.FirstOrDefault() != default ? card.cardID : -1);
             } else if (mode == ParseMode.ConfirmCardMode)
@@ -355,7 +357,7 @@ public class CardParser : MonoBehaviour
         public string bestStickerTypeByColor;
     }
 
-    private object AttemptToGetStickerMods(Mat cardScene, CustomCard card, Mat cardMat, List<GameObject> possibleCards, Point2f[][] oldContours)
+    private Tuple<PossibleSticker, PossibleSticker, PossibleSticker> AttemptToGetStickerMods(Mat cardScene, CustomCard card, Mat cardMat, List<GameObject> possibleCards, Point2f[][] oldContours)
     {
         // get rhombus bounds
         DetectContours(cardMat, out Point2f[][] contours, out HierarchyIndex[] h, false);
@@ -375,14 +377,9 @@ public class CardParser : MonoBehaviour
         possibleSticker3 = RotateStickerBoundToUpperLeftFirst(possibleSticker3);
 
 
-        print("Possible Sticker 1: " + possibleSticker1);
-        print("Possible Sticker 2: " + possibleSticker2);
-        print("Possible Sticker 3: " + possibleSticker3);
-
-
-        object finalSticker1 = null;
-        object finalSticker2 = null;
-        object finalSticker3 = null;
+        PossibleSticker finalSticker1 = null;
+        PossibleSticker finalSticker2 = null;
+        PossibleSticker finalSticker3 = null;
 
         if (possibleSticker1 != null)
             finalSticker1 = ParseStickerByContour(possibleSticker1, cardScene, card, cardMat, 0);
@@ -400,7 +397,7 @@ public class CardParser : MonoBehaviour
             finalSticker3 = ParseStickerByCrop(cardScene, card, cardMat, stickerBoundingBox3, 2);
 
         // TODO
-        return new Tuple<object, object, object>(finalSticker1, finalSticker2, finalSticker3);
+        return new Tuple<PossibleSticker, PossibleSticker, PossibleSticker>(finalSticker1, finalSticker2, finalSticker3);
     }
 
     private Point2f[] RotateStickerBoundToUpperLeftFirst(Point2f[] sticker)
@@ -525,10 +522,17 @@ public class CardParser : MonoBehaviour
     private bool SubtypeAndStickerNameContradict(string bestStickerTypeByColor, string bestStickerByDiff)
     {
         Dictionary<string, HashSet<string>> validLines = new Dictionary<string, HashSet<string>>();
+        validLines.Add("Plus", new HashSet<string>(new string[] { "Plus 2 Sticker", "Plus 4 Sticker", "Plus 6 Sticker", "Plus 8 Sticker" }));
+        validLines.Add("Mana", new HashSet<string>(new string[] { "Mana 1 Sticker", "Mana 2 Sticker", "Mana 3 Sticker", "Mana 4 Sticker" }));
+        validLines.Add("People", new HashSet<string>(new string[] { "All Sticker", "Adj Sticker" }));
+        validLines.Add("Hard Element", new HashSet<string>(new string[] { "Earth Sticker", "Light Sticker" }));
+        // TODO : add these to the scriptables
+
         // TODO TODO TODO 
         if (validLines.TryGetValue(bestStickerTypeByColor, out HashSet<string> validNames))
             return !validNames.Contains(bestStickerByDiff);
-        return false;
+
+        return bestStickerTypeByColor != bestStickerByDiff;
 }
 
 private float ScalarEuclidDistance(Scalar a, Scalar b)

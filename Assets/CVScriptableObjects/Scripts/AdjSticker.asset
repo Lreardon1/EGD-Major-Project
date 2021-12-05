@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13c69971f97b5ec429347d0bdd0b823c, type: 3}
   m_Name: AdjSticker
   m_EditorClassIdentifier: 
-  stickerName: AdjSticker
+  stickerName: Adj Sticker
+  stickerSubType: People
   stickerID: 0
   modEnum: 3
   stickerTexture: {fileID: 2800000, guid: 9d8c45742039a1a4c83c560af55f3165, type: 3}
