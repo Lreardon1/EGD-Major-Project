@@ -16,7 +16,7 @@ TextureImporter:
     second: villager01_idle_3
   - first:
       213: 3459041007998039178
-    second: villager01_idle_4
+    second: villager01_idle_1
   - first:
       213: -995205242874474813
     second: villager01_idle_5
@@ -154,10 +154,10 @@ TextureImporter:
       name: villager01_idle_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 40
-        height: 40
+        x: 11
+        y: 5
+        width: 17
+        height: 26
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -175,73 +175,10 @@ TextureImporter:
       name: villager01_idle_1
       rect:
         serializedVersion: 2
-        x: 40
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f5a05595fd5ca1ad0800000000000000
-      internalID: -2730652660979660193
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: villager01_idle_2
-      rect:
-        serializedVersion: 2
-        x: 80
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2809d75eb926ca9f0800000000000000
-      internalID: -455881040561598334
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: villager01_idle_3
-      rect:
-        serializedVersion: 2
-        x: 120
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ab20241687f186d50800000000000000
-      internalID: 6730664244993458874
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: villager01_idle_4
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 0
-        width: 40
-        height: 40
+        x: 171
+        y: 5
+        width: 17
+        height: 25
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -251,69 +188,6 @@ TextureImporter:
       bones: []
       spriteID: a847b31587bf00030800000000000000
       internalID: 3459041007998039178
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: villager01_idle_5
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3ce4cdbba125032f0800000000000000
-      internalID: -995205242874474813
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: villager01_idle_6
-      rect:
-        serializedVersion: 2
-        x: 240
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 30a9bfa330b158980800000000000000
-      internalID: -8537387817922487805
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: villager01_idle_7
-      rect:
-        serializedVersion: 2
-        x: 280
-        y: 0
-        width: 40
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d5178a5c540abf850800000000000000
-      internalID: 6411894716021371229
       vertices: []
       indices: 
       edges: []

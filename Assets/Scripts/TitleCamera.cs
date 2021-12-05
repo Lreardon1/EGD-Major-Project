@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TitleCamera : MonoBehaviour
 {
-    public GameObject mainCamera;
+    Vector3 original;
     //public GameObject topCamera;
     public Animation anim;
     public GameObject player;
@@ -13,6 +13,7 @@ public class TitleCamera : MonoBehaviour
     IEnumerator waiter()
     {
         yield return new WaitForSeconds(4);
+        player.transform.position = original;
         //mainCamera.SetActive(true);
         //topCamera.SetActive(false);
         completed = true;
@@ -24,9 +25,10 @@ public class TitleCamera : MonoBehaviour
         //check if player is the collision
         if (other.gameObject.name == "Player" && !completed)
         {
+            original = player.transform.position;
             //mainCamera.SetActive(false);
             //topCamera.SetActive(true);
-            mainCamera.transform.position = new Vector3(-424.5829162597656f, 8.026437759399414f, 397.9913635253906f);
+            //player.transform.position = new Vector3(-420.331f, 5.309f, 398.698f);
             anim.Play();
             player.GetComponent<OverworldMovement>().SetCanMove(false);
             StartCoroutine(waiter());
