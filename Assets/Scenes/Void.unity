@@ -11675,8 +11675,16 @@ PrefabInstance:
       value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
+      propertyPath: minBinStickerDiffAmount
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
       propertyPath: timeRequiredForCountZero
       value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
+      propertyPath: minColorStickerDistAmount
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
       propertyPath: timeRequiredForCountUpdate
