@@ -1199,9 +1199,11 @@ public class CardParser : MonoBehaviour
                 if ((matchByShape * 0.1f) + (matchToDiff * 0.9f) > bestCorner.matchVal) {
                     // if we have no upper left partner, we aren't a lower right.
                     Point2f[] rotRect = RotateWinding(rect, rotCount);
-                    if (FindBestUpperLeftCardCorner(scene, rotRect, ref contours) == null)
+                    if (FindBestUpperLeftCardCorner(scene, rotRect, ref contours, true) == null)
+                    {
                         continue;
-
+                    }
+                    if (FindBestUpperLeftCardCorner(scene, rotRect, ref contours) != null) print("Rot that was good: " + rotCount);
                     bestCorner = new CardCorner()
                     {
                         corners = rect,
@@ -1288,7 +1290,7 @@ public class CardParser : MonoBehaviour
     }
 
     // Get the most likely upper left corner from lower right corner
-    private CardCorner FindBestUpperLeftCardCorner(Mat scene, Point2f[] lowerRight, ref Point2f[][] contours)
+    private CardCorner FindBestUpperLeftCardCorner(Mat scene, Point2f[] lowerRight, ref Point2f[][] contours, bool bDebug = false)
     {
         Point2f[] dest = bottomRightBoundingBox.GetCWWindingOrder();
         Point2f upperLeftCenter = upperLeftBoundingBox.GetCenter();
@@ -1299,7 +1301,7 @@ public class CardParser : MonoBehaviour
             float expectedArea = (float)Cv2.ContourArea(warpedLR);
 
             int bestRotCount = 0;
-            float bestRatio = 3.0f;
+            float bestRatio = 2.0f;
             Point2f[] bestTopLeft = null;
             float bestAreaRatio = 0;
             float bestLocalAreaRatio = 3;
@@ -1316,8 +1318,9 @@ public class CardParser : MonoBehaviour
 
                 // filter not inside expected point
                 Point2f[] warpedUL = Cv2.PerspectiveTransform(canid, persp);
-                double inExpected = Cv2.PointPolygonTest(warpedUL, upperLeftCenter, false);
-                if (inExpected < 0.9f)
+                double inExpected = Cv2.PointPolygonTest(warpedUL, upperLeftCenter, true);
+
+                if (inExpected < -0.5f)
                     continue;
 
                 // filter for ratio and area
@@ -1331,6 +1334,9 @@ public class CardParser : MonoBehaviour
                 {
                     continue;
                 }
+
+                if (bDebug)
+                    print("Upper Left Dist: " + inExpected);
 
                 bestAreaRatio = areaRatio;
                 
