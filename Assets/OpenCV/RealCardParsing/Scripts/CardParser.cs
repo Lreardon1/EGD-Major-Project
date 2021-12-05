@@ -299,7 +299,7 @@ public class CardParser : MonoBehaviour
                 List<GameObject> possibleCards = GetCardsOfName(card.cardName);
                 print("COUNT: " + possibleCards.Count);
 
-                // AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards);
+                AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards);
 
                 UpdateCardDetected(possibleCards.FirstOrDefault(), possibleCards.FirstOrDefault() != default ? card.cardID : -1);
             } else if (mode == ParseMode.ConfirmCardMode)
@@ -1335,9 +1335,6 @@ public class CardParser : MonoBehaviour
                     continue;
                 }
 
-                if (bDebug)
-                    print("Upper Left Dist: " + inExpected);
-
                 bestAreaRatio = areaRatio;
                 
                 bestRatio = (aspectRatio * aspectWeight) + (areaRatio * (1.0f - aspectWeight));
@@ -1544,6 +1541,7 @@ public class CardParser : MonoBehaviour
                 return null;
             Mat replaned = PerformFirstReplaneFull(cardScene, possibleCard, cornerReplaneOffset, out Mat firstTMat);
 
+            print("Succeeded aruco, trying for keypoints");
             // get the homography matrix from the replaned image to the template image space
             Mat hMat = KeypointMatchToTemplate(replaned, bestLowerRight, out CardType cardType, out CardElement cardElement, out int ID, out string cardName);
             if (hMat == null) return null;
