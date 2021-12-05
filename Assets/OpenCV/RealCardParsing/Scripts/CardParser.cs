@@ -26,8 +26,6 @@ public class CardParser : MonoBehaviour
     public bool bMemoryMode = true;
 
     public CardParserManager cardParserManager;
-    [Space(10)]
-    public Texture2D staticTestImage;
     
     // BOUNDING BOXES
     [Space(10)]
@@ -301,10 +299,9 @@ public class CardParser : MonoBehaviour
                 List<GameObject> possibleCards = GetCardsOfName(card.cardName);
                 print("COUNT: " + possibleCards.Count);
 
-                AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards);
-                // TODO : debugging
-                UpdateCardDetected(null, -1);
-                //UpdateCardDetected(bestCard, bestCard != null ? card.cardID : -1);
+                // AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards);
+
+                UpdateCardDetected(possibleCards.FirstOrDefault(), possibleCards.FirstOrDefault() != default ? card.cardID : -1);
             } else if (mode == ParseMode.ConfirmCardMode)
             {
                 lastGoodCustomCard = null;
@@ -454,8 +451,7 @@ public class CardParser : MonoBehaviour
 
         GetBestStickerBackgroundDiff(stickerMat, binStickerMat, cardStickerSlotsDict[modType], out string bestStickerByColor, out float dist);
 
-        if (cardParserManager)
-            cardParserManager.UpdateStickerDebugs(ID, diff);
+        // cardParserManager?.UpdateStickerDebugs(ID, diff);
         
         return bestStickerByDiff;
     }
@@ -1415,9 +1411,6 @@ public class CardParser : MonoBehaviour
         cardScene.CopyTo(blackout);
         CvAruco.DrawDetectedMarkers(blackout, contours, null);
 
-        if (cardParserManager != null)
-            cardParserManager.UpdateSeenImage(blackout);
-
         // POSSIBLE LOWER RIGHTS
         CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
         for (int i = 0; i < bestLowerRights.Length; ++i)
@@ -1438,9 +1431,6 @@ public class CardParser : MonoBehaviour
         Mat blackout = new Mat();
         cardScene.CopyTo(blackout);
         CvAruco.DrawDetectedMarkers(blackout, contours, null);
-
-        if (cardParserManager)
-            cardParserManager.UpdateSeenImage(blackout);
 
         // POSSIBLE LOWER RIGHTS
         CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
@@ -1512,9 +1502,6 @@ public class CardParser : MonoBehaviour
         Mat blackout = new Mat();
         cardScene.CopyTo(blackout);
         CvAruco.DrawDetectedMarkers(blackout, contours, null);
-
-        if (cardParserManager)
-            cardParserManager.UpdateSeenImage(blackout);
 
         // POSSIBLE LOWER RIGHTS
         CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);

@@ -17,11 +17,11 @@ public class CardParserManager : MonoBehaviour
 
     private CombatManager cm;
     private Image progressIndicator;
-    private RawImage planeImage;
-    private RawImage goodSeeImage;
-    private RawImage stickerImage1;
-    private RawImage stickerImage2;
-    private RawImage stickerImage3;
+    public RawImage planeImage;
+    public RawImage goodSeeImage;
+    public RawImage stickerImage1;
+    public RawImage stickerImage2;
+    public RawImage stickerImage3;
 
     private TMP_Text playText;
     private TMP_Text cardText;
@@ -475,6 +475,8 @@ public class CardParserManager : MonoBehaviour
         phaseInfoText = backLoader.phaseInfoText;
         cm.SubscribeAsController(HandlePhaseStep, HandleRequestForInput);
 
+
+        return; // TODO : remove after debuggin
         // TODO : sanity check but might just muddle things
         HandlePhaseStep(CombatManager.CombatPhase.None, CombatManager.CombatPhase.DrawPhase);
         currentInputHandler = StartCoroutine(RunInitDrawPhase(4));

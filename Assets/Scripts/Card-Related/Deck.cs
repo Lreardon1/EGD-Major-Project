@@ -36,11 +36,13 @@ public class Deck : MonoBehaviour
     public GameObject modifierPrefab;
 
     private DeckCustomizer deckCustomizer;
-
+    public bool shouldLoadNextScene = true;
     IEnumerator LoadNextSceneAfterAllInits()
     {
         yield return null;
-        SceneManager.LoadScene(sceneToLoad);
+
+        if (shouldLoadNextScene)
+            SceneManager.LoadScene(sceneToLoad);
     }
 
     //enforcing singleton of deck on game start

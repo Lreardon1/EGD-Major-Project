@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13c69971f97b5ec429347d0bdd0b823c, type: 3}
+  m_Name: AirSticker
+  m_EditorClassIdentifier: 
+  stickerName: Air Sticker
+  stickerID: 1
+  modEnum: 2
+  stickerTexture: {fileID: 2800000, guid: 0603a99d0a9c1bb49871ea6c45dd11da, type: 3}
