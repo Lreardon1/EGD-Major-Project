@@ -281,7 +281,7 @@ public class CardParser : MonoBehaviour
     public bool ProcessTexture(WebCamTexture input)
     {
         // if (!shouldUpdate) return false;
-
+        print(mode);
         using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
         // using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
         {
@@ -323,20 +323,13 @@ public class CardParser : MonoBehaviour
     {
         
         List<GameObject> cardList = new List<GameObject>();
-        foreach (GameObject c in Deck.instance.deck)
-        {
-            if (c.GetComponent<Card>().cardName == name)
-                cardList.Add(c);
-        }
-        if (cardList.Count > 0)
-            return cardList;
-
-
         // If we got no cards from phase specific, get from all
         foreach (GameObject c in Deck.instance.allCards)
         {
-            if (c.GetComponent<Card>().cardName == name)
+            print("Got card with name: '" + c.GetComponent<Card>().cardName + "' comp to '" + cardName + "'" + " which is " + (c.GetComponent<Card>().cardName.Equals(cardName)));
+            if (c.GetComponent<Card>().cardName == cardName) {
                 cardList.Add(c);
+            }
         }
         return cardList;
     }
@@ -575,6 +568,9 @@ public class CardParser : MonoBehaviour
 
     private void UpdateCardDetected(GameObject card, int id)
     {
+        // TODO : debugging here
+        StableUpdateEvent.Invoke(card, id);
+
         print("Updating for card: " + (card != null ? card.GetComponent<Card>().name : "NULL") + " with previous " + 
             (previousCard != null ? previousCard.GetComponent<Card>().cardName : " NULL"));
 
@@ -1494,7 +1490,6 @@ public class CardParser : MonoBehaviour
         mainSeeImage.texture = OpenCvSharp.Unity.MatToTexture(cardScene);
         */
 
-        print("ACTUALLY PARSING CARD");
         Point2f[][] contours;
         HierarchyIndex[] h;
         // DETECT CONTOURS AND SIMPLIFY THEM IF NEEDED
@@ -1502,16 +1497,22 @@ public class CardParser : MonoBehaviour
         Mat blackout = new Mat();
         cardScene.CopyTo(blackout);
         CvAruco.DrawDetectedMarkers(blackout, contours, null);
+        cardParserManager.UpdateSeenImage(blackout);
 
         // POSSIBLE LOWER RIGHTS
         CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
+        print("Got Corners: " + bestLowerRights.Length);
 
         // TODO : memory mode which GREATLY improves the runtime at the possible cost of accuracy...
         if (lastGoodCustomCard != null && bestLowerRights.Length > 0 && bMemoryMode)
+        {
+            print("TAKING MEMORY MODE!!!");
             return lastGoodCustomCard;
+        }
 
         Mat blackOut = new Mat();
         cardScene.CopyTo(blackOut);
+        if (bestLowerRights.Length == 0) print("Failed on corner");
 
         foreach (CardCorner bestLowerRight in bestLowerRights)
         {
@@ -1536,9 +1537,6 @@ public class CardParser : MonoBehaviour
             if (possibleCard == null)
                 return null;
             Mat replaned = PerformFirstReplaneFull(cardScene, possibleCard, cornerReplaneOffset, out Mat firstTMat);
-
-            // predict most likely element from single replane, might not work but may improve performance.
-            bestLowerRight.mostLikelyElement = GetMostLikelyElement(replaned, cornerReplaneOffset);
 
             // get the homography matrix from the replaned image to the template image space
             Mat hMat = KeypointMatchToTemplate(replaned, bestLowerRight, out CardType cardType, out CardElement cardElement, out int ID, out string cardName);
@@ -1568,6 +1566,7 @@ public class CardParser : MonoBehaviour
 
             // TODO : bound the bounding box less strictly and perhaps axis aligned?
             // TODO : ID function, by array or similar? : add to card template data
+            print("Final decision on " + cardName);
             return new CustomCard(1.0f, new BoundingBox(possibleCard[0], possibleCard[1], possibleCard[2], possibleCard[3]),
                 cardType, cardElement, ID, cardName, affineRepOfCrop * hMat * firstTMat);
             // TODO : function to reaquire from old BB, 
@@ -1695,7 +1694,7 @@ public class CardParser : MonoBehaviour
      * TODO : may not work on bad cameras that output too much red. 
      * Being color agnostic is an ideal we probably cannot meet...
      */
-    private CardElement GetMostLikelyElement(Mat replaned, int cornerReplaneOffset)
+    /*private CardElement GetMostLikelyElement(Mat replaned, int cornerReplaneOffset)
     {
         Mat area = replaned[cornerReplaneOffset, replaned.Height - cornerReplaneOffset, cornerReplaneOffset, replaned.Width - cornerReplaneOffset];
 
@@ -1732,7 +1731,7 @@ public class CardParser : MonoBehaviour
             print("Winner is " + bestElement);
             return bestElement;
         }
-    }
+    }*/
 
 
 

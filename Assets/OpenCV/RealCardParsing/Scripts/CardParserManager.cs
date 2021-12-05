@@ -473,10 +473,11 @@ public class CardParserManager : MonoBehaviour
         playText = backLoader.playText;
         cardText = backLoader.cardText;
         phaseInfoText = backLoader.phaseInfoText;
+        return; // TODO : remove after debuggin
+
         cm.SubscribeAsController(HandlePhaseStep, HandleRequestForInput);
 
 
-        return; // TODO : remove after debuggin
         // TODO : sanity check but might just muddle things
         HandlePhaseStep(CombatManager.CombatPhase.None, CombatManager.CombatPhase.DrawPhase);
         currentInputHandler = StartCoroutine(RunInitDrawPhase(4));
