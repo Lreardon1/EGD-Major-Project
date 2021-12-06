@@ -81,7 +81,7 @@ public class CardParser : MonoBehaviour
     private WebCamDevice? webCamDevice = null;
     private WebCamTexture webCamTexture = null;
 
-    private Dictionary<string, string> CVModToTylerMod = new Dictionary<string, string>();
+    private Dictionary<string, string> TylerModToCVMod = new Dictionary<string, string>();
 
     /// <summary>
     /// A kind of workaround for macOS issue: MacBook doesn't state it's webcam as frontal
@@ -106,7 +106,22 @@ public class CardParser : MonoBehaviour
 
     private void InitModNameConverter()
     {
-        CVModToTylerMod.Add("Fire", "Fire"); // TODO : ETC
+        TylerModToCVMod.Add("fire", "Fire Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("water", "Water Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("earth", "Earth Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("air", "Air Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("light", "Light Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("dark", "Dark Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("plus2", "Plus 2 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("plus4", "Plus 4 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("plus6", "Plus 6 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("plus8", "Plus 8 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("mana2", "Mana 2 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("mana3", "Mana 3 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("mana4", "Mana 4 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("prio", "Priority Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("adj", "Adj Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("all", "All Sticker"); // TODO : ETC
     }
 
 
@@ -302,14 +317,15 @@ public class CardParser : MonoBehaviour
                     return true;
                 }
                 print("ESCAPE!!!");
-                List<GameObject> possibleCards = GetCardsOfName(card.cardName);
+                List<GameObject> possibleCards = GetCardsOfNameDebug(card.cardName);
                 print("COUNT: " + possibleCards.Count);
 
-                AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards, lastGoodContours);
+                var stickerData = AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards, lastGoodContours);
+                GameObject bestPossibleCard = GetBestCardByStickers(possibleCards, stickerData);
 
                 /// possibleCards[0].GetComponent<Card>().modifiers[0].GetComponent<Modifier>().name;
 
-                UpdateCardDetected(possibleCards.FirstOrDefault(), possibleCards.FirstOrDefault() != default ? card.cardID : -1);
+                UpdateCardDetected(bestPossibleCard, bestPossibleCard != null ? card.cardID : -1);
             } else if (mode == ParseMode.ConfirmCardMode)
             {
                 lastGoodCustomCard = null;
@@ -325,17 +341,79 @@ public class CardParser : MonoBehaviour
         }
         return true;
     }
+    private float GetScoreFromStickerSlot(PossibleSticker presumedSticker, string digitalSticker)
+    {
+        // match by pure call
+        if (presumedSticker.bestStickerByColor == digitalSticker || presumedSticker.bestStickerByDiff == digitalSticker)
+            return 1.0f;
+        // match by sticker type, the ANY type will be caught here before the emptiness of the type will get it penalized below
+        // TODO : this function is not complete
+        bool matchesDiffType = !SubtypeAndStickerNameContradict(presumedSticker.bestStickerTypeByDiff, digitalSticker);
+        bool matchesColorType = !SubtypeAndStickerNameContradict(presumedSticker.bestStickerTypeByColor, digitalSticker);
+        if (matchesColorType && matchesDiffType && presumedSticker.bestStickerByColor != "Any") return 0.8f;
+        if (matchesColorType || matchesDiffType) return 0.5f;
 
+        // heavily penalize stickers where there shouldn't be
+        if (digitalSticker == "" && (presumedSticker.bestStickerByColor != "" && presumedSticker.bestStickerByDiff != "")) return -0.8f;
+        if (digitalSticker != "" && (presumedSticker.bestStickerByColor == "" && presumedSticker.bestStickerByDiff == "")) return -0.8f;
+        if (digitalSticker == "" && (presumedSticker.bestStickerByColor != "" || presumedSticker.bestStickerByDiff != "")) return -0.5f;
+        if (digitalSticker != "" && (presumedSticker.bestStickerByColor == "" || presumedSticker.bestStickerByDiff == "")) return -0.5f;
+        
+        // default, totally unsure on assessment
+        return 0;
+    }
+
+    private GameObject GetBestCardByStickers(List<GameObject> possibleCards, Tuple<PossibleSticker, PossibleSticker, PossibleSticker> stickerData)
+    {
+        List<(float, GameObject)> cardScores = new List<(float, GameObject)>();
+        foreach (GameObject g in possibleCards)
+        {
+            Card card = g.GetComponent<Card>();
+            CardEditHandler cardEditor = g.GetComponent<CardEditHandler>();
+            Modifier m1 = cardEditor.activeModifiers[card.modifiers[0]];
+            Modifier m2 = cardEditor.activeModifiers[card.modifiers[1]];
+            Modifier m3 = cardEditor.activeModifiers[card.modifiers[2]];
+            string cvStickerType1 = TylerModToCVMod.TryGetValue(m1.spriteParsing, out string val) ? val : "";
+            string cvStickerType2 = TylerModToCVMod.TryGetValue(m1.spriteParsing, out val) ? val : "";
+            string cvStickerType3 = TylerModToCVMod.TryGetValue(m1.spriteParsing, out val) ? val : "";
+
+            // tally score
+            float score = GetScoreFromStickerSlot(stickerData.Item1, cvStickerType1);
+            score += GetScoreFromStickerSlot(stickerData.Item2, cvStickerType2);
+            score += GetScoreFromStickerSlot(stickerData.Item3, cvStickerType3);
+            cardScores.Add((score, g));
+        }
+        // get the best score
+        cardScores.Sort();
+        if (cardScores.Last().Item1 < 0) return null;
+        else return cardScores.Last().Item2;
+    }
 
     private List<GameObject> GetCardsOfName(string cardName)
     {
-        
+
+        List<GameObject> cardList = new List<GameObject>();
+        // If we got no cards from phase specific, get from all
+        foreach (GameObject c in Deck.instance.deck)
+        {
+            print("Got card with name: '" + c.GetComponent<Card>().cardName + "' comp to '" + cardName + "'" + " which is " + (c.GetComponent<Card>().cardName.Equals(cardName)));
+            if (c.GetComponent<Card>().cardName == cardName)
+            {
+                cardList.Add(c);
+            }
+        }
+        return cardList;
+    }
+    private List<GameObject> GetCardsOfNameDebug(string cardName)
+    {
+
         List<GameObject> cardList = new List<GameObject>();
         // If we got no cards from phase specific, get from all
         foreach (GameObject c in Deck.instance.allCards)
         {
             print("Got card with name: '" + c.GetComponent<Card>().cardName + "' comp to '" + cardName + "'" + " which is " + (c.GetComponent<Card>().cardName.Equals(cardName)));
-            if (c.GetComponent<Card>().cardName == cardName) {
+            if (c.GetComponent<Card>().cardName == cardName)
+            {
                 cardList.Add(c);
             }
         }
