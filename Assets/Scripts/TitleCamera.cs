@@ -6,6 +6,7 @@ public class TitleCamera : MonoBehaviour
 {
     Vector3 original;
     //public GameObject topCamera;
+    public GameObject mainCamera;
     public Animation anim;
     public GameObject player;
     bool completed = false;
@@ -13,7 +14,7 @@ public class TitleCamera : MonoBehaviour
     IEnumerator waiter()
     {
         yield return new WaitForSeconds(4);
-        player.transform.position = original;
+        //mainCamera.transform.position = original;
         //mainCamera.SetActive(true);
         //topCamera.SetActive(false);
         completed = true;
@@ -25,10 +26,10 @@ public class TitleCamera : MonoBehaviour
         //check if player is the collision
         if (other.gameObject.name == "Player" && !completed)
         {
-            original = player.transform.position;
+            //original = mainCamera.transform.position;
             //mainCamera.SetActive(false);
             //topCamera.SetActive(true);
-            //player.transform.position = new Vector3(-420.331f, 5.309f, 398.698f);
+            //mainCamera.transform.position = new Vector3(-379.284912109375f, 8.02044677734375f, 398.00335693359377f);
             anim.Play();
             player.GetComponent<OverworldMovement>().SetCanMove(false);
             StartCoroutine(waiter());
