@@ -307,7 +307,7 @@ public class CardParser : MonoBehaviour
 
                 AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards, lastGoodContours);
 
-                possibleCards[0].GetComponent<Card>().modifiers[0].GetComponent<Modifier>().name;
+                /// possibleCards[0].GetComponent<Card>().modifiers[0].GetComponent<Modifier>().name;
 
                 UpdateCardDetected(possibleCards.FirstOrDefault(), possibleCards.FirstOrDefault() != default ? card.cardID : -1);
             } else if (mode == ParseMode.ConfirmCardMode)
