@@ -80,8 +80,8 @@ public class CardParser : MonoBehaviour
     private Dictionary<Modifier.ModifierEnum, List<StickerTemplateData>> cardStickerSlotsDict = new Dictionary<Modifier.ModifierEnum, List<StickerTemplateData>>();
     private WebCamDevice? webCamDevice = null;
     private WebCamTexture webCamTexture = null;
-    
-    
+
+    private Dictionary<string, string> CVModToTylerMod = new Dictionary<string, string>();
 
     /// <summary>
     /// A kind of workaround for macOS issue: MacBook doesn't state it's webcam as frontal
@@ -100,8 +100,13 @@ public class CardParser : MonoBehaviour
 
         //MakeBoundingBoxFromEditorStr(boundBoxText);
         BakeCardTemplateData();
-        
+        InitModNameConverter();
 
+    }
+
+    private void InitModNameConverter()
+    {
+        CVModToTylerMod.Add("Fire", "Fire"); // TODO : ETC
     }
 
 
@@ -301,8 +306,8 @@ public class CardParser : MonoBehaviour
                 print("COUNT: " + possibleCards.Count);
 
                 AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards, lastGoodContours);
-                
-                // TODO TODO TODO
+
+                possibleCards[0].GetComponent<Card>().modifiers[0].GetComponent<Modifier>().name;
 
                 UpdateCardDetected(possibleCards.FirstOrDefault(), possibleCards.FirstOrDefault() != default ? card.cardID : -1);
             } else if (mode == ParseMode.ConfirmCardMode)
