@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class AfterHunterActions : AfterCutsceneActions
 {
+    public OverworldMovement player;
     // BASE CLASS TO PERFORM AFTER CUTSCENE ACTIONS
     public override void TakeActionsAfterCutscene()
     {
-        Debug.LogError("ERROR: ADD THE HUNTER TO YOUR PARTY HERE AFTER THIS CUTSCENE");
+        Debug.Log("ADDED THE HUNTER TO YOUR PARTY HERE AFTER THIS CUTSCENE");
+        player.AddPartyMember("hunter");
     }
 }
