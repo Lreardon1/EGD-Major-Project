@@ -115,35 +115,19 @@ public class RPS_Opponent : MonoBehaviour
                 yield return new WaitForSeconds(1.9f);
                 break;
             case RPS_PlayManager.PlayState.Reveal:
-                RPS_Card.CardType myPlay = manager.opponentPlay.type;
-                if (myPlay == manager.playerPlay.type)
+                switch (manager.roundResult)
                 {
-                    WriteOutTalk($"A TIE on {myPlay}, nobody's gonna win like this...");
-                    yield return new WaitForSeconds(2.2f);
-                    break;
-                }
-                switch (manager.playerPlay.type)
-                {
-                    case RPS_Card.CardType.Water:
-                        if (myPlay == RPS_Card.CardType.Wind)
-                            WriteOutTalk($"You WON with WATER! So much steam now, huh, kid.");
-                        else
-                            WriteOutTalk($"You LOST to WIND. Not even the ocean can stop a hurricane!");
+                    case RPS_Card.Result.Win:
+                        WriteOutTalk("Good play, kid.");
                         break;
-                    case RPS_Card.CardType.Fire:
-                        if (myPlay == RPS_Card.CardType.Fire)
-                            WriteOutTalk($"You WON with FIRE, huh? Guess I should have expected given from your spirit!");
-                        else
-                            WriteOutTalk($"You LOST to WATER? Never underestimate the TIDE!");
+                    case RPS_Card.Result.Loss:
+                        WriteOutTalk("You gotta be smarter, kid.");
                         break;
-                    case RPS_Card.CardType.Wind:
-                        if (myPlay == RPS_Card.CardType.Water)
-                            WriteOutTalk($"You WON with WIND. Sometimes, I still forget that beats WATER.");
-                        else
-                            WriteOutTalk($"You LOST to FIRE. Your wind just made me stronger!");
+                    case RPS_Card.Result.Tie:
+                        WriteOutTalk("That was super boring though...");
                         break;
                 }
-                yield return new WaitForSeconds(2.2f);
+                yield return new WaitForSeconds(1.4f);
                 break;
             case RPS_PlayManager.PlayState.Trade:
                 WriteOutTalk(manager.bLastBidsTraded ? "Now, what can I do with this card?" : "Nothing ventured, nothing gained.");
@@ -241,19 +225,35 @@ public class RPS_Opponent : MonoBehaviour
 
     public float GetResponseToReveal(RPS_Card.Result result)
     {
-        switch (result)
+        RPS_Card.CardType myPlay = manager.opponentPlay.type;
+        if (myPlay == manager.playerPlay.type)
         {
-            case RPS_Card.Result.Win:
-                WriteOutTalk("Good play, kid.");
-                return 1.0f;
-            case RPS_Card.Result.Loss:
-                WriteOutTalk("Gotta be smarter, kid.");
-                return 1.0f;
-            case RPS_Card.Result.Tie:
-                WriteOutTalk("That was super boring though...");
-                return 1.0f;
+            WriteOutTalk($"A TIE on {myPlay}, nobody's gonna win like this...");
+            return 3.0f;
         }
-        return 0;
+        switch (manager.playerPlay.type)
+        {
+            case RPS_Card.CardType.Water:
+                if (myPlay == RPS_Card.CardType.Fire)
+                    WriteOutTalk($"You WON with WATER! Don't choke on the steam, kid.");
+                else
+                    WriteOutTalk($"You LOST to WIND. Not even the ocean can stop a hurricane!");
+                break;
+            case RPS_Card.CardType.Fire:
+                if (myPlay == RPS_Card.CardType.Wind)
+                    WriteOutTalk($"You WON with FIRE, huh? Guess I should have expected given from your spirit!");
+                else
+                    WriteOutTalk($"You LOST to WATER. Never underestimate the TIDE!");
+                break;
+            case RPS_Card.CardType.Wind:
+                if (myPlay == RPS_Card.CardType.Water)
+                    WriteOutTalk($"You WON with WIND. Sometimes, I still forget that beats WATER.");
+                else
+                    WriteOutTalk($"You LOST to FIRE. Your wind just made me stronger!");
+                break;
+        }
+
+        return 3.4f;
     }
 
     public int GetNumberCards()
