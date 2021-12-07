@@ -32,28 +32,16 @@ public class CVControllerBackLoader : MonoBehaviour
         cmp.ActivateCVForCombat(this);
     }
 
-    IEnumerator DebugGo()
-    {
-        yield return null;
-
-        if (WebCamTexture.devices.Length > 0)
-            DeviceName = WebCamTexture.devices[0].name;
-        // DeviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 1].name;
-        CardParserManager.instance.ActivateCVForCombat(this);
-        // cvPanel.SetActive(true);
-       //  regularPanel.SetActive(false);
-    }
-
     // Start is called before the first frame update
     void Awake()
     {
-        StartCoroutine(DebugGo());
-        return;
         if (CombatManager.IsInCVMode && CardParserManager.instance != null)
         {
-            if (WebCamTexture.devices.Length > 0)
-                DeviceName = WebCamTexture.devices[0].name;
-                // DeviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 1].name;
+            if (WebCamTexture.devices.Length > 1)
+                DeviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 2].name;
+            else if (WebCamTexture.devices.Length > 0)
+                DeviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 1].name;
+            // DeviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 1].name;
             CardParserManager.instance.ActivateCVForCombat(this);
             cvPanel.SetActive(true);
             regularPanel.SetActive(false);

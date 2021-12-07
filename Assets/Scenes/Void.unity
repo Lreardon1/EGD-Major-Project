@@ -246,7 +246,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &12818524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5148,7 +5148,7 @@ MonoBehaviour:
   - {fileID: 237699260}
   sceneToLoad: ForestAndVillage
   modifierPrefab: {fileID: 2774128207351011884, guid: 36b3bec1b6f488442acc26f3dd2a4c00, type: 3}
-  shouldLoadNextScene: 0
+  shouldLoadNextScene: 1
 --- !u!114 &816220764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11675,8 +11675,16 @@ PrefabInstance:
       value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
+      propertyPath: minBinStickerDiffAmount
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
       propertyPath: timeRequiredForCountZero
       value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
+      propertyPath: minColorStickerDistAmount
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 4642193870367902649, guid: e8fefcbbb044bab4c871370186b95aca, type: 3}
       propertyPath: timeRequiredForCountUpdate

@@ -185,6 +185,12 @@ public class PauseManager : MonoBehaviour
             Time.timeScale = 1f;
         }
     }
+    
+    public void ToggleCVMode(bool toggleOn)
+    {
+        CombatManager.IsInCVMode = toggleOn;
+        print(CombatManager.IsInCVMode ? "IN CV MODE" : "IN REGULAR MODE");
+    }
 
     public void quitGame()
     {

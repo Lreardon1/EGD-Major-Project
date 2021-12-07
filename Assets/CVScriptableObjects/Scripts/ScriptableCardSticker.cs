@@ -4,6 +4,8 @@ using UnityEngine;
 public class ScriptableCardSticker : ScriptableObject
 {
     public string stickerName;
+    public string stickerSubType;
+
     public int stickerID;
     public Modifier.ModifierEnum modEnum;
 

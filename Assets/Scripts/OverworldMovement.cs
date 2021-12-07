@@ -25,6 +25,7 @@ public class OverworldMovement : MonoBehaviour
     private float walkTime = 0;
 
     public GameObject[] party_members;
+    public PauseManager pauseManager;
 
     public class TimePairTransform
     {
@@ -40,7 +41,6 @@ public class OverworldMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
         directionY = "left";
         directionX = "forward";
         //Fetch the SpriteRenderer from the GameObject and other party gameobjects
@@ -61,6 +61,26 @@ public class OverworldMovement : MonoBehaviour
         {
             walkLine.AddFirst(new TimePairTransform(t, transform.position));
         }
+
+        // TODO : debug delete all
+        PlayerPrefs.DeleteAll();
+
+        UpdatePartyMembers();
+    }
+
+    public void AddPartyMember(string member)
+    {
+        pauseManager.AddPartyMember(member, true);
+        UpdatePartyMembers();
+    }
+
+    public void UpdatePartyMembers()
+    {
+        godfatherRenderer.enabled = (PlayerPrefs.GetInt("priest", 0) == 1);
+        hunterRenderer.enabled = (PlayerPrefs.GetInt("hunter", 0) == 1);
+        mechanistRenderer.enabled = (PlayerPrefs.GetInt("mechanist", 0) == 1);
+        warriorRenderer.enabled = (PlayerPrefs.GetInt("warrior", 0) == 1);
+        print("We have disabled the clowns");
     }
 
     public Vector3 velocity = Vector3.zero;

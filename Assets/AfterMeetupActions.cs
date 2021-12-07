@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class AfterMeetupActions : AfterCutsceneActions
 {
+    public OverworldMovement player;
+
     public override void TakeActionsAfterCutscene()
     {
-        base.TakeActionsAfterCutscene();
-        Debug.LogError("ADD MORE PARTY MEMBERS");
+        Debug.Log("ADDED MORE PARTY MEMBERS");
+        player.AddPartyMember("mechanist");
+        player.AddPartyMember("warrior");
     }
 }

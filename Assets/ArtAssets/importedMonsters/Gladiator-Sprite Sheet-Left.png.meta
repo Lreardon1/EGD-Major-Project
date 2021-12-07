@@ -4,19 +4,19 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: 7961806002609506517
-    second: Gladiator-Sprite Sheet-Left_0
+    second: gladiator_idle_0
   - first:
       213: 291073905625094883
-    second: Gladiator-Sprite Sheet-Left_1
+    second: gladiator_idle_1
   - first:
       213: 5706425009346536912
-    second: Gladiator-Sprite Sheet-Left_2
+    second: gladiator_idle_2
   - first:
       213: 5947794590651420866
-    second: Gladiator-Sprite Sheet-Left_3
+    second: gladiator_idle_3
   - first:
       213: 8319431837445575018
-    second: Gladiator-Sprite Sheet-Left_4
+    second: gladiator_idle_4
   - first:
       213: -8305860870096241192
     second: Gladiator-Sprite Sheet-Left_5
@@ -28,19 +28,19 @@ TextureImporter:
     second: Gladiator-Sprite Sheet-Left_7
   - first:
       213: 593666569426362185
-    second: Gladiator-Sprite Sheet-Left_8
+    second: gladiator_walk_0
   - first:
       213: -7300786178640622775
-    second: Gladiator-Sprite Sheet-Left_9
+    second: gladiator_walk_1
   - first:
       213: 7512910705968094068
-    second: Gladiator-Sprite Sheet-Left_10
+    second: gladiator_walk_2
   - first:
       213: -3855574272309143128
-    second: Gladiator-Sprite Sheet-Left_11
+    second: gladiator_walk_3
   - first:
       213: -4931874579187048835
-    second: Gladiator-Sprite Sheet-Left_12
+    second: gladiator_walk_4
   - first:
       213: 1480307261333009793
     second: Gladiator-Sprite Sheet-Left_13
@@ -64,7 +64,7 @@ TextureImporter:
     second: Gladiator-Sprite Sheet-Left_19
   - first:
       213: -958150354219689055
-    second: Gladiator-Sprite Sheet-Left_20
+    second: gladiator_sweat_0
   - first:
       213: 5360420960033215827
     second: Gladiator-Sprite Sheet-Left_21
@@ -73,25 +73,25 @@ TextureImporter:
     second: Gladiator-Sprite Sheet-Left_22
   - first:
       213: -5138607841829943379
-    second: Gladiator-Sprite Sheet-Left_23
+    second: gladiator_pushup_0
   - first:
       213: 829910071883428152
-    second: Gladiator-Sprite Sheet-Left_24
+    second: gladiator_pushup_1
   - first:
       213: -4851454215436784273
-    second: Gladiator-Sprite Sheet-Left_25
+    second: gladiator_pushup_2
   - first:
       213: -45992212551890990
-    second: Gladiator-Sprite Sheet-Left_26
+    second: gladiator_pushup_3
   - first:
       213: -8207520562778259749
-    second: Gladiator-Sprite Sheet-Left_27
+    second: gladiator_pushup_4
   - first:
       213: 1374396631472139133
-    second: Gladiator-Sprite Sheet-Left_28
+    second: gladiator_pushup_5
   - first:
       213: -3803688234624903887
-    second: Gladiator-Sprite Sheet-Left_29
+    second: gladiator_pushup_6
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -217,15 +217,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_0
+      name: gladiator_idle_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 128
-        width: 32
-        height: 32
+        x: 8
+        y: 129
+        width: 17
+        height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -238,15 +238,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_1
+      name: gladiator_idle_1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 128
-        width: 32
-        height: 32
+        x: 40
+        y: 129
+        width: 17
+        height: 25
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -259,15 +259,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_2
+      name: gladiator_idle_2
       rect:
         serializedVersion: 2
-        x: 64
-        y: 128
-        width: 32
-        height: 32
+        x: 72
+        y: 129
+        width: 17
+        height: 26
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -280,15 +280,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_3
+      name: gladiator_idle_3
       rect:
         serializedVersion: 2
-        x: 96
-        y: 128
-        width: 32
-        height: 32
+        x: 104
+        y: 129
+        width: 17
+        height: 26
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -301,15 +301,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_4
+      name: gladiator_idle_4
       rect:
         serializedVersion: 2
-        x: 128
-        y: 128
-        width: 32
-        height: 32
+        x: 136
+        y: 129
+        width: 17
+        height: 25
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -322,78 +322,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_5
+      name: gladiator_walk_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 96
-        width: 32
-        height: 32
+        x: 102
+        y: 97
+        width: 21
+        height: 22
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8ddb8148b87abbc80800000000000000
-      internalID: -8305860870096241192
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_6
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 96
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: eac98408bcc66ad70800000000000000
-      internalID: 9054043722161364142
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_7
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 96
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9ef7470c196c8ee00800000000000000
-      internalID: 1074326840429281257
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_8
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 96
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -406,15 +343,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_9
+      name: gladiator_walk_1
       rect:
         serializedVersion: 2
-        x: 128
-        y: 96
-        width: 32
-        height: 32
+        x: 134
+        y: 97
+        width: 21
+        height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -427,15 +364,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_10
+      name: gladiator_walk_2
       rect:
         serializedVersion: 2
-        x: 160
-        y: 96
-        width: 32
-        height: 32
+        x: 166
+        y: 98
+        width: 21
+        height: 23
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -448,15 +385,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_11
+      name: gladiator_walk_3
       rect:
         serializedVersion: 2
-        x: 192
-        y: 96
-        width: 32
-        height: 32
+        x: 198
+        y: 97
+        width: 21
+        height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -469,15 +406,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_12
+      name: gladiator_walk_4
       rect:
         serializedVersion: 2
-        x: 224
-        y: 96
-        width: 32
-        height: 32
+        x: 230
+        y: 97
+        width: 21
+        height: 22
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -490,162 +427,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_13
+      name: gladiator_sweat_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 64
-        width: 32
-        height: 32
+        x: 8
+        y: 33
+        width: 17
+        height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1857f267c9b1b8410800000000000000
-      internalID: 1480307261333009793
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_14
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c93ae02e8a2bf0040800000000000000
-      internalID: 4616104581494907804
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_15
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2a2980a9c8a5b3cd0800000000000000
-      internalID: -2577366801813302622
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_16
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a57197c6247b90130800000000000000
-      internalID: 3533556878564464474
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_17
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c7751929307ba36d0800000000000000
-      internalID: -3009892174971971716
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_18
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0fb825aa89b26b880800000000000000
-      internalID: -8595634904097453072
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_19
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bec607c85daaeef90800000000000000
-      internalID: -6922407743060939541
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_20
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -661,12 +451,12 @@ TextureImporter:
       name: Gladiator-Sprite Sheet-Left_21
       rect:
         serializedVersion: 2
-        x: 32
-        y: 32
-        width: 32
-        height: 32
+        x: 39
+        y: 33
+        width: 19
+        height: 22
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -682,12 +472,12 @@ TextureImporter:
       name: Gladiator-Sprite Sheet-Left_22
       rect:
         serializedVersion: 2
-        x: 64
-        y: 32
-        width: 32
-        height: 32
+        x: 69
+        y: 33
+        width: 22
+        height: 27
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -700,15 +490,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_23
+      name: gladiator_pushup_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 32
-        height: 32
+        x: 8
+        y: 1
+        width: 17
+        height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -721,15 +511,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_24
+      name: gladiator_pushup_1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 0
-        width: 32
-        height: 32
+        x: 39
+        y: 1
+        width: 19
+        height: 22
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -742,15 +532,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_25
+      name: gladiator_pushup_2
       rect:
         serializedVersion: 2
-        x: 64
-        y: 0
-        width: 32
-        height: 32
+        x: 69
+        y: 1
+        width: 22
+        height: 25
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -763,15 +553,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_26
+      name: gladiator_pushup_3
       rect:
         serializedVersion: 2
-        x: 96
-        y: 0
-        width: 32
-        height: 32
+        x: 97
+        y: 1
+        width: 24
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -784,15 +574,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_27
+      name: gladiator_pushup_4
       rect:
         serializedVersion: 2
         x: 128
-        y: 0
-        width: 32
-        height: 32
+        y: 1
+        width: 25
+        height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -805,15 +595,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_28
+      name: gladiator_pushup_5
       rect:
         serializedVersion: 2
-        x: 160
-        y: 0
-        width: 32
-        height: 32
+        x: 158
+        y: 1
+        width: 31
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -826,15 +616,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_29
+      name: gladiator_pushup_6
       rect:
         serializedVersion: 2
-        x: 192
-        y: 0
+        x: 189
+        y: 1
         width: 32
-        height: 32
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

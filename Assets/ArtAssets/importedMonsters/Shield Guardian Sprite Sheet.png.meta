@@ -4,49 +4,49 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: -552274059620993124
-    second: Shield Guardian Sprite Sheet_0
+    second: guardian_idle_0
   - first:
       213: 4759200149639669796
-    second: Shield Guardian Sprite Sheet_1
+    second: guardian_idle_1
   - first:
       213: -406012882081634729
-    second: Shield Guardian Sprite Sheet_2
+    second: guardian_idle_2
   - first:
       213: 8864898391355315845
-    second: Shield Guardian Sprite Sheet_3
+    second: guardian_idle_3
   - first:
       213: 3834206749030599393
-    second: Shield Guardian Sprite Sheet_4
+    second: guardian_walking_0
   - first:
       213: -257178008984431770
-    second: Shield Guardian Sprite Sheet_5
+    second: guardian_walking_1
   - first:
       213: -760652188379829184
-    second: Shield Guardian Sprite Sheet_6
+    second: guardian_walking_2
   - first:
       213: 5802010312330042340
-    second: Shield Guardian Sprite Sheet_7
+    second: guardian_walking_3
   - first:
       213: -3331150464327315896
-    second: Shield Guardian Sprite Sheet_8
+    second: guardian_walking_4
   - first:
       213: -4437641943411076452
-    second: Shield Guardian Sprite Sheet_9
+    second: guardian_walking_5
   - first:
       213: 652062436001049496
-    second: Shield Guardian Sprite Sheet_10
+    second: guardian_fistbump_4
   - first:
       213: 5934838559003234982
-    second: Shield Guardian Sprite Sheet_11
+    second: guardian_idle_4
   - first:
       213: 5380178478834302440
-    second: Shield Guardian Sprite Sheet_12
+    second: guardian_idle_5
   - first:
       213: 8539606983567117854
-    second: Shield Guardian Sprite Sheet_13
+    second: guardian_idle_6
   - first:
       213: -6577776022184412217
-    second: Shield Guardian Sprite Sheet_14
+    second: guardian_idle_7
   - first:
       213: 7354425129818373764
     second: Shield Guardian Sprite Sheet_15
@@ -58,16 +58,16 @@ TextureImporter:
     second: Shield Guardian Sprite Sheet_17
   - first:
       213: 7361481914144074096
-    second: Shield Guardian Sprite Sheet_18
+    second: guardian_fistbump_0
   - first:
       213: -4090904778469553292
-    second: Shield Guardian Sprite Sheet_19
+    second: guardian_fistbump_1
   - first:
       213: 8865551048882509973
-    second: Shield Guardian Sprite Sheet_20
+    second: guardian_fistbump_2
   - first:
       213: -887121434325743426
-    second: Shield Guardian Sprite Sheet_21
+    second: guardian_fistbump_3
   - first:
       213: -715188541742638190
     second: Shield Guardian Sprite Sheet_22
@@ -91,34 +91,34 @@ TextureImporter:
     second: Shield Guardian Sprite Sheet_28
   - first:
       213: 4370279094758555472
-    second: Shield Guardian Sprite Sheet_29
+    second: guardian_schlump_0
   - first:
       213: 2490510785763119489
-    second: Shield Guardian Sprite Sheet_30
+    second: guardian_schlump_1
   - first:
       213: -2955446583652422277
-    second: Shield Guardian Sprite Sheet_31
+    second: guardian_schlump_2
   - first:
       213: -6063307835703370263
-    second: Shield Guardian Sprite Sheet_32
+    second: guardian_schlump_3
   - first:
       213: -8427376198517836955
-    second: Shield Guardian Sprite Sheet_33
+    second: guardian_schlump_4
   - first:
       213: 7411974103497088743
     second: Shield Guardian Sprite Sheet_34
   - first:
       213: 580837659378730971
-    second: Shield Guardian Sprite Sheet_35
+    second: guardian_schlump_5
   - first:
       213: -7903522991153876138
     second: Shield Guardian Sprite Sheet_36
   - first:
       213: -7617455749849032275
-    second: Shield Guardian Sprite Sheet_37
+    second: guardian_schlump_6
   - first:
       213: 5730948007539469451
-    second: Shield Guardian Sprite Sheet_38
+    second: guardian_schlump_7
   - first:
       213: -46753441551401606
     second: Shield Guardian Sprite Sheet_39
@@ -265,15 +265,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_0
+      name: guardian_idle_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 32
         y: 320
-        width: 64
-        height: 64
+        width: 31
+        height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -286,15 +286,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_1
+      name: guardian_idle_1
       rect:
         serializedVersion: 2
         x: 128
         y: 320
-        width: 64
-        height: 64
+        width: 31
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -307,15 +307,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_2
+      name: guardian_idle_2
       rect:
         serializedVersion: 2
-        x: 192
+        x: 224
         y: 320
-        width: 64
-        height: 64
+        width: 31
+        height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -328,15 +328,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_3
+      name: guardian_idle_3
       rect:
         serializedVersion: 2
         x: 320
         y: 320
-        width: 64
-        height: 64
+        width: 31
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -349,15 +349,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_4
+      name: guardian_walking_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 30
         y: 256
-        width: 64
-        height: 64
+        width: 34
+        height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -370,15 +370,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_5
+      name: guardian_walking_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 127
         y: 256
-        width: 64
-        height: 64
+        width: 33
+        height: 43
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -391,15 +391,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_6
+      name: guardian_walking_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 225
         y: 256
-        width: 64
-        height: 64
+        width: 29
+        height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -412,15 +412,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_7
+      name: guardian_walking_3
       rect:
         serializedVersion: 2
-        x: 192
+        x: 322
         y: 256
-        width: 64
-        height: 64
+        width: 30
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -433,15 +433,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_8
+      name: guardian_walking_4
       rect:
         serializedVersion: 2
-        x: 320
+        x: 418
         y: 256
-        width: 64
-        height: 64
+        width: 28
+        height: 43
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -454,15 +454,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_9
+      name: guardian_walking_5
       rect:
         serializedVersion: 2
-        x: 384
+        x: 513
         y: 256
-        width: 64
-        height: 64
+        width: 30
+        height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -475,183 +475,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_10
+      name: guardian_fistbump_0
       rect:
         serializedVersion: 2
-        x: 512
-        y: 256
-        width: 64
-        height: 64
+        x: 32
+        y: 128
+        width: 31
+        height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 89be73da4579c0900800000000000000
-      internalID: 652062436001049496
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_11
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 192
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6a2ddaca938cc5250800000000000000
-      internalID: 5934838559003234982
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_12
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 192
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8edbe1332db3aaa40800000000000000
-      internalID: 5380178478834302440
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_13
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 192
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e1e86f88e47c28670800000000000000
-      internalID: 8539606983567117854
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_14
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 192
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7cbbd91fe8b07b4a0800000000000000
-      internalID: -6577776022184412217
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_15
-      rect:
-        serializedVersion: 2
-        x: 256
-        y: 192
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 48eb70ea0ba201660800000000000000
-      internalID: 7354425129818373764
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_16
-      rect:
-        serializedVersion: 2
-        x: 320
-        y: 192
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 85aae45b35eb92840800000000000000
-      internalID: 5199896511509342808
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_17
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 192
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4bc7cea5e4fc96930800000000000000
-      internalID: 4137065668156357812
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_18
-      rect:
-        serializedVersion: 2
-        x: 448
-        y: 192
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -664,15 +496,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_19
+      name: guardian_fistbump_1
       rect:
         serializedVersion: 2
-        x: 512
-        y: 192
-        width: 64
-        height: 64
+        x: 128
+        y: 128
+        width: 32
+        height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -685,15 +517,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_20
+      name: guardian_fistbump_2
       rect:
         serializedVersion: 2
-        x: 576
-        y: 192
-        width: 64
-        height: 64
+        x: 225
+        y: 128
+        width: 35
+        height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -706,15 +538,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_21
+      name: guardian_fistbump_3
       rect:
         serializedVersion: 2
-        x: 0
+        x: 322
         y: 128
-        width: 64
-        height: 64
+        width: 30
+        height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -727,162 +559,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_22
+      name: guardian_schlump_0
       rect:
         serializedVersion: 2
-        x: 128
-        y: 128
-        width: 64
-        height: 64
+        x: 32
+        y: 0
+        width: 31
+        height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 29b100e7fc32316f0800000000000000
-      internalID: -715188541742638190
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_23
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 128
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f410b06f17d132f00800000000000000
-      internalID: 1090747910050218319
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_24
-      rect:
-        serializedVersion: 2
-        x: 256
-        y: 128
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2c38a15f4c80bf810800000000000000
-      internalID: 1800042118083412930
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_25
-      rect:
-        serializedVersion: 2
-        x: 320
-        y: 128
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 79a8181d73f040d50800000000000000
-      internalID: 6702498877846686359
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_26
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 128
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 42b20a3548a4e01f0800000000000000
-      internalID: -1076841328695825628
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_27
-      rect:
-        serializedVersion: 2
-        x: 448
-        y: 128
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 91da34f31e87e5530800000000000000
-      internalID: 3845644040645356825
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_28
-      rect:
-        serializedVersion: 2
-        x: 512
-        y: 128
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 51e5524c540af9bf0800000000000000
-      internalID: -315357227388674539
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_29
-      rect:
-        serializedVersion: 2
-        x: 576
-        y: 128
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -895,15 +580,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_30
+      name: guardian_schlump_1
       rect:
         serializedVersion: 2
-        x: 640
-        y: 128
-        width: 64
-        height: 64
+        x: 128
+        y: 0
+        width: 31
+        height: 41
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -916,15 +601,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_31
+      name: guardian_schlump_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 64
-        width: 64
-        height: 64
+        x: 224
+        y: 0
+        width: 31
+        height: 35
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -937,15 +622,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_32
+      name: guardian_schlump_3
       rect:
         serializedVersion: 2
-        x: 128
-        y: 64
-        width: 64
-        height: 64
+        x: 315
+        y: 0
+        width: 42
+        height: 33
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -958,15 +643,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_33
+      name: guardian_schlump_4
       rect:
         serializedVersion: 2
-        x: 192
-        y: 64
-        width: 64
-        height: 64
+        x: 402
+        y: 0
+        width: 62
+        height: 29
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -979,36 +664,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_34
+      name: guardian_schlump_5
       rect:
         serializedVersion: 2
-        x: 320
-        y: 64
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7ee96534d2f9cd660800000000000000
-      internalID: 7411974103497088743
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_35
-      rect:
-        serializedVersion: 2
-        x: 0
+        x: 498
         y: 0
-        width: 64
-        height: 64
+        width: 61
+        height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1021,36 +685,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_36
+      name: guardian_schlump_6
       rect:
         serializedVersion: 2
-        x: 128
+        x: 594
         y: 0
-        width: 64
-        height: 64
+        width: 61
+        height: 22
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 653f326d6bb015290800000000000000
-      internalID: -7903522991153876138
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_37
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1063,15 +706,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_38
+      name: guardian_schlump_7
       rect:
         serializedVersion: 2
-        x: 256
+        x: 690
         y: 0
-        width: 64
-        height: 64
+        width: 61
+        height: 22
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1084,148 +727,85 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_39
+      name: guardian_idle_4
       rect:
         serializedVersion: 2
-        x: 320
-        y: 0
-        width: 64
-        height: 64
+        x: 31
+        y: 63
+        width: 34
+        height: 46
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a7d3d4c1ef5e95ff0800000000000000
-      internalID: -46753441551401606
+      spriteID: 6a2ddaca938cc5250800000000000000
+      internalID: 5934838559003234982
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_40
+      name: guardian_idle_5
       rect:
         serializedVersion: 2
-        x: 384
-        y: 0
-        width: 64
-        height: 64
+        x: 128
+        y: 63
+        width: 33
+        height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5133cbb0bc29a00b0800000000000000
-      internalID: -5761631372494228715
+      spriteID: 8edbe1332db3aaa40800000000000000
+      internalID: 5380178478834302440
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_41
+      name: guardian_idle_6
       rect:
         serializedVersion: 2
-        x: 448
-        y: 0
-        width: 64
-        height: 64
+        x: 223
+        y: 63
+        width: 33
+        height: 44
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fb39252bee2733820800000000000000
-      internalID: 2896785354848900031
+      spriteID: e1e86f88e47c28670800000000000000
+      internalID: 8539606983567117854
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_42
+      name: guardian_idle_7
       rect:
         serializedVersion: 2
-        x: 512
-        y: 0
-        width: 64
-        height: 64
+        x: 319
+        y: 63
+        width: 33
+        height: 44
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ab742c108da9f5b40800000000000000
-      internalID: 5431229928165230522
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_43
-      rect:
-        serializedVersion: 2
-        x: 576
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f9b4a7ed6ce0ff510800000000000000
-      internalID: 1585001841156574111
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_44
-      rect:
-        serializedVersion: 2
-        x: 640
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 40c3acd5d50f7c970800000000000000
-      internalID: 8775246682750860292
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shield Guardian Sprite Sheet_45
-      rect:
-        serializedVersion: 2
-        x: 704
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 592409ce3ca68b5d0800000000000000
-      internalID: -3046567758196096363
+      spriteID: 7cbbd91fe8b07b4a0800000000000000
+      internalID: -6577776022184412217
       vertices: []
       indices: 
       edges: []

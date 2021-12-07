@@ -4,34 +4,34 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: -8700327237623170601
-    second: pig_sprite_sheet_0
+    second: pig_idle_0
   - first:
       213: 789418031612879652
-    second: pig_sprite_sheet_1
+    second: pig_idle_1
   - first:
       213: -9084409295350040875
-    second: pig_sprite_sheet_2
+    second: pig_idle_2
   - first:
       213: -4420518703148035987
-    second: pig_sprite_sheet_3
+    second: pig_idle_3
   - first:
       213: -5897106340380944140
-    second: pig_sprite_sheet_4
+    second: pig_waking_0
   - first:
       213: 7624122139509747666
-    second: pig_sprite_sheet_5
+    second: pig_walking_0
   - first:
       213: 585816061396093735
-    second: pig_sprite_sheet_6
+    second: pig_walking_1
   - first:
       213: -8485312796286751088
-    second: pig_sprite_sheet_7
+    second: pig_walking_2
   - first:
       213: -384776563777332467
-    second: pig_sprite_sheet_8
+    second: pig_waking_1
   - first:
       213: 270154891180362935
-    second: pig_sprite_sheet_9
+    second: pig_waking_2
   - first:
       213: -5288482547183537972
     second: pig_sprite_sheet_10
@@ -40,40 +40,40 @@ TextureImporter:
     second: pig_sprite_sheet_11
   - first:
       213: 6135752595292431885
-    second: pig_sprite_sheet_12
+    second: pig_sleepy_0
   - first:
       213: -2649746587523663422
-    second: pig_sprite_sheet_13
+    second: pig_sleepy_1
   - first:
       213: 4532469671274492186
-    second: pig_sprite_sheet_14
+    second: pig_sleepy_2
   - first:
       213: 5753239416889689547
-    second: pig_sprite_sheet_15
+    second: pig_sleepy_3
   - first:
       213: -1660393113616118845
-    second: pig_sprite_sheet_16
+    second: pig_sleepy_4
   - first:
       213: -284857576511022315
-    second: pig_sprite_sheet_17
+    second: pig_sleep_0
   - first:
       213: 3809139648462355125
-    second: pig_sprite_sheet_18
+    second: pig_sleep_1
   - first:
       213: -5726988971159319036
-    second: pig_sprite_sheet_19
+    second: pig_sleep_2
   - first:
       213: -4808795589018841515
-    second: pig_sprite_sheet_20
+    second: pig_sleep_3
   - first:
       213: 9074175210265991515
-    second: pig_sprite_sheet_21
+    second: pig_sleep_4
   - first:
       213: 4721864703016846814
-    second: pig_sprite_sheet_22
+    second: pig_sleep_5
   - first:
       213: 7937147283770480867
-    second: pig_sprite_sheet_23
+    second: pig_sleep_6
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -199,15 +199,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pig_sprite_sheet_0
+      name: pig_idle_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 7
         y: 96
-        width: 32
-        height: 32
+        width: 18
+        height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -220,15 +220,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pig_sprite_sheet_1
+      name: pig_idle_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 38
         y: 96
-        width: 32
-        height: 32
+        width: 20
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -241,15 +241,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pig_sprite_sheet_2
+      name: pig_idle_2
       rect:
         serializedVersion: 2
-        x: 64
+        x: 69
         y: 96
-        width: 32
-        height: 32
+        width: 21
+        height: 11
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -262,15 +262,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pig_sprite_sheet_3
+      name: pig_idle_3
       rect:
         serializedVersion: 2
-        x: 96
+        x: 103
         y: 96
-        width: 32
-        height: 32
+        width: 18
+        height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -283,15 +283,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pig_sprite_sheet_4
+      name: pig_waking_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 135
         y: 64
-        width: 32
-        height: 32
+        width: 18
+        height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -304,15 +304,267 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pig_sprite_sheet_5
+      name: pig_sleepy_0
       rect:
         serializedVersion: 2
-        x: 32
-        y: 64
-        width: 32
-        height: 32
+        x: 7
+        y: 32
+        width: 18
+        height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0626101a72962550800000000000000
+      internalID: 6135752595292431885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pig_sleepy_1
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 33
+        width: 19
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c939d184853a3bd0800000000000000
+      internalID: -2649746587523663422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pig_sleepy_2
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 34
+        width: 19
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a113c87e62196ee30800000000000000
+      internalID: 4532469671274492186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pig_sleepy_3
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 33
+        width: 19
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc54c7784cc97df40800000000000000
+      internalID: 5753239416889689547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pig_sleepy_4
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 32
+        width: 18
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cb0863a24915f8e0800000000000000
+      internalID: -1660393113616118845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pig_sleep_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 0
+        width: 18
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51b5b7c1b8bfb0cf0800000000000000
+      internalID: -284857576511022315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pig_sleep_1
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 0
+        width: 19
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ba747e1458ccd430800000000000000
+      internalID: 3809139648462355125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pig_sleep_2
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 0
+        width: 19
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40e0875afd5a580b0800000000000000
+      internalID: -5726988971159319036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pig_sleep_3
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 0
+        width: 21
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55e011fc3e9b34db0800000000000000
+      internalID: -4808795589018841515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pig_sleep_4
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 0
+        width: 21
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b595f85d642fded70800000000000000
+      internalID: 9074175210265991515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pig_sleep_5
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 0
+        width: 22
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed546cc0eee678140800000000000000
+      internalID: 4721864703016846814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pig_sleep_6
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 0
+        width: 18
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e8981bd669662e60800000000000000
+      internalID: 7937147283770480867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pig_walking_0
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 66
+        width: 19
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -325,15 +577,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pig_sprite_sheet_6
+      name: pig_walking_1
       rect:
         serializedVersion: 2
-        x: 64
-        y: 64
-        width: 32
-        height: 32
+        x: 199
+        y: 67
+        width: 19
+        height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -346,15 +598,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pig_sprite_sheet_7
+      name: pig_walking_2
       rect:
         serializedVersion: 2
-        x: 96
-        y: 64
-        width: 32
-        height: 32
+        x: 231
+        y: 66
+        width: 19
+        height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -367,13 +619,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pig_sprite_sheet_8
+      name: pig_waking_1
       rect:
         serializedVersion: 2
-        x: 128
-        y: 64
-        width: 32
-        height: 32
+        x: 71
+        y: 68
+        width: 18
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -388,13 +640,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pig_sprite_sheet_9
+      name: pig_waking_2
       rect:
         serializedVersion: 2
-        x: 160
-        y: 64
-        width: 32
-        height: 32
+        x: 103
+        y: 67
+        width: 19
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -404,300 +656,6 @@ TextureImporter:
       bones: []
       spriteID: 7bcc3233178cfb300800000000000000
       internalID: 270154891180362935
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_10
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cc0b54694298b96b0800000000000000
-      internalID: -5288482547183537972
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_11
-      rect:
-        serializedVersion: 2
-        x: 224
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d4d3014ea439796a0800000000000000
-      internalID: -6442518792067072691
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_12
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d0626101a72962550800000000000000
-      internalID: 6135752595292431885
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_13
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2c939d184853a3bd0800000000000000
-      internalID: -2649746587523663422
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_14
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a113c87e62196ee30800000000000000
-      internalID: 4532469671274492186
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_15
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bc54c7784cc97df40800000000000000
-      internalID: 5753239416889689547
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_16
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3cb0863a24915f8e0800000000000000
-      internalID: -1660393113616118845
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_17
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 51b5b7c1b8bfb0cf0800000000000000
-      internalID: -284857576511022315
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_18
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5ba747e1458ccd430800000000000000
-      internalID: 3809139648462355125
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_19
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 40e0875afd5a580b0800000000000000
-      internalID: -5726988971159319036
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_20
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 55e011fc3e9b34db0800000000000000
-      internalID: -4808795589018841515
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_21
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b595f85d642fded70800000000000000
-      internalID: 9074175210265991515
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_22
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ed546cc0eee678140800000000000000
-      internalID: 4721864703016846814
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: pig_sprite_sheet_23
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3e8981bd669662e60800000000000000
-      internalID: 7937147283770480867
       vertices: []
       indices: 
       edges: []

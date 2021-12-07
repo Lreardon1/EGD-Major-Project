@@ -38,6 +38,30 @@ TextureImporter:
   - first:
       213: -1203529981766872419
     second: golem_upperBody
+  - first:
+      213: 6313958136043311771
+    second: golem_rightFinger1
+  - first:
+      213: 6225803207390036791
+    second: golem__rightFinger2
+  - first:
+      213: -2235388607827041426
+    second: golem_rightFinger3
+  - first:
+      213: -3145354403953770894
+    second: golem__rightFinger4
+  - first:
+      213: 521003051100060685
+    second: golem_leftFinger1
+  - first:
+      213: 3113114727066961396
+    second: golem__leftFinger2
+  - first:
+      213: 7604863118969471786
+    second: golem__leftFinger3
+  - first:
+      213: -3534367033610702545
+    second: golem__leftFinger4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -292,10 +316,10 @@ TextureImporter:
       name: golem_rightHand
       rect:
         serializedVersion: 2
-        x: 1
-        y: 142
-        width: 154
-        height: 127
+        x: 28
+        y: 196
+        width: 97
+        height: 74
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -355,10 +379,10 @@ TextureImporter:
       name: golem_leftHand
       rect:
         serializedVersion: 2
-        x: 387
-        y: 163
-        width: 133
-        height: 110
+        x: 409
+        y: 207
+        width: 88
+        height: 69
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -410,6 +434,174 @@ TextureImporter:
       bones: []
       spriteID: d92d040bbd33c4fe0800000000000000
       internalID: -1203529981766872419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: golem_rightFinger1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 176
+        width: 26
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b929c81d87faf9750800000000000000
+      internalID: 6313958136043311771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: golem__rightFinger2
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 150
+        width: 35
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73388f9080f766650800000000000000
+      internalID: 6225803207390036791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: golem_rightFinger3
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 156
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e63a38f97ed4af0e0800000000000000
+      internalID: -2235388607827041426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: golem__rightFinger4
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 187
+        width: 29
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27eff9b95d47954d0800000000000000
+      internalID: -3145354403953770894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: golem_leftFinger1
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 180
+        width: 22
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0cb6bbb389fa3700800000000000000
+      internalID: 521003051100060685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: golem__leftFinger2
+      rect:
+        serializedVersion: 2
+        x: 461
+        y: 169
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f50ddba951043b20800000000000000
+      internalID: 3113114727066961396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: golem__leftFinger3
+      rect:
+        serializedVersion: 2
+        x: 423
+        y: 166
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2305a3e6b6e98960800000000000000
+      internalID: 7604863118969471786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: golem__leftFinger4
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 189
+        width: 22
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2178c7a8e763fec0800000000000000
+      internalID: -3534367033610702545
       vertices: []
       indices: 
       edges: []
