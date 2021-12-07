@@ -16,6 +16,9 @@ public class RPS_CardObject : MonoBehaviour
     private void Start()
     {
         initRot = transform.rotation;
+
+        //cardType = RPS_Card.CardType.Unknown;
+        //sr.enabled = false;
     }
 
     public Sprite GetCardSprite(RPS_Card.CardType ct)
@@ -38,6 +41,7 @@ public class RPS_CardObject : MonoBehaviour
     {
         cardType = card.type;
         print("Play card set to " + card.type);
+        sr.enabled = (card.type != RPS_Card.CardType.Unknown);
         sr.sprite = GetCardSprite(cardType);
     }
 
