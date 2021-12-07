@@ -64,11 +64,12 @@ public class CardParserManager : MonoBehaviour
     IEnumerator RunInitDrawPhase(int numberToDraw)
     {
         phaseInfoText.text = "Shuffle Deck";
-        playText.text = "Shuffling all your deck together then press SPACE.";
+        playText.text = "Shuffle your whole deck together then press SPACE.";
         yield return new WaitUntil(StartAdviseEnd);
         phaseInfoText.text = "You may cheat";
         playText.text = "Cheating is expressly allowed.";
         yield return new WaitForSeconds(0.07f);
+        playText.text = "";
 
         handCount = 0;
         phaseInfoText.text = "Initial Draw Phase";
@@ -111,7 +112,7 @@ public class CardParserManager : MonoBehaviour
         }
 
         // finish drawing and continue
-        playText.text = "Initial Cards Drawn, progressing...";
+        playText.text = "";
         phaseInfoText.text = "";
         for (float t = 0; t < drawFinishWaitTime; t += Time.deltaTime)
         {
@@ -119,16 +120,14 @@ public class CardParserManager : MonoBehaviour
             yield return null;
         }
         timeSpentWithCard = 0.0f;
-        playText.text = "";
         progressIndicator.fillAmount = 0.0f;
         currentInputHandler = null;
-        // TODO : next phase
+
         cm.NextPhase();
     }
 
     public void HandleNewImage(WebCamTexture webCamTexture)
     {
-        // goodSeeImage.texture = webCamTexture;
         cardParser.ProcessTexture(webCamTexture);
     }
 
@@ -153,7 +152,9 @@ public class CardParserManager : MonoBehaviour
             timeSpentWithCard = 0;
             while (Input.GetKeyDown(KeyCode.Space))
             {
-                playText.text = "Drawing cards, max hand size of " + maxCardsInHand + ".";
+                playText.text = "Draw Cards up to 4 cards, max hand size of " + maxCardsInHand
+                    + "\nYou will gain " + manaToDrawCounts[totalCardsDrawn] + " mana if you stop drawing now.\n"
+                    + ((cm.currentMana >= ShuffleCost() && (Deck.instance.discard.Count + discardCount) > 0) ? $"Press R to spend {ShuffleCost()} mana to shuffle discards into your deck." : "");
                 timeSpentWithCard = 0;
                 progressIndicator.fillAmount = 0.0f;
                 // FINISH
