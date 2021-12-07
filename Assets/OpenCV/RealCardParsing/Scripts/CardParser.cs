@@ -316,10 +316,8 @@ public class CardParser : MonoBehaviour
                     UpdateCardDetected(null, -1);
                     return true;
                 }
-                print("ESCAPE!!!");
-                List<GameObject> possibleCards = GetCardsOfNameDebug(card.cardName);
-                print("COUNT: " + possibleCards.Count);
 
+                List<GameObject> possibleCards = GetCardsOfNameDebug(card.cardName);
                 var stickerData = AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards, lastGoodContours);
                 GameObject bestPossibleCard = GetBestCardByStickers(possibleCards, stickerData);
 
@@ -336,6 +334,10 @@ public class CardParser : MonoBehaviour
             {
                 RPS_Card.CardType cardType = RPS_ParseCard(cardScene);
                 Update_RPS_Card(cardType);
+            } else
+            {
+                lastGoodCustomCard = null;
+                UpdateCardDetected(null, -1, true);
             }
 
         }
@@ -797,13 +799,24 @@ private float ScalarEuclidDistance(Scalar a, Scalar b)
         }
     }
 
-    private void UpdateCardDetected(GameObject card, int id)
+    private void UpdateCardDetected(GameObject card, int id, bool disableOverride = false)
     {
-        // TODO : debugging here
-        StableUpdateEvent.Invoke(card, id);
-
         print("Updating for card: " + (card != null ? card.GetComponent<Card>().name : "NULL") + " with previous " + 
             (previousCard != null ? previousCard.GetComponent<Card>().cardName : " NULL"));
+
+        // FOR DISABLED MODE
+        if (disableOverride)
+        {
+            if (previousCard != null)
+            {
+                previousCard = null;
+                ToNullUpdateEvent.Invoke(card, id);
+            } else
+            {
+                StableUpdateEvent.Invoke(card, id);
+            }
+            return;
+        }
 
         // if card is the same as last, don't update
         if (card == previousCard)
@@ -1652,6 +1665,8 @@ private float ScalarEuclidDistance(Scalar a, Scalar b)
     }
 
 
+    private bool memoryTick = true;
+    RPS_Card.CardType lastGoodCardElement = RPS_Card.CardType.Unknown;
     private RPS_Card.CardType RPS_ParseCard(Mat cardScene)
     {
         Point2f[][] contours;
@@ -1664,8 +1679,16 @@ private float ScalarEuclidDistance(Scalar a, Scalar b)
 
         // POSSIBLE LOWER RIGHTS
         CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
-        
 
+        // TODO : memory mode which GREATLY improves the runtime at the possible cost of accuracy...
+        if (lastGoodCardElement != RPS_Card.CardType.Unknown && bestLowerRights.Length > 0 && bMemoryMode && memoryTick)
+        {
+            print("TAKING MEMORY MODE!!!");
+            memoryTick = !memoryTick;
+            return lastGoodCardElement;
+        }
+
+        lastGoodCardElement = RPS_Card.CardType.Unknown;
         foreach (CardCorner bestLowerRight in bestLowerRights)
         {
             print("RPS: FOUND A BLOODY CARD!");
@@ -1694,22 +1717,23 @@ private float ScalarEuclidDistance(Scalar a, Scalar b)
             // get the homography matrix from the replaned image to the template image space
             Mat hMat = KeypointMatchToTemplate(replaned, bestLowerRight, out CardType cardType, out CardElement cardElement, out int ID, out string cardName);
             if (hMat == null) return RPS_Card.CardType.Unknown;
-            print(cardElement);
+            print("MY BEST CARD ELEEMENT IS: " + cardElement);
+            memoryTick = true;
             switch (cardElement)
             {
-                case CardElement.Dark:
                 case CardElement.Fire:
-                    return RPS_Card.CardType.Unknown;
+                    lastGoodCardElement = RPS_Card.CardType.Fire;
+                    return RPS_Card.CardType.Fire;
                 case CardElement.Water:
+                case CardElement.Earth:
+                    lastGoodCardElement = RPS_Card.CardType.Water;
                     return RPS_Card.CardType.Water;
                 case CardElement.Wind:
+                    lastGoodCardElement = RPS_Card.CardType.Wind;
                     return RPS_Card.CardType.Wind;
-                case CardElement.Earth:
-                case CardElement.Light:
-                case CardElement.None:
-                    return RPS_Card.CardType.Unknown;
             }
         }
+
         return RPS_Card.CardType.Unknown;
     }
 
@@ -1799,8 +1823,6 @@ private float ScalarEuclidDistance(Scalar a, Scalar b)
             replaned.Release();
             replaned.Dispose();
 
-            // TODO : bound the bounding box less strictly and perhaps axis aligned?
-            // TODO : ID function, by array or similar? : add to card template data
             print("Final decision on " + cardName);
             lastGoodContours = contours;
             Mat finalMat = hMat * firstTMat;
@@ -1866,7 +1888,7 @@ private float ScalarEuclidDistance(Scalar a, Scalar b)
                 //if (CheckIfEnoughMatch(goodMatches, initMatches) && bestGoodMatches < goodMatches.Length) // discrete count version
                 {
                     Mat homo = GetHomographyMatrix(m_kp2, m_kp1);
-                    // TODO : combine the filter by fundy with the other go?
+
                     if (homo != null && homo.Width == 3 && homo.Height == 3 && IsGoodHomography(homo, m_kp1, m_kp2, out float percent))
                     {
                         int survivedKP = Mathf.RoundToInt(m_kp1.Length * percent);

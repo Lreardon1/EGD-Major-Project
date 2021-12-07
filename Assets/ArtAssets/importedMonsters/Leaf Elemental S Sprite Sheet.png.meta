@@ -19,19 +19,19 @@ TextureImporter:
     second: leaf_idle_4
   - first:
       213: 8286191296459776020
-    second: Leaf Elemental S Sprite Sheet_5
+    second: leaf_idle_5
   - first:
       213: 6115264776640320308
-    second: Leaf Elemental S Sprite Sheet_6
+    second: leaf_idle_6
   - first:
       213: -1725283420240008930
-    second: Leaf Elemental S Sprite Sheet_7
+    second: leaf_sadge_0
   - first:
       213: -1024739921417291936
-    second: Leaf Elemental S Sprite Sheet_8
+    second: leaf_sadge_1
   - first:
       213: 6458322872441543855
-    second: Leaf Elemental S Sprite Sheet_9
+    second: leaf_sadge_2
   - first:
       213: -6345651515430434392
     second: leaf_suprise_0
@@ -49,22 +49,22 @@ TextureImporter:
     second: leaf_suprise_4
   - first:
       213: 6752397290000052338
-    second: Leaf Elemental S Sprite Sheet_15
+    second: leaf_sadge_3
   - first:
       213: 6630305226736608832
-    second: Leaf Elemental S Sprite Sheet_16
+    second: leaf_sadge_4
   - first:
       213: 3656618479642754455
-    second: Leaf Elemental S Sprite Sheet_17
+    second: leaf_sadge_6
   - first:
       213: -379540555892743730
-    second: Leaf Elemental S Sprite Sheet_18
+    second: leaf_sadge_7
   - first:
       213: 5536604185681357994
-    second: Leaf Elemental S Sprite Sheet_19
+    second: leaf_sadge_8
   - first:
       213: -3563867119432893203
-    second: Leaf Elemental S Sprite Sheet_20
+    second: leaf_sadge_9
   - first:
       213: -7797256650508130678
     second: Leaf Elemental S Sprite Sheet_21
@@ -333,7 +333,7 @@ TextureImporter:
         width: 10
         height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -354,7 +354,7 @@ TextureImporter:
         width: 10
         height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -375,7 +375,7 @@ TextureImporter:
         width: 10
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -396,7 +396,7 @@ TextureImporter:
         width: 12
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -417,7 +417,7 @@ TextureImporter:
         width: 12
         height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -438,7 +438,7 @@ TextureImporter:
         width: 10
         height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -456,10 +456,10 @@ TextureImporter:
         serializedVersion: 2
         x: 39
         y: 289
-        width: 12
+        width: 14
         height: 18
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -477,10 +477,10 @@ TextureImporter:
         serializedVersion: 2
         x: 71
         y: 292
-        width: 12
+        width: 14
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -498,10 +498,10 @@ TextureImporter:
         serializedVersion: 2
         x: 103
         y: 289
-        width: 12
+        width: 14
         height: 18
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -522,7 +522,7 @@ TextureImporter:
         width: 10
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -543,7 +543,7 @@ TextureImporter:
         width: 10
         height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -564,7 +564,7 @@ TextureImporter:
         width: 10
         height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -585,7 +585,7 @@ TextureImporter:
         width: 11
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -601,12 +601,12 @@ TextureImporter:
       name: leaf_poof_3
       rect:
         serializedVersion: 2
-        x: 105
+        x: 94
         y: 192
-        width: 21
-        height: 12
+        width: 33
+        height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -622,12 +622,12 @@ TextureImporter:
       name: leaf_poof_4
       rect:
         serializedVersion: 2
-        x: 137
+        x: 127
         y: 192
-        width: 21
+        width: 31
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -643,9 +643,72 @@ TextureImporter:
       name: leaf_poof_5
       rect:
         serializedVersion: 2
-        x: 169
+        x: 158
         y: 192
-        width: 21
+        width: 32
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fda3acd87efeb94a0800000000000000
+      internalID: -6585406252303893793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leaf_idle_5
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 320
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4102b6ef4177ef270800000000000000
+      internalID: 8286191296459776020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leaf_idle_6
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 320
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 433da1f0ae8cdd450800000000000000
+      internalID: 6115264776640320308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leaf_sadge_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 256
+        width: 12
         height: 13
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -654,8 +717,176 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fda3acd87efeb94a0800000000000000
-      internalID: -6585406252303893793
+      spriteID: e1929b7cedf8e08e0800000000000000
+      internalID: -1725283420240008930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leaf_sadge_1
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 256
+        width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 067b2c4887467c1f0800000000000000
+      internalID: -1024739921417291936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leaf_sadge_2
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 256
+        width: 23
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fac98a05f6290a950800000000000000
+      internalID: 6458322872441543855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leaf_sadge_3
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 256
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27073cc3f8555bd50800000000000000
+      internalID: 6752397290000052338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leaf_sadge_4
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 256
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0462d009973930c50800000000000000
+      internalID: 6630305226736608832
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leaf_sadge_6
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 224
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79d3c36322beeb230800000000000000
+      internalID: 3656618479642754455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leaf_sadge_7
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 224
+        width: 13
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec1a82410e99bbaf0800000000000000
+      internalID: -379540555892743730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leaf_sadge_8
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 224
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aac6a753c28f5dc40800000000000000
+      internalID: 5536604185681357994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: leaf_sadge_9
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 224
+        width: 16
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: decf18facb99a8ec0800000000000000
+      internalID: -3563867119432893203
       vertices: []
       indices: 
       edges: []

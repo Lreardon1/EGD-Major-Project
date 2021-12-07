@@ -87,6 +87,11 @@ public class RPS_PlayerController : MonoBehaviour
         else return myCards[bestVisibleCard] > 0 && bestVisibleCard != RPS_Card.CardType.Unknown;
     }
 
+    internal bool HasCard(RPS_Card.CardType ct)
+    {
+        return myCards[ct] > 0;
+    }
+
     private RPS_Card.CardType GetBestVisibleCard()
     {
         return bestVisibleCard;

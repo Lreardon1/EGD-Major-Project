@@ -25,6 +25,7 @@ public class RPS_PlayManager : MonoBehaviour
     public bool bLastBidsTraded = false;
 
     public TMP_Text winText;
+    public TMP_Text pointsText;
     public TMP_Text tradeText;
 
 
@@ -46,6 +47,7 @@ public class RPS_PlayManager : MonoBehaviour
     public Transform playerPlayAnimPoint;
     public Transform opponentPlayAnimPoint;
 
+    private bool ending = false;
 
     IEnumerator StartFromAndLerpInDirection(GameObject go, Vector3 start, Vector3 dir, float time, float dist)
     {
@@ -109,6 +111,7 @@ public class RPS_PlayManager : MonoBehaviour
         currentRound = 1;
         totalRounds = waterCount + fireCount + natureCount - 1;
         state = PlayState.Start;
+        ending = false;
 
         player.Init(this, RPS_Card.CreateDeck(fireCount, waterCount, natureCount));
         opponent.Init(this, RPS_Card.CreateDeck(fireCount, waterCount, natureCount));
@@ -206,6 +209,14 @@ public class RPS_PlayManager : MonoBehaviour
         StartCoroutine(IRevealCards());
     }
 
+    private string GetPointsAssessment()
+    {
+        if (playerPoints == opponentPoints) return "tie.";
+        if (playerPoints > opponentPoints) return "you are winning";
+        return "opponent is winning";
+    }
+
+
     IEnumerator IRevealCards()
     {
         playerPlayObj.AnimatePlayReveal(false);
@@ -221,12 +232,15 @@ public class RPS_PlayManager : MonoBehaviour
         resStr = roundResult == RPS_Card.Result.Win ? "Win" : resStr;
         winText.text = resStr;
         yield return new WaitForSeconds(1.2f);
-        if (roundResult == RPS_Card.Result.Tie) {
+        if (roundResult == RPS_Card.Result.Tie && !ending)
+        {
+            opponent.GainCard(opponentBid);
             StartCoroutine(ReturnBidsAnim());
         }
         yield return new WaitForSeconds(0.5f);
         playerPoints += roundResult == RPS_Card.Result.Win ? 1 : 0;
         opponentPoints += roundResult == RPS_Card.Result.Loss ? 1 : 0;
+        pointsText.text = $"{playerPoints} to {opponentPoints}, {GetPointsAssessment()}";
 
         yield return new WaitForSeconds(opponent.GetResponseToReveal(roundResult));
 
@@ -242,21 +256,26 @@ public class RPS_PlayManager : MonoBehaviour
         card2.transform.Rotate((new Vector3(rotRanges.x * Random.value, rotRanges.y * Random.value, rotRanges.z * Random.value) * 2.0f) - rotRanges);
         card2.GetComponent<RPS_CardObject>().SetCard(opponentPlay);
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(ending ? 1.3f : 0.3f);
 
         // SPECIAL LOGIC TO ESCAPE AFTER LAST ROUND AND TO SKIP BIDS ON LAST ROUND
-        if (currentRound == totalRounds)
+        if (ending)
         {
             SendStateChangeForComment(PlayState.End);
-            yield return null;
-        } else if (currentRound == totalRounds - 1)
-        {
-            SendStateChangeForComment(PlayState.OpponentPlay);
-            yield return null;
+            yield break;
         }
 
         if (roundResult == RPS_Card.Result.Tie) {
-            SendStateChangeForComment(PlayState.OpponentBid);
+            if (opponent.GetNumberCards() == 1)
+            {
+                Debug.LogError("HERE TO FINISH");
+                ending = true;
+                SendStateChangeForComment(PlayState.OpponentPlay);
+            }
+            else
+            {
+                SendStateChangeForComment(PlayState.OpponentBid);
+            }
         } else {
             SendStateChangeForComment(PlayState.Trade);
         }
@@ -302,10 +321,10 @@ public class RPS_PlayManager : MonoBehaviour
             tradeText.text = "Cards Traded : Place your bid aside and take a " + opponentBid.type;
             float t = opponentBidObj.AnimateBidReveal(true);
             playerBidObj.SetCard(new RPS_Card(playerCard));
-            // t = playerBidObj.AnimateBidReveal(true);
+
 
             yield return new WaitForSeconds(t);
-            yield return new WaitForSeconds(1.2f); // TODO : additional wait???
+            yield return new WaitForSeconds(1.2f);
 
 
             opponent.GainCard(new RPS_Card(playerCard));
@@ -319,11 +338,19 @@ public class RPS_PlayManager : MonoBehaviour
             tradeText.text = "Cards NOT Traded. You retain your card, pick it up.";
             StartCoroutine(ReturnBidsAnim());
             opponent.GainCard(opponentBid);
-            // player.GainCard(new RPS_Card(playerCard));
         }
 
         yield return new WaitForSeconds(2.2f);
         tradeText.text = "";
-        SendStateChangeForComment(PlayState.OpponentBid);
+        if (opponent.GetNumberCards() == 1)
+        {
+            Debug.LogError("HERE TO FINISH");
+            ending = true;
+            SendStateChangeForComment(PlayState.OpponentPlay);
+        }
+        else
+        {
+            SendStateChangeForComment(PlayState.OpponentBid);
+        }
     }
 }

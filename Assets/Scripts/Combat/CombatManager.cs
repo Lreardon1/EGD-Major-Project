@@ -322,11 +322,11 @@ public class CombatManager : MonoBehaviour
     {
         PhaseStepEvent.Invoke(currentPhase, CombatPhase.PlayPhase);
         currentPhase = CombatPhase.PlayPhase;
-        chc.UpdateDropZones();
+        if (!IsInCVMode)
+            chc.UpdateDropZones(); // CV TODO : drop zomes could be a thing to disable in CV mode
 
         if (!IsInCVMode)
         {
-
             ToggleDrawButtons(false);
         }
         // Allow player to move cards to play on allies/enemies, update action order accordingly, ends when player clicks done or something, transition to Discard Phase
@@ -700,6 +700,7 @@ public class CombatManager : MonoBehaviour
 
         pauseManager.RefreshPartyView();
 
+        // this works for CV but I really don't like it being here - JAY
         chc.DiscardCard(card);
         print(card.transform.lossyScale);
         //card.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
