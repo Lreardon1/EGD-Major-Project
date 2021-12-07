@@ -51,9 +51,9 @@ public class CardParserManager : MonoBehaviour
     private int handCount = 0;
     private int discardCount = 0;
 
-    private float drawFinishWaitTime = 1.5f;
-    private float playFinishWaitTime = 1.5f;
-    private float discardFinishWaitTime = 1.5f;
+    private float drawFinishWaitTime = 0.7f;
+    private float playFinishWaitTime = 0.7f;
+    private float discardFinishWaitTime = 0.7f;
 
 
     private bool StartAdviseEnd()
@@ -141,20 +141,20 @@ public class CardParserManager : MonoBehaviour
     {
         int totalCardsDrawn = 0;
         cardParser.UpdateMode(CardParser.ParseMode.Disabled);
-        phaseInfoText.text = "Draw Phase. Press Enter to stop drawing.";
-        playText.text = "Draw Cards up to 4 cards, max hand size of " + maxCardsInHand 
-            + "\nYou will gain " + manaToDrawCounts[totalCardsDrawn] + " mana if you stop drawing now.\n"
-            + ((cm.currentMana >= ShuffleCost() && (Deck.instance.discard.Count + discardCount) > 0) ? $"Press R to spend {ShuffleCost()} mana to shuffle discards into your deck." : "");
+        phaseInfoText.text = "Draw Phase. Press Enter to stop drawing. " 
+            + ((cm.currentMana >= ShuffleCost() && (Deck.instance.discard.Count + discardCount) > 0) ? "R to spend {ShuffleCost()} mana to shuffle discards into your deck." : "");
 
+        playText.text = "Draw Cards up to 4 cards, max hand size of " + maxCardsInHand + ". Press SPACE with a drawn card."
+            + "\nYou will gain " + manaToDrawCounts[totalCardsDrawn] + " mana if you stop drawing now.\n";
         while (maxCardsInHand > handCount && totalCardsDrawn < 4)
         {
             // ATTEMPT TO WAIT FOR CONSISTENT ENOUGH INPUT TO GET A CARD READ, MAY BE TOO MUCH FOR CURRENT ITERATION
-            timeSpentWithCard = 0;
             while (Input.GetKeyDown(KeyCode.Space))
             {
-                playText.text = "Draw Cards up to 4 cards, max hand size of " + maxCardsInHand
-                    + "\nYou will gain " + manaToDrawCounts[totalCardsDrawn] + " mana if you stop drawing now.\n"
-                    + ((cm.currentMana >= ShuffleCost() && (Deck.instance.discard.Count + discardCount) > 0) ? $"Press R to spend {ShuffleCost()} mana to shuffle discards into your deck." : "");
+
+                playText.text = "Draw Cards up to 4 cards, max hand size of " + maxCardsInHand + ". Press SPACE with a drawn card."
+                    + "\nYou will gain " + manaToDrawCounts[totalCardsDrawn] + " mana if you stop drawing now.\n";
+
                 timeSpentWithCard = 0;
                 progressIndicator.fillAmount = 0.0f;
                 // FINISH
@@ -211,7 +211,7 @@ public class CardParserManager : MonoBehaviour
         GameObject currentCard, GameObject currentTarget, float fillMeter)
     {
         if (!validTarget)
-            playText.text = "Apply cards to combatants...";
+            playText.text = "Apply cards to allies and enemies...";
         else if (hasCardAttached)
             playText.text = "You focus on " + currentTarget.name + "... but they already have a card.";
         else if (currentCard != null && Deck.instance.discard.Contains(currentCard))
@@ -238,7 +238,7 @@ public class CardParserManager : MonoBehaviour
     {
         cardParser.UpdateMode(CardParser.ParseMode.GetCardFromAll);
         currentCard = null;
-        phaseInfoText.text = "Play Phase: Play cards on any combatant. Press Space to continue.";
+        phaseInfoText.text = "Play Phase: Play cards on allies and enemies. Press SPACE to continue.";
 
         while (CanPlayMore())
         {
@@ -278,22 +278,23 @@ public class CardParserManager : MonoBehaviour
                 cm.ApplyCard(currentCard, currentTarget);
                 timeSpentWithCard = 0.0f;
                 progressIndicator.fillAmount = 0.0f;
-                playText.text = "Played " + currentCard.GetComponent<Card>().cardName + " on " + currentTarget.name + ". Put card in Discard pile.";
-                yield return new WaitForSeconds(0.5f);
+                playText.text = "Played " + currentCard.GetComponent<Card>().cardName + ". Put the card in your Discard pile.";
+                for (float t = 0; t < 1.0f; t += Time.deltaTime) { yield return null; if (Input.GetKeyDown(KeyCode.Space)) break; }
             } else
             {
                 timeSpentWithCard = 0.0f;
                 progressIndicator.fillAmount = 0.0f;
                 playText.text = "You do not have enough mana to play " + currentCard.GetComponent<Card>().cardName + ".";
-                yield return new WaitForSeconds(0.5f);
+                for (float t = 0; t < 1.0f; t += Time.deltaTime) { yield return null; if (Input.GetKeyDown(KeyCode.Space)) break; }
             }
             yield return null;
         }
 
     FinishPlay:
+        cardParser.UpdateMode(CardParser.ParseMode.Disabled);
         // visual of progressing and then
         phaseInfoText.text = "";
-        playText.text = "Cards played, Progressing...";
+        playText.text = "Cards played...";
         for (float t = 0; t < playFinishWaitTime; t += Time.deltaTime)
         {
             progressIndicator.fillAmount = (t / playFinishWaitTime);
@@ -301,7 +302,7 @@ public class CardParserManager : MonoBehaviour
         }
         progressIndicator.fillAmount = 0.0f;
         currentInputHandler = null;
-        print("MOVING ON TO NEXT PHASE FROM PLAY");
+
         cm.NextPhase();
     }
 
@@ -311,12 +312,12 @@ public class CardParserManager : MonoBehaviour
         print("DISABLE");
     }
 
-    private float timeToCompleteDiscard = 2.5f;
+
 
     IEnumerator RunDiscardPhase()
     {
-        phaseInfoText.text = "Discard Phase. ENTER to finish.";
-        cardParser.UpdateMode(CardParser.ParseMode.ConfirmCardMode);
+        phaseInfoText.text = "Discard Phase. Press ENTER to continue.";
+        cardParser.UpdateMode(CardParser.ParseMode.Disabled);
         int manaUp = 0;
 
         while (handCount > 0)
@@ -324,14 +325,11 @@ public class CardParserManager : MonoBehaviour
             while (!Input.GetKeyDown(KeyCode.Space))
             {               
                 playText.text = "Press SPACE using a card in your hand to discard it." + ". (Mana Gain per Card: " + 1 + ")";
-                timeSpentWithCard = Mathf.Max(0, timeSpentWithCard - (Time.deltaTime * 3));
-                progressIndicator.fillAmount = timeSpentWithCard / timeToCompleteDiscard;
                 if (Input.GetKeyDown(KeyCode.KeypadEnter)) goto FinishDiscard;
                 yield return null;
             }
 
             // APPLY THE CARD TO A VALID TARGET
-
             manaUp += 1;
             handCount -= 1;
             discardCount += 1;
@@ -345,7 +343,7 @@ public class CardParserManager : MonoBehaviour
 
     FinishDiscard:
         // visual of progressing and then
-        playText.text = "Cards discarded, " + manaUp + " mana awarded, progressing...";
+        playText.text = "Cards discarded, " + manaUp + " mana awarded.";
         phaseInfoText.text = "";
         for (float t = 0; t < discardFinishWaitTime; t += Time.deltaTime)
         {
@@ -408,6 +406,7 @@ public class CardParserManager : MonoBehaviour
 
 
     FinishAction:
+        cardParser.UpdateMode(CardParser.ParseMode.Disabled);
         progressIndicator.fillAmount = 0.0f;
         playText.text = "";
         currentInputHandler = null;
@@ -515,22 +514,21 @@ public class CardParserManager : MonoBehaviour
         cardParser.ToNewUpdateEvent.AddListener(HandleNewUpdate);
         cardParser.NumberCardsSeenEvent.AddListener(HandleNumberSeenUpdate);
 
-        cardParser.UpdateMode(CardParser.ParseMode.GetCardFromAll);
+        cardParser.UpdateMode(CardParser.ParseMode.Disabled);
 
         SetUpOrderedCards(Deck.instance.allCards);
     }
 
     public void DisplayCardData(GameObject card, Mat goodPlaneImage)
     {
-        planeImage.enabled = true;
-        bool inDiscard = Deck.instance.discard.Contains(card);
+        planeImage.enabled = (card != null && goodPlaneImage != null);
         if (planeImage.texture != null)
             Destroy(planeImage.texture);
 
         if (card != null && goodPlaneImage != null)
         {
             planeImage.texture = OpenCvSharp.Unity.MatToTexture(goodPlaneImage);
-            cardText.text = "Card " + card.GetComponent<Card>().cardName + (inDiscard ? ", in DISCARD" : " not in DISCARD");
+            cardText.text = card.GetComponent<Card>().cardName;
         }
         else
         {

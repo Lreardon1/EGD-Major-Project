@@ -672,6 +672,7 @@ public class CombatManager : MonoBehaviour
 
         pauseManager.RefreshPartyView();
 
+        // this works for CV but I really don't like it being here - JAY
         chc.DiscardCard(card);
         print(card.transform.lossyScale);
         //card.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);

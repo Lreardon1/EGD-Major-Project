@@ -316,10 +316,8 @@ public class CardParser : MonoBehaviour
                     UpdateCardDetected(null, -1);
                     return true;
                 }
-                print("ESCAPE!!!");
-                List<GameObject> possibleCards = GetCardsOfNameDebug(card.cardName);
-                print("COUNT: " + possibleCards.Count);
 
+                List<GameObject> possibleCards = GetCardsOfNameDebug(card.cardName);
                 var stickerData = AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards, lastGoodContours);
                 GameObject bestPossibleCard = GetBestCardByStickers(possibleCards, stickerData);
 
@@ -336,6 +334,10 @@ public class CardParser : MonoBehaviour
             {
                 RPS_Card.CardType cardType = RPS_ParseCard(cardScene);
                 Update_RPS_Card(cardType);
+            } else
+            {
+                lastGoodCustomCard = null;
+                UpdateCardDetected(null, -1, true);
             }
 
         }
@@ -797,13 +799,24 @@ private float ScalarEuclidDistance(Scalar a, Scalar b)
         }
     }
 
-    private void UpdateCardDetected(GameObject card, int id)
+    private void UpdateCardDetected(GameObject card, int id, bool disableOverride = false)
     {
-        // TODO : debugging here
-        StableUpdateEvent.Invoke(card, id);
-
         print("Updating for card: " + (card != null ? card.GetComponent<Card>().name : "NULL") + " with previous " + 
             (previousCard != null ? previousCard.GetComponent<Card>().cardName : " NULL"));
+
+        // FOR DISABLED MODE
+        if (disableOverride)
+        {
+            if (previousCard != null)
+            {
+                previousCard = null;
+                ToNullUpdateEvent.Invoke(card, id);
+            } else
+            {
+                StableUpdateEvent.Invoke(card, id);
+            }
+            return;
+        }
 
         // if card is the same as last, don't update
         if (card == previousCard)
