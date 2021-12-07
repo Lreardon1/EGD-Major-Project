@@ -397,10 +397,11 @@ public class CombatantBasis : MonoBehaviour
 
     }
 
-    public virtual void SelectTarget() //TODO:: STILL NEEDS TO HANDLE RETARGETTING IF RANDOMLY CHOOSING UNTARGETTABLE COMBATANT
+    public virtual void SelectTarget() 
     {
         CombatManager cm = FindObjectOfType<CombatManager>();
         List<GameObject> targets = new List<GameObject>();
+        
         if (isEnemy)
             targets = cm.activePartyMembers;
         else
@@ -410,6 +411,26 @@ public class CombatantBasis : MonoBehaviour
             target = null;
             return;
         }
+        if (oldTarget != null)
+        {
+            targets.Remove(oldTarget);
+        }
+        List<GameObject> targetable = new List<GameObject>();
+        foreach(GameObject targ in targets)
+        {
+            if (targ.GetComponent<CombatantBasis>().untargettable == false)
+                targetable.Add(targ);
+        }
+        targets = targetable;
+
+        if(targets.Count == 0)
+        {
+            Debug.Log("No Targets Available");
+            nextAction = Action.Block;
+            text.text = "Block";
+            return;
+        }
+
         int randint = Random.Range(0, targets.Count);
         target = targets[randint];
         if(nextAction == Action.Attack)
@@ -424,6 +445,14 @@ public class CombatantBasis : MonoBehaviour
         lr.SetPosition(0, targetLineStart.position);
         lr.SetPosition(1, target.transform.position);
         lr.enabled = true;
+    }
+
+    public void UpdateTargetName()
+    {
+        if(nextAction == Action.Attack)
+            text.text = "Attack " + target.GetComponent<CombatantBasis>().combatantName;
+        else if(specialHasTarget && nextAction == Action.Special)
+            text.text = "Special " + target.GetComponent<CombatantBasis>().combatantName;
     }
 
     public virtual void Attack()

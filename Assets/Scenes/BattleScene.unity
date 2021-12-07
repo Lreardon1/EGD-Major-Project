@@ -636,7 +636,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &339715432
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2254,6 +2254,7 @@ MonoBehaviour:
   reshuffleButton: {fileID: 817535457}
   currentPhaseText: {fileID: 1206299178}
   manaText: {fileID: 1534407708}
+  initialPartyMembers: []
   partyMembers:
   - {fileID: 2096779967}
   - {fileID: 244591423}
