@@ -145,7 +145,7 @@ public class RPS_Opponent : MonoBehaviour
     private IEnumerator IHandleBid()
     {
         WriteOutTalk("Hmmm, let's see...");
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.9f);
         WriteOutTalk("I'll bid this one...");
         yield return new WaitForSeconds(0.9f);
         print(myCardsArr.Count + " Left in opponent's hand : for bid");
@@ -164,13 +164,13 @@ public class RPS_Opponent : MonoBehaviour
         if (myCardsArr.Count > 1)
             WriteOutTalk(Random.value > 0.5f ? "Hmmm, let's see..." : "What card, what card...?");
         else WriteOutTalk("Only one left to play.");
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.2f);
         if (myCardsArr.Count > 1)
             WriteOutTalk(Random.value > 0.5f ? "I'll play this one..." : "I'm sure the anticipation is killing you.");
         else
             WriteOutTalk("Do you think you've got me, kid?");
 
-        yield return new WaitForSeconds(0.9f);
+        yield return new WaitForSeconds(1.2f);
         int r = Random.Range(0, myCardsArr.Count);
         RPS_Card.CardType ct = myCardsArr[r];
         myCardsArr.RemoveAt(r);
