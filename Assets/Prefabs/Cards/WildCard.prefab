@@ -28,6 +28,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
+      propertyPath: cardName
+      value: Echo
+      objectReference: {fileID: 0}
+    - target: {fileID: 3711955351833297983, guid: 89372504ce310124eb5ac7ea85c5f417, type: 3}
       propertyPath: onPlayScript
       value: 
       objectReference: {fileID: 5902484147957588236}

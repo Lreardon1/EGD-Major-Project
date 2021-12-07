@@ -25,6 +25,7 @@ public class OverworldMovement : MonoBehaviour
     private float walkTime = 0;
 
     public GameObject[] party_members;
+    public PauseManager pauseManager;
 
     public class TimePairTransform
     {
@@ -40,7 +41,6 @@ public class OverworldMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
         directionY = "left";
         directionX = "forward";
         //Fetch the SpriteRenderer from the GameObject and other party gameobjects
@@ -61,6 +61,26 @@ public class OverworldMovement : MonoBehaviour
         {
             walkLine.AddFirst(new TimePairTransform(t, transform.position));
         }
+
+        // TODO : debug delete all
+        PlayerPrefs.DeleteAll();
+
+        UpdatePartyMembers();
+    }
+
+    public void AddPartyMember(string member)
+    {
+        pauseManager.AddPartyMember(member, true);
+        UpdatePartyMembers();
+    }
+
+    public void UpdatePartyMembers()
+    {
+        godfatherRenderer.enabled = (PlayerPrefs.GetInt("priest", 0) == 1);
+        hunterRenderer.enabled = (PlayerPrefs.GetInt("hunter", 0) == 1);
+        mechanistRenderer.enabled = (PlayerPrefs.GetInt("mechanist", 0) == 1);
+        warriorRenderer.enabled = (PlayerPrefs.GetInt("warrior", 0) == 1);
+        print("We have disabled the clowns");
     }
 
     public Vector3 velocity = Vector3.zero;
@@ -88,7 +108,7 @@ public class OverworldMovement : MonoBehaviour
         bool isGround = Physics.Raycast(transform.position,
             (ground.transform.position - transform.position).normalized,
             (ground.transform.position - transform.position).magnitude, LayerMask.GetMask("Ground"));
-        velocity += Vector3.down * 9.8f * Time.deltaTime;
+        velocity = Vector3.down * 9.8f;
         velocity = isGround ? Vector3.zero : velocity;
 
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
@@ -98,7 +118,7 @@ public class OverworldMovement : MonoBehaviour
             Vector3 pos = transform.position;
             walkLine.AddFirst(new TimePairTransform(walkTime, pos));
         }
-        if (party_members.Length > 0)
+        if (party_members.Length > 0 && canMove)
         {
             MovePartyMembers();
         }
@@ -121,7 +141,7 @@ public class OverworldMovement : MonoBehaviour
                 directionY = "backward";
 
             // Moving Animation
-            bool isMoving = (right + up).sqrMagnitude > 0.0001;
+            bool isMoving = ((right + up).sqrMagnitude > 0.0001);
             player_animator.SetBool("Walking", isMoving);
             godfather_animator.SetBool("Walking", isMoving);
             hunter_animator.SetBool("Walking", isMoving);
@@ -149,6 +169,14 @@ public class OverworldMovement : MonoBehaviour
     public void SetCanMove(bool c)
     {
         canMove = c;
+        if(!c)
+        {
+            player_animator.SetBool("Walking", c);
+            godfather_animator.SetBool("Walking", c);
+            hunter_animator.SetBool("Walking", c);
+            warrior_animator.SetBool("Walking", c);
+            mechanist_animator.SetBool("Walking", c);
+        }
     }
 
     public float backoff = 0.1f;

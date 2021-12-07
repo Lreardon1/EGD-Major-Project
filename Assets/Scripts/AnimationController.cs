@@ -13,6 +13,7 @@ public class AnimationController : MonoBehaviour
     public GameObject[] ObjectsToDisable;
     [Header("Objects To Enable")]
     public GameObject[] ObjectsToEnable;
+    public GameObject UI;
     [Header("Actors To Activate")]
     public AnimatedCharacter[] animatedCharacters;
 
@@ -26,8 +27,10 @@ public class AnimationController : MonoBehaviour
     private int currentIndex = 0;
     private DialogueObject currentDialogue;
 
-    public float fadeInTime = 0.6f;
-    public float fadeOutTime = 0.6f;
+    public float startFadeInTime = 0.6f;
+    public float startFadeOutTime = 0.6f;
+    public float endFadeInTime = 0.6f;
+    public float endFadeOutTime = 0.6f;
 
     IEnumerator FadeToBlack(float time, Action A)
     {
@@ -58,23 +61,23 @@ public class AnimationController : MonoBehaviour
     public void PlayCutscene()
     {
         FindObjectOfType<OverworldMovement>().SetCanMove(false);
-        StartCoroutine(FadeToBlack(fadeInTime, StartUp));
+        UI.SetActive(true);
+        StartCoroutine(FadeToBlack(startFadeInTime, StartUp));
     }
     
 
     public void TriggerCutscene()
     {
-        StartCoroutine(FadeToBlack(fadeInTime, StartUp));
+        StartCoroutine(FadeToBlack(startFadeInTime, StartUp));
     }
 
     private void StartUp()
     {
-        
-
+       
         disabledObjects.AddRange(GameObject.FindGameObjectsWithTag("Player"));
         disabledObjects.AddRange(GameObject.FindGameObjectsWithTag("Party"));
         disabledObjects.AddRange(ObjectsToDisable);
-        disabledObjects.Add(Camera.main.gameObject);
+        //disabledObjects.Add(Camera.main.gameObject);
 
         foreach (GameObject d in disabledObjects)
             d.SetActive(false);
@@ -84,19 +87,18 @@ public class AnimationController : MonoBehaviour
             c.enabled = true;
         cam.gameObject.SetActive(true);
 
-        StartCoroutine(FadeToScene(fadeOutTime, Sink));
-        print("SENDING NEXT");
-        GetComponent<Animator>().SetTrigger("Next");
+        StartCoroutine(FadeToScene(startFadeOutTime, () => {
+            print("SENDING NEXT");
+            GetComponent<Animator>().SetTrigger("Next");
+        }));
     }
-
-    public void Sink() { }
 
     private void DestroySelf() { Destroy(gameObject); }
 
     public void EndAnimation()
     {
         StopAllCoroutines();
-        StartCoroutine(FadeToBlack(fadeInTime, FinishUp));
+        StartCoroutine(FadeToBlack(endFadeInTime, FinishUp));
     }
 
     private void FinishUp()
@@ -114,11 +116,13 @@ public class AnimationController : MonoBehaviour
             transform.GetChild(i).gameObject.SetActive(false);
         cam.gameObject.SetActive(false);
 
-        FindObjectOfType<OverworldMovement>().SetCanMove(true);
-        StartCoroutine(FadeToScene(fadeOutTime, DestroySelf));
-
-
         GetComponent<AfterCutsceneActions>()?.TakeActionsAfterCutscene();
+
+        StartCoroutine(FadeToScene(endFadeOutTime, () => 
+        {
+            FindObjectOfType<OverworldMovement>().SetCanMove(true);
+            DestroySelf();
+        }));
     }
 
 

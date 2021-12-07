@@ -36,11 +36,13 @@ public class Deck : MonoBehaviour
     public GameObject modifierPrefab;
 
     private DeckCustomizer deckCustomizer;
-
+    public bool shouldLoadNextScene = true;
     IEnumerator LoadNextSceneAfterAllInits()
     {
         yield return null;
-        SceneManager.LoadScene(sceneToLoad);
+
+        if (shouldLoadNextScene)
+            SceneManager.LoadScene(sceneToLoad);
     }
 
     //enforcing singleton of deck on game start
@@ -72,21 +74,6 @@ public class Deck : MonoBehaviour
 
         StartCoroutine(LoadNextSceneAfterAllInits());
     }
-
-    //void Update()
-    //{
-    //    if (Input.GetKeyDown("m"))
-    //    {
-    //        print("attempting to save");
-    //        SaveDeckAndModifiers("test");
-    //    }
-
-    //    if (Input.GetKeyDown("n"))
-    //    {
-    //        print("attempting to load");
-    //        LoadDeckAndModifiers("test");
-    //    }
-    //}
 
     public GameObject Draw()
     {
@@ -325,7 +312,7 @@ public class Deck : MonoBehaviour
             deckCustomizer = FindObjectOfType<DeckCustomizer>();
         }
 
-        deckCustomizer.SetUp();
+        //deckCustomizer.SetUp();
     }
 
     [System.Serializable]

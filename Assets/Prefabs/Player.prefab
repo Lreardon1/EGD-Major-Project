@@ -263,7 +263,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   velocity: {x: 0, y: 0, z: 0}
-  turnSpeed: 60
+  turnSpeed: 100
   backoff: 0.14
 --- !u!114 &1426100620896122056
 MonoBehaviour:

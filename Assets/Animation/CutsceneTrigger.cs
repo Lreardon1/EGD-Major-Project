@@ -30,6 +30,10 @@ public class CutsceneTrigger : MonoBehaviour
                 TriggerCutscene();
                 break;
             case CutsceneTriggerConditions.CardsGained:
+                if (AfterCutsceneActions.HasCards)
+                {
+                    TriggerCutscene();
+                }
                 break;
             case CutsceneTriggerConditions.Etc:
                 break;

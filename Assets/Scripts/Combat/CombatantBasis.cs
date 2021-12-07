@@ -54,8 +54,8 @@ public class CombatantBasis : MonoBehaviour
     public Animator animator;
 
     // TODO : solution because no function is called to inform combatbasis of changed applied card
-    public GameObject appliedCard
-    {
+    public GameObject appliedCard = null;
+    /*{
         get
         {
             return appliedCardReal;
@@ -76,7 +76,7 @@ public class CombatantBasis : MonoBehaviour
 
             appliedCardReal = value;
         }
-    }
+    }*/
     private GameObject appliedCardReal = null;
 
     public GameObject heldItem = null;

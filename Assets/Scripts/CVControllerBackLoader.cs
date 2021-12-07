@@ -37,9 +37,11 @@ public class CVControllerBackLoader : MonoBehaviour
     {
         if (CombatManager.IsInCVMode && CardParserManager.instance != null)
         {
-            if (WebCamTexture.devices.Length > 0)
-                DeviceName = WebCamTexture.devices[0].name;
-                // DeviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 1].name;
+            if (WebCamTexture.devices.Length > 1)
+                DeviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 2].name;
+            else if (WebCamTexture.devices.Length > 0)
+                DeviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 1].name;
+            // DeviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 1].name;
             CardParserManager.instance.ActivateCVForCombat(this);
             cvPanel.SetActive(true);
             regularPanel.SetActive(false);
@@ -62,15 +64,12 @@ public class CVControllerBackLoader : MonoBehaviour
             // webCamTexture.Stop();
             webCamTexture.Play();
         }
-        print("Update count: " + webCamTexture.updateCount);
         if (webCamTexture != null && webCamTexture.didUpdateThisFrame)
         {
             // this must be called continuously
             ReadTextureConversionParameters();
-            if (CombatManager.IsInCVMode)
-            {
-                CardParserManager.instance.HandleNewImage(webCamTexture);
-            }
+            // goodSeeImage.texture = webCamTexture;
+            CardParserManager.instance.HandleNewImage(webCamTexture);
         }
     }    
 

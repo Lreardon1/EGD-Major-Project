@@ -7,7 +7,10 @@ using UnityEngine.UI;
 public class CardGamePlayerDialogue : MonoBehaviour
 {
     public TMPro.TextMeshProUGUI uitext;
-    public RawImage text_back;
+    public Image text_back;
+    public TMPro.TextMeshProUGUI speaker;
+
+    public string _name;
     public string cardsOpening, noCardsOpening;
     public string SceneToLoad;
     public bool inTrigger = false;
@@ -35,14 +38,16 @@ public class CardGamePlayerDialogue : MonoBehaviour
             SceneManager.LoadScene(SceneToLoad);
         }
     }
+    
 
     void OnTriggerEnter(Collider other)
     {
         //other.name should equal the root of your Player object
         if (other.name == "Player")
         {
-            print("START UP");
             uitext.text = hasCards ? cardsOpening : noCardsOpening;
+            speaker.gameObject.SetActive(true);
+            speaker.text = _name;
             text_back.gameObject.SetActive(true);
             inTrigger = true;
         }
@@ -55,6 +60,7 @@ public class CardGamePlayerDialogue : MonoBehaviour
         {
             uitext.text = "";
             text_back.gameObject.SetActive(false);
+            speaker.gameObject.SetActive(false);
             inTrigger = false;
         }
     }

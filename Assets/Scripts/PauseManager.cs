@@ -12,6 +12,8 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     public GameObject pauseMenu;
     [SerializeField]
+    public Animator pauseMenuAnimator;
+    [SerializeField]
     public GameObject partyViewWindow;
     [SerializeField]
     public GameObject refWindow;
@@ -107,16 +109,19 @@ public class PauseManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.M))
         {
-            PlayerPrefs.DeleteAll();
+            if (debug)
+            {
+                PlayerPrefs.DeleteAll();
+            }
         }
+
+        print("remove reminder for debugs in PauseManager");
     }
 
     public void TogglePartyView()
     {
-        Animator anim = partyViewWindow.GetComponent<Animator>();
-        bool appear = anim.GetBool("Appear");
-        print(appear);
-        anim.SetBool("Appear", !appear);
+        bool appear = pauseMenuAnimator.GetBool("Appear");
+        pauseMenuAnimator.SetBool("Appear", !appear);
         refWindow.SetActive(false);
         RefreshPartyView();
     }
@@ -179,6 +184,12 @@ public class PauseManager : MonoBehaviour
         {
             Time.timeScale = 1f;
         }
+    }
+    
+    public void ToggleCVMode(bool toggleOn)
+    {
+        CombatManager.IsInCVMode = toggleOn;
+        print(CombatManager.IsInCVMode ? "IN CV MODE" : "IN REGULAR MODE");
     }
 
     public void quitGame()

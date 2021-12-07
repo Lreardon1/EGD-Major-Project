@@ -47,9 +47,12 @@ MonoBehaviour:
   currentCard: {fileID: 0}
   cardParser: {fileID: 4642193870367902649}
   cInterface: {fileID: 0}
-  timeToCompleteDraw: 3
+  planeImage: {fileID: 0}
+  goodSeeImage: {fileID: 0}
+  stickerImage1: {fileID: 0}
+  stickerImage2: {fileID: 0}
+  stickerImage3: {fileID: 0}
   maxCardsInHand: 7
-  timeToCompletePlay: 2.5
 --- !u!114 &4642193870367902649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,8 +65,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20207fcf6ab55b54faa1a662df242386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bMemoryMode: 1
   cardParserManager: {fileID: 4642193870367902654}
-  staticTestImage: {fileID: 0}
   bottomRightBoundingBox:
     ul:
       X: 0.776639
@@ -142,35 +145,65 @@ MonoBehaviour:
     ll:
       X: 0.715164
       Y: 0.912023
+  backgroundImageBoundingBox:
+    ul:
+      X: 0
+      Y: 0
+    ur:
+      X: 0
+      Y: 0
+    lr:
+      X: 0
+      Y: 0
+    ll:
+      X: 0
+      Y: 0
   cornerReplaneOffset: 25
   matchThresh: 0.7
   tagLineIntersectThresh: 4
+  mode: 0
   borderAmount: 10
   defaultCardResizeAmount: 0.5
   cardTemplates:
   - {fileID: 11400000, guid: 34536231089c9eb4cbbb26854ec6b6c4, type: 2}
+  - {fileID: 11400000, guid: 5a7d029f511305a4c99353ea8b0460b4, type: 2}
   - {fileID: 11400000, guid: f4c4aee228c7ddc488d9b8885b4ed2af, type: 2}
+  - {fileID: 11400000, guid: 3e8a7c8720bf69c48b08c8966e0c9c04, type: 2}
   - {fileID: 11400000, guid: 963ce43ab03913f47801c9c314b51a2b, type: 2}
-  - {fileID: 11400000, guid: 3809b0d816758f848817db642f568347, type: 2}
+  - {fileID: 11400000, guid: 5c4278c4edee5e84ab52adaab844df05, type: 2}
+  - {fileID: 11400000, guid: 5c365250f6075c540a4f3e87e535a418, type: 2}
   - {fileID: 11400000, guid: f4016e3721142c74994a9e16eda09ed2, type: 2}
+  - {fileID: 11400000, guid: b49297e80ab24a44b846e947a20b61cf, type: 2}
+  - {fileID: 11400000, guid: c30092b5835e03646b0948ca543daaab, type: 2}
+  - {fileID: 11400000, guid: 3809b0d816758f848817db642f568347, type: 2}
+  - {fileID: 11400000, guid: b6d52cc85b156a242a8eac88c18d16af, type: 2}
+  - {fileID: 11400000, guid: 978068e999fa5a145834d03905240340, type: 2}
+  - {fileID: 11400000, guid: 8468e9878bd06464b8a92c3af1d19b6b, type: 2}
+  - {fileID: 11400000, guid: a062aaad19ac1d74e91fc46d6c584756, type: 2}
+  - {fileID: 11400000, guid: fbe38c94293ad094d9114df4cce41b08, type: 2}
+  - {fileID: 11400000, guid: ef68fa1b2d2df5440a3a693510eb0917, type: 2}
+  - {fileID: 11400000, guid: 25298345c8c2fb8418790e3f53938eb1, type: 2}
   - {fileID: 11400000, guid: d0007aa7754ff2c40ba414a1d81753a6, type: 2}
+  - {fileID: 11400000, guid: ca99fc1477efff84690c1ff13e06ed0b, type: 2}
   stickerTemplates:
-  - {fileID: 11400000, guid: 5cb6bb4a180f49447b4cc928aa9b57ee, type: 2}
-  - {fileID: 11400000, guid: c49413cefdaffec41a0368772b09dd7f, type: 2}
-  - {fileID: 11400000, guid: 8096811f48b0eae4883593877cf36073, type: 2}
-  - {fileID: 11400000, guid: 1d21ab982b3a40d4eaf2c7ff1254b8ab, type: 2}
-  - {fileID: 11400000, guid: 4dd1fe14017b86146a0d17c65b175fcc, type: 2}
-  - {fileID: 11400000, guid: 8b28d1101daf3ed45a5175c01f1e91fe, type: 2}
-  - {fileID: 11400000, guid: 552bb9c2138d2b640a495f8c9b42eed1, type: 2}
-  - {fileID: 11400000, guid: e0b86eb6767545b46849bfd441b19aef, type: 2}
-  - {fileID: 11400000, guid: cfa96f6c929ad994ab35dfa47d191177, type: 2}
-  - {fileID: 11400000, guid: aaa76aae5a0146e4c989f134f5aa290b, type: 2}
-  - {fileID: 11400000, guid: 03677c0f09517254b89db95f4667a1f7, type: 2}
-  - {fileID: 11400000, guid: 4bea33006cc224b48976336df1ca76b5, type: 2}
-  - {fileID: 11400000, guid: d6d585f3faf88fd4eb41f04799d60da3, type: 2}
-  - {fileID: 11400000, guid: 35ed07b4e8692c649b573fabc8aa247a, type: 2}
-  - {fileID: 11400000, guid: 48caa24983d10fd40a0babc358d06582, type: 2}
-  - {fileID: 11400000, guid: 3e89803cbc8393d4bbad3bcada44efec, type: 2}
+  - {fileID: 11400000, guid: 344bf20de6eb9484fbfdb93701b0139a, type: 2}
+  - {fileID: 11400000, guid: 327a36e625346db4a993debf847463db, type: 2}
+  - {fileID: 11400000, guid: 7a7fccf882fcb2449afa6f457f0450e8, type: 2}
+  - {fileID: 11400000, guid: 055e1de2bb5e62b4792a5740e2f87c67, type: 2}
+  - {fileID: 11400000, guid: 022b684d8ea38d94eb68efbd46ab9bc9, type: 2}
+  - {fileID: 11400000, guid: 1346ebd2ce2f7264e907621a32682a13, type: 2}
+  - {fileID: 11400000, guid: f888373cfe2559c45a0d602482f0c8b6, type: 2}
+  - {fileID: 11400000, guid: 7094cd76879d2c04eb8169ddd7a2204c, type: 2}
+  - {fileID: 11400000, guid: bac3ee14ad333294f983d99b976bcef0, type: 2}
+  - {fileID: 11400000, guid: d0b138a0809727144a1d548683837f07, type: 2}
+  - {fileID: 11400000, guid: 83a3f89506f6101479e9187053d2f9b2, type: 2}
+  - {fileID: 11400000, guid: 3fe8d1107e7696945ba9ae8f10966664, type: 2}
+  - {fileID: 11400000, guid: dc98d60581e8c5940b976158db70bf11, type: 2}
+  - {fileID: 11400000, guid: 982a128d4a9a4b948ad2f71b6da2fc6e, type: 2}
+  - {fileID: 11400000, guid: c12d49ec721e22f42810e294cbb5f7cb, type: 2}
+  - {fileID: 11400000, guid: 7560e10e358ac6a46b3fbcc18f9c2979, type: 2}
+  minBinStickerDiffAmount: 0.6
+  minColorStickerDistAmount: 30
   StableUpdateEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -180,8 +213,26 @@ MonoBehaviour:
   ToNewUpdateEvent:
     m_PersistentCalls:
       m_Calls: []
+  NumberCardsSeenEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  RPS_StableUpdateEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  RPS_ToNewUpdateEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  RPS_ToNullUpdateEvent:
+    m_PersistentCalls:
+      m_Calls: []
   timeRequiredForNull: 1.6
   timeRequiredForNew: 0.3
+  timeRequiredForNewFromNull: 0
+  timeRequiredForCountZero: 0.5
+  timeRequiredForCountUpdate: 0.1
+  rps_timeRequiredForNull: 0
+  rps_timeRequiredForNew: 0
+  rps_timeRequiredForNewFromNull: 0
   loweRatio: 0.7
   kpDist: 30
   keypointMatchesRequired: 25
@@ -197,3 +248,4 @@ MonoBehaviour:
     0.770492,0.177419,0.905738,0.274194
 
     0.770492,0.306452,0.905738,0.404692'
+  BoundStickerText: 

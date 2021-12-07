@@ -19,14 +19,13 @@ public class CardParser : MonoBehaviour
         GetCardFromAll,
         GetCardNoStickers,
         ConfirmCardMode,
-        RPS_Mode
+        RPS_Mode,
+        Disabled
     }
 
     public bool bMemoryMode = true;
 
     public CardParserManager cardParserManager;
-    [Space(10)]
-    public Texture2D staticTestImage;
     
     // BOUNDING BOXES
     [Space(10)]
@@ -81,8 +80,8 @@ public class CardParser : MonoBehaviour
     private Dictionary<Modifier.ModifierEnum, List<StickerTemplateData>> cardStickerSlotsDict = new Dictionary<Modifier.ModifierEnum, List<StickerTemplateData>>();
     private WebCamDevice? webCamDevice = null;
     private WebCamTexture webCamTexture = null;
-    
-    
+
+    private Dictionary<string, string> TylerModToCVMod = new Dictionary<string, string>();
 
     /// <summary>
     /// A kind of workaround for macOS issue: MacBook doesn't state it's webcam as frontal
@@ -101,8 +100,28 @@ public class CardParser : MonoBehaviour
 
         //MakeBoundingBoxFromEditorStr(boundBoxText);
         BakeCardTemplateData();
-        
+        InitModNameConverter();
 
+    }
+
+    private void InitModNameConverter()
+    {
+        TylerModToCVMod.Add("fire", "Fire Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("water", "Water Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("earth", "Earth Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("air", "Air Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("light", "Light Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("dark", "Dark Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("plus2", "Plus 2 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("plus4", "Plus 4 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("plus6", "Plus 6 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("plus8", "Plus 8 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("mana2", "Mana 2 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("mana3", "Mana 3 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("mana4", "Mana 4 Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("prio", "Priority Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("adj", "Adj Sticker"); // TODO : ETC
+        TylerModToCVMod.Add("all", "All Sticker"); // TODO : ETC
     }
 
 
@@ -213,7 +232,7 @@ public class CardParser : MonoBehaviour
 
 
             print("For " + sticker.stickerName + ", Icon color: " + meanIconColor + " back color: " + meanBackColor);
-            StickerTemplateData stickerData = new StickerTemplateData(bin, meanBackColor, meanIconColor, sticker.stickerName);
+            StickerTemplateData stickerData = new StickerTemplateData(bin, meanBackColor, meanIconColor, sticker.stickerName, sticker.stickerSubType);
             cardStickerDict.Add(sticker.stickerName, stickerData);
 
             if (!cardStickerSlotsDict.ContainsKey(sticker.modEnum))
@@ -279,10 +298,11 @@ public class CardParser : MonoBehaviour
 
     private GameObject previousCard;
     private CustomCard lastGoodCustomCard = null;
+    private Point2f[][] lastGoodContours = null;
     public bool ProcessTexture(WebCamTexture input)
     {
         // if (!shouldUpdate) return false;
-
+        print(mode);
         using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
         // using (Mat cardScene = OpenCvSharp.Unity.TextureToMat(input))
         {
@@ -297,13 +317,15 @@ public class CardParser : MonoBehaviour
                     return true;
                 }
                 print("ESCAPE!!!");
-                List<GameObject> possibleCards = GetCardsOfName(card.cardName);
+                List<GameObject> possibleCards = GetCardsOfNameDebug(card.cardName);
                 print("COUNT: " + possibleCards.Count);
 
-                AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards);
-                // TODO : debugging
-                UpdateCardDetected(null, -1);
-                //UpdateCardDetected(bestCard, bestCard != null ? card.cardID : -1);
+                var stickerData = AttemptToGetStickerMods(cardScene, card, lastGoodReplane, possibleCards, lastGoodContours);
+                GameObject bestPossibleCard = GetBestCardByStickers(possibleCards, stickerData);
+
+                /// possibleCards[0].GetComponent<Card>().modifiers[0].GetComponent<Modifier>().name;
+
+                UpdateCardDetected(bestPossibleCard, bestPossibleCard != null ? card.cardID : -1);
             } else if (mode == ParseMode.ConfirmCardMode)
             {
                 lastGoodCustomCard = null;
@@ -319,26 +341,81 @@ public class CardParser : MonoBehaviour
         }
         return true;
     }
+    private float GetScoreFromStickerSlot(PossibleSticker presumedSticker, string digitalSticker)
+    {
+        // match by pure call
+        if (presumedSticker.bestStickerByColor == digitalSticker || presumedSticker.bestStickerByDiff == digitalSticker)
+            return 1.0f;
+        // match by sticker type, the ANY type will be caught here before the emptiness of the type will get it penalized below
+        // TODO : this function is not complete
+        bool matchesDiffType = !SubtypeAndStickerNameContradict(presumedSticker.bestStickerTypeByDiff, digitalSticker);
+        bool matchesColorType = !SubtypeAndStickerNameContradict(presumedSticker.bestStickerTypeByColor, digitalSticker);
+        if (matchesColorType && matchesDiffType && presumedSticker.bestStickerByColor != "Any") return 0.8f;
+        if (matchesColorType || matchesDiffType) return 0.5f;
 
+        // heavily penalize stickers where there shouldn't be
+        if (digitalSticker == "" && (presumedSticker.bestStickerByColor != "" && presumedSticker.bestStickerByDiff != "")) return -0.8f;
+        if (digitalSticker != "" && (presumedSticker.bestStickerByColor == "" && presumedSticker.bestStickerByDiff == "")) return -0.8f;
+        if (digitalSticker == "" && (presumedSticker.bestStickerByColor != "" || presumedSticker.bestStickerByDiff != "")) return -0.5f;
+        if (digitalSticker != "" && (presumedSticker.bestStickerByColor == "" || presumedSticker.bestStickerByDiff == "")) return -0.5f;
+        
+        // default, totally unsure on assessment
+        return 0;
+    }
+
+    private GameObject GetBestCardByStickers(List<GameObject> possibleCards, Tuple<PossibleSticker, PossibleSticker, PossibleSticker> stickerData)
+    {
+        List<(float, GameObject)> cardScores = new List<(float, GameObject)>();
+        foreach (GameObject g in possibleCards)
+        {
+            Card card = g.GetComponent<Card>();
+            CardEditHandler cardEditor = g.GetComponent<CardEditHandler>();
+            Modifier m1 = cardEditor.activeModifiers[card.modifiers[0]];
+            Modifier m2 = cardEditor.activeModifiers[card.modifiers[1]];
+            Modifier m3 = cardEditor.activeModifiers[card.modifiers[2]];
+            string cvStickerType1 = TylerModToCVMod.TryGetValue(m1.spriteParsing, out string val) ? val : "";
+            string cvStickerType2 = TylerModToCVMod.TryGetValue(m1.spriteParsing, out val) ? val : "";
+            string cvStickerType3 = TylerModToCVMod.TryGetValue(m1.spriteParsing, out val) ? val : "";
+
+            // tally score
+            float score = GetScoreFromStickerSlot(stickerData.Item1, cvStickerType1);
+            score += GetScoreFromStickerSlot(stickerData.Item2, cvStickerType2);
+            score += GetScoreFromStickerSlot(stickerData.Item3, cvStickerType3);
+            cardScores.Add((score, g));
+        }
+        // get the best score
+        cardScores.Sort();
+        if (cardScores.Last().Item1 < 0) return null;
+        else return cardScores.Last().Item2;
+    }
 
     private List<GameObject> GetCardsOfName(string cardName)
     {
-        
+
         List<GameObject> cardList = new List<GameObject>();
+        // If we got no cards from phase specific, get from all
         foreach (GameObject c in Deck.instance.deck)
         {
-            if (c.GetComponent<Card>().cardName == name)
+            print("Got card with name: '" + c.GetComponent<Card>().cardName + "' comp to '" + cardName + "'" + " which is " + (c.GetComponent<Card>().cardName.Equals(cardName)));
+            if (c.GetComponent<Card>().cardName == cardName)
+            {
                 cardList.Add(c);
+            }
         }
-        if (cardList.Count > 0)
-            return cardList;
+        return cardList;
+    }
+    private List<GameObject> GetCardsOfNameDebug(string cardName)
+    {
 
-
+        List<GameObject> cardList = new List<GameObject>();
         // If we got no cards from phase specific, get from all
         foreach (GameObject c in Deck.instance.allCards)
         {
-            if (c.GetComponent<Card>().cardName == name)
+            print("Got card with name: '" + c.GetComponent<Card>().cardName + "' comp to '" + cardName + "'" + " which is " + (c.GetComponent<Card>().cardName.Equals(cardName)));
+            if (c.GetComponent<Card>().cardName == cardName)
+            {
                 cardList.Add(c);
+            }
         }
         return cardList;
     }
@@ -355,32 +432,37 @@ public class CardParser : MonoBehaviour
     /*************************************************************************************************
     /*************************************************************************************************/
 
-    private object AttemptToGetStickerMods(Mat cardScene, CustomCard card, Mat cardMat, List<GameObject> possibleCards)
+    public class PossibleSticker
+    {
+        public string bestStickerByDiff;
+        public string bestStickerTypeByDiff;
+        public string bestStickerByColor;
+        public string bestStickerTypeByColor;
+    }
+
+    private Tuple<PossibleSticker, PossibleSticker, PossibleSticker> AttemptToGetStickerMods(Mat cardScene, CustomCard card, Mat cardMat, List<GameObject> possibleCards, Point2f[][] oldContours)
     {
         // get rhombus bounds
-        Mat blurredCardMat = new Mat();
-        Cv2.GaussianBlur(cardMat, blurredCardMat, new Size(3, 3), 0);
-
-        DetectContours(blurredCardMat, out Point2f[][] contours, out HierarchyIndex[] h, true);
+        DetectContours(cardMat, out Point2f[][] contours, out HierarchyIndex[] h, false);
 
         // get possible sticker bounds
         Point2f[] possibleSticker1 = GetStickerBoundByContour(contours, stickerBoundingBox1.GetCenter(cardMat.Size()), stickerBoundingBox1.GetArea(cardMat));
         Point2f[] possibleSticker2 = GetStickerBoundByContour(contours, stickerBoundingBox2.GetCenter(cardMat.Size()), stickerBoundingBox2.GetArea(cardMat));
         Point2f[] possibleSticker3 = GetStickerBoundByContour(contours, stickerBoundingBox3.GetCenter(cardMat.Size()), stickerBoundingBox3.GetArea(cardMat));
+        if (possibleSticker1 == null)
+            possibleSticker1 = GetStickerBoundByOldContour(oldContours, card.homoMat, stickerBoundingBox1.GetCenter(cardMat.Size()), stickerBoundingBox1.GetArea(cardMat));
+        if (possibleSticker2 == null)
+            possibleSticker2 = GetStickerBoundByOldContour(oldContours, card.homoMat, stickerBoundingBox2.GetCenter(cardMat.Size()), stickerBoundingBox2.GetArea(cardMat));
+        if (possibleSticker3 == null)
+            possibleSticker3 = GetStickerBoundByOldContour(oldContours, card.homoMat, stickerBoundingBox3.GetCenter(cardMat.Size()), stickerBoundingBox3.GetArea(cardMat));
+        possibleSticker1 = RotateStickerBoundToUpperLeftFirst(possibleSticker1);
+        possibleSticker2 = RotateStickerBoundToUpperLeftFirst(possibleSticker2);
+        possibleSticker3 = RotateStickerBoundToUpperLeftFirst(possibleSticker3);
 
-        /*if (possibleSticker1 != null)
-            CvAruco.DrawDetectedMarkers(cardMat, new Point2f[][] { possibleSticker1 }, new int[] { 1 });
-        if (possibleSticker2 != null)
-            CvAruco.DrawDetectedMarkers(cardMat, new Point2f[][] { possibleSticker2 }, new int[] { 2 });
-        if (possibleSticker3 != null)
-            CvAruco.DrawDetectedMarkers(cardMat, new Point2f[][] { possibleSticker3 }, new int[] { 3 });
-        */
-        //cardParserManager.UpdateSeenImage(cardMat);
-        // debugImage.texture = OpenCvSharp.Unity.MatToTexture(cardMat);
 
-        string finalSticker1 = null;
-        string finalSticker2 = null;
-        string finalSticker3 = null;
+        PossibleSticker finalSticker1 = null;
+        PossibleSticker finalSticker2 = null;
+        PossibleSticker finalSticker3 = null;
 
         if (possibleSticker1 != null)
             finalSticker1 = ParseStickerByContour(possibleSticker1, cardScene, card, cardMat, 0);
@@ -395,10 +477,49 @@ public class CardParser : MonoBehaviour
         if (possibleSticker3 != null)
             finalSticker3 = ParseStickerByContour(possibleSticker3, cardScene, card, cardMat, 2);
         else
-            finalSticker3 = ParseStickerByCrop(cardScene, card, cardMat, stickerBoundingBox1, 2);
+            finalSticker3 = ParseStickerByCrop(cardScene, card, cardMat, stickerBoundingBox3, 2);
 
         // TODO
-        return new Tuple<object, object, object>(finalSticker1, finalSticker2, finalSticker3);
+        return new Tuple<PossibleSticker, PossibleSticker, PossibleSticker>(finalSticker1, finalSticker2, finalSticker3);
+    }
+
+    private Point2f[] RotateStickerBoundToUpperLeftFirst(Point2f[] sticker)
+    {
+        if (sticker == null) return sticker;
+
+        int rot = 0;
+        float dist = Mathf.Infinity;
+        for (int j = 0; j < sticker.Length; ++j)
+        {
+            if (sticker[j].X + sticker[j].Y < dist)
+            {
+                dist = sticker[j].X + sticker[j].Y;
+                rot = j;
+            }
+        }
+        return RotateWinding(sticker, 4 - rot);
+    }
+
+    private Point2f[] GetStickerBoundByOldContour(Point2f[][] oldContours, Mat homoMat, Point2f containedPoint, float expectedArea)
+    {
+        float bestRatio = 1.5f;
+        Point2f[] bestContour = null;
+        foreach (Point2f[] rect in oldContours)
+        {        
+
+            Point2f[] warpRect = Cv2.PerspectiveTransform(rect, homoMat);
+
+            bool inside = Cv2.PointPolygonTest(warpRect, containedPoint, true) > -0.5;
+
+            float cArea = (float)Cv2.ContourArea(warpRect);
+            float areaRatio = CompareAreaRatio(expectedArea, cArea);
+            if (bestRatio > areaRatio && inside)
+            {
+                bestRatio = areaRatio;
+                bestContour = warpRect;
+            }
+        }
+        return bestContour;
     }
 
     private Point2f[] GetStickerBoundByContour(Point2f[][] contours, Point2f containedPoint, float expectedArea)
@@ -407,7 +528,7 @@ public class CardParser : MonoBehaviour
         Point2f[] bestContour = null;
         foreach (Point2f[] contour in contours)
         {
-            bool inside = Cv2.PointPolygonTest(contour, containedPoint, false) > 0.0;
+            bool inside = Cv2.PointPolygonTest(contour, containedPoint, true) > -0.3;
 
             float cArea = (float)Cv2.ContourArea(contour);
             float areaRatio = CompareAreaRatio(expectedArea, cArea);
@@ -426,9 +547,11 @@ public class CardParser : MonoBehaviour
      * TODO TODO
      */
     Modifier.ModifierEnum[] modTypes = new Modifier.ModifierEnum[] { Modifier.ModifierEnum.NumModifier, Modifier.ModifierEnum.SecondaryElement, Modifier.ModifierEnum.Utility };
-    public float minBinStickerDiffAmount = 0.6f;
+    public float minBinStickerDiffAmount = 0f;
     public float minColorStickerDistAmount = 30.0f;
-    private string ParseStickerByContour(Point2f[] stickerContour, Mat cardScene, CustomCard card, Mat cardMat, int ID)
+
+
+    private PossibleSticker ParseStickerByContour(Point2f[] stickerContour, Mat cardScene, CustomCard card, Mat cardMat, int ID)
     {
         Modifier.ModifierEnum modType = modTypes[ID];
 
@@ -441,25 +564,61 @@ public class CardParser : MonoBehaviour
         };
 
         Mat stickerTransMat = Cv2.GetPerspectiveTransform(stickerContour, corners);
+
         Mat stickerMat = new Mat();
         Cv2.WarpPerspective(cardMat, stickerMat, stickerTransMat, new Size(defaultStickerWidth, defaultStickerHeight));
         Mat binStickerMat = new Mat();
         Cv2.CvtColor(stickerMat, binStickerMat, ColorConversionCodes.BGR2GRAY);
         Cv2.Threshold(binStickerMat, binStickerMat, 200, 255, ThresholdTypes.Otsu);
 
-        // TODO : maybe a bug out if the icon value is less than acceptable
+        // Make comparison attempts....
+        GetBestStickerBackgroundDiff(stickerMat, binStickerMat, cardStickerSlotsDict[modType], out string bestStickerByColor, out string bestStickerTypeByColor, out float dist, ID);
+        GetBestStickerBinDiff(binStickerMat, cardStickerSlotsDict[modType], out string bestStickerByDiff, out string bestStickerTypeByDiff, out Mat diff, out float certainty, ID);
 
-        GetBestStickerBinDiff(binStickerMat, cardStickerSlotsDict[modType], out string bestStickerByDiff, out Mat diff, out float certainty);
+        if (bestStickerByDiff != null)
+            cardParserManager?.UpdateStickerDebugs(ID, diff);
 
-        GetBestStickerBackgroundDiff(stickerMat, binStickerMat, cardStickerSlotsDict[modType], out string bestStickerByColor, out float dist);
+        if (bestStickerTypeByColor == null && bestStickerByDiff == null)
+        {
+            return null;
+        }
 
-        if (cardParserManager)
-            cardParserManager.UpdateStickerDebugs(ID, diff);
-        
-        return bestStickerByDiff;
+        if (!SubtypeAndStickerNameContradict(bestStickerTypeByColor, bestStickerByDiff))
+        {
+            return new PossibleSticker {
+                bestStickerByDiff = bestStickerByDiff,
+                bestStickerByColor = bestStickerByColor,
+                bestStickerTypeByDiff = bestStickerTypeByDiff,
+                bestStickerTypeByColor = bestStickerTypeByColor
+            };
+        } else
+        {
+            return new PossibleSticker {
+                bestStickerByColor = null,
+                bestStickerByDiff = null,
+                bestStickerTypeByColor = "Any",
+                bestStickerTypeByDiff = "Any"
+            };
+        }
     }
 
-    private float ScalarEuclidDistance(Scalar a, Scalar b)
+    private bool SubtypeAndStickerNameContradict(string bestStickerTypeByColor, string bestStickerByDiff)
+    {
+        Dictionary<string, HashSet<string>> validLines = new Dictionary<string, HashSet<string>>();
+        validLines.Add("Plus", new HashSet<string>(new string[] { "Plus 2 Sticker", "Plus 4 Sticker", "Plus 6 Sticker", "Plus 8 Sticker" }));
+        validLines.Add("Mana", new HashSet<string>(new string[] { "Mana 1 Sticker", "Mana 2 Sticker", "Mana 3 Sticker", "Mana 4 Sticker" }));
+        validLines.Add("People", new HashSet<string>(new string[] { "All Sticker", "Adj Sticker" }));
+        validLines.Add("Hard Element", new HashSet<string>(new string[] { "Earth Sticker", "Light Sticker" }));
+        // TODO : add these to the scriptables
+
+        // TODO TODO TODO 
+        if (validLines.TryGetValue(bestStickerTypeByColor, out HashSet<string> validNames))
+            return !validNames.Contains(bestStickerByDiff);
+
+        return bestStickerTypeByColor != bestStickerByDiff;
+}
+
+private float ScalarEuclidDistance(Scalar a, Scalar b)
     {
         return Mathf.Sqrt((float)(
             ((a.Val0 - b.Val0) * (a.Val0 - b.Val0)) + 
@@ -467,7 +626,8 @@ public class CardParser : MonoBehaviour
             ((a.Val2 - b.Val2) * (a.Val2 - b.Val2))));
     }
 
-    private void GetBestStickerBackgroundDiff(Mat stickerMat, Mat binStickerMat, List<StickerTemplateData> stickerList, out string bestStickerByColor, out float bestDist)
+    private void GetBestStickerBackgroundDiff(Mat stickerMat, Mat binStickerMat, List<StickerTemplateData> stickerList,
+        out string bestStickerByColor, out string bestStickerByColorType, out float bestDist, int ID)
     {
         Scalar iconColor = Cv2.Mean(stickerMat, binStickerMat);
         Cv2.BitwiseNot(binStickerMat, binStickerMat);
@@ -476,27 +636,33 @@ public class CardParser : MonoBehaviour
 
         bestDist = minColorStickerDistAmount;
         bestStickerByColor = null;
+        bestStickerByColorType = null;
         foreach (StickerTemplateData stickerTemp in stickerList)
         {
             // normalize the color to the best
             Scalar tColor = stickerTemp.iconColor;
             Scalar mult = new Scalar(iconColor.Val0 / tColor.Val0, iconColor.Val1 / tColor.Val1, iconColor.Val1 / tColor.Val1);
-            Scalar normBackColor = new Scalar(backColor.Val0 * mult.Val0, backColor.Val1 * mult.Val1, backColor.Val2 * mult.Val2);
+            Scalar normBackColor = backColor;
+            // Scalar normBackColor = new Scalar(backColor.Val0 * mult.Val0, backColor.Val1 * mult.Val1, backColor.Val2 * mult.Val2);
 
             float dist = ScalarEuclidDistance(normBackColor, stickerTemp.backColor);
-            print("For " + stickerList[1].name + ", got " + stickerTemp.name + " with color distance of " + dist);
+
             if (dist < bestDist)
             {
                 bestDist = dist;
                 bestStickerByColor = stickerTemp.name;
+                bestStickerByColorType = stickerTemp.subType;
             }
         }
+        print("COLOR: For list with " + stickerList[0].name + $"({ID}), got " + bestStickerByColor + "(" + bestStickerByColorType + ")" + " with color distance of " + bestDist);
     }
 
-    private void GetBestStickerBinDiff(Mat binStickerMat, List<StickerTemplateData> stickerList, out string bestSticker, out Mat bestDiff, out float certainty)
+    private void GetBestStickerBinDiff(Mat binStickerMat, List<StickerTemplateData> stickerList, 
+        out string bestSticker, out string bestStickerType, out Mat bestDiff, out float certainty, int ID)
     {
         certainty = minBinStickerDiffAmount;
         bestSticker = null;
+        bestStickerType = null;
         bestDiff = new Mat();
         foreach (StickerTemplateData stickerTemp in stickerList)
         {
@@ -510,15 +676,70 @@ public class CardParser : MonoBehaviour
             {
                 certainty = diffOp;
                 bestSticker = stickerTemp.name;
+                bestStickerType = stickerTemp.subType;
                 bestDiff = diff;
             }
         }
+        print("DIFF: For list with " + stickerList[0].name + $"({ID}), got " + bestSticker + "(" + bestStickerType + ")" + " with diff of " + certainty);
     }
 
-    private string ParseStickerByCrop(Mat cardScene, CustomCard card, Mat cardMat, BoundingBox stickerBoundingBox1, int ID)
+
+
+
+
+    private PossibleSticker ParseStickerByCrop(Mat cardScene, CustomCard card, Mat cardMat, BoundingBox stickerBoundingBox, int ID)
     {
-        return null;
+        Modifier.ModifierEnum modType = modTypes[ID];
+
+        Mat stickerMat = stickerBoundingBox.CropByBox(cardMat, new Size(defaultStickerWidth, defaultStickerHeight));
+        Mat binStickerMat = new Mat();
+        Cv2.CvtColor(stickerMat, binStickerMat, ColorConversionCodes.BGR2GRAY);
+        Cv2.Threshold(binStickerMat, binStickerMat, 200, 255, ThresholdTypes.Otsu);
+
+        // Make comparison attempts....
+        GetBestStickerBackgroundDiff(stickerMat, binStickerMat, cardStickerSlotsDict[modType], out string bestStickerByColor, out string bestStickerTypeByColor, out float dist, ID);
+        GetBestStickerBinDiff(binStickerMat, cardStickerSlotsDict[modType], out string bestStickerByDiff, out string bestStickerTypeByDiff, out Mat diff, out float certainty, ID);
+
+        if (bestStickerByDiff != null)
+            cardParserManager?.UpdateStickerDebugs(ID, diff);
+
+        if (bestStickerTypeByColor == null && bestStickerByDiff == null)
+        {
+            return null;
+        }
+
+        if (!SubtypeAndStickerNameContradict(bestStickerTypeByColor, bestStickerByDiff))
+        {
+            return new PossibleSticker
+            {
+                bestStickerByDiff = bestStickerByDiff,
+                bestStickerByColor = bestStickerByColor,
+                bestStickerTypeByDiff = bestStickerTypeByDiff,
+                bestStickerTypeByColor = bestStickerTypeByColor
+            };
+        }
+        else
+        {
+            return new PossibleSticker
+            {
+                bestStickerByColor = null,
+                bestStickerByDiff = null,
+                bestStickerTypeByColor = "Any",
+                bestStickerTypeByDiff = "Any"
+            };
+        }
     }
+
+
+
+
+
+
+
+
+
+
+
 
     [HideInInspector]
     public UnityEvent<GameObject, int> StableUpdateEvent = new UnityEvent<GameObject, int>();
@@ -578,6 +799,9 @@ public class CardParser : MonoBehaviour
 
     private void UpdateCardDetected(GameObject card, int id)
     {
+        // TODO : debugging here
+        StableUpdateEvent.Invoke(card, id);
+
         print("Updating for card: " + (card != null ? card.GetComponent<Card>().name : "NULL") + " with previous " + 
             (previousCard != null ? previousCard.GetComponent<Card>().cardName : " NULL"));
 
@@ -1206,9 +1430,11 @@ public class CardParser : MonoBehaviour
                 if ((matchByShape * 0.1f) + (matchToDiff * 0.9f) > bestCorner.matchVal) {
                     // if we have no upper left partner, we aren't a lower right.
                     Point2f[] rotRect = RotateWinding(rect, rotCount);
-                    if (FindBestUpperLeftCardCorner(scene, rotRect, ref contours) == null)
+                    if (FindBestUpperLeftCardCorner(scene, rotRect, ref contours, true) == null)
+                    {
                         continue;
-
+                    }
+                    if (FindBestUpperLeftCardCorner(scene, rotRect, ref contours) != null) print("Rot that was good: " + rotCount);
                     bestCorner = new CardCorner()
                     {
                         corners = rect,
@@ -1295,7 +1521,7 @@ public class CardParser : MonoBehaviour
     }
 
     // Get the most likely upper left corner from lower right corner
-    private CardCorner FindBestUpperLeftCardCorner(Mat scene, Point2f[] lowerRight, ref Point2f[][] contours)
+    private CardCorner FindBestUpperLeftCardCorner(Mat scene, Point2f[] lowerRight, ref Point2f[][] contours, bool bDebug = false)
     {
         Point2f[] dest = bottomRightBoundingBox.GetCWWindingOrder();
         Point2f upperLeftCenter = upperLeftBoundingBox.GetCenter();
@@ -1306,7 +1532,7 @@ public class CardParser : MonoBehaviour
             float expectedArea = (float)Cv2.ContourArea(warpedLR);
 
             int bestRotCount = 0;
-            float bestRatio = 3.0f;
+            float bestRatio = 2.0f;
             Point2f[] bestTopLeft = null;
             float bestAreaRatio = 0;
             float bestLocalAreaRatio = 3;
@@ -1323,8 +1549,9 @@ public class CardParser : MonoBehaviour
 
                 // filter not inside expected point
                 Point2f[] warpedUL = Cv2.PerspectiveTransform(canid, persp);
-                double inExpected = Cv2.PointPolygonTest(warpedUL, upperLeftCenter, false);
-                if (inExpected < 0.9f)
+                double inExpected = Cv2.PointPolygonTest(warpedUL, upperLeftCenter, true);
+
+                if (inExpected < -0.5f)
                     continue;
 
                 // filter for ratio and area
@@ -1414,9 +1641,6 @@ public class CardParser : MonoBehaviour
         cardScene.CopyTo(blackout);
         CvAruco.DrawDetectedMarkers(blackout, contours, null);
 
-        if (cardParserManager != null)
-            cardParserManager.UpdateSeenImage(blackout);
-
         // POSSIBLE LOWER RIGHTS
         CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
         for (int i = 0; i < bestLowerRights.Length; ++i)
@@ -1437,9 +1661,6 @@ public class CardParser : MonoBehaviour
         Mat blackout = new Mat();
         cardScene.CopyTo(blackout);
         CvAruco.DrawDetectedMarkers(blackout, contours, null);
-
-        if (cardParserManager)
-            cardParserManager.UpdateSeenImage(blackout);
 
         // POSSIBLE LOWER RIGHTS
         CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
@@ -1503,7 +1724,6 @@ public class CardParser : MonoBehaviour
         mainSeeImage.texture = OpenCvSharp.Unity.MatToTexture(cardScene);
         */
 
-        print("ACTUALLY PARSING CARD");
         Point2f[][] contours;
         HierarchyIndex[] h;
         // DETECT CONTOURS AND SIMPLIFY THEM IF NEEDED
@@ -1511,19 +1731,22 @@ public class CardParser : MonoBehaviour
         Mat blackout = new Mat();
         cardScene.CopyTo(blackout);
         CvAruco.DrawDetectedMarkers(blackout, contours, null);
-
-        if (cardParserManager)
-            cardParserManager.UpdateSeenImage(blackout);
+        cardParserManager.UpdateSeenImage(blackout);
 
         // POSSIBLE LOWER RIGHTS
         CardCorner[] bestLowerRights = FindBestLowerRightCardCorner(cardScene, ref contours);
+        print("Got Corners: " + bestLowerRights.Length);
 
         // TODO : memory mode which GREATLY improves the runtime at the possible cost of accuracy...
         if (lastGoodCustomCard != null && bestLowerRights.Length > 0 && bMemoryMode)
+        {
+            print("TAKING MEMORY MODE!!!");
             return lastGoodCustomCard;
+        }
 
         Mat blackOut = new Mat();
         cardScene.CopyTo(blackOut);
+        if (bestLowerRights.Length == 0) print("Failed on corner");
 
         foreach (CardCorner bestLowerRight in bestLowerRights)
         {
@@ -1549,9 +1772,7 @@ public class CardParser : MonoBehaviour
                 return null;
             Mat replaned = PerformFirstReplaneFull(cardScene, possibleCard, cornerReplaneOffset, out Mat firstTMat);
 
-            // predict most likely element from single replane, might not work but may improve performance.
-            bestLowerRight.mostLikelyElement = GetMostLikelyElement(replaned, cornerReplaneOffset);
-
+            print("Succeeded aruco, trying for keypoints");
             // get the homography matrix from the replaned image to the template image space
             Mat hMat = KeypointMatchToTemplate(replaned, bestLowerRight, out CardType cardType, out CardElement cardElement, out int ID, out string cardName);
             if (hMat == null) return null;
@@ -1580,8 +1801,11 @@ public class CardParser : MonoBehaviour
 
             // TODO : bound the bounding box less strictly and perhaps axis aligned?
             // TODO : ID function, by array or similar? : add to card template data
+            print("Final decision on " + cardName);
+            lastGoodContours = contours;
+            Mat finalMat = hMat * firstTMat;
             return new CustomCard(1.0f, new BoundingBox(possibleCard[0], possibleCard[1], possibleCard[2], possibleCard[3]),
-                cardType, cardElement, ID, cardName, affineRepOfCrop * hMat * firstTMat);
+                cardType, cardElement, ID, cardName, finalMat);
             // TODO : function to reaquire from old BB, 
         }
         return null;
@@ -1707,7 +1931,7 @@ public class CardParser : MonoBehaviour
      * TODO : may not work on bad cameras that output too much red. 
      * Being color agnostic is an ideal we probably cannot meet...
      */
-    private CardElement GetMostLikelyElement(Mat replaned, int cornerReplaneOffset)
+    /*private CardElement GetMostLikelyElement(Mat replaned, int cornerReplaneOffset)
     {
         Mat area = replaned[cornerReplaneOffset, replaned.Height - cornerReplaneOffset, cornerReplaneOffset, replaned.Width - cornerReplaneOffset];
 
@@ -1744,7 +1968,7 @@ public class CardParser : MonoBehaviour
             print("Winner is " + bestElement);
             return bestElement;
         }
-    }
+    }*/
 
 
 
@@ -2015,18 +2239,20 @@ public class CardParser : MonoBehaviour
 
     public class StickerTemplateData
     {
-        public StickerTemplateData(Mat binImg, Scalar backCol, Scalar iconCol, string name)
+        public StickerTemplateData(Mat binImg, Scalar backCol, Scalar iconCol, string name, string subtype)
         {
             binImage = binImg;
             backColor = backCol;
             iconColor = iconCol;
             this.name = name;
+            this.subType = subtype;
         }
 
         public Mat binImage;
         public Scalar backColor;
         public Scalar iconColor; // TODO : should just be white?
         public string name;
+        public string subType;
     }
 
     /**
