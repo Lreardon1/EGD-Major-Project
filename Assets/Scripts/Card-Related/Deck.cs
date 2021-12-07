@@ -312,7 +312,7 @@ public class Deck : MonoBehaviour
             deckCustomizer = FindObjectOfType<DeckCustomizer>();
         }
 
-        //deckCustomizer.SetUp();
+        deckCustomizer.SetUp();
     }
 
     [System.Serializable]
