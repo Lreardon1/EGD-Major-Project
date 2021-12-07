@@ -2855,9 +2855,9 @@ MonoBehaviour:
   tradeText: {fileID: 1336167675}
   currentRound: 0
   totalRounds: 0
-  waterCount: 1
-  fireCount: 1
-  natureCount: 1
+  waterCount: 2
+  fireCount: 2
+  natureCount: 2
   physicsCard: {fileID: 1994489891608063984, guid: 71ca7b60d3f91214c9683988c4ff4805, type: 3}
   physicsSpawnPoint: {fileID: 315031685}
   sphereRadius: 1
