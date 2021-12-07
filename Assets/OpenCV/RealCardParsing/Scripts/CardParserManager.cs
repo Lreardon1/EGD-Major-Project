@@ -618,6 +618,8 @@ public class CardParserManager : MonoBehaviour
 
     public void UpdateSeenImage(Mat blackout)
     {
+        if (goodSeeImage == null) return;
+
         if (goodSeeImage.texture != null)
             Destroy(goodSeeImage.texture);
         goodSeeImage.texture = OpenCvSharp.Unity.MatToTexture(blackout);
