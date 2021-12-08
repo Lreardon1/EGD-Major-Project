@@ -42,14 +42,19 @@ public class OverworldMovement : MonoBehaviour
     private void LoadScenePos()
     {
         Vector3 pos = MemorySceneLoader.GetPlayerPosPrefForScene();
+        cc.enabled = false;
+        print("LOADING FROM MEMORY: " + pos);
         transform.position = pos;
+        cc.enabled = true;
     }
 
     // Start is called before the first frame update
     void Start()
     {
         if (MemorySceneLoader.HasScenePos())
+        {
             LoadScenePos();
+        }
 
 
         MemorySceneLoader.SetPlayerPosPref(transform.position);
@@ -74,9 +79,6 @@ public class OverworldMovement : MonoBehaviour
         {
             walkLine.AddFirst(new TimePairTransform(t, transform.position));
         }
-
-        // TODO : debug delete all
-        PlayerPrefs.DeleteAll();
 
         UpdatePartyMembers();
     }
@@ -124,7 +126,7 @@ public class OverworldMovement : MonoBehaviour
         velocity = Vector3.down * 9.8f;
         velocity = isGround ? Vector3.zero : velocity;
 
-        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
+        if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0 && canMove)
         {
             walkTime += Time.fixedDeltaTime;
             //print(Time.fixedDeltaTime);

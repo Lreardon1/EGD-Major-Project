@@ -277,6 +277,12 @@ public class RPS_PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.Q))
+        {
+            MemorySceneLoader.LoadToOverworld("RPS_CardGame");
+            enabled = false;
+        }
+
         if (!lookingForInput) {
             cardParser.ResetRPS();
             return;

@@ -9,7 +9,9 @@ public class MechanistCombat : CombatantBasis
     public override void Special()
     {
         CombatManager cm = FindObjectOfType<CombatManager>();
-        
+
+        audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Attack_Heavy", typeof(AudioClip)), 0.7f);
+
         int randStatus = Random.Range(1, 15);
         Status statusToApply = (Status)randStatus;
 

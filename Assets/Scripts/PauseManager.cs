@@ -194,8 +194,8 @@ public class PauseManager : MonoBehaviour
     
     public void ToggleCVMode(bool toggleOn)
     {
-        CombatManager.IsInCVMode = toggleOn;
-        print(CombatManager.IsInCVMode ? "IN CV MODE" : "IN REGULAR MODE");
+        PlayerPrefs.SetInt("IsInCVMode", toggleOn ? 1 : 0);
+        print(CombatManager.IsInCVMode() ? "IN CV MODE" : "IN REGULAR MODE");
     }
 
     public void quitGame()

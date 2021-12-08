@@ -558,7 +558,7 @@ AnimationClip:
   - time: 2.5666666
     functionName: ActivateText
     data: 
-    objectReferenceParameter: {fileID: 11400000, guid: 90167316bfc4bfa4d9d61078e31b68f7, type: 2}
+    objectReferenceParameter: {fileID: 11400000, guid: aae59ecfb67d12d44bf28e02cb426af8, type: 2}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

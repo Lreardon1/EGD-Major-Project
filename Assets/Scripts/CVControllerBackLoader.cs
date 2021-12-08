@@ -35,7 +35,7 @@ public class CVControllerBackLoader : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        if (CombatManager.IsInCVMode && CardParserManager.instance != null)
+        if (CombatManager.IsInCVMode() && CardParserManager.instance != null)
         {
             if (WebCamTexture.devices.Length > 1)
                 DeviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 2].name;

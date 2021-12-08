@@ -39,6 +39,11 @@ public class PartyDialogue : MonoBehaviour
                 speaker_name.text = "MC";
                 i++;
                 break;
+            case "Serena":
+                speaker_image.sprite = speakers[0];
+                speaker_name.text = "Serena";
+                i++;
+                break;
             case "Godfather":
                 speaker_image.sprite = speakers[1];
                 speaker_name.text = "Godfather";
