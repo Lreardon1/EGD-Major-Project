@@ -75,9 +75,6 @@ public class OverworldMovement : MonoBehaviour
             walkLine.AddFirst(new TimePairTransform(t, transform.position));
         }
 
-        // TODO : debug delete all
-        PlayerPrefs.DeleteAll();
-
         UpdatePartyMembers();
     }
 
