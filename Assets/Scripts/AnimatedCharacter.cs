@@ -12,7 +12,7 @@ public class AnimatedCharacter : MonoBehaviour
     private void Start()
     {
         anim = GetComponent<Animator>();
-        enabled = false;
+        // enabled = false;
     }
 
     // Update is called once per frame
