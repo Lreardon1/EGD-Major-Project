@@ -31,6 +31,7 @@ public class CombatManager : MonoBehaviour
     public Text currentPhaseText;
     public Text manaText;
 
+    public List<GameObject> initialPartyMembers = new List<GameObject>();
     public List<GameObject> partyMembers = new List<GameObject>();
     public List<GameObject> enemies = new List<GameObject>();
 
@@ -76,8 +77,43 @@ public class CombatManager : MonoBehaviour
             pauseManager = FindObjectOfType<PauseManager>();
         }
 
+        
+        initialPartyMembers.Add(partyMembers[0]);
+        pauseManager.AddPartyMember("priest", true);
+        //PlayerPrefs.SetInt("hunter", 0);
+        //PlayerPrefs.SetInt("warrior", 0);
+        //PlayerPrefs.SetInt("mechanist", 0);
+
+        if (PlayerPrefs.GetInt("hunter") == 0)
+        {
+            partyMembers[1].SetActive(false);
+            partyMembers[0].transform.position += new Vector3(2, 0, -3);
+        } else
+        {
+            initialPartyMembers.Add(partyMembers[1]);
+        }
+        if(PlayerPrefs.GetInt("warrior") == 0)
+        {
+            partyMembers[2].SetActive(false);
+            if (PlayerPrefs.GetInt("hunter") == 1)
+            {
+                partyMembers[0].transform.position += new Vector3(2, 0, -1);
+                partyMembers[1].transform.position += new Vector3(-1.75f, 0, -4);
+            }
+        } else
+        {
+            initialPartyMembers.Add(partyMembers[2]);
+        }
+        if (PlayerPrefs.GetInt("mechanist") == 0)
+        {
+            partyMembers[3].SetActive(false);
+        } else
+        {
+            initialPartyMembers.Add(partyMembers[3]);
+        }
+
         List<GameObject> allCombatants = new List<GameObject>();
-        foreach (GameObject member in partyMembers)
+        foreach (GameObject member in initialPartyMembers)
         {
             member.SetActive(true);
             activePartyMembers.Add(member);
@@ -144,7 +180,7 @@ public class CombatManager : MonoBehaviour
         ToggleDrawButtons(false);
         reshuffleButton.interactable = false;
 
-        foreach (GameObject member in partyMembers)
+        foreach (GameObject member in initialPartyMembers)
         {
             CombatantBasis memberScript = member.GetComponent<CombatantBasis>();
             memberScript.SelectAction();
@@ -205,7 +241,7 @@ public class CombatManager : MonoBehaviour
             chc.UpdateDropZones();
             ToggleDrawButtons(true);
         }
-        foreach (GameObject member in partyMembers)
+        foreach (GameObject member in activePartyMembers)
         {
             CombatantBasis cb = member.GetComponent<CombatantBasis>();
             if (cb.appliedCard != null && !cb.isChanneling) // Check to see if card is delay turn card in which case to not set to null
@@ -229,7 +265,7 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        foreach (GameObject member in partyMembers)
+        foreach (GameObject member in activePartyMembers)
         {
             CombatantBasis memberScript = member.GetComponent<CombatantBasis>();
             memberScript.SelectAction();
@@ -239,7 +275,7 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        foreach (GameObject enemy in enemies)
+        foreach (GameObject enemy in activeEnemies)
         {
             CombatantBasis enemyScript = enemy.GetComponent<CombatantBasis>();
             enemyScript.SelectAction();
@@ -381,8 +417,7 @@ public class CombatManager : MonoBehaviour
     {
         if (!IsInCVMode)
         {
-            return Input.GetKeyDown(KeyCode.Space)
-                || (currentCB != null && currentCB.GetComponent<CombatantBasis>().appliedCard != null);
+            return Input.GetKeyDown(KeyCode.Space);
         } 
         else if (cvReadyForMoreActions)
         {
@@ -414,47 +449,44 @@ public class CombatManager : MonoBehaviour
             }
             pointer.transform.position = pointerPos;
 
-            bool cardAlreadyPlayed = cb.appliedCard != null;
-
             // TODO : might be nice to overwite cards, which this does not allow
             // TODO : that or condition is like a bandaid on cancer
-            if (enoughMana && !cardAlreadyPlayed && (chc.transform.childCount != 0 || IsInCVMode))
+            
+            Debug.Log("Play card on " + actionOrder[0].name);
+            foreach (GameObject card in Deck.instance.allCards)
             {
-                Debug.Log("Play card on " + actionOrder[0].name);
-                foreach (GameObject card in Deck.instance.allCards)
-                {
-                    DragDrop dd = card.GetComponent<DragDrop>();
-                    List<GameObject> allZones = new List<GameObject>();
-                    allZones.Add(cb.uiCollider);
-                    dd.allowedDropZones.Clear();
-                    dd.allowedDropZones = allZones;
-                }
-                RequestInputForPhaseEvent.Invoke(CombatPhase.ActionPhase);
-                yield return new WaitUntil(IsReadyToContinueActions);
-                
-                /*bool done = false;
-                while (!done)
-                {
-                    // skips when space is hit
-                    if (Input.GetKeyDown(KeyCode.Space))
-                    {
-                        done = true;
-                    }
-
-                    // Need code to detect if card has been applied
-
-                    // TODO : this would continue if the player has already played a card, giving them no opportunity to play another...
-                    // TODO : For many of these while (!done) loops I'd recommend making a request to the controller (CV or Hand) 
-                    //        which in turn calls back with a function when it's has an update, and then you continue
-                    if (cb.appliedCard != null)
-                    {
-                        // Activate Card Effect
-                        done = true;
-
-                    }
-                    yield return null;
-                }*/
+                DragDrop dd = card.GetComponent<DragDrop>();
+                List<GameObject> allZones = new List<GameObject>();
+                allZones.Add(cb.uiCollider);
+                dd.allowedDropZones.Clear();
+                dd.allowedDropZones = allZones;
             }
+            RequestInputForPhaseEvent.Invoke(CombatPhase.ActionPhase);
+            yield return new WaitUntil(IsReadyToContinueActions);
+                
+            /*bool done = false;
+            while (!done)
+            {
+                // skips when space is hit
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    done = true;
+                }
+
+                // Need code to detect if card has been applied
+
+                // TODO : this would continue if the player has already played a card, giving them no opportunity to play another...
+                // TODO : For many of these while (!done) loops I'd recommend making a request to the controller (CV or Hand) 
+                //        which in turn calls back with a function when it's has an update, and then you continue
+                if (cb.appliedCard != null)
+                {
+                    // Activate Card Effect
+                    done = true;
+
+                }
+                yield return null;
+            }*/
+            
 
             cb.ExecuteAction();
             actionOrder.RemoveAt(0);
@@ -664,10 +696,10 @@ public class CombatManager : MonoBehaviour
 
         if(!cb.isEnemy)
         {
-            cardScript.Play(combatant, partyMembers);
+            cardScript.Play(combatant, activePartyMembers);
         } else
         {
-            cardScript.Play(combatant, enemies);
+            cardScript.Play(combatant, activeEnemies);
         }
 
         pauseManager.RefreshPartyView();
@@ -735,7 +767,7 @@ public class CombatManager : MonoBehaviour
 
     public void DiscardCard(GameObject card)
     {
-        currentMana += discardCost;
+        AddMana(discardCost);
         manaText.text = "Mana: " + currentMana + "/" + maxMana;
         if (!IsInCVMode)
             chc.DiscardCard(card);
@@ -815,14 +847,14 @@ public class CombatManager : MonoBehaviour
 
         } else
         {
-            int index = partyMembers.IndexOf(combatant);
-            if (index >= 1 && activePartyMembers.Contains(partyMembers[index - 1]))
+            int index = initialPartyMembers.IndexOf(combatant);
+            if (index >= 1 && activePartyMembers.Contains(initialPartyMembers[index - 1]))
             {
-                adjacent.Add(partyMembers[index - 1]);
+                adjacent.Add(initialPartyMembers[index - 1]);
             }
-            if (index <= partyMembers.Count - 2 && activePartyMembers.Contains(enemies[index + 1]))
+            if (index <= initialPartyMembers.Count - 2 && activePartyMembers.Contains(enemies[index + 1]))
             {
-                adjacent.Add(partyMembers[index + 1]);
+                adjacent.Add(initialPartyMembers[index + 1]);
             }
         }
 
@@ -937,6 +969,7 @@ public class CombatManager : MonoBehaviour
             if (cb.oldTarget == combatant)
             {
                 cb.target = combatant;
+                cb.UpdateTargetName();
             }
         }
     }
