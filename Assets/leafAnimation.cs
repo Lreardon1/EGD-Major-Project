@@ -21,7 +21,7 @@ public class leafAnimation : MonoBehaviour
         if (other.gameObject.name == "Player")
         {
             leaf_animator.Play("leaf_suprise");
-            //leaf_animator.SetBool("Poof", false);
+            leaf_animator.SetBool("Poof", false);
         }
     }
 
@@ -31,7 +31,7 @@ public class leafAnimation : MonoBehaviour
         if (other.gameObject.name == "Player")
         {
             leaf_animator.Play("leaf_sadge");
-            //leaf_animator.SetBool("Poof", false);
+            leaf_animator.SetBool("Poof", false);
         }
     }
 

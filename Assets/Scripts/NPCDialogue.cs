@@ -9,7 +9,16 @@ public class NPCDialogue : MonoBehaviour
     public TMPro.TextMeshProUGUI speaker;
     public Image text_back;
     public string opening;
+    public string closing;
     public string name;
+
+    IEnumerator waiter()
+    {
+        yield return new WaitForSeconds(3f);
+        uitext.text = "";
+        text_back.gameObject.SetActive(false);
+        speaker.gameObject.SetActive(false);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +49,7 @@ public class NPCDialogue : MonoBehaviour
             speaker.gameObject.SetActive(true);
             speaker.text = name;
             text_back.gameObject.SetActive(true);
+            StartCoroutine(waiter());
         }
     }
 
@@ -48,9 +58,11 @@ public class NPCDialogue : MonoBehaviour
         //other.name should equal the root of your Player object
         if (other.name == "Player")
         {
-            uitext.text = "";
-            text_back.gameObject.SetActive(false);
-            speaker.gameObject.SetActive(false);
+            uitext.text = closing;
+            speaker.gameObject.SetActive(true);
+            speaker.text = name;
+            text_back.gameObject.SetActive(true);
         }
+        StartCoroutine(waiter());
     }
 }
