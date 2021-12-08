@@ -23,6 +23,18 @@ public class pigAnimation : MonoBehaviour
         //additionally pick which direction to face from left and right
         int directionNum = UnityEngine.Random.Range(0, 2);
         int animationNum = UnityEngine.Random.Range(0, 3);
+        if (animationNum == 0 && state == "idle")
+        {
+            animationNum = 1;
+        }
+        else if (animationNum == 1 && state == "sleeping")
+        {
+            animationNum = 2;
+        }
+        else if (animationNum == 2 && state == "walking")
+        {
+            animationNum = 0;
+        }
         if (animationNum == 0)
         {
             //idle
@@ -54,7 +66,7 @@ public class pigAnimation : MonoBehaviour
             direction = "left";
             pigRenderer.flipX = false;
         }
-        Debug.Log(string.Format("Now facing {0} while {1}", direction, state));
+        //Debug.Log(string.Format("Now facing {0} while {1}", direction, state));
         StartCoroutine(waiter());
     }
 
