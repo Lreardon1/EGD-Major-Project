@@ -71,6 +71,8 @@ public class CombatManager : MonoBehaviour
     public GameObject tutorialUIParent;
     public List<GameObject> tutorialTexts = new List<GameObject>();
 
+    public GameObject cardDisplay;
+
 
     public static bool IsInCVMode()
     {
