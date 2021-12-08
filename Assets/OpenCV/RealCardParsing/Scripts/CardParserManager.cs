@@ -593,7 +593,6 @@ public class CardParserManager : MonoBehaviour
     
     public void UpdateStickerDebugs(int i, Mat sticker)
     {
-        stickerImage1.enabled = stickerImage2.enabled = stickerImage3.enabled = true;
         RawImage stickerImage = null;
         switch(i)
         {
@@ -607,6 +606,8 @@ public class CardParserManager : MonoBehaviour
                 stickerImage = stickerImage3;
                 break;
         }
+        if (stickerImage == null) return;
+
         if (stickerImage.texture != null)
             Destroy(stickerImage.texture);
 
