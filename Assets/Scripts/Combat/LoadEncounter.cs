@@ -33,6 +33,8 @@ public class LoadEncounter : MonoBehaviour
     private GameObject encounter;
 
     private float tempTimer = 0f;
+
+    public bool isTutorial = false;
     
         // Start is called before the first frame update
     void Start()
@@ -84,13 +86,17 @@ public class LoadEncounter : MonoBehaviour
         SceneManager.LoadScene("BattleScene", LoadSceneMode.Additive);
         originalCameraPos = mainCam.transform.position;
         originalCameraRot = mainCam.transform.rotation;
-        Invoke("SetUpCombatCamera", Time.deltaTime*2f);
+        Invoke("SetUpCombatCamera", Time.deltaTime*5f);
     }
 
     public void SetUpCombatCamera()
     {
         CombatManager cm = FindObjectOfType<CombatManager>();
         cm.encounterScript = this;
+        if(isTutorial)
+        {
+            cm.ActivateTutorial();
+        }
         mainCam.transform.SetParent(null);
         cameraParent.gameObject.SetActive(false);
         mainCam.transform.position = cm.cameraPosition;

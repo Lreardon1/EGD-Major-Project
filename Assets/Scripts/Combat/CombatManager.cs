@@ -71,7 +71,8 @@ public class CombatManager : MonoBehaviour
     public List<Transform> timeOutSpaces = new List<Transform>();
     private int timeOutIndex = 0;
 
-    public bool tutorialActive = false;
+    public GameObject tutorialUIParent;
+    public List<GameObject> tutorialTexts = new List<GameObject>();
 
 
     // Start is called before the first frame update
@@ -1031,5 +1032,50 @@ public class CombatManager : MonoBehaviour
         chc.ReturnCardsInHand();
         chc.ReShuffle();
         encounterScript.ReturnToOverWorld();
+    }
+
+    public void ActivateTutorial()
+    {
+        StopAllCoroutines();
+        tutorialUIParent.SetActive(true);
+        chc.SetUpTutorial();
+    }
+
+    public IEnumerator Tutorial()
+    {
+        int i = 0;
+        while(i < tutorialTexts.Count-1)
+        {
+            tutorialTexts[i].SetActive(false);
+            i++;
+            tutorialTexts[i].SetActive(true);
+            bool done = false;
+            while (!done)
+            {
+                // skips when space is hit
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    done = true;
+                }
+                
+                yield return null;
+            }
+        }
+
+        SkipTutorial(true);
+
+        yield return null;
+    }
+
+    public void SkipTutorial(bool doSkip)
+    {
+        if(doSkip)
+        {
+            tutorialUIParent.SetActive(false);
+            ActivatePlayPhase();
+        } else
+        {
+            StartCoroutine(Tutorial());
+        }
     }
 }

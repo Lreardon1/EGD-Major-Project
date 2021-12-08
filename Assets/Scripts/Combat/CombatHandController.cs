@@ -79,6 +79,16 @@ public class CombatHandController : MonoBehaviour
         }
     }
 
+    public void SetUpTutorial()
+    {
+        foreach (GameObject card in Deck.instance.allCards)
+        {
+            DragDrop dd = card.GetComponent<DragDrop>();
+            dd.isDraggable = false;
+            dd.allowedDropZones.Clear();
+        }
+    }
+
     public void UpdateDropZones()
     {
         switch (cm.currentPhase)
