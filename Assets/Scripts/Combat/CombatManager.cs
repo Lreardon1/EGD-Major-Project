@@ -79,6 +79,10 @@ public class CombatManager : MonoBehaviour
 
         
         initialPartyMembers.Add(partyMembers[0]);
+        pauseManager.AddPartyMember("priest", true);
+        //PlayerPrefs.SetInt("hunter", 0);
+        //PlayerPrefs.SetInt("warrior", 0);
+        //PlayerPrefs.SetInt("mechanist", 0);
 
         if (PlayerPrefs.GetInt("hunter") == 0)
         {

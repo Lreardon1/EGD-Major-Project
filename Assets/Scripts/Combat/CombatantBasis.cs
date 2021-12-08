@@ -226,15 +226,15 @@ public class CombatantBasis : MonoBehaviour
 
     public virtual void TakeDamage(float damageAmount, Card.Element damageType1, Card.Element damageType2, GameObject attacker)
     {
-
         statusScript.OnTakeDamageStatusHandler(statusCondition, attacker, (int)damageAmount);
 
         int shieldValue = temporaryHitPoints;
 
         int totalDamageAmount = (int)((damageAmount) / defenseMultiplier);
-
-        currentHitPoints -= (int)((damageAmount) / defenseMultiplier);
+        shieldValue -= (int)((damageAmount) / defenseMultiplier);
+        currentHitPoints += Mathf.Clamp(shieldValue, -10000, 0);
         Debug.Log(combatantName + " took " + totalDamageAmount + " of " + damageType1 + " type and " + damageType2);
+        animator.Play(combatantName + "_Get_Hit");
 
         // visuals, TODO : make a string construction system to color elements differently?
         MakePopup("<color=\"red\"> Took " + totalDamageAmount + "</color>", null, Color.white);
