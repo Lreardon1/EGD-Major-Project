@@ -26,12 +26,11 @@ public class TutorialManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    public void StartTutorial()
     {
         objective.text = "";
         player.GetComponent<OverworldMovement>().SetCanMove(false);
         StartCoroutine(waiter());
-
     }
 
     // Update is called once per frame
