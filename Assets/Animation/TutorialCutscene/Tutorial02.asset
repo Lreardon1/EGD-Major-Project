@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tutorial02
   m_EditorClassIdentifier: 
   dialogue:
-  - Well well, your fantasies bear fruit.
+  - Well well, fantasies and folklore bear fruit.
   - Do they really not require an incantation?
   - 'Such an alien notion: voiceless magic!'
   - ...
