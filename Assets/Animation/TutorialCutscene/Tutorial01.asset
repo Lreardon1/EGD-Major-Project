@@ -13,11 +13,65 @@ MonoBehaviour:
   m_Name: Tutorial01
   m_EditorClassIdentifier: 
   dialogue:
-  - I do not recognize this place...
-  - Your enthusiasm is wonderful, but do let it get us lost.
-  - Hmm? What did you find? Are those... cards?
+  - Aren't you afraid?
+  - 'Don''t look me like "what you are talking about", it sounds like I''m a coward. '
+  - (The wind howls inside the cave.)
+  - Okay, I admit it. I am a coward. Just stick with me please.
+  - (Fedir puts his hand in front of himself, tries to push the mana and channels
+    light magic, and failed.)
+  - How we are going to...
+  - (Serina pulls the left arm of Fedir before the ceiling falls onto his head.)
+  - Thank goddess.
+  - (Serina left him where he is, to let him think about his luck and his goddess.)
+  - Hey, Serina, wait!
+  - You sure it is the right way?
+  - (Serine isn't sure, but she knows that it is the only way they have now.)
+  - (After about 50 careful steps, their eyes got used to the darkness inside the
+    cave.)
+  - (At about 80 steps, they almost fall into another cave.)
+  - (And God knows how many more steps were there before they could see a dim light
+    in their sight.)
+  - (Fedir was about to run in that direction, while Serina pulled his arm, saved
+    him again from falling into another trap)
+  - Oh, thank you
+  - (Serina shakes her head, walked towards the source of light, and pulled that
+    rectangular-shaped piece, card, out of the earth.)
+  - This is...Here it is Serina! See! It is responding to your mana!
+  - (Fedir stared at the right hand of Serina, which flips around the card between
+    its fingers.)
+  - 'And there is a stream of light coming from the dark cave, that penetrated throw
+    the ground to appear in front of them. '
+  - (Serina's hand faces towards the cards inside the ground. The ground starts to
+    shake, then all the cards inside buried beneath vibrate and slip out of the earth
+    beneath where they are standing.)
+  - (A huge hollow appeared under her feet, and she started falling.)
+  - Serina!
+  - (Fedir tried to reach her hand, failed, and lost his balance, and fell into the
+    darkness.)
   images:
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
-  shouldProgresses: 000000
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  shouldProgresses: 00000000000000000000000000000000000000000000000000
