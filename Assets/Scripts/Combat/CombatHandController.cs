@@ -228,6 +228,7 @@ public class CombatHandController : MonoBehaviour
             DragDrop dd = card.GetComponent<DragDrop>();
             dd.allowedDropZones.Clear();
             card.transform.localScale = new Vector3(1, 1, 1);
+            card.GetComponent<CardEditHandler>().inCombat = false;
         }
     }
 }
