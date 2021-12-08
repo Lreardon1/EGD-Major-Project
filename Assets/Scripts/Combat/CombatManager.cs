@@ -71,6 +71,8 @@ public class CombatManager : MonoBehaviour
     public GameObject tutorialUIParent;
     public List<GameObject> tutorialTexts = new List<GameObject>();
 
+    public GameObject cardDisplay;
+
 
     public static bool IsInCVMode()
     {
@@ -88,7 +90,7 @@ public class CombatManager : MonoBehaviour
         
         initialPartyMembers.Add(partyMembers[0]);
 
-        pauseManager.AddPartyMember("priest", true);
+        //pauseManager.AddPartyMember("priest", true);
         //PlayerPrefs.SetInt("hunter", 0);
         //PlayerPrefs.SetInt("warrior", 0);
         //PlayerPrefs.SetInt("mechanist", 0);

@@ -8,6 +8,7 @@ public class CardEditHandler : MonoBehaviour
 
     public Card cardScript;
     public DeckCustomizer deckCustomizer;
+    public CombatManager combatManager;
     private CardEditor cardEditor;
     public Dictionary<GameObject, Modifier> activeModifiers = new Dictionary<GameObject, Modifier>();
 
@@ -47,30 +48,46 @@ public class CardEditHandler : MonoBehaviour
     public void DisplayCard()
     {
         if (inCombat)
-            return;
-        if (deckCustomizer == null)
         {
-            deckCustomizer = FindObjectOfType<DeckCustomizer>();
-            cardEditor = deckCustomizer.cardEditor.GetComponent<CardEditor>();
-        }
-        if (displayOnClick)
-        {
-            if (isCustomizable)
+            if (combatManager == null)
             {
-                //gameObject.GetComponent<Button>().interactable = false;
-                deckCustomizer.cardEditor.SetActive(true);
-                //instantiate editable card UI, allowing for changes with more buttons 
-                Card displayCard = cardEditor.editedCardRender.GetComponent<Card>();
-                cardEditor.LoadCard(cardScript);
-                formatModifierEditors(displayCard);
-                cardEditor.checkForChanges = true;
+                combatManager = FindObjectOfType<CombatManager>();
+                //cardEditor = deckCustomizer.cardEditor.GetComponent<CardEditor>();
             }
-            else
+
+            if (displayOnClick)
             {
-                //gameObject.GetComponent<Button>().interactable = false;
-                deckCustomizer.cardDisplay.SetActive(true);
-                Card displayCard = deckCustomizer.cardDisplay.transform.GetChild(0).gameObject.GetComponent<Card>();
+                combatManager.cardDisplay.SetActive(true);
+                Card displayCard = combatManager.cardDisplay.transform.GetChild(0).gameObject.GetComponent<Card>();
                 displayCard.VisualCopy(cardScript);
+            }
+        }
+        else
+        {
+            if (deckCustomizer == null)
+            {
+                deckCustomizer = FindObjectOfType<DeckCustomizer>();
+                cardEditor = deckCustomizer.cardEditor.GetComponent<CardEditor>();
+            }
+            if (displayOnClick)
+            {
+                if (isCustomizable)
+                {
+                    //gameObject.GetComponent<Button>().interactable = false;
+                    deckCustomizer.cardEditor.SetActive(true);
+                    //instantiate editable card UI, allowing for changes with more buttons 
+                    Card displayCard = cardEditor.editedCardRender.GetComponent<Card>();
+                    cardEditor.LoadCard(cardScript);
+                    formatModifierEditors(displayCard);
+                    cardEditor.checkForChanges = true;
+                }
+                else
+                {
+                    //gameObject.GetComponent<Button>().interactable = false;
+                    deckCustomizer.cardDisplay.SetActive(true);
+                    Card displayCard = deckCustomizer.cardDisplay.transform.GetChild(0).gameObject.GetComponent<Card>();
+                    displayCard.VisualCopy(cardScript);
+                }
             }
         }
         displayOnClick = true;

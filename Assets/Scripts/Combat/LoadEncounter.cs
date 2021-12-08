@@ -81,8 +81,11 @@ public class LoadEncounter : MonoBehaviour
 
     public void LoadCombatScene()
     {
-        overWorldMusic.Stop();
-        overWorldMap.SetActive(false);
+        if(overWorldMusic != null)
+            overWorldMusic.Stop();
+        if (overWorldMap != null)
+            overWorldMap.SetActive(false);
+
         SceneManager.LoadScene("BattleScene", LoadSceneMode.Additive);
         originalCameraPos = mainCam.transform.position;
         originalCameraRot = mainCam.transform.rotation;
@@ -113,8 +116,10 @@ public class LoadEncounter : MonoBehaviour
         mainCam.transform.position = originalCameraPos;
         mainCam.transform.rotation = originalCameraRot;
 
-        overWorldMusic.Play();
-        overWorldMap.SetActive(true);
+        if(overWorldMusic != null)
+            overWorldMusic.Play();
+        if (overWorldMap != null)
+            overWorldMap.SetActive(true);
 
         Deck.instance.SetDragger(overWorldDragger, true);
         inEncounter = false;
