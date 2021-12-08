@@ -35,6 +35,8 @@ public class LoadEncounter : MonoBehaviour
     private float tempTimer = 0f;
 
     public bool isTutorial = false;
+
+    public bool golemEncounter = false;
     
         // Start is called before the first frame update
     void Start()
@@ -70,6 +72,14 @@ public class LoadEncounter : MonoBehaviour
 
     public void GenerateEncounter()
     {
+        if(golemEncounter && !PlayerPrefs.HasKey("golemDefeated"))
+        {
+            PlayerPrefs.SetInt("golemDefeated", 1);
+        } else if(golemEncounter && PlayerPrefs.HasKey("golemDefeated"))
+        {
+            return;
+        }
+
         player.canMove = false;
         eventSystem.SetActive(false);
 
@@ -89,7 +99,7 @@ public class LoadEncounter : MonoBehaviour
         SceneManager.LoadScene("BattleScene", LoadSceneMode.Additive);
         originalCameraPos = mainCam.transform.position;
         originalCameraRot = mainCam.transform.rotation;
-        Invoke("SetUpCombatCamera", Time.deltaTime*5f);
+        Invoke("SetUpCombatCamera", Time.deltaTime*10f);
     }
 
     public void SetUpCombatCamera()
