@@ -68,7 +68,7 @@ public class CardParserManager : MonoBehaviour
         yield return new WaitUntil(StartAdviseEnd);
         phaseInfoText.text = "You may cheat";
         playText.text = "Cheating is expressly allowed.";
-        yield return new WaitForSeconds(0.07f);
+        yield return new WaitForSeconds(0.3f);
         playText.text = "";
 
         handCount = 0;
@@ -214,7 +214,7 @@ public class CardParserManager : MonoBehaviour
             playText.text = "Apply cards to allies and enemies...";
         else if (hasCardAttached)
             playText.text = "You focus on " + currentTarget.name + "... but they already have a card.";
-        else if (currentCard != null && Deck.instance.discard.Contains(currentCard))
+        else if (currentCard == null || Deck.instance.discard.Contains(currentCard))
             playText.text = "You focus on " + currentTarget.name + "... What card will you play?";
         else if (currentCard != null)
         {
@@ -464,17 +464,15 @@ public class CardParserManager : MonoBehaviour
         playText = backLoader.playText;
         cardText = backLoader.cardText;
         phaseInfoText = backLoader.phaseInfoText;
-        return; // TODO : remove after debuggin
 
         cm.SubscribeAsController(HandlePhaseStep, HandleRequestForInput);
-
 
         // TODO : sanity check but might just muddle things
         HandlePhaseStep(CombatManager.CombatPhase.None, CombatManager.CombatPhase.DrawPhase);
         currentInputHandler = StartCoroutine(RunInitDrawPhase(4));
 
         activeController = CombatManager.IsInCVMode;
-        // DisplayCardData(null, null);
+        DisplayCardData(null, null);
     }
 
     private int currentID = -1;
