@@ -11,6 +11,8 @@ public class CanvasManager : MonoBehaviour
     [SerializeField]
     public GameObject newModPopup;
     [SerializeField]
+    public GameObject minimapPopup;
+    [SerializeField]
     public MinimapManager minimap;
     [SerializeField]
     public PauseManager pauseManager;
@@ -21,7 +23,7 @@ public class CanvasManager : MonoBehaviour
 
     void Start()
     {
-        //PopUpNewModifiers();
+        PopUpFollowMap();
     }
 
     public void ToggleEditOption(bool state)
@@ -41,13 +43,19 @@ public class CanvasManager : MonoBehaviour
     public void PopUpNewModifiers()
     {
         newModPopup.GetComponent<Animator>().SetBool("open", true);
-        StartCoroutine(CloseNewModPopUp());
+        StartCoroutine(ClosePopUp(newModPopup, 5f));
     }
 
-    IEnumerator CloseNewModPopUp()
+    public void PopUpFollowMap()
     {
-        yield return new WaitForSeconds(5);
-        newModPopup.GetComponent<Animator>().SetBool("open", false);
+        minimapPopup.GetComponent<Animator>().SetBool("open", true);
+        StartCoroutine(ClosePopUp(minimapPopup, 8f));
+    }
+
+    IEnumerator ClosePopUp(GameObject pop, float time)
+    {
+        yield return new WaitForSeconds(time);
+        pop.GetComponent<Animator>().SetBool("open", false);
     }
 
     public void OpenCustomization(PlayerInteraction pi)
