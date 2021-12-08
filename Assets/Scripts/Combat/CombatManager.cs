@@ -14,9 +14,6 @@ using UnityEngine.UI;
 // and maybe even requests from the combat manager to active control scheme
 public class CombatManager : MonoBehaviour
 {
-    public static bool IsInCVMode = false;
-
-
     public enum CombatPhase {DrawPhase, PlayPhase, DiscardPhase, ActionPhase, EndPhase, None };
 
 
@@ -74,6 +71,11 @@ public class CombatManager : MonoBehaviour
     public GameObject tutorialUIParent;
     public List<GameObject> tutorialTexts = new List<GameObject>();
 
+
+    public static bool IsInCVMode()
+    {
+        return PlayerPrefs.GetInt("IsInCVMode", 0) == 1;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -220,7 +222,7 @@ public class CombatManager : MonoBehaviour
 
         // TODO : for CV I need an initial draw phase before play to allow the player to tell me their cards 
         // (or we can honestly just forego trying to track that)
-        if (!IsInCVMode) {
+        if (!IsInCVMode()) {
             ActivatePlayPhase();
         }
         else  {
@@ -243,7 +245,7 @@ public class CombatManager : MonoBehaviour
         currentPhase = CombatPhase.DrawPhase;
         currentPhaseText.text = "Draw Phase";
 
-        if (!IsInCVMode)
+        if (!IsInCVMode())
         {
             chc.UpdateDropZones();
             ToggleDrawButtons(true);
@@ -308,7 +310,7 @@ public class CombatManager : MonoBehaviour
 
     public IEnumerator DrawPhaseCoroutine()
     {
-        if (!IsInCVMode) // in CV mode, the CV manager will make this call
+        if (!IsInCVMode()) // in CV mode, the CV manager will make this call
         {
             bool done = false;
             while (!done)
@@ -333,10 +335,10 @@ public class CombatManager : MonoBehaviour
     {
         PhaseStepEvent.Invoke(currentPhase, CombatPhase.PlayPhase);
         currentPhase = CombatPhase.PlayPhase;
-        if (!IsInCVMode)
+        if (!IsInCVMode())
             chc.UpdateDropZones(); // CV TODO : drop zomes could be a thing to disable in CV mode
 
-        if (!IsInCVMode)
+        if (!IsInCVMode())
         {
             ToggleDrawButtons(false);
         }
@@ -347,7 +349,7 @@ public class CombatManager : MonoBehaviour
 
     public IEnumerator PlayPhaseCoroutine()
     {
-        if (!IsInCVMode) // if in CV mode, the CV controller will take care of switching
+        if (!IsInCVMode()) // if in CV mode, the CV controller will take care of switching
         {
             bool done = false;
             while (!done)
@@ -370,7 +372,7 @@ public class CombatManager : MonoBehaviour
     {
         PhaseStepEvent.Invoke(currentPhase, CombatPhase.DiscardPhase);
         currentPhase = CombatPhase.DiscardPhase;
-        if (!IsInCVMode)
+        if (!IsInCVMode())
         {
             chc.UpdateDropZones();
         }
@@ -382,7 +384,7 @@ public class CombatManager : MonoBehaviour
 
     public IEnumerator DiscardPhaseCoroutine()
     {
-        if (!IsInCVMode) // if in CV mode, the CV controller will take care of switching
+        if (!IsInCVMode()) // if in CV mode, the CV controller will take care of switching
         {
             bool done = false;
             while (!done)
@@ -405,7 +407,7 @@ public class CombatManager : MonoBehaviour
     {
         PhaseStepEvent.Invoke(currentPhase, CombatPhase.ActionPhase);
         currentPhase = CombatPhase.ActionPhase;
-        if (!IsInCVMode)
+        if (!IsInCVMode())
             chc.UpdateDropZones();
         reshuffleButton.interactable = false;
         currentPhaseText.text = "Action Phase";
@@ -421,7 +423,7 @@ public class CombatManager : MonoBehaviour
 
     public bool IsReadyToContinueActions()
     {
-        if (!IsInCVMode)
+        if (!IsInCVMode())
         {
             return Input.GetKeyDown(KeyCode.Space);
         } 
@@ -624,7 +626,7 @@ public class CombatManager : MonoBehaviour
     public void CheckEnoughMana()
     {
         // TODO : yea I don't know what to do here, but I want my controller in charge of this, not the combatmanager.
-        if (IsInCVMode)
+        if (IsInCVMode())
         {
             enoughMana = true;
             return;
@@ -656,7 +658,7 @@ public class CombatManager : MonoBehaviour
             cb.appliedCard = null;
             return false;
         }
-        if (!IsInCVMode)
+        if (!IsInCVMode())
         {
             if (cb.appliedCard != null)
             {
@@ -729,7 +731,7 @@ public class CombatManager : MonoBehaviour
         CombatantBasis cb = combatant.GetComponent<CombatantBasis>();
         Card cardScript = card.GetComponent<Card>();
         
-        if (!IsInCVMode)
+        if (!IsInCVMode())
         {
             if (currentMana - cardScript.manaCost < 0)
             {
@@ -770,18 +772,19 @@ public class CombatManager : MonoBehaviour
 
     public void DrawCards(int cardsToDraw)
     {
-        if (!IsInCVMode)
+        if (!IsInCVMode())
         {
             if (chc.DrawCards(cardsToDraw)) ;
                 NextPhase();
         }
     }
 
+    // TODO : DO NOT USE THIS FOR DISCARDS AFTER PLAY, ONLY AFTER DISCARDS
     public void DiscardCard(GameObject card)
     {
         AddMana(discardCost);
         manaText.text = "Mana: " + currentMana + "/" + maxMana;
-        if (!IsInCVMode)
+        if (!IsInCVMode())
             chc.DiscardCard(card);
     }
 
