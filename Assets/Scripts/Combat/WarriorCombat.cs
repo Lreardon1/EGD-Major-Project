@@ -19,6 +19,10 @@ public class WarriorCombat : CombatantBasis
         // visuals, TODO : make a string construction system to color elements differently?
         MakePopup("<color=\"red\"> Took " + totalDamageAmount + "</color>", null, Color.white);
 
+        //audio
+        audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Hit_Flash", typeof(AudioClip)), 0.7f);
+
+
         //if damage shielded during attack
         if (shieldValue > 0 && shieldReturnDmg > 0)
         {
@@ -101,6 +105,7 @@ public class WarriorCombat : CombatantBasis
 
     public override void Special()
     {
+        
         Block();
         canCounterAttack = true;
         // Do special Defend party mechanic

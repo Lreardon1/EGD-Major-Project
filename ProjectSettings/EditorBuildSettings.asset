@@ -21,12 +21,12 @@ EditorBuildSettings:
     path: Assets/Scenes/OverworldTest.unity
     guid: 8c45b66b70b42a243a4648dd6ef7498c
   - enabled: 1
-    path: Assets/Scenes/BattleSceneWithCV.unity
-    guid: 4dee65eedb094bd4d92fdf8483e710aa
+    path: Assets/Scenes/RPS_CardGame.unity
+    guid: 04b3fc4d72e6ea94f8a44369f7de78b0
   - enabled: 1
     path: Assets/Scenes/Tutorial.unity
     guid: 6dd0d01d56bbffc4cabba5177c08d338
   - enabled: 1
-    path: Assets/Scenes/RPS_CardGame.unity
-    guid: 04b3fc4d72e6ea94f8a44369f7de78b0
+    path: Assets/Scenes/FinalDungeon.unity
+    guid: e2e77ae37e75f0d4ebd0091a9e4deb11
   m_configObjects: {}

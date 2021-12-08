@@ -41,6 +41,7 @@ public class MemorySceneLoader : MonoBehaviour
 
     internal static bool HasScenePos()
     {
+        print("Checking for " + SceneManager.GetActiveScene().name + "_LoadPos1");
         return PlayerPrefs.HasKey(SceneManager.GetActiveScene().name + "_LoadPos1");
     }
 }
