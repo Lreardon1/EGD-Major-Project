@@ -66,6 +66,9 @@ public class CardParserManager : MonoBehaviour
         phaseInfoText.text = "Shuffle Deck";
         playText.text = "Shuffle your whole deck together then press SPACE.";
         yield return new WaitUntil(StartAdviseEnd);
+        phaseInfoText.text = "Play in a Bright Environment";
+        playText.text = "Please, play in a bright environment.";
+        yield return new WaitForSeconds(2.5f);
         phaseInfoText.text = "You may cheat";
         playText.text = "Cheating is expressly allowed.";
         yield return new WaitForSeconds(0.3f);
