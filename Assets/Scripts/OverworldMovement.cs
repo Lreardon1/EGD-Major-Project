@@ -51,6 +51,9 @@ public class OverworldMovement : MonoBehaviour
         if (MemorySceneLoader.HasScenePos())
             LoadScenePos();
 
+
+        MemorySceneLoader.SetPlayerPosPref(transform.position);
+
         directionY = "left";
         directionX = "forward";
         //Fetch the SpriteRenderer from the GameObject and other party gameobjects
