@@ -33,6 +33,8 @@ public class LoadEncounter : MonoBehaviour
     private GameObject encounter;
 
     private float tempTimer = 0f;
+
+    public bool isTutorial = false;
     
         // Start is called before the first frame update
     void Start()
@@ -79,18 +81,25 @@ public class LoadEncounter : MonoBehaviour
 
     public void LoadCombatScene()
     {
-        overWorldMusic.Stop();
-        overWorldMap.SetActive(false);
+        if(overWorldMusic != null)
+            overWorldMusic.Stop();
+        if (overWorldMap != null)
+            overWorldMap.SetActive(false);
+
         SceneManager.LoadScene("BattleScene", LoadSceneMode.Additive);
         originalCameraPos = mainCam.transform.position;
         originalCameraRot = mainCam.transform.rotation;
-        Invoke("SetUpCombatCamera", Time.deltaTime*2f);
+        Invoke("SetUpCombatCamera", Time.deltaTime*5f);
     }
 
     public void SetUpCombatCamera()
     {
         CombatManager cm = FindObjectOfType<CombatManager>();
         cm.encounterScript = this;
+        if(isTutorial)
+        {
+            cm.ActivateTutorial();
+        }
         mainCam.transform.SetParent(null);
         cameraParent.gameObject.SetActive(false);
         mainCam.transform.position = cm.cameraPosition;
@@ -107,8 +116,10 @@ public class LoadEncounter : MonoBehaviour
         mainCam.transform.position = originalCameraPos;
         mainCam.transform.rotation = originalCameraRot;
 
-        overWorldMusic.Play();
-        overWorldMap.SetActive(true);
+        if(overWorldMusic != null)
+            overWorldMusic.Play();
+        if (overWorldMap != null)
+            overWorldMap.SetActive(true);
 
         Deck.instance.SetDragger(overWorldDragger, true);
         inEncounter = false;

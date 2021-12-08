@@ -53,6 +53,8 @@ public class CombatantBasis : MonoBehaviour
     public PauseManager pauseManager;
     public Animator animator;
 
+    public AudioSource audioSource;
+
     // TODO : solution because no function is called to inform combatbasis of changed applied card
     public GameObject appliedCard = null;
     /*{
@@ -100,6 +102,8 @@ public class CombatantBasis : MonoBehaviour
 
         nextActionPrimaryElems.Add(Card.Element.None);
         nextActionSecondaryElems.Add(Card.Element.None);
+
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     public void MakePopup(string text, Texture2D image, Color col)
@@ -212,6 +216,10 @@ public class CombatantBasis : MonoBehaviour
         // visuals
         MakePopup("<color=\"green\"> Healed for " + healingAmount + "</color>", null, Color.white);
         healthBar.SetHealth(currentHitPoints);
+
+        //audio
+        audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Magic_Heal", typeof(AudioClip)), 0.7f);
+
     }
 
     public void TakeStatusDamage(float damageAmount, Status status)
@@ -222,6 +230,10 @@ public class CombatantBasis : MonoBehaviour
         MakePopup("<color=\"red\"> Took " + damageAmount + " status damange for " + status + "</color>", null, Color.white);
         healthBar.SetHealth(currentHitPoints);
         CheckIsSlain();
+
+        //audio
+        audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Hit_Flash", typeof(AudioClip)), 0.7f);
+
     }
 
     public virtual void TakeDamage(float damageAmount, Card.Element damageType1, Card.Element damageType2, GameObject attacker)
@@ -238,6 +250,10 @@ public class CombatantBasis : MonoBehaviour
 
         // visuals, TODO : make a string construction system to color elements differently?
         MakePopup("<color=\"red\"> Took " + totalDamageAmount + "</color>", null, Color.white);
+
+        //audio
+        audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Hit_Flash", typeof(AudioClip)), 0.7f);
+
 
         //if damage shielded during attack
         if (shieldValue > 0 && shieldReturnDmg > 0)
@@ -467,6 +483,43 @@ public class CombatantBasis : MonoBehaviour
 
         float damageTotal = (attack + attackCardBonus) * attackMultiplier; // Get modifier from card here
 
+        if (nextActionPrimaryElems[nextActionPrimaryElems.Count - 1] == Card.Element.Air)
+        {
+            //audio
+            audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Magic_Cast(Air)", typeof(AudioClip)), 0.7f);
+        }
+        else if (nextActionPrimaryElems[nextActionPrimaryElems.Count - 1] == Card.Element.Dark)
+        {
+            //audio
+            audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Magic_Dark", typeof(AudioClip)), 0.7f);
+        }
+        else if (nextActionPrimaryElems[nextActionPrimaryElems.Count - 1] == Card.Element.Light)
+        {
+            //audio
+            audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Magic_Light", typeof(AudioClip)), 0.7f);
+        }
+        else if (nextActionPrimaryElems[nextActionPrimaryElems.Count - 1] == Card.Element.Earth)
+        {
+            //audio
+            audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/MagicHit_Earth", typeof(AudioClip)), 0.7f);
+        }
+        else if (nextActionPrimaryElems[nextActionPrimaryElems.Count - 1] == Card.Element.Fire)
+        {
+            //audio
+            audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/MagicHit_Ignite", typeof(AudioClip)), 0.7f);
+        }
+        else if (nextActionPrimaryElems[nextActionPrimaryElems.Count - 1] == Card.Element.Water)
+        {
+            //audio
+            audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/MagicHit_Water", typeof(AudioClip)), 0.7f);
+        }
+        else
+        {
+            //audio
+            audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Attack_Light", typeof(AudioClip)), 0.7f);
+        }
+
+
         cb.TakeDamage(damageTotal, nextActionPrimaryElems[nextActionPrimaryElems.Count-1], nextActionSecondaryElems[nextActionSecondaryElems.Count-1], gameObject);
 
         Debug.Log("Attack");
@@ -482,6 +535,7 @@ public class CombatantBasis : MonoBehaviour
         {
             canCounterAttack = true;
         }
+        audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Block", typeof(AudioClip)), 0.7f);
 
         Debug.Log("Block");
     }

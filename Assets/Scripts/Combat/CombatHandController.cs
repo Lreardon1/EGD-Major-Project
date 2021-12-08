@@ -31,7 +31,7 @@ public class CombatHandController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (!isActiveControlScheme || CombatManager.IsInCVMode)
+        if (!isActiveControlScheme || CombatManager.IsInCVMode())
             return;
 
         mainCam = FindObjectOfType<Camera>();
@@ -39,7 +39,7 @@ public class CombatHandController : MonoBehaviour
 
     private void Awake()
     {
-        if (!isActiveControlScheme || CombatManager.IsInCVMode)
+        if (!isActiveControlScheme || CombatManager.IsInCVMode())
             return;
 
         Invoke("DrawStartingHand", 0.1f);
@@ -76,6 +76,16 @@ public class CombatHandController : MonoBehaviour
         foreach (GameObject card in cardsInHand)
         {
             card.GetComponent<DragDrop>().isDraggable = true;
+        }
+    }
+
+    public void SetUpTutorial()
+    {
+        foreach (GameObject card in Deck.instance.allCards)
+        {
+            DragDrop dd = card.GetComponent<DragDrop>();
+            dd.isDraggable = false;
+            dd.allowedDropZones.Clear();
         }
     }
 
@@ -218,6 +228,7 @@ public class CombatHandController : MonoBehaviour
             DragDrop dd = card.GetComponent<DragDrop>();
             dd.allowedDropZones.Clear();
             card.transform.localScale = new Vector3(1, 1, 1);
+            card.GetComponent<CardEditHandler>().inCombat = false;
         }
     }
 }

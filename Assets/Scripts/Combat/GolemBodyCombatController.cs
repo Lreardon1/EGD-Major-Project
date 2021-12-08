@@ -8,7 +8,7 @@ public class GolemBodyCombatController : CombatantBasis
     public override void Special()
     {
         MakePopup("Using Special Reinforce", null, Color.white);
-
+        audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Hit_Metal", typeof(AudioClip)), 0.7f);
         CombatManager cm = FindObjectOfType<CombatManager>();
         List<GameObject> adjacentArms = cm.GetAdjacentCombatants(this.gameObject);
 

@@ -9,7 +9,7 @@ public class GolemHandCombatController : CombatantBasis
     public override void Special()
     {
         MakePopup("Using Special Earthern Shake", null, Color.white);
-
+        audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Attack_Heavy", typeof(AudioClip)), 0.7f);
         CombatManager cm = FindObjectOfType<CombatManager>();
         List<GameObject> adjacentTargets = cm.GetAdjacentCombatants(target);
         

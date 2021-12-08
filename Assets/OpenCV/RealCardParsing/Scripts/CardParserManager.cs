@@ -483,7 +483,7 @@ public class CardParserManager : MonoBehaviour
         HandlePhaseStep(CombatManager.CombatPhase.None, CombatManager.CombatPhase.DrawPhase);
         currentInputHandler = StartCoroutine(RunInitDrawPhase(4));
 
-        activeController = CombatManager.IsInCVMode;
+        activeController = CombatManager.IsInCVMode();
         DisplayCardData(null, null);
     }
 

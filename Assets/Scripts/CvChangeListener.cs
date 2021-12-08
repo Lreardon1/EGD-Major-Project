@@ -13,13 +13,14 @@ public class CvChangeListener : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.V))
+        /*if (Input.GetKeyDown(KeyCode.V))
         {
-            CombatManager.IsInCVMode = !CombatManager.IsInCVMode;
-            if (CombatManager.IsInCVMode)
+            bool isInCV = !CombatManager.IsInCVMode();
+            PlayerPrefs.SetInt("IsInCVMode", isInCV ? 1 : 0);
+            if (CombatManager.IsInCVMode())
                 print("Switched to CV mode");
             else
                 print("Switched to regular mode");
-        }
+        }*/
     }
 }

@@ -85,7 +85,8 @@ public class HunterCombat : CombatantBasis
     {
         CombatManager cm = FindObjectOfType<CombatManager>();
         specialAttack = true;
-        foreach(GameObject enemy in cm.activeEnemies)
+        audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Bow_Shoot", typeof(AudioClip)), 0.7f);
+        foreach (GameObject enemy in cm.activeEnemies)
         {
             if (enemy.GetComponent<CombatantBasis>().isSlain)
                 continue;

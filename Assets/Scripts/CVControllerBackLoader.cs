@@ -35,7 +35,7 @@ public class CVControllerBackLoader : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        if (CombatManager.IsInCVMode && CardParserManager.instance != null)
+        if (CombatManager.IsInCVMode() && CardParserManager.instance != null)
         {
             if (WebCamTexture.devices.Length > 1)
                 DeviceName = WebCamTexture.devices[WebCamTexture.devices.Length - 2].name;
@@ -89,6 +89,13 @@ public class CVControllerBackLoader : MonoBehaviour
 
             if (null != webCamTexture && webCamTexture.isPlaying)
                 webCamTexture.Stop();
+
+            if (value == null)
+            {
+                webCamDevice = null;
+                webCamTexture = null;
+                return;
+            }
 
             // get device index
             int cameraIndex = -1;
@@ -197,18 +204,9 @@ public class CVControllerBackLoader : MonoBehaviour
     void OnDestroy()
     {
         print("DESTROYING");
-        if (webCamTexture != null)
+        if (DeviceName != null)
         {
-            if (webCamTexture.isPlaying)
-            {
-                webCamTexture.Stop();
-            }
-            webCamTexture = null;
-        }
-
-        if (webCamDevice != null)
-        {
-            webCamDevice = null;
+            DeviceName = null;
         }
     }
 }

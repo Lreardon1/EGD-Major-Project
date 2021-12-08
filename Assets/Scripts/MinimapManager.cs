@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,12 +14,31 @@ public class MinimapManager : MonoBehaviour
     public float dampenSpeed;
     public GameObject destinationPoint;
     public GameObject playerPoint;
+
+    public void UpdateTargetDestination()
+    {
+        if (PlayerPrefs.GetInt("warrior", 0) == 1)
+            destination = afterMeetupDestination.position;
+        else if (PlayerPrefs.GetInt("hasCards", 0) == 1)
+            destination = afterCaveDestination.position;
+        else if (PlayerPrefs.GetInt("priest", 0) == 1)
+            destination = afterChurchDestination.position;
+        else
+            destination = startingDestination.position;
+    }
+
     [SerializeField]
     public GameObject minimapAll;
     public RawImage visualMap;
     private Camera mapCam;
 
     public static MinimapManager instance;
+
+    [Header("Destinations")]
+    public Transform startingDestination;
+    public Transform afterChurchDestination;
+    public Transform afterCaveDestination;
+    public Transform afterMeetupDestination;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +50,15 @@ public class MinimapManager : MonoBehaviour
         this.transform.position = playerPos;
         destinationPoint.transform.localScale = new Vector3(waypointSize, waypointSize, waypointSize);
         mapCam = GetComponent<Camera>();
+
+        if (PlayerPrefs.GetInt("warrior", 0) == 1)
+            destination = afterMeetupDestination.position;
+        else if (PlayerPrefs.GetInt("hasCards", 0) == 1)
+            destination = afterCaveDestination.position;
+        else if (PlayerPrefs.GetInt("priest", 0) == 1)
+            destination = afterChurchDestination.position;
+        else
+            destination = startingDestination.position;
     }
 
     // Update is called once per frame

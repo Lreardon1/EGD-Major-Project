@@ -211,9 +211,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   revealed: 0
   cardSprites:
-  - {fileID: 21300000, guid: a7136afee951be345a2e7e503284caab, type: 3}
-  - {fileID: 21300000, guid: ebd2a505b77a8eb43a6b4260d03aca6c, type: 3}
-  - {fileID: 21300000, guid: 7a7896ccb211b634fbf09e7f1f560486, type: 3}
+  - {fileID: 21300000, guid: 039028c230f0616429d4338b63cb15f8, type: 3}
+  - {fileID: 21300000, guid: f1f9c3eca88141c47aff418086a32d57, type: 3}
+  - {fileID: 21300000, guid: 9316dc4a2a2d7d0429e76ffc7bd22abb, type: 3}
   - {fileID: 21300000, guid: 92d12a4458dbf03479911e1400b7a664, type: 3}
   sr: {fileID: 9071171892540039079}
   revealFoldUpPivot: 2

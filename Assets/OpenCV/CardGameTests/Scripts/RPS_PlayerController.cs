@@ -273,10 +273,18 @@ public class RPS_PlayerController : MonoBehaviour
     WebCamTexture webCamTexture;
     WebCamDevice? webCamDevice;
     protected bool lookingForInput = false;
-
+    protected bool canContinue = true;
     // Update is called once per frame
     void Update()
     {
+        if (!canContinue) return;
+
+        if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.Q))
+        {
+            MemorySceneLoader.LoadToOverworld("RPS_CardGame");
+            canContinue = false;
+        }
+
         if (!lookingForInput) {
             cardParser.ResetRPS();
             return;
@@ -315,6 +323,14 @@ public class RPS_PlayerController : MonoBehaviour
 
             if (null != webCamTexture && webCamTexture.isPlaying)
                 webCamTexture.Stop();
+
+
+            if (value == null)
+            {
+                webCamDevice = null;
+                webCamTexture = null;
+                return;
+            }
 
             // get device index
             int cameraIndex = -1;
@@ -419,22 +435,24 @@ public class RPS_PlayerController : MonoBehaviour
 
         //UnityEngine.Debug.Log (string.Format("front = {0}, vertMirrored = {1}, angle = {2}", webCamDevice.isFrontFacing, webCamTexture.videoVerticallyMirrored, webCamTexture.videoRotationAngle));
     }
+    
 
     void OnDestroy()
     {
         print("DESTROYING");
-        if (webCamTexture != null)
+        /*if (webCamTexture != null)
         {
             if (webCamTexture.isPlaying)
             {
                 webCamTexture.Stop();
             }
             webCamTexture = null;
-        }
+        }*/
 
-        if (webCamDevice != null)
+        if (DeviceName != null)
         {
-            webCamDevice = null;
+            DeviceName = null;
         }
+        
     }
 }

@@ -7,18 +7,21 @@ public class CutsceneTrigger : MonoBehaviour
 
     public enum CutsceneTriggerConditions
     {
-        NoPriest,
         GameStart,
-        CardsGained, 
-        Etc
+        NoPriest,
+        NoHunter, 
+        NoWarrior
     }
 
     public void Start()
     {
-        if (PlayerPrefs.HasKey("priest") && triggerCondition == CutsceneTriggerConditions.NoPriest)
+        if (PlayerPrefs.GetInt("priest", 0) == 1 && triggerCondition == CutsceneTriggerConditions.NoPriest)
             animController.gameObject.SetActive(false);
-        if (!PlayerPrefs.HasKey("hasCards") && triggerCondition == CutsceneTriggerConditions.CardsGained)
+        if ((!PlayerPrefs.HasKey("hasCards") || PlayerPrefs.GetInt("hunter", 0) == 1) && triggerCondition == CutsceneTriggerConditions.NoHunter)
             animController.gameObject.SetActive(false);
+        if ((!PlayerPrefs.HasKey("hasCards") || PlayerPrefs.GetInt("warrior", 0) == 1) && triggerCondition == CutsceneTriggerConditions.NoWarrior)
+            animController.gameObject.SetActive(false);
+
     }
 
     public CutsceneTriggerConditions triggerCondition;
