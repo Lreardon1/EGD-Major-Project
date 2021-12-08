@@ -8,5 +8,6 @@ public class AfterCardPickupActions : AfterCutsceneActions
     {
         Debug.LogError("MAKE CHANGES AND SET VARIABLES AFTER CARD CUTSCENE");
         AfterCutsceneActions.HasCards = true;
+        PlayerPrefs.SetInt("hasCards", 1);
     }
 }

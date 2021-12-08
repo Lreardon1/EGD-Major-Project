@@ -15,7 +15,9 @@ public class CardGamePlayerDialogue : MonoBehaviour
     public string SceneToLoad;
     public bool inTrigger = false;
 
-    public bool hasCards = true;
+
+    private Vector3 playerPos;
+
 
     // Start is called before the first frame update
     void Start()
@@ -33,9 +35,11 @@ public class CardGamePlayerDialogue : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        bool hasCards = PlayerPrefs.HasKey("hasCards");
+        hasCards = true;
         if (hasCards && inTrigger && Input.GetKeyDown(KeyCode.Space))
         {
-            SceneManager.LoadScene(SceneToLoad);
+            MemorySceneLoader.LoadFromOverworld(SceneToLoad, playerPos);
         }
     }
     
@@ -45,6 +49,9 @@ public class CardGamePlayerDialogue : MonoBehaviour
         //other.name should equal the root of your Player object
         if (other.name == "Player")
         {
+            bool hasCards = PlayerPrefs.HasKey("hasCards");
+            hasCards = true;
+            playerPos = other.transform.position;
             uitext.text = hasCards ? cardsOpening : noCardsOpening;
             speaker.gameObject.SetActive(true);
             speaker.text = _name;
