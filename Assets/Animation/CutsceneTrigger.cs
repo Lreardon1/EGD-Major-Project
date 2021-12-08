@@ -7,9 +7,18 @@ public class CutsceneTrigger : MonoBehaviour
 
     public enum CutsceneTriggerConditions
     {
+        NoPriest,
         GameStart,
         CardsGained, 
         Etc
+    }
+
+    public void Start()
+    {
+        if (PlayerPrefs.HasKey("priest") && triggerCondition == CutsceneTriggerConditions.NoPriest)
+            animController.gameObject.SetActive(false);
+        if (!PlayerPrefs.HasKey("hasCards") && triggerCondition == CutsceneTriggerConditions.CardsGained)
+            animController.gameObject.SetActive(false);
     }
 
     public CutsceneTriggerConditions triggerCondition;
@@ -17,26 +26,29 @@ public class CutsceneTrigger : MonoBehaviour
 
     private void TriggerCutscene()
     {
-        print("TRIGGER");
         animController.PlayCutscene();
         Destroy(this);
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        TriggerCutscene();
+
+        /*
         switch (triggerCondition)
         {
+            case CutsceneTriggerConditions.NoPriest:
+                TriggerCutscene();
+                break;
             case CutsceneTriggerConditions.GameStart:
                 TriggerCutscene();
                 break;
             case CutsceneTriggerConditions.CardsGained:
-                if (AfterCutsceneActions.HasCards)
-                {
-                    TriggerCutscene();
-                }
+                TriggerCutscene();
                 break;
             case CutsceneTriggerConditions.Etc:
                 break;
         }
+        */
     }
 }

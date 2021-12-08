@@ -131,17 +131,17 @@ public class CombatHandController : MonoBehaviour
         }
     }
 
-    public void DrawCards(int cardAmount)
+    public bool DrawCards(int cardAmount)
     {
         if (transform.childCount + cardAmount > maxHandSize)
         {
             Debug.Log("You Can't Draw That Many Cards!");
-            return;
+            return false;
         }
         if(Deck.instance.deck.Count < cardAmount)
         {
             Debug.Log("Not Enough Cards In Deck To Draw!");
-            return;
+            return false;
         }
 
         for(int i = 0; i < cardAmount; i++)
@@ -156,21 +156,22 @@ public class CombatHandController : MonoBehaviour
         switch (cardAmount)
         {
             case 0:
-                cm.AddMana(18);
+                cm.AddMana(17);
                 break;
             case 1:
-                cm.AddMana(16);
-                break;
-            case 2:
                 cm.AddMana(14);
                 break;
+            case 2:
+                cm.AddMana(11);
+                break;
             case 3:
-                cm.AddMana(12);
+                cm.AddMana(8);
                 break;
             case 4:
-                cm.AddMana(10);
+                cm.AddMana(5);
                 break;
         }
+        return true;
     }
 
     public void DiscardCard(GameObject card)

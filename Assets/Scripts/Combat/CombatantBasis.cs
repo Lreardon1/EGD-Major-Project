@@ -226,15 +226,15 @@ public class CombatantBasis : MonoBehaviour
 
     public virtual void TakeDamage(float damageAmount, Card.Element damageType1, Card.Element damageType2, GameObject attacker)
     {
-
         statusScript.OnTakeDamageStatusHandler(statusCondition, attacker, (int)damageAmount);
 
         int shieldValue = temporaryHitPoints;
 
         int totalDamageAmount = (int)((damageAmount) / defenseMultiplier);
-
-        currentHitPoints -= (int)((damageAmount) / defenseMultiplier);
+        shieldValue -= (int)((damageAmount) / defenseMultiplier);
+        currentHitPoints += Mathf.Clamp(shieldValue, -10000, 0);
         Debug.Log(combatantName + " took " + totalDamageAmount + " of " + damageType1 + " type and " + damageType2);
+        animator.Play(combatantName + "_Get_Hit");
 
         // visuals, TODO : make a string construction system to color elements differently?
         MakePopup("<color=\"red\"> Took " + totalDamageAmount + "</color>", null, Color.white);
@@ -285,7 +285,13 @@ public class CombatantBasis : MonoBehaviour
             healthBar.gameObject.SetActive(false);
             lr.gameObject.SetActive(false);
             text.enabled = false;
-            animator.SetBool("IsSlain", true);
+            if(isEnemy)
+                animator.SetBool("IsSlain", true); 
+            else
+            {
+                CombatManager cm = FindObjectOfType<CombatManager>();
+                cm.PutPartyMemberInTimeOut(this.gameObject);
+            }
             return true;
         }
         return false;
@@ -397,10 +403,11 @@ public class CombatantBasis : MonoBehaviour
 
     }
 
-    public virtual void SelectTarget() //TODO:: STILL NEEDS TO HANDLE RETARGETTING IF RANDOMLY CHOOSING UNTARGETTABLE COMBATANT
+    public virtual void SelectTarget() 
     {
         CombatManager cm = FindObjectOfType<CombatManager>();
         List<GameObject> targets = new List<GameObject>();
+        
         if (isEnemy)
             targets = cm.activePartyMembers;
         else
@@ -410,6 +417,26 @@ public class CombatantBasis : MonoBehaviour
             target = null;
             return;
         }
+        if (oldTarget != null)
+        {
+            targets.Remove(oldTarget);
+        }
+        List<GameObject> targetable = new List<GameObject>();
+        foreach(GameObject targ in targets)
+        {
+            if (targ.GetComponent<CombatantBasis>().untargettable == false)
+                targetable.Add(targ);
+        }
+        targets = targetable;
+
+        if(targets.Count == 0)
+        {
+            Debug.Log("No Targets Available");
+            nextAction = Action.Block;
+            text.text = "Block";
+            return;
+        }
+
         int randint = Random.Range(0, targets.Count);
         target = targets[randint];
         if(nextAction == Action.Attack)
@@ -424,6 +451,14 @@ public class CombatantBasis : MonoBehaviour
         lr.SetPosition(0, targetLineStart.position);
         lr.SetPosition(1, target.transform.position);
         lr.enabled = true;
+    }
+
+    public void UpdateTargetName()
+    {
+        if(nextAction == Action.Attack)
+            text.text = "Attack " + target.GetComponent<CombatantBasis>().combatantName;
+        else if(specialHasTarget && nextAction == Action.Special)
+            text.text = "Special " + target.GetComponent<CombatantBasis>().combatantName;
     }
 
     public virtual void Attack()

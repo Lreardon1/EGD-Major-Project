@@ -262,6 +262,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  pauseManager: {fileID: 0}
   velocity: {x: 0, y: 0, z: 0}
   turnSpeed: 100
   backoff: 0.14

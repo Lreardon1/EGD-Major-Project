@@ -68,7 +68,7 @@ public class CardParserManager : MonoBehaviour
         yield return new WaitUntil(StartAdviseEnd);
         phaseInfoText.text = "You may cheat";
         playText.text = "Cheating is expressly allowed.";
-        yield return new WaitForSeconds(0.07f);
+        yield return new WaitForSeconds(0.3f);
         playText.text = "";
 
         handCount = 0;
@@ -128,7 +128,8 @@ public class CardParserManager : MonoBehaviour
 
     public void HandleNewImage(WebCamTexture webCamTexture)
     {
-        cardParser.ProcessTexture(webCamTexture);
+        if (cardParser.GetMode() != CardParser.ParseMode.Disabled)
+            cardParser.ProcessTexture(webCamTexture);
     }
 
     int[] manaToDrawCounts = new int[] { 18, 16, 14, 12, 10 }; 
@@ -214,7 +215,7 @@ public class CardParserManager : MonoBehaviour
             playText.text = "Apply cards to allies and enemies...";
         else if (hasCardAttached)
             playText.text = "You focus on " + currentTarget.name + "... but they already have a card.";
-        else if (currentCard != null && Deck.instance.discard.Contains(currentCard))
+        else if (currentCard == null || Deck.instance.discard.Contains(currentCard))
             playText.text = "You focus on " + currentTarget.name + "... What card will you play?";
         else if (currentCard != null)
         {
@@ -225,6 +226,8 @@ public class CardParserManager : MonoBehaviour
 
     private bool CanPlayMore()
     {
+        if (handCount <= 0) return false;
+
         foreach (GameObject c in cm.activeEnemies)
             if (c.GetComponent<CombatantBasis>().appliedCard == null)
                 return true;
@@ -238,7 +241,7 @@ public class CardParserManager : MonoBehaviour
     {
         cardParser.UpdateMode(CardParser.ParseMode.GetCardFromAll);
         currentCard = null;
-        phaseInfoText.text = "Play Phase: Play cards on allies and enemies. Press SPACE to continue.";
+        phaseInfoText.text = "Play Phase: Play cards. Press SPACE to continue.";
 
         while (CanPlayMore())
         {
@@ -278,6 +281,7 @@ public class CardParserManager : MonoBehaviour
                 cm.ApplyCard(currentCard, currentTarget);
                 timeSpentWithCard = 0.0f;
                 progressIndicator.fillAmount = 0.0f;
+                handCount -= 1;
                 playText.text = "Played " + currentCard.GetComponent<Card>().cardName + ". Put the card in your Discard pile.";
                 for (float t = 0; t < 1.0f; t += Time.deltaTime) { yield return null; if (Input.GetKeyDown(KeyCode.Space)) break; }
             } else
@@ -363,15 +367,14 @@ public class CardParserManager : MonoBehaviour
         cardParser.UpdateMode(CardParser.ParseMode.GetCardFromAll);
 
         CombatantBasis cb = cm.actionOrder[0].GetComponent<CombatantBasis>();
-        print("Running an action phase for " + cb.combatantName);
 
-        phaseInfoText.text = "Action Phase for " + cb.name + ". You can play a card on them or skip with Space.";
+        phaseInfoText.text = "Action Phase for " + cb.name + ". ";
         if (cb.appliedCard != null)
         {
-            playText.text = "Currently, cannot play because " + cb.combatantName + " already has played card.";
-            yield return new WaitForSeconds(0.4f);
+            playText.text = "Cannot play a card because " + cb.combatantName + " already has card applied.";
+            yield return new WaitForSeconds(1.1f);
             goto FinishAction;
-        } else
+        } else if (CanPlayMore())
         {
             // TRACK IN A LOOP TO NET A CARD
             timeSpentWithCard = 0.0f;
@@ -380,14 +383,14 @@ public class CardParserManager : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     playText.text = "Skipping play on " + cb.combatantName + "...";
-                    yield return new WaitForSeconds(0.4f);
+                    yield return new WaitForSeconds(0.7f);
                     goto FinishAction;
                 }
 
 
                 if (currentCard == null || Deck.instance.discard.Contains(currentCard))
                 {
-                    playText.text = "Play Card on " + cb.combatantName + "?";
+                    playText.text = "Play Card on " + cb.combatantName + "? (Or skip with SPACE.)";
                     timeSpentWithCard = Mathf.Max(0, timeSpentWithCard - (Time.deltaTime * 3));
                     progressIndicator.fillAmount = timeSpentWithCard / timeToCompletePlay;
                 }
@@ -399,15 +402,24 @@ public class CardParserManager : MonoBehaviour
                 }
                 yield return null;
             }
-            // TODO : applycard should add the card back to the discard pile of the deck
+
+            // apply card should add the card back to the discard pile of the deck
             cm.ApplyCard(currentCard, cm.actionOrder[0]);
             handCount -= 1;
+            goto FinishAction;
         }
 
+        if (!CanPlayMore())
+        {
+            playText.text = "Cannot play card. Your hand is empty.";
+            yield return new WaitForSeconds(0.7f);
+        }
 
     FinishAction:
+
         cardParser.UpdateMode(CardParser.ParseMode.Disabled);
         progressIndicator.fillAmount = 0.0f;
+        phaseInfoText.text = "";
         playText.text = "";
         currentInputHandler = null;
         cm.CVReadyToContinueActions();
@@ -464,17 +476,15 @@ public class CardParserManager : MonoBehaviour
         playText = backLoader.playText;
         cardText = backLoader.cardText;
         phaseInfoText = backLoader.phaseInfoText;
-        return; // TODO : remove after debuggin
 
         cm.SubscribeAsController(HandlePhaseStep, HandleRequestForInput);
-
 
         // TODO : sanity check but might just muddle things
         HandlePhaseStep(CombatManager.CombatPhase.None, CombatManager.CombatPhase.DrawPhase);
         currentInputHandler = StartCoroutine(RunInitDrawPhase(4));
 
         activeController = CombatManager.IsInCVMode;
-        // DisplayCardData(null, null);
+        DisplayCardData(null, null);
     }
 
     private int currentID = -1;
@@ -595,7 +605,6 @@ public class CardParserManager : MonoBehaviour
     
     public void UpdateStickerDebugs(int i, Mat sticker)
     {
-        stickerImage1.enabled = stickerImage2.enabled = stickerImage3.enabled = true;
         RawImage stickerImage = null;
         switch(i)
         {
@@ -609,6 +618,8 @@ public class CardParserManager : MonoBehaviour
                 stickerImage = stickerImage3;
                 break;
         }
+        if (stickerImage == null) return;
+
         if (stickerImage.texture != null)
             Destroy(stickerImage.texture);
 

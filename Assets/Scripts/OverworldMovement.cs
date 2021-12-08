@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class OverworldMovement : MonoBehaviour
 {
@@ -38,9 +39,21 @@ public class OverworldMovement : MonoBehaviour
         }
     }
 
+    private void LoadScenePos()
+    {
+        Vector3 pos = MemorySceneLoader.GetPlayerPosPrefForScene();
+        transform.position = pos;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        if (MemorySceneLoader.HasScenePos())
+            LoadScenePos();
+
+
+        MemorySceneLoader.SetPlayerPosPref(transform.position);
+
         directionY = "left";
         directionX = "forward";
         //Fetch the SpriteRenderer from the GameObject and other party gameobjects

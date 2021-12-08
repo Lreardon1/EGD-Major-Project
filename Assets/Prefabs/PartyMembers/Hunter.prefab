@@ -40,7 +40,7 @@ MonoBehaviour:
   totalHitPoints: 25
   currentHitPoints: 25
   attack: 8
-  speed: 20
+  speed: 18
   attachedBuffs: []
   attackMultiplier: 1
   defenseMultiplier: 1
@@ -64,7 +64,8 @@ MonoBehaviour:
   lr: {fileID: 110858995768291046}
   targetLineStart: {fileID: 3520208962881906484}
   pauseManager: {fileID: 0}
-  animator: {fileID: 0}
+  animator: {fileID: 2924813595293478308}
+  appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   oldTarget: {fileID: 0}

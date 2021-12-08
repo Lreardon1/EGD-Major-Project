@@ -60,8 +60,6 @@ public class CVControllerBackLoader : MonoBehaviour
 
         if (!webCamTexture.isPlaying)
         {
-            print("Starting play again");
-            // webCamTexture.Stop();
             webCamTexture.Play();
         }
         if (webCamTexture != null && webCamTexture.didUpdateThisFrame)

@@ -6,10 +6,10 @@ public class CobraCombat : CombatantBasis
 {
     public override void Special()
     {
-        if(nextActionPrimaryElems[0] != Card.Element.None)
-        {
-            nextActionPrimaryElems.Add(Card.Element.Dark);
-        }
+        MakePopup("Using Special Dark Strike", null, Color.white);
+        
+        nextActionPrimaryElems.Add(Card.Element.Dark);
+        
         Attack();
 
         Debug.Log(combatantName + " Special");

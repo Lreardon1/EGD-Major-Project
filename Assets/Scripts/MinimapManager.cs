@@ -7,6 +7,7 @@ public class MinimapManager : MonoBehaviour
 {
     public float defaultMapSize = 10f;
     public float innerBoundPercent = 0.9f;
+    public float waypointSize = 2;
     public OverworldMovement player;
     public Vector3 destination;
     public float dampenSpeed;
@@ -27,7 +28,7 @@ public class MinimapManager : MonoBehaviour
         Vector3 playerPos = player.transform.position;
         playerPos.y = transform.position.y;
         this.transform.position = playerPos;
-
+        destinationPoint.transform.localScale = new Vector3(waypointSize, waypointSize, waypointSize);
         mapCam = GetComponent<Camera>();
     }
 
@@ -42,7 +43,7 @@ public class MinimapManager : MonoBehaviour
         oob.x = Mathf.Clamp(oob.x, 1.0f - innerBoundPercent, innerBoundPercent);
         oob.y = Mathf.Clamp(oob.y, 1.0f - innerBoundPercent, innerBoundPercent);
         oob.z = Mathf.Clamp(oob.z, 1.0f - innerBoundPercent, innerBoundPercent);
-        print(oob);
+
         destinationPoint.transform.position = mapCam.ViewportToWorldPoint(oob);
         
         Vector3 visualPlayerMark = player.transform.position;

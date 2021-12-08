@@ -32,6 +32,11 @@ public class PauseManager : MonoBehaviour
     {
         isPaused = false;
 
+        if (Deck.instance != null)
+        {
+            Deck.instance.loadingScreen.SetActive(false);
+        }
+
         //loading in all current party members
         if (PlayerPrefs.HasKey("priest"))
         {
@@ -152,6 +157,7 @@ public class PauseManager : MonoBehaviour
 
     public void LinkCombatant(string type, GameObject combatant)
     {
+        print("Trying for " + type);
         PartyMemberStats.combatPartyMembers[type] = combatant;
         currPartyMembers[type].GetComponent<PartyMemberStats>().UpdatePartyMember(type, false);
     }

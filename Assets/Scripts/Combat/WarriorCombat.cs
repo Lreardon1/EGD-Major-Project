@@ -12,7 +12,8 @@ public class WarriorCombat : CombatantBasis
 
         int totalDamageAmount = (int)((damageAmount) / defenseMultiplier);
 
-        currentHitPoints -= (int)((damageAmount) / defenseMultiplier);
+        shieldValue -= (int)((damageAmount) / defenseMultiplier);
+        currentHitPoints += Mathf.Clamp(shieldValue, -10000, 0);
         Debug.Log(combatantName + " took " + totalDamageAmount + " of " + damageType1 + " type and " + damageType2);
 
         // visuals, TODO : make a string construction system to color elements differently?
