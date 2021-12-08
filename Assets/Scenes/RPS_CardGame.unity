@@ -357,22 +357,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3322817569870303009, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
-      propertyPath: cardSprites.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3322817569870303009, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
-      propertyPath: cardSprites.Array.data[0]
-      value: 
-      objectReference: {fileID: 21300000, guid: a7136afee951be345a2e7e503284caab, type: 3}
-    - target: {fileID: 3322817569870303009, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
-      propertyPath: cardSprites.Array.data[1]
-      value: 
-      objectReference: {fileID: 21300000, guid: ebd2a505b77a8eb43a6b4260d03aca6c, type: 3}
-    - target: {fileID: 3322817569870303009, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
-      propertyPath: cardSprites.Array.data[2]
-      value: 
-      objectReference: {fileID: 21300000, guid: 7a7896ccb211b634fbf09e7f1f560486, type: 3}
     - target: {fileID: 9071171892809150168, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
       propertyPath: m_Name
       value: RPS_Card_OpponentPlay
@@ -441,18 +425,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3322817569870303009, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
-      propertyPath: cardSprites.Array.data[0]
-      value: 
-      objectReference: {fileID: 21300000, guid: a7136afee951be345a2e7e503284caab, type: 3}
-    - target: {fileID: 3322817569870303009, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
-      propertyPath: cardSprites.Array.data[1]
-      value: 
-      objectReference: {fileID: 21300000, guid: ebd2a505b77a8eb43a6b4260d03aca6c, type: 3}
-    - target: {fileID: 3322817569870303009, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
-      propertyPath: cardSprites.Array.data[2]
-      value: 
-      objectReference: {fileID: 21300000, guid: 7a7896ccb211b634fbf09e7f1f560486, type: 3}
     - target: {fileID: 9071171892809150168, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
       propertyPath: m_Name
       value: RPS_Card_OpponentBid
@@ -1591,18 +1563,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3322817569870303009, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
-      propertyPath: cardSprites.Array.data[0]
-      value: 
-      objectReference: {fileID: 21300000, guid: a7136afee951be345a2e7e503284caab, type: 3}
-    - target: {fileID: 3322817569870303009, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
-      propertyPath: cardSprites.Array.data[1]
-      value: 
-      objectReference: {fileID: 21300000, guid: ebd2a505b77a8eb43a6b4260d03aca6c, type: 3}
-    - target: {fileID: 3322817569870303009, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
-      propertyPath: cardSprites.Array.data[2]
-      value: 
-      objectReference: {fileID: 21300000, guid: 7a7896ccb211b634fbf09e7f1f560486, type: 3}
     - target: {fileID: 9071171892809150168, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
       propertyPath: m_Name
       value: RPS_Card_PlayerBid
@@ -2504,18 +2464,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3322817569870303009, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
-      propertyPath: cardSprites.Array.data[0]
-      value: 
-      objectReference: {fileID: 21300000, guid: a7136afee951be345a2e7e503284caab, type: 3}
-    - target: {fileID: 3322817569870303009, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
-      propertyPath: cardSprites.Array.data[1]
-      value: 
-      objectReference: {fileID: 21300000, guid: ebd2a505b77a8eb43a6b4260d03aca6c, type: 3}
-    - target: {fileID: 3322817569870303009, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
-      propertyPath: cardSprites.Array.data[2]
-      value: 
-      objectReference: {fileID: 21300000, guid: 7a7896ccb211b634fbf09e7f1f560486, type: 3}
     - target: {fileID: 9071171892540039079, guid: 663454735c0dbb14198613f87a2b2f05, type: 3}
       propertyPath: m_Size.x
       value: 7.03
