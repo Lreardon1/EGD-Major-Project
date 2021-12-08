@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class CVControllerBackLoader : MonoBehaviour
 {
@@ -92,6 +93,9 @@ public class CVControllerBackLoader : MonoBehaviour
 
             if (value == null)
             {
+                // Destroy(webCamDevice);
+                if (webCamTexture != null)
+                    Destroy(webCamTexture);
                 webCamDevice = null;
                 webCamTexture = null;
                 return;
@@ -201,12 +205,12 @@ public class CVControllerBackLoader : MonoBehaviour
         //UnityEngine.Debug.Log (string.Format("front = {0}, vertMirrored = {1}, angle = {2}", webCamDevice.isFrontFacing, webCamTexture.videoVerticallyMirrored, webCamTexture.videoRotationAngle));
     }
 
-    void OnDestroy()
+    public void DestroyCamera()
     {
         print("DESTROYING");
-        if (DeviceName != null)
-        {
-            DeviceName = null;
-        }
+        if (webCamTexture.isPlaying)
+            webCamTexture.Stop();
+
+        Destroy(webCamTexture);
     }
 }

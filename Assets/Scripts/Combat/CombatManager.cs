@@ -23,6 +23,8 @@ public class CombatManager : MonoBehaviour
 
     public CombatPhase currentPhase = CombatPhase.None;
     public CombatHandController chc;
+    public CVControllerBackLoader CVBackLoader;
+
     public List<Button> drawButtons = new List<Button>();
     public Button reshuffleButton;
     public Text currentPhaseText;
@@ -1005,6 +1007,7 @@ public class CombatManager : MonoBehaviour
             PlayerPrefs.SetInt("mechanistCurrHealth", partyMembers[3].GetComponent<CombatantBasis>().currentHitPoints);
             PlayerPrefs.Save();
             encounterScript.ScreenWipe();
+            if (IsInCVMode()) { CVBackLoader.DestroyCamera(); }
             Invoke("ReturnToOverWorld", 0.5f);
             PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);
             return true;
@@ -1019,6 +1022,7 @@ public class CombatManager : MonoBehaviour
             PlayerPrefs.SetInt("mechanistCurrHealth", partyMembers[3].GetComponent<CombatantBasis>().totalHitPoints);
             PlayerPrefs.Save();
             encounterScript.ScreenWipe();
+            if (IsInCVMode()) { CVBackLoader.DestroyCamera(); }
             Invoke("ReturnToOverWorld", 0.5f);
             PhaseStepEvent.Invoke(currentPhase, CombatPhase.EndPhase);
             return true;
