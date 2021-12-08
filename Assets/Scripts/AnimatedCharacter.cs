@@ -22,6 +22,7 @@ public class AnimatedCharacter : MonoBehaviour
         Vector2 camForward = new Vector2(cam.transform.forward.x, cam.transform.forward.z).normalized;
         Vector2 myForward = new Vector2(transform.forward.x, transform.forward.z).normalized;
 
-        anim.SetBool("Back", Vector3.Dot(camForward, myForward) < 0.0f);
+        anim.SetBool("Back", Vector2.Dot(camForward, myForward) < 0.0f);
+        print($"{name} : {Vector2.Dot(camForward, myForward)}");
     }
 }
