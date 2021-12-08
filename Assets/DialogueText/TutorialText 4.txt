@@ -1,10 +1,11 @@
-MC|*stares around at the numerous ruins surounding them*
+Serena|*stares around at the numerous ruins surounding them*
 *barely dodges a a falling rock*
 Godfather|Watch out! That almost gave me a heart attack.
 You need to be more careful!
-MC|*rolls her eyes and stares angrily at him*
+Serena|*rolls her eyes and stares angrily at him*
 Godfather|What do you think happened to this place.
 It doesn't look like anyone has lived here for centuries...
-MC|*holds up cards as if they are dangerous*
-Godfather|Those things seem like bad luck. Are you sure this was a good idea?
-MC|*ignores him and continue forward*
+Serena|*holds up cards as if they are dangerous*
+Godfather|Those things are starting to seem like bad luck. 
+Are you sure this was a good idea?
+Serena|*ignores him and continue forward*
