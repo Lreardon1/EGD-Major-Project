@@ -375,6 +375,9 @@ public class CardParser : MonoBehaviour
             Modifier m1 = cardEditor.activeModifiers[card.modifiers[0]];
             Modifier m2 = cardEditor.activeModifiers[card.modifiers[1]];
             Modifier m3 = cardEditor.activeModifiers[card.modifiers[2]];
+
+
+
             string cvStickerType1 = TylerModToCVMod.TryGetValue(m1.spriteParsing, out string val) ? val : "";
             string cvStickerType2 = TylerModToCVMod.TryGetValue(m1.spriteParsing, out val) ? val : "";
             string cvStickerType3 = TylerModToCVMod.TryGetValue(m1.spriteParsing, out val) ? val : "";
@@ -606,6 +609,8 @@ public class CardParser : MonoBehaviour
 
     private bool SubtypeAndStickerNameContradict(string bestStickerTypeByColor, string bestStickerByDiff)
     {
+        if (bestStickerTypeByColor == null || bestStickerByDiff == null) return true;
+
         Dictionary<string, HashSet<string>> validLines = new Dictionary<string, HashSet<string>>();
         validLines.Add("Plus", new HashSet<string>(new string[] { "Plus 2 Sticker", "Plus 4 Sticker", "Plus 6 Sticker", "Plus 8 Sticker" }));
         validLines.Add("Mana", new HashSet<string>(new string[] { "Mana 1 Sticker", "Mana 2 Sticker", "Mana 3 Sticker", "Mana 4 Sticker" }));
@@ -691,6 +696,14 @@ private float ScalarEuclidDistance(Scalar a, Scalar b)
 
     private PossibleSticker ParseStickerByCrop(Mat cardScene, CustomCard card, Mat cardMat, BoundingBox stickerBoundingBox, int ID)
     {
+        return new PossibleSticker
+        {
+            bestStickerByColor = null,
+            bestStickerByDiff = null,
+            bestStickerTypeByColor = "Any",
+            bestStickerTypeByDiff = "Any"
+        };
+
         Modifier.ModifierEnum modType = modTypes[ID];
 
         Mat stickerMat = stickerBoundingBox.CropByBox(cardMat, new Size(defaultStickerWidth, defaultStickerHeight));
