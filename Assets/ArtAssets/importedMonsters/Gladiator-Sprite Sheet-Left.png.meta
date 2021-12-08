@@ -64,13 +64,13 @@ TextureImporter:
     second: Gladiator-Sprite Sheet-Left_19
   - first:
       213: -958150354219689055
-    second: gladiator_sweat_0
+    second: gladiator_pushup_9
   - first:
       213: 5360420960033215827
-    second: Gladiator-Sprite Sheet-Left_21
+    second: gladiator_pushup_7
   - first:
       213: 4981349406579954504
-    second: Gladiator-Sprite Sheet-Left_22
+    second: gladiator_pushup_8
   - first:
       213: -5138607841829943379
     second: gladiator_pushup_0
@@ -427,7 +427,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: gladiator_sweat_0
+      name: gladiator_pushup_9
       rect:
         serializedVersion: 2
         x: 8
@@ -448,7 +448,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_21
+      name: gladiator_pushup_7
       rect:
         serializedVersion: 2
         x: 39
@@ -469,7 +469,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Gladiator-Sprite Sheet-Left_22
+      name: gladiator_pushup_8
       rect:
         serializedVersion: 2
         x: 69

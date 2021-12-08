@@ -83,8 +83,7 @@ public class AnimationController : MonoBehaviour
             d.SetActive(false);
         foreach (GameObject e in ObjectsToEnable)
             e.SetActive(true);
-        foreach (AnimatedCharacter c in animatedCharacters)
-            c.enabled = true;
+        foreach (AnimatedCharacter c in animatedCharacters) c.enabled = true;
         cam.gameObject.SetActive(true);
 
         StartCoroutine(FadeToScene(startFadeOutTime, () => {
@@ -109,8 +108,7 @@ public class AnimationController : MonoBehaviour
             d.SetActive(true);
         foreach (GameObject e in ObjectsToEnable)
             e.SetActive(false);
-        foreach (AnimatedCharacter c in animatedCharacters)
-            c.enabled = false;
+        foreach (AnimatedCharacter c in animatedCharacters) c.enabled = false;
 
         for (int i = 0; i < transform.childCount; ++i)
             transform.GetChild(i).gameObject.SetActive(false);
@@ -128,6 +126,8 @@ public class AnimationController : MonoBehaviour
 
     public void ActivateText(DialogueObject texts)
     {
+        foreach (AnimatedCharacter c in animatedCharacters) c.enabled = true;
+
         print("Activated text");
         dialoguePanel.SetActive(true);
         currentDialogue = texts;
@@ -151,6 +151,8 @@ public class AnimationController : MonoBehaviour
 
         if (currentDialogue != null)
         {
+            foreach (AnimatedCharacter c in animatedCharacters) c.enabled = true;
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 currentIndex++;

@@ -152,6 +152,7 @@ public class PauseManager : MonoBehaviour
 
     public void LinkCombatant(string type, GameObject combatant)
     {
+        print("Trying for " + type);
         PartyMemberStats.combatPartyMembers[type] = combatant;
         currPartyMembers[type].GetComponent<PartyMemberStats>().UpdatePartyMember(type, false);
     }
