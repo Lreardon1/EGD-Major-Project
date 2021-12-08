@@ -23,7 +23,12 @@ public class CanvasManager : MonoBehaviour
 
     void Start()
     {
-        PopUpFollowMap();
+        print(PlayerPrefs.GetInt("OnStart"));
+        if (!PlayerPrefs.HasKey("OnStart") || PlayerPrefs.GetInt("OnStart") == 0)
+        {
+            PopUpFollowMap();
+            PlayerPrefs.SetInt("OnStart", 1);
+        }
     }
 
     public void ToggleEditOption(bool state)
