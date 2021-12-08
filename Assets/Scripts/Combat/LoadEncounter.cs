@@ -56,7 +56,7 @@ public class LoadEncounter : MonoBehaviour
             float random = Random.Range(0f, 1f);
             Debug.Log(random);
 
-            if(random < encounterRate && timer <= 0f)
+            if(random < encounterRate && timer <= 0f && PlayerPrefs.GetInt("hasCards") == 1)
             {
                 inEncounter = true;
                 GenerateEncounter();
