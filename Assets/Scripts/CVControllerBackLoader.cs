@@ -90,6 +90,13 @@ public class CVControllerBackLoader : MonoBehaviour
             if (null != webCamTexture && webCamTexture.isPlaying)
                 webCamTexture.Stop();
 
+            if (value == null)
+            {
+                webCamDevice = null;
+                webCamTexture = null;
+                return;
+            }
+
             // get device index
             int cameraIndex = -1;
             for (int i = 0; i < WebCamTexture.devices.Length && -1 == cameraIndex; i++)
@@ -197,18 +204,9 @@ public class CVControllerBackLoader : MonoBehaviour
     void OnDestroy()
     {
         print("DESTROYING");
-        if (webCamTexture != null)
+        if (DeviceName != null)
         {
-            if (webCamTexture.isPlaying)
-            {
-                webCamTexture.Stop();
-            }
-            webCamTexture = null;
-        }
-
-        if (webCamDevice != null)
-        {
-            webCamDevice = null;
+            DeviceName = null;
         }
     }
 }

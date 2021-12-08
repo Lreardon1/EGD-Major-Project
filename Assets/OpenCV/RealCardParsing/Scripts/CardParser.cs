@@ -251,55 +251,7 @@ public class CardParser : MonoBehaviour
         RPS_ToNullUpdateEvent.Invoke(RPS_Card.CardType.Unknown);
     }
 
-
-    /// <summary>
-    /// This method scans source device params (flip, rotation, front-camera status etc.) and
-    /// prepares TextureConversionParameters that will compensate all that stuff for OpenCV
-    /// </summary>
-    private void ReadTextureConversionParameters()
-    {
-        OpenCvSharp.Unity.TextureConversionParams parameters = new OpenCvSharp.Unity.TextureConversionParams();
-
-        // frontal camera - we must flip around Y axis to make it mirror-like
-        parameters.FlipHorizontally = forceFrontalCamera || webCamDevice.Value.isFrontFacing;
-
-        // TO-DO:
-        // actually, code below should work, however, on our devices tests every device except iPad
-        // returned "false", iPad said "true" but the texture wasn't actually flipped
-
-        // compensate vertical flip
-        //parameters.FlipVertically = webCamTexture.videoVerticallyMirrored;
-
-        // deal with rotation
-        if (0 != webCamTexture.videoRotationAngle)
-            parameters.RotationAngle = webCamTexture.videoRotationAngle; // cw -> ccw
-
-        // apply
-        TextureParameters = parameters;
-
-        //UnityEngine.Debug.Log (string.Format("front = {0}, vertMirrored = {1}, angle = {2}", webCamDevice.isFrontFacing, webCamTexture.videoVerticallyMirrored, webCamTexture.videoRotationAngle));
-    }
     
-    void OnDestroy()
-    {
-        print("DESTROYING");
-        if (webCamTexture != null)
-        {
-            if (webCamTexture.isPlaying)
-            {
-                webCamTexture.Stop();
-            }
-            webCamTexture = null;
-        }
-
-        if (webCamDevice != null)
-        {
-            webCamDevice = null;
-        }
-    }
-
-
-
     private GameObject previousCard;
     private CustomCard lastGoodCustomCard = null;
     private Point2f[][] lastGoodContours = null;
