@@ -13,6 +13,7 @@ public class Buff : MonoBehaviour
     public void StartBuff()
     {
         CombatantBasis cb = gameObject.GetComponent<CombatantBasis>();
+        cb.audioSource.PlayOneShot((AudioClip)Resources.Load("Sound/SFX/Hit_Metal", typeof(AudioClip)), 0.7f);
         foreach (Stat stat in affectedValues)
         {
             switch (stat)
