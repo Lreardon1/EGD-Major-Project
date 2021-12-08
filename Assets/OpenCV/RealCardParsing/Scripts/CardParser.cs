@@ -124,6 +124,10 @@ public class CardParser : MonoBehaviour
         TylerModToCVMod.Add("all", "All Sticker"); // TODO : ETC
     }
 
+    public ParseMode GetMode()
+    {
+        return mode;
+    }
 
     private int ConvertToIntMask(CardElement element)
     {
@@ -356,10 +360,10 @@ public class CardParser : MonoBehaviour
         if (matchesColorType || matchesDiffType) return 0.5f;
 
         // heavily penalize stickers where there shouldn't be
-        if (digitalSticker == "" && (presumedSticker.bestStickerByColor != "" && presumedSticker.bestStickerByDiff != "")) return -0.8f;
-        if (digitalSticker != "" && (presumedSticker.bestStickerByColor == "" && presumedSticker.bestStickerByDiff == "")) return -0.8f;
-        if (digitalSticker == "" && (presumedSticker.bestStickerByColor != "" || presumedSticker.bestStickerByDiff != "")) return -0.5f;
-        if (digitalSticker != "" && (presumedSticker.bestStickerByColor == "" || presumedSticker.bestStickerByDiff == "")) return -0.5f;
+        if (digitalSticker == "" && (presumedSticker.bestStickerByColor != "" && presumedSticker.bestStickerByDiff != "")) return -0.2f;
+        if (digitalSticker != "" && (presumedSticker.bestStickerByColor == "" && presumedSticker.bestStickerByDiff == "")) return -0.2f;
+        if (digitalSticker == "" && (presumedSticker.bestStickerByColor != "" || presumedSticker.bestStickerByDiff != "")) return -0.1f;
+        if (digitalSticker != "" && (presumedSticker.bestStickerByColor == "" || presumedSticker.bestStickerByDiff == "")) return -0.1f;
         
         // default, totally unsure on assessment
         return 0;
@@ -372,15 +376,23 @@ public class CardParser : MonoBehaviour
         {
             Card card = g.GetComponent<Card>();
             CardEditHandler cardEditor = g.GetComponent<CardEditHandler>();
-            Modifier m1 = cardEditor.activeModifiers[card.modifiers[0]];
-            Modifier m2 = cardEditor.activeModifiers[card.modifiers[1]];
-            Modifier m3 = cardEditor.activeModifiers[card.modifiers[2]];
+            string m1, m2, m3;
+            if (cardEditor.activeModifiers.TryGetValue(card.modifiers[0], out Modifier mod1))
+                m1 = mod1.spriteParsing;
+            else
+                m1 = "";
+            if (cardEditor.activeModifiers.TryGetValue(card.modifiers[1], out Modifier mod2))
+                m2 = mod2.spriteParsing;
+            else
+                m2 = "";
+            if (cardEditor.activeModifiers.TryGetValue(card.modifiers[2], out Modifier mod3))
+                m3 = mod3.spriteParsing;
+            else
+                m3 = "";
 
-
-
-            string cvStickerType1 = TylerModToCVMod.TryGetValue(m1.spriteParsing, out string val) ? val : "";
-            string cvStickerType2 = TylerModToCVMod.TryGetValue(m1.spriteParsing, out val) ? val : "";
-            string cvStickerType3 = TylerModToCVMod.TryGetValue(m1.spriteParsing, out val) ? val : "";
+            string cvStickerType1 = TylerModToCVMod.TryGetValue(m1, out string val) ? val : "";
+            string cvStickerType2 = TylerModToCVMod.TryGetValue(m2, out val) ? val : "";
+            string cvStickerType3 = TylerModToCVMod.TryGetValue(m3, out val) ? val : "";
 
             // tally score
             float score = GetScoreFromStickerSlot(stickerData.Item1, cvStickerType1);
@@ -389,9 +401,8 @@ public class CardParser : MonoBehaviour
             cardScores.Add((score, g));
         }
         // get the best score
-        cardScores.Sort();
-        if (cardScores.Last().Item1 < 0) return null;
-        else return cardScores.Last().Item2;
+        cardScores = new List<(float, GameObject)>(cardScores.OrderByDescending(item => item.Item1));
+        return cardScores.Last().Item2;
     }
 
     private List<GameObject> GetCardsOfName(string cardName)
@@ -599,8 +610,8 @@ public class CardParser : MonoBehaviour
         } else
         {
             return new PossibleSticker {
-                bestStickerByColor = null,
-                bestStickerByDiff = null,
+                bestStickerByColor = "",
+                bestStickerByDiff = "",
                 bestStickerTypeByColor = "Any",
                 bestStickerTypeByDiff = "Any"
             };
@@ -642,8 +653,8 @@ private float ScalarEuclidDistance(Scalar a, Scalar b)
         Cv2.BitwiseNot(binStickerMat, binStickerMat);
 
         bestDist = minColorStickerDistAmount;
-        bestStickerByColor = null;
-        bestStickerByColorType = null;
+        bestStickerByColor = "";
+        bestStickerByColorType = "";
         foreach (StickerTemplateData stickerTemp in stickerList)
         {
             // normalize the color to the best
@@ -698,8 +709,8 @@ private float ScalarEuclidDistance(Scalar a, Scalar b)
     {
         return new PossibleSticker
         {
-            bestStickerByColor = null,
-            bestStickerByDiff = null,
+            bestStickerByColor = "",
+            bestStickerByDiff = "",
             bestStickerTypeByColor = "Any",
             bestStickerTypeByDiff = "Any"
         };
