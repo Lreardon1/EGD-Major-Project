@@ -76,7 +76,7 @@ public class OverworldMovement : MonoBehaviour
         }
 
         // TODO : debug delete all
-        // PlayerPrefs.DeleteAll();
+        PlayerPrefs.DeleteAll();
 
         UpdatePartyMembers();
     }
