@@ -285,7 +285,13 @@ public class CombatantBasis : MonoBehaviour
             healthBar.gameObject.SetActive(false);
             lr.gameObject.SetActive(false);
             text.enabled = false;
-            animator.SetBool("IsSlain", true);
+            if(isEnemy)
+                animator.SetBool("IsSlain", true); 
+            else
+            {
+                CombatManager cm = FindObjectOfType<CombatManager>();
+                cm.PutPartyMemberInTimeOut(this.gameObject);
+            }
             return true;
         }
         return false;

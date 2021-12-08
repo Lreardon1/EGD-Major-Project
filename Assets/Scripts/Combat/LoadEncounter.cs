@@ -84,7 +84,7 @@ public class LoadEncounter : MonoBehaviour
         SceneManager.LoadScene("BattleScene", LoadSceneMode.Additive);
         originalCameraPos = mainCam.transform.position;
         originalCameraRot = mainCam.transform.rotation;
-        Invoke("SetUpCombatCamera", Time.deltaTime);
+        Invoke("SetUpCombatCamera", Time.deltaTime*2f);
     }
 
     public void SetUpCombatCamera()

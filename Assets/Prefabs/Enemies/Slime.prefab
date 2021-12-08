@@ -39,7 +39,7 @@ MonoBehaviour:
   combatantName: Slime
   totalHitPoints: 10
   currentHitPoints: 10
-  attack: 5
+  attack: 3
   speed: 12
   attachedBuffs: []
   attackMultiplier: 1
@@ -65,6 +65,7 @@ MonoBehaviour:
   targetLineStart: {fileID: 1544006762984880793}
   pauseManager: {fileID: 0}
   animator: {fileID: 7331925750750259899}
+  appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   oldTarget: {fileID: 0}
@@ -75,7 +76,7 @@ MonoBehaviour:
   uiCollider: {fileID: 0}
   previousAction: 0
   combatPopupPrefab: {fileID: 4730867921388399689, guid: d79b7f53d915fa84b81ad869b2e19850, type: 3}
-  slimeHealAmount: 4
+  slimeHealAmount: 3
 --- !u!1001 &2369301503570432375
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,5 +1,24 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!95 &7588580548538531410
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6272639951522897273}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: aa32ff0ac0e7bd644a09a91dfa51c9bd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &3609361941438951918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45,7 +64,7 @@ MonoBehaviour:
   lr: {fileID: 1395006257990481377}
   targetLineStart: {fileID: 2454351851050253363}
   pauseManager: {fileID: 0}
-  animator: {fileID: 0}
+  animator: {fileID: 7588580548538531410}
   appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
@@ -58,25 +77,6 @@ MonoBehaviour:
   previousAction: 0
   combatPopupPrefab: {fileID: 4730867921388399689, guid: d79b7f53d915fa84b81ad869b2e19850, type: 3}
   mechanistHealAmount: 3
---- !u!95 &7588580548538531410
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6272639951522897273}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: aa32ff0ac0e7bd644a09a91dfa51c9bd, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &7578279150225114531
 PrefabInstance:
   m_ObjectHideFlags: 0

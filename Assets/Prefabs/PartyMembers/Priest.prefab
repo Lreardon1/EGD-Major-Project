@@ -37,8 +37,8 @@ MonoBehaviour:
   nextActionPrimaryElems: 
   nextActionSecondaryElems: 
   combatantName: Priest
-  totalHitPoints: 15
-  currentHitPoints: 15
+  totalHitPoints: 20
+  currentHitPoints: 20
   attack: 4
   speed: 16
   attachedBuffs: []
@@ -64,6 +64,8 @@ MonoBehaviour:
   lr: {fileID: 754259332523247626}
   targetLineStart: {fileID: 4261592789152055768}
   pauseManager: {fileID: 0}
+  animator: {fileID: 6531839571241031678}
+  appliedCard: {fileID: 0}
   heldItem: {fileID: 0}
   target: {fileID: 0}
   oldTarget: {fileID: 0}

@@ -8,6 +8,7 @@ public class SlimeCombat : CombatantBasis
 
     public override void Special()
     {
+        MakePopup("Using Special Regen", null, Color.white);
         Heal(slimeHealAmount);
         Debug.Log(combatantName + " Special");
     }

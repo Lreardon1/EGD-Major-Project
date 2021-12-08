@@ -68,6 +68,9 @@ public class CombatManager : MonoBehaviour
 
     PauseManager pauseManager = null;
 
+    public List<Transform> timeOutSpaces = new List<Transform>();
+    private int timeOutIndex = 0;
+
 
     // Start is called before the first frame update
     void Start()
@@ -79,10 +82,13 @@ public class CombatManager : MonoBehaviour
 
         
         initialPartyMembers.Add(partyMembers[0]);
-        pauseManager.AddPartyMember("priest", true);
-        //PlayerPrefs.SetInt("hunter", 0);
-        //PlayerPrefs.SetInt("warrior", 0);
-        //PlayerPrefs.SetInt("mechanist", 0);
+        //pauseManager.AddPartyMember("priest", true);
+        //pauseManager.AddPartyMember("hunter", true);
+        //pauseManager.AddPartyMember("warrior", true);
+        //pauseManager.AddPartyMember("mechanist", true);
+        //PlayerPrefs.SetInt("hunter", 1);
+        //PlayerPrefs.SetInt("warrior", 1);
+        //PlayerPrefs.SetInt("mechanist", 1);
 
         if (PlayerPrefs.GetInt("hunter") == 0)
         {
@@ -384,7 +390,6 @@ public class CombatManager : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     done = true;
-                    chc.DrawCards(0);
                 }
 
                 // Need code to detect if card has been applied
@@ -609,6 +614,12 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    public void PutPartyMemberInTimeOut(GameObject partyMember)
+    {
+        partyMember.transform.position = timeOutSpaces[timeOutIndex].position;
+        timeOutIndex++;
+    }
+
     public void CheckEnoughMana()
     {
         // TODO : yea I don't know what to do here, but I want my controller in charge of this, not the combatmanager.
@@ -760,8 +771,8 @@ public class CombatManager : MonoBehaviour
     {
         if (!IsInCVMode)
         {
-            chc.DrawCards(cardsToDraw);
-            NextPhase();
+            if(chc.DrawCards(cardsToDraw));
+                NextPhase();
         }
     }
 
@@ -848,12 +859,15 @@ public class CombatManager : MonoBehaviour
         } else
         {
             int index = initialPartyMembers.IndexOf(combatant);
-            if (index >= 1 && activePartyMembers.Contains(initialPartyMembers[index - 1]))
+            Debug.Log("Test1");
+            if (initialPartyMembers.Count >= 2 && index >= 1 && activePartyMembers.Contains(initialPartyMembers[index - 1]))
             {
+                Debug.Log("Test2");
                 adjacent.Add(initialPartyMembers[index - 1]);
             }
-            if (index <= initialPartyMembers.Count - 2 && activePartyMembers.Contains(enemies[index + 1]))
+            if (initialPartyMembers.Count >=2 && index <= initialPartyMembers.Count - 2 && activePartyMembers.Contains(initialPartyMembers[index + 1]))
             {
+                Debug.Log("Test3");
                 adjacent.Add(initialPartyMembers[index + 1]);
             }
         }

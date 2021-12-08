@@ -89,6 +89,8 @@ public class HunterCombat : CombatantBasis
         {
             if (enemy.GetComponent<CombatantBasis>().isSlain)
                 continue;
+            if (enemy.GetComponent<CombatantBasis>().untargettable)
+                continue;
             target = enemy;
             Attack();
         }
