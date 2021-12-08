@@ -13,12 +13,18 @@ MonoBehaviour:
   m_Name: Church_1
   m_EditorClassIdentifier: 
   dialogue:
-  - Hello, my daughter. What brings you here?
-  - ...
-  - Just to play? Or do you want supervision whilst you bounce fantasies of magic
-    cards off cave walls?
+  - Hey Serina!
+  - (In the past few days, Serina has been trying to avoid meeting him in every way
+    possible.)
+  - Don't look me like "Why is this annoying priest again trying to sell his religion
+    to me every time I show up."
+  - You are wrong, so wrong.it is not every time you show up, is every moment you
+    are breathing.
+  - (Quickly walks away.)
   images:
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
-  shouldProgresses: 000000
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  shouldProgresses: 0000000000

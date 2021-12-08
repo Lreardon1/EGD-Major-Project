@@ -13,22 +13,21 @@ MonoBehaviour:
   m_Name: FinalIntroDia01
   m_EditorClassIdentifier: 
   dialogue:
-  - Please Warrior, you must help! My golem is malfunctioning!
-  - Ah! Finally decided to show its true colors. Disgusting thing!
-  - Warned you it would... malpractice, Mechanist.
-  - Can't trust a golem...
-  - Exterior influences, warrior. A glowing object suddenly appeared while we were
-    exploring a ruin.
-  - It seemed to be a card; my golem went haywire after it appeared.
-  - Not helping you unbug anything again, but I'll smash it good!
-  - A card?
+  - (A huge golem appeared on the horizon when they approach.)
+  - A warrior is holding against it, but it won't take long before she loses against
+    the golem.
+  - Please help!
+  - I'm hungry!
+  - WTF is this thing...
+  - Don't know! But it is our job to help those in need!
+  - (Serina nodded, and the party of three joined the battle.)
+  - '*the warrior and the mechanic joined the party*'
   images:
-  - {fileID: 2800000, guid: bced1ff49593d6a42829571209f56944, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
   - {fileID: 2800000, guid: 74ac5de7c1e7ea04a96a00368e3d6fa5, type: 3}
-  - {fileID: 2800000, guid: 74ac5de7c1e7ea04a96a00368e3d6fa5, type: 3}
-  - {fileID: 2800000, guid: 74ac5de7c1e7ea04a96a00368e3d6fa5, type: 3}
-  - {fileID: 2800000, guid: bced1ff49593d6a42829571209f56944, type: 3}
   - {fileID: 2800000, guid: bced1ff49593d6a42829571209f56944, type: 3}
   - {fileID: 2800000, guid: 74ac5de7c1e7ea04a96a00368e3d6fa5, type: 3}
   - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
   shouldProgresses: 0000000000000000

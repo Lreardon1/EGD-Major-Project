@@ -13,15 +13,19 @@ MonoBehaviour:
   m_Name: HunterDia01
   m_EditorClassIdentifier: 
   dialogue:
-  - Are...
-  - Are you ok ma'am?
-  - ...
-  - ...
-  - ...
+  - Well, at least it is a place we know
+  - (Serina silently walk toward the tree, try to avoid sunlight that burns her skin.)
+  - Let's take some rest.
+  - (Fedir sit down next to Serina.)
+  - Have you ever heard of the "Wish Card"
+  - (Serina just sat there, not saying a word.)
+  - What is it then?
   images:
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
-  shouldProgresses: 0000000000
+  - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
+  - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
+  shouldProgresses: 00000000000000

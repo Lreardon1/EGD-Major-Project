@@ -13,41 +13,33 @@ MonoBehaviour:
   m_Name: HunterDia02
   m_EditorClassIdentifier: 
   dialogue:
-  - You little brats!
-  - Brats?!?
-  - You scared off the deer! I'm going to STARVE!!
-  - This is Olyway, there are no deer here! But I would be happy to feed you at the
-    church.
-  - No no no, stale bread and staler wine, I need MEAT.
-  - You did get one thing right though; you ARE going to repay me!
-  - ...
-  - Howdy, kid. The deer are gone, ain't no need to stay so quiet now.
-  - There. Are. No. Deer. Here. And Sarah is mute, I'm afraid.
-  - '*Waves*'
+  - (A voice came from above the tree. Fedir was surprised, and thrown a fireball
+    upon)
+  - Who is it!
+  - Could you ask before you attack.
+  - The source of the voice inside the hoods jumps down from the branches,
+  - Young people nowadays getting rude and violent.
+  - "But you looks\u2026"
+  - You won't ask the age of lady, would you?
+  - So, would you allow me to join your conversation, because I have an idea of place
+    where I heard he rumors of it
+  - Lead the way then. Though I do not fully trust you,
+  - "And I will protect Serina from\u2026 Serina?"
   - Wait a second...
-  - Are those the Incant-less cards?
-  - Hey hey hey HEY! I think we've hit on you two can repay me!
-  - The Wish card is in there right? Just give me a wish!
-  - No, it isn't. Leave her be, hunter.
-  - But if you tracked down those cards... What's to say you ain't got a scent on
-    the Wish card?
-  - '*Hunter has joined your party?*'
+  - (Serina has already been walking away with Caitlin, who later told them her name.)
+  - '*the hunter has joined the party?*'
   images:
   - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
-  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
-  - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
-  - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
-  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
-  - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
-  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
-  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
-  - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
-  - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
   - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
   - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
+  - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
   shouldProgresses: 0000000000000000000000000000000000
