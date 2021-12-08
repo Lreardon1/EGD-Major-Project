@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 // controls all management actions BUT DOES NOT CONTROL ANY PLAYER ACTIONS, OF EITHER
 public class RPS_PlayManager : MonoBehaviour
@@ -73,6 +74,10 @@ public class RPS_PlayManager : MonoBehaviour
         go.transform.rotation = end;
     }
 
+    public void LoadScene(string returnScene)
+    {
+        player.RequestClose(returnScene);
+    }
 
     IEnumerator ReturnBidsAnim()
     {
@@ -199,7 +204,6 @@ public class RPS_PlayManager : MonoBehaviour
             case PlayState.Start:
             case PlayState.Trade:
             case PlayState.End:
-                print("What the fuck");
                 break;
         }
     }

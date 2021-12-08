@@ -49,6 +49,7 @@ public class RPS_Opponent : MonoBehaviour
             else if (manager.playerPoints == manager.opponentPoints)
                 WriteOutTalk("Dang! Sorry, we couldn't have a more exciting end, kid.");
             yield return new WaitForSeconds(2.7f);
+            manager.LoadScene(returnScene);
             SceneManager.LoadScene(returnScene);
             yield break;
         }
