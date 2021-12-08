@@ -19,7 +19,9 @@ public class AnimatedCharacter : MonoBehaviour
     void Update()
     {
         anim.SetBool("Walking", isWalking);
-        anim.SetBool("Back", Vector3.Dot(cam.transform.forward, transform.forward) < 0.0f);
-        if (name == "godfather") print(Vector3.Dot(cam.transform.forward, transform.forward) < 0.0f ? "back" : "front");
+        Vector2 camForward = new Vector2(cam.transform.forward.x, cam.transform.forward.z).normalized;
+        Vector2 myForward = new Vector2(transform.forward.x, transform.forward.z).normalized;
+
+        anim.SetBool("Back", Vector3.Dot(camForward, myForward) < 0.0f);
     }
 }
