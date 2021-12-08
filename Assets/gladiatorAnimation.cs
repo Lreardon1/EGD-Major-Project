@@ -2,37 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class leafAnimation : MonoBehaviour
+public class gladiatorAnimation : MonoBehaviour
 {
     public string state;
     public string direction = "left";
-    SpriteRenderer leafRenderer;
-    public Animator leaf_animator;
+    SpriteRenderer gladiatorRenderer;
+    public Animator gladiator_animator;
 
     IEnumerator waiter()
     {
-        yield return new WaitForSeconds(20);
+        yield return new WaitForSeconds(25);
         NewState();
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        //check if player is the collision
-        if (other.gameObject.name == "Player")
-        {
-            leaf_animator.Play("leaf_suprise");
-            leaf_animator.SetBool("Poof", false);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        //check if player is the collision
-        if (other.gameObject.name == "Player")
-        {
-            leaf_animator.Play("leaf_sadge");
-            leaf_animator.SetBool("Poof", false);
-        }
     }
 
     void NewState()
@@ -40,12 +20,16 @@ public class leafAnimation : MonoBehaviour
         //every 10 sec pick a new animation to do from idle, schlump, and walking
         //additionally pick which direction to face from left and right
         int directionNum = UnityEngine.Random.Range(0, 2);
-        int animationNum = UnityEngine.Random.Range(0, 2);
+        int animationNum = UnityEngine.Random.Range(0, 3);
         if (animationNum == 0 && state == "idle")
         {
             animationNum = 1;
         }
-        else if (animationNum == 1 && state == "poof")
+        else if (animationNum == 1 && state == "pushup")
+        {
+            animationNum = 2;
+        }
+        else if (animationNum == 2 && state == "walk")
         {
             animationNum = 0;
         }
@@ -53,23 +37,32 @@ public class leafAnimation : MonoBehaviour
         {
             //idle
             state = "idle";
-            leaf_animator.SetBool("Poof", false);
+            gladiator_animator.SetBool("Pushup", false);
+            gladiator_animator.SetBool("Walking", false);
         }
         if (animationNum == 1)
         {
-            //poof
-            state = "poof";
-            leaf_animator.SetBool("Poof", true);
+            //pushup
+            state = "pushup";
+            gladiator_animator.SetBool("Pushup", true);
+            gladiator_animator.SetBool("Walking", false);
+        }
+        if (animationNum == 2)
+        {
+            //walk
+            state = "walk";
+            gladiator_animator.SetBool("Pushup", false);
+            gladiator_animator.SetBool("Walking", true);
         }
         if (directionNum == 0)
         {
             direction = "right";
-            leafRenderer.flipX = true;
+            gladiatorRenderer.flipX = true;
         }
         else if (directionNum == 1)
         {
             direction = "left";
-            leafRenderer.flipX = false;
+            gladiatorRenderer.flipX = false;
         }
         //Debug.Log(string.Format("Now facing {0} while {1}", direction, state));
         StartCoroutine(waiter());
@@ -78,8 +71,8 @@ public class leafAnimation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        leafRenderer = GetComponent<SpriteRenderer>();
-        leafRenderer.flipX = false;
+        gladiatorRenderer = GetComponent<SpriteRenderer>();
+        gladiatorRenderer.flipX = false;
         state = "idle";
         StartCoroutine(waiter());
     }

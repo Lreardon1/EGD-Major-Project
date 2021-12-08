@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class leafAnimation : MonoBehaviour
+public class crabAnimation : MonoBehaviour
 {
     public string state;
     public string direction = "left";
-    SpriteRenderer leafRenderer;
-    public Animator leaf_animator;
+    SpriteRenderer crabRenderer;
+    public Animator crab_animator;
 
     IEnumerator waiter()
     {
-        yield return new WaitForSeconds(20);
+        yield return new WaitForSeconds(10);
         NewState();
     }
 
@@ -20,18 +20,8 @@ public class leafAnimation : MonoBehaviour
         //check if player is the collision
         if (other.gameObject.name == "Player")
         {
-            leaf_animator.Play("leaf_suprise");
-            leaf_animator.SetBool("Poof", false);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        //check if player is the collision
-        if (other.gameObject.name == "Player")
-        {
-            leaf_animator.Play("leaf_sadge");
-            leaf_animator.SetBool("Poof", false);
+            crab_animator.Play("crab_slash");
+            crab_animator.SetBool("Slash", false);
         }
     }
 
@@ -40,12 +30,16 @@ public class leafAnimation : MonoBehaviour
         //every 10 sec pick a new animation to do from idle, schlump, and walking
         //additionally pick which direction to face from left and right
         int directionNum = UnityEngine.Random.Range(0, 2);
-        int animationNum = UnityEngine.Random.Range(0, 2);
+        int animationNum = UnityEngine.Random.Range(0, 3);
         if (animationNum == 0 && state == "idle")
         {
             animationNum = 1;
         }
-        else if (animationNum == 1 && state == "poof")
+        else if (animationNum == 1 && state == "sleep")
+        {
+            animationNum = 2;
+        }
+        else if (animationNum == 2 && state == "walk")
         {
             animationNum = 0;
         }
@@ -53,23 +47,32 @@ public class leafAnimation : MonoBehaviour
         {
             //idle
             state = "idle";
-            leaf_animator.SetBool("Poof", false);
+            crab_animator.SetBool("Sleep", false);
+            crab_animator.SetBool("Walk", false);
         }
         if (animationNum == 1)
         {
-            //poof
-            state = "poof";
-            leaf_animator.SetBool("Poof", true);
+            //sleep
+            state = "sleep";
+            crab_animator.SetBool("Sleep", true);
+            crab_animator.SetBool("Walk", false);
+        }
+        if (animationNum == 2)
+        {
+            //walk
+            state = "walk";
+            crab_animator.SetBool("Sleep", false);
+            crab_animator.SetBool("Walk", true);
         }
         if (directionNum == 0)
         {
             direction = "right";
-            leafRenderer.flipX = true;
+            crabRenderer.flipX = true;
         }
         else if (directionNum == 1)
         {
             direction = "left";
-            leafRenderer.flipX = false;
+            crabRenderer.flipX = false;
         }
         //Debug.Log(string.Format("Now facing {0} while {1}", direction, state));
         StartCoroutine(waiter());
@@ -78,8 +81,8 @@ public class leafAnimation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        leafRenderer = GetComponent<SpriteRenderer>();
-        leafRenderer.flipX = false;
+        crabRenderer = GetComponent<SpriteRenderer>();
+        crabRenderer.flipX = false;
         state = "idle";
         StartCoroutine(waiter());
     }

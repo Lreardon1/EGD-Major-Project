@@ -2,37 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class leafAnimation : MonoBehaviour
+public class knightAnimation : MonoBehaviour
 {
     public string state;
     public string direction = "left";
-    SpriteRenderer leafRenderer;
-    public Animator leaf_animator;
+    SpriteRenderer knightRenderer;
+    public Animator knight_animator;
 
     IEnumerator waiter()
     {
-        yield return new WaitForSeconds(20);
+        yield return new WaitForSeconds(15);
         NewState();
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        //check if player is the collision
-        if (other.gameObject.name == "Player")
-        {
-            leaf_animator.Play("leaf_suprise");
-            leaf_animator.SetBool("Poof", false);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        //check if player is the collision
-        if (other.gameObject.name == "Player")
-        {
-            leaf_animator.Play("leaf_sadge");
-            leaf_animator.SetBool("Poof", false);
-        }
     }
 
     void NewState()
@@ -45,7 +25,7 @@ public class leafAnimation : MonoBehaviour
         {
             animationNum = 1;
         }
-        else if (animationNum == 1 && state == "poof")
+        else if (animationNum == 1 && state == "walk")
         {
             animationNum = 0;
         }
@@ -53,23 +33,23 @@ public class leafAnimation : MonoBehaviour
         {
             //idle
             state = "idle";
-            leaf_animator.SetBool("Poof", false);
+            knight_animator.SetBool("Walking", false);
         }
         if (animationNum == 1)
         {
-            //poof
-            state = "poof";
-            leaf_animator.SetBool("Poof", true);
+            //walk
+            state = "walk";
+            knight_animator.SetBool("Walking", true);
         }
         if (directionNum == 0)
         {
             direction = "right";
-            leafRenderer.flipX = true;
+            knightRenderer.flipX = true;
         }
         else if (directionNum == 1)
         {
             direction = "left";
-            leafRenderer.flipX = false;
+            knightRenderer.flipX = false;
         }
         //Debug.Log(string.Format("Now facing {0} while {1}", direction, state));
         StartCoroutine(waiter());
@@ -78,8 +58,8 @@ public class leafAnimation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        leafRenderer = GetComponent<SpriteRenderer>();
-        leafRenderer.flipX = false;
+        knightRenderer = GetComponent<SpriteRenderer>();
+        knightRenderer.flipX = false;
         state = "idle";
         StartCoroutine(waiter());
     }
