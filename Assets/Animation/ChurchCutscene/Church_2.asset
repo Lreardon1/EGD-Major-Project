@@ -13,19 +13,21 @@ MonoBehaviour:
   m_Name: Church_2
   m_EditorClassIdentifier: 
   dialogue:
-  - Fine fine, I'd not want to damage even a spark of your youthful spirit.
-  - However, you must remember that you are not in my charge.
-  - With or without voice, that cave is your dominion, not mine. I can help only
-    with words and pray.
-  - Now, if you'd like to explore God's house for your mysterious cards... THAT I
-    will gleefully assist you in.
-  - ...
-  - HaHaHAA, well then, which way to that cave again?
+  - "Why are you so mean to me, we are friends, aren\u2019t we?"
+  - (Stops and turns back, slightly shakes her head.)
+  - (Chases a few steps)
+  - I know you are just too shy to say that we are.
+  - (Starts getting away from him, and Fedir pauses her)
+  - I found a way to allow my dear friend to use magic if she is my friend
+  - (Turns back again, walks toward him, opens her hand)
+  - It is not here. I'll lead you to it.
   images:
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
-  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
-  shouldProgresses: 000000000001
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  shouldProgresses: 0000000000000001

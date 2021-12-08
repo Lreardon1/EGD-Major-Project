@@ -35,6 +35,9 @@ public class Deck : MonoBehaviour
     [SerializeField]
     public GameObject modifierPrefab;
 
+    [SerializeField]
+    public GameObject loadingScreen;
+
     private DeckCustomizer deckCustomizer;
     public bool shouldLoadNextScene = true;
     IEnumerator LoadNextSceneAfterAllInits()
@@ -139,6 +142,14 @@ public class Deck : MonoBehaviour
             trans.anchorMin = new Vector2(0.5f, 0.5f);
             trans.anchoredPosition = new Vector2(0.5f, 0.5f);
             trans.localPosition = new Vector3(0, 0, 0);
+        }
+    }
+
+    public void ResetCards()
+    {
+        foreach (GameObject card in allCards)
+        {
+            card.GetComponent<Card>().Unequip();
         }
     }
 
@@ -257,6 +268,7 @@ public class Deck : MonoBehaviour
 
         //rebuilding deck based off read data
         List<string> cardData = data.deckStringData;
+        ResetCards();
         deck.Clear();
         foreach (string card in cardData)
         {

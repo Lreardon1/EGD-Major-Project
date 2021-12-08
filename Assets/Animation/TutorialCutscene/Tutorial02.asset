@@ -13,13 +13,21 @@ MonoBehaviour:
   m_Name: Tutorial02
   m_EditorClassIdentifier: 
   dialogue:
-  - Well well, fantasies and folklore bear fruit.
-  - Do they really not require an incantation?
-  - 'Such an alien notion: voiceless magic!'
-  - ...
+  - That was hell of an advanture!
+  - Hey Serina! Feeling Good with magic right?
+  - (Serina nods)
+  - It breaks the code of my church, but it doesn't matter.
+  - What matters is that my friend, you are happy.
+  - So you know the way back right?
+  - (Serina shakes her head)
+  - No worries! We just keep marching and we would find our way!
   images:
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
   - {fileID: 2800000, guid: e7e87046b691b2a48901d47d38cb8bb6, type: 3}
-  shouldProgresses: 00000000
+  - {fileID: 2800000, guid: 1023b64acb8a96146a05112b9616822f, type: 3}
+  shouldProgresses: 0000000000000000

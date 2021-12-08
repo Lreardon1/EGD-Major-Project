@@ -9,9 +9,11 @@ public class Campfire : MonoBehaviour
         //check if player is the collision
         if (other.gameObject.name == "Player")
         {
-            CanvasManager cm = other.gameObject.GetComponent<PlayerInteraction>().cm;
-            cm.ToggleEditOption(true);
-            other.gameObject.GetComponent<PlayerInteraction>().canEditCards = true;
+            if (PlayerPrefs.HasKey("hasCards") && PlayerPrefs.GetInt("hasCards") == 1) {
+                CanvasManager cm = other.gameObject.GetComponent<PlayerInteraction>().cm;
+                cm.ToggleEditOption(true);
+                other.gameObject.GetComponent<PlayerInteraction>().canEditCards = true;
+            }
         }
     }
 
@@ -20,9 +22,12 @@ public class Campfire : MonoBehaviour
         //check if player is the collision
         if (other.gameObject.name == "Player")
         {
-            CanvasManager cm = other.gameObject.GetComponent<PlayerInteraction>().cm;
-            cm.ToggleEditOption(false);
-            other.gameObject.GetComponent<PlayerInteraction>().canEditCards = false;
+            if (PlayerPrefs.HasKey("hasCards") && PlayerPrefs.GetInt("hasCards") == 1)
+            {
+                CanvasManager cm = other.gameObject.GetComponent<PlayerInteraction>().cm;
+                cm.ToggleEditOption(false);
+                other.gameObject.GetComponent<PlayerInteraction>().canEditCards = false;
+            }
         }
     }
 }

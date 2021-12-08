@@ -32,6 +32,11 @@ public class PauseManager : MonoBehaviour
     {
         isPaused = false;
 
+        if (Deck.instance != null)
+        {
+            Deck.instance.loadingScreen.SetActive(false);
+        }
+
         //loading in all current party members
         if (PlayerPrefs.HasKey("priest"))
         {
