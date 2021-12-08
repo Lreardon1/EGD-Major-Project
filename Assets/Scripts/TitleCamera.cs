@@ -36,16 +36,8 @@ public class TitleCamera : MonoBehaviour
         }
 
 
-        t = 0;
-        while (t < timeWait)
-        {
-            float l = t / timeLerp;
-            cameraRef.transform.position = endPos;
-            cameraRef.transform.rotation = endRot;
-            t += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-
+        cameraRef.transform.position = Vector3.Lerp(originalPos, endPos, 1);
+        cameraRef.transform.rotation = Quaternion.Slerp(originalRot, endRot, 1);
         yield return new WaitForSeconds(timeWait);
 
         t = 0;
@@ -58,6 +50,8 @@ public class TitleCamera : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
+        cameraRef.transform.position = Vector3.Lerp(originalPos, endPos, 1.0f);
+        cameraRef.transform.rotation = Quaternion.Slerp(originalRot, endRot, 1.0f);
         mainCamera.transform.position = originalPos;
         mainCamera.transform.rotation = originalRot;
         
