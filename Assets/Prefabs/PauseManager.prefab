@@ -3809,7 +3809,7 @@ MonoBehaviour:
   partyMemberStatPrefab: {fileID: 8048956693008016608, guid: 05127484ed0313845be2c62cbef4271d, type: 3}
   partyView: {fileID: 1098293197701007460}
   isPaused: 0
-  debug: 1
+  debug: 0
 --- !u!1 &7593456214260859888
 GameObject:
   m_ObjectHideFlags: 0

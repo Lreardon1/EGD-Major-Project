@@ -101,7 +101,7 @@ public class PauseManager : MonoBehaviour
         }
         
         //DEBUG
-        if (Input.GetKeyDown(KeyCode.N))
+        /*if (Input.GetKeyDown(KeyCode.N))
         {
             if (debug)
             {
@@ -121,6 +121,7 @@ public class PauseManager : MonoBehaviour
         }
 
         print("remove reminder for debugs in PauseManager");
+        */
     }
 
     public void TogglePartyView()
@@ -206,5 +207,11 @@ public class PauseManager : MonoBehaviour
     public void loadScene(string scene)
     {
         SceneManager.LoadScene(scene);
+    }
+
+    public void newGame(string scene)
+    {
+        PlayerPrefs.DeleteAll();
+        loadScene(scene);
     }
 }
