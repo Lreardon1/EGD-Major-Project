@@ -252,12 +252,12 @@ public class RPS_PlayManager : MonoBehaviour
         opponentPlayObj.SetEnabled(false);
 
         yield return new WaitForSeconds(0.3f);
-        GameObject card1 = Instantiate(physicsCard, physicsSpawnPoint.position + Random.insideUnitSphere * sphereRadius, Quaternion.Euler(90, 0, 0));
-        card1.transform.Rotate((new Vector3(rotRanges.x * Random.value, rotRanges.y * Random.value, rotRanges.z * Random.value) * 2.0f) - rotRanges);
+        GameObject card1 = Instantiate(physicsCard, physicsSpawnPoint.position + UnityEngine.Random.insideUnitSphere * sphereRadius, Quaternion.Euler(90, 0, 0));
+        card1.transform.Rotate((new Vector3(rotRanges.x * UnityEngine.Random.value, rotRanges.y * UnityEngine.Random.value, rotRanges.z * UnityEngine.Random.value) * 2.0f) - rotRanges);
         card1.GetComponent<RPS_CardObject>().SetCard(playerPlay);
         yield return new WaitForSeconds(0.2f);
-        GameObject card2 = Instantiate(physicsCard, physicsSpawnPoint.position + Random.insideUnitSphere * sphereRadius, Quaternion.Euler(90, 0, 0));
-        card2.transform.Rotate((new Vector3(rotRanges.x * Random.value, rotRanges.y * Random.value, rotRanges.z * Random.value) * 2.0f) - rotRanges);
+        GameObject card2 = Instantiate(physicsCard, physicsSpawnPoint.position + UnityEngine.Random.insideUnitSphere * sphereRadius, Quaternion.Euler(90, 0, 0));
+        card2.transform.Rotate((new Vector3(rotRanges.x * UnityEngine.Random.value, rotRanges.y * UnityEngine.Random.value, rotRanges.z * UnityEngine.Random.value) * 2.0f) - rotRanges);
         card2.GetComponent<RPS_CardObject>().SetCard(opponentPlay);
 
         yield return new WaitForSeconds(ending ? 1.3f : 0.3f);
