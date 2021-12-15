@@ -1,0 +1,3 @@
+1, "The Priest", "Greetings, Serena.", "priest"
+2, "Serena", "...", "mc"
+anim, "ChurchCutscene2", False

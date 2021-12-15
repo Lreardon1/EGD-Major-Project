@@ -1492,11 +1492,4 @@ AnimationClip:
     script: {fileID: 0}
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events:
-  - time: 5.15
-    functionName: ActivateText
-    data: 
-    objectReferenceParameter: {fileID: 11400000, guid: a1dda7dde12a83348ac680c11acb5a68, type: 2}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
+  m_Events: []

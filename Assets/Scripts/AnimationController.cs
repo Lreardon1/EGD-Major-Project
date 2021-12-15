@@ -165,11 +165,42 @@ public class AnimationController : MonoBehaviour
         public bool continueDuring;
     }
 
+    private string[] CVS_Split(string stringToSplit)
+    {
+        int i = 0;
+        bool insideQuotes = false;
+
+        List<string> collected = new List<string>();
+
+        while (i < stringToSplit.Length)
+        {
+            if (stringToSplit[i] == ',' && !insideQuotes)
+            {
+                collected.Add(stringToSplit.Substring(0, i));
+                stringToSplit = stringToSplit.Substring(i + 1);
+                i = -1;
+            } else if (stringToSplit[i] == '"')
+            {
+                insideQuotes = !insideQuotes;
+            }
+
+            ++i;
+        }
+
+        if (stringToSplit.Length > 0)
+            collected.Add(stringToSplit);
+        return collected.ToArray();
+    }
+
     private bool ParseTextAction(string action, out TextAction textAction)
     {
         textAction = new TextAction();
 
-        string[] actionElements = action.Split(',');
+        string[] actionElements = CVS_Split(action);
+        print(actionElements);
+        foreach (string s in actionElements)
+            print(s);
+
         for (int i = 0; i < actionElements.Length; ++i)
             actionElements[i] = actionElements[i].Trim(' ', '"', '\'', '\r', '\n');
 
@@ -188,7 +219,7 @@ public class AnimationController : MonoBehaviour
     private bool ParseAnimAction(string action, out AnimAction animAction)
     {
         animAction = new AnimAction();
-        string[] actionElements = action.Split(',');
+        string[] actionElements = CVS_Split(action);
         for (int i = 0; i < actionElements.Length; ++i)
             actionElements[i] = actionElements[i].Trim(' ', '"', '\'', '\r', '\n');
 
@@ -226,6 +257,7 @@ public class AnimationController : MonoBehaviour
                 diaText.text = textAction.line;
                 diaImage.texture = textAction.displayTexture;
 
+                yield return new WaitForSeconds(0.1f);
                 yield return new WaitUntil(ContinueFromTextInput);
             }
             else
@@ -233,6 +265,7 @@ public class AnimationController : MonoBehaviour
                 dialoguePanel.SetActive(false);
                 GetComponent<Animator>().Play(animAction.animName);
 
+                yield return new WaitForSeconds(0.05f);
                 yield return new WaitUntil(ContinueFromAnim);
             }
 
@@ -248,14 +281,10 @@ public class AnimationController : MonoBehaviour
         yield break;
     }
 
-    public void NotifyAnimOver()
-    {
-
-    }
-
     private bool ContinueFromAnim()
     {
-        return GetComponent<Animator>().GetAnimatorTransitionInfo(0).normalizedTime >= 1;
+        Animator animator = GetComponent<Animator>();
+        return animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.1f;
     }
 
     private bool ContinueFromTextInput()
