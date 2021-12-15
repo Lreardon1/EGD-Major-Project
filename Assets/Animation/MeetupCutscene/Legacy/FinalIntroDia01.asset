@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae2a90191e74cb8429ca53a22b51195f, type: 3}
+  m_Name: FinalIntroDia01
+  m_EditorClassIdentifier: 
+  dialogue:
+  - Please Warrior, you must help! My golem is malfunctioning!
+  - Ah! Finally decided to show its true colors. Disgusting thing!
+  - Warned you it would... malpractice, Mechanist.
+  - Can't trust a golem...
+  - Exterior influences, warrior. A glowing object suddenly appeared while we were
+    exploring a ruin.
+  - It seemed to be a card; my golem went haywire after it appeared.
+  - Not helping you unbug anything again, but I'll smash it good!
+  - A card?
+  images:
+  - {fileID: 2800000, guid: bced1ff49593d6a42829571209f56944, type: 3}
+  - {fileID: 2800000, guid: 74ac5de7c1e7ea04a96a00368e3d6fa5, type: 3}
+  - {fileID: 2800000, guid: 74ac5de7c1e7ea04a96a00368e3d6fa5, type: 3}
+  - {fileID: 2800000, guid: 74ac5de7c1e7ea04a96a00368e3d6fa5, type: 3}
+  - {fileID: 2800000, guid: bced1ff49593d6a42829571209f56944, type: 3}
+  - {fileID: 2800000, guid: bced1ff49593d6a42829571209f56944, type: 3}
+  - {fileID: 2800000, guid: 74ac5de7c1e7ea04a96a00368e3d6fa5, type: 3}
+  - {fileID: 2800000, guid: 4e79f087c6d31a544a50a534b3c9701a, type: 3}
+  shouldProgresses: 0000000000000000

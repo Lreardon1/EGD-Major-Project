@@ -22,15 +22,25 @@ public class AnimationController : MonoBehaviour
     public Image fadeImage;
     public GameObject dialoguePanel;
     public TMP_Text diaText;
+    public TMP_Text diaSpeaker;
     public RawImage diaImage;
 
+
     private int currentIndex = 0;
-    private DialogueObject currentDialogue;
+    private string[] parsedDialogue;
+    public TextAsset dialogue;
+
+    public string[] speakerNames;
+    public Texture[] speakerSprites;
+    public Dictionary<string, Texture> speakers = new Dictionary<string, Texture>();
 
     public float startFadeInTime = 0.6f;
     public float startFadeOutTime = 0.6f;
     public float endFadeInTime = 0.6f;
     public float endFadeOutTime = 0.6f;
+
+    // Format:  "line ID", "speaker name", "line", "display sprite A", "display sprite b, unused"
+    // OFormat: "anim", "anim ID", "continue without"
 
     IEnumerator FadeToBlack(float time, Action A)
     {
@@ -60,6 +70,9 @@ public class AnimationController : MonoBehaviour
     // Start is called before the first frame update
     public void PlayCutscene()
     {
+        parsedDialogue = dialogue.text.Split('\n');
+        currentIndex = 0;
+
         FindObjectOfType<OverworldMovement>().SetCanMove(false);
         UI.SetActive(true);
         StartCoroutine(FadeToBlack(startFadeInTime, StartUp));
@@ -73,7 +86,12 @@ public class AnimationController : MonoBehaviour
 
     private void StartUp()
     {
-       
+        speakers.Clear();
+        for (int i = 0; i < speakerNames.Length; ++i)
+        {
+            speakers.Add(speakerNames[i], speakerSprites[i]);
+        }
+
         disabledObjects.AddRange(GameObject.FindGameObjectsWithTag("Player"));
         disabledObjects.AddRange(GameObject.FindGameObjectsWithTag("Party"));
         disabledObjects.AddRange(ObjectsToDisable);
@@ -87,10 +105,12 @@ public class AnimationController : MonoBehaviour
         cam.gameObject.SetActive(true);
 
         StartCoroutine(FadeToScene(startFadeOutTime, () => {
-            print("SENDING NEXT");
-            GetComponent<Animator>().SetTrigger("Next");
+            StartCoroutine(ManageCutscene(dialogue.text.Split('\n')));
         }));
     }
+
+
+
 
     private void DestroySelf() { Destroy(gameObject); }
 
@@ -124,57 +144,122 @@ public class AnimationController : MonoBehaviour
     }
 
 
-    public void ActivateText(DialogueObject texts)
+
+
+
+
+
+
+
+    private class TextAction
     {
-        foreach (AnimatedCharacter c in animatedCharacters) c.enabled = true;
-
-        print("Activated text");
-        dialoguePanel.SetActive(true);
-        currentDialogue = texts;
-        currentIndex = 0;
-
-        string dia = currentDialogue.dialogue[currentIndex];
-        Texture image = currentDialogue.images[currentIndex];
-        bool progressAnim = currentDialogue.shouldProgresses[currentIndex];
-
-        diaText.text = dia;
-        diaImage.texture = image;
-        if (progressAnim)
-        {
-            GetComponent<Animator>().SetTrigger("Next");
-        }
+        public int lineID;
+        public string speakerName;
+        public string line;
+        public Texture displayTexture;
     }
 
-    private void Update()
+    private class AnimAction
     {
-        dialoguePanel.SetActive(currentDialogue != null);
+        public string animName;
+        public bool continueDuring;
+    }
 
-        if (currentDialogue != null)
+    private bool ParseTextAction(string action, out TextAction textAction)
+    {
+        textAction = new TextAction();
+
+        string[] actionElements = action.Split(',');
+        for (int i = 0; i < actionElements.Length; ++i)
+            actionElements[i] = actionElements[i].Trim(' ', '"', '\'', '\r', '\n');
+
+        if (!int.TryParse(actionElements[0], out textAction.lineID))
+            return false;
+
+        textAction.speakerName = actionElements[1];
+        textAction.line = actionElements[2];
+
+        if (!speakers.TryGetValue(actionElements[3], out textAction.displayTexture))
+            return false;
+
+        return true;
+    }
+
+    private bool ParseAnimAction(string action, out AnimAction animAction)
+    {
+        animAction = new AnimAction();
+        string[] actionElements = action.Split(',');
+        for (int i = 0; i < actionElements.Length; ++i)
+            actionElements[i] = actionElements[i].Trim(' ', '"', '\'', '\r', '\n');
+
+
+        if (actionElements[0].ToLower() != "anim")
+            return false;
+
+        animAction.animName = actionElements[1];
+
+        animAction.continueDuring = actionElements[2].ToLower() == "true";
+
+        return true;
+    }
+
+    IEnumerator ManageCutscene(string[] actions)
+    {
+        currentIndex = 0;
+        TextAction textAction;
+        AnimAction animAction;
+
+
+        while (currentIndex < actions.Length)
         {
-            foreach (AnimatedCharacter c in animatedCharacters) c.enabled = true;
+            string currentAction = actions[currentIndex];
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            bool isOnText = ParseTextAction(currentAction, out textAction);
+            if (!ParseAnimAction(currentAction, out animAction) && !isOnText)
+                throw new Exception("ERROR: INVALID TEXT PROVIDED.");
+
+            if (isOnText)
             {
-                currentIndex++;
-                if (currentIndex >= currentDialogue.dialogue.Length)
-                {
-                    GetComponent<Animator>().SetTrigger("Next");
-                    currentDialogue = null;
-                    dialoguePanel.SetActive(false);
-                    return;
-                }
+                dialoguePanel.SetActive(true);
 
-                string dia = currentDialogue.dialogue[currentIndex];
-                Texture image = currentDialogue.images[currentIndex];
-                bool progressAnim = currentDialogue.shouldProgresses[currentIndex];
+                diaSpeaker.text = textAction.speakerName;
+                diaText.text = textAction.line;
+                diaImage.texture = textAction.displayTexture;
 
-                diaText.text = dia;
-                diaImage.texture = image;
-                if (progressAnim)
-                {
-                    GetComponent<Animator>().SetTrigger("Next");
-                }
+                yield return new WaitUntil(ContinueFromTextInput);
             }
+            else
+            {
+                dialoguePanel.SetActive(false);
+                GetComponent<Animator>().Play(animAction.animName);
+
+                yield return new WaitUntil(ContinueFromAnim);
+            }
+
+            currentIndex++;
+
+            foreach (AnimatedCharacter c in animatedCharacters) c.enabled = true;
         }
+        // Format:  "line ID", "speaker name", "line", "display sprite A", "display sprite b, unused"
+        // OFormat: "anim", "anim ID", "continue without"
+
+        EndAnimation();
+
+        yield break;
+    }
+
+    public void NotifyAnimOver()
+    {
+
+    }
+
+    private bool ContinueFromAnim()
+    {
+        return GetComponent<Animator>().GetAnimatorTransitionInfo(0).normalizedTime >= 1;
+    }
+
+    private bool ContinueFromTextInput()
+    {
+        return Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0);
     }
 }
