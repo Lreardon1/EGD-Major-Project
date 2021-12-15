@@ -266,7 +266,8 @@ public class AnimationController : MonoBehaviour
                 GetComponent<Animator>().Play(animAction.animName);
 
                 yield return new WaitForSeconds(0.05f);
-                yield return new WaitUntil(ContinueFromAnim);
+                if (!animAction.continueDuring)
+                    yield return new WaitUntil(ContinueFromAnim);
             }
 
             currentIndex++;
